@@ -88,16 +88,17 @@ function setI18nField<T extends BaseField = UnknownField>(field: T) {
 
 function getI18nDefaults(
   collectionOrFileI18n: boolean | Partial<I18nInfo>,
-  defaultI18n: I18nInfo,
+  { default_locale, locales = ['en'], structure = I18N_STRUCTURE_SINGLE_FILE }: Partial<I18nInfo>,
 ): I18nInfo {
   if (typeof collectionOrFileI18n === 'boolean') {
-    return defaultI18n;
+    return { default_locale, locales, structure };
   } else {
-    const locales = collectionOrFileI18n.locales || defaultI18n.locales;
-    const defaultLocale = collectionOrFileI18n.default_locale || locales?.[0];
-    const mergedI18n: I18nInfo = deepmerge(defaultI18n, collectionOrFileI18n);
-    mergedI18n.locales = locales ?? [];
-    mergedI18n.default_locale = defaultLocale;
+    const mergedI18n: I18nInfo = deepmerge(
+      { default_locale, locales, structure },
+      collectionOrFileI18n,
+    );
+    mergedI18n.locales = collectionOrFileI18n.locales ?? locales;
+    mergedI18n.default_locale = collectionOrFileI18n.default_locale || locales?.[0];
     throwOnMissingDefaultLocale(mergedI18n);
     return mergedI18n;
   }

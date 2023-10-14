@@ -16,7 +16,10 @@ import {
 import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
-import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
+import {
+  selectIsFetching,
+  selectUseOpenAuthoring,
+} from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
 import EditorToolbar from './EditorToolbar';
@@ -148,6 +151,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
 }) => {
   const config = useAppSelector(selectConfig);
   const useWorkflow = useAppSelector(selectUseWorkflow);
+  const useOpenAuthoring = useAppSelector(selectUseOpenAuthoring);
 
   const isMobile = useIsMobile();
 
@@ -516,7 +520,6 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       navbarActions={
         <EditorToolbar
           isPersisting={isPersisting}
-          isDeleting={entry.isDeleting}
           onPersist={handleOnPersist}
           onPersistAndNew={() => handleOnPersist({ createNew: true })}
           onPersistAndDuplicate={() => handleOnPersist({ createNew: true, duplicate: true })}
@@ -564,6 +567,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
             disabled={disabled}
             onChangeStatus={onChangeStatus}
             isLoading={isLoading}
+            useOpenAuthoring={useOpenAuthoring}
             mobile
           />
         </div>
