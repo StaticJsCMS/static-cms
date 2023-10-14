@@ -43,7 +43,7 @@ export function getI18nInfo<EF extends BaseField>(
   if (!hasI18n(collection) || typeof collection[I18N] !== 'object') {
     return null;
   }
-  return collection.i18n;
+  return collection.i18n as I18nInfo;
 }
 
 export function getI18nFilesDepth<EF extends BaseField>(collection: Collection<EF>, depth: number) {
