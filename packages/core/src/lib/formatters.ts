@@ -1,10 +1,10 @@
 import get from 'lodash/get';
-import set from 'lodash/set';
 
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
 import { sanitizeSlug } from './urlHelper';
 import { selectIdentifier, selectInferredField } from './util/collection.util';
 import { selectField } from './util/field.util';
+import set from './util/set.util';
 import { isEmpty } from './util/string.util';
 import {
   addFileTemplateFields,
