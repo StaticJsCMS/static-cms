@@ -1,9 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
-import set from 'lodash/set';
 import { v4 as uuid } from 'uuid';
 
-import {} from '../actions/editorialWorkflow';
 import {
   ADD_DRAFT_ENTRY_MEDIA_FILE,
   DRAFT_CHANGE_FIELD,
@@ -35,6 +33,7 @@ import {
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
 import { fileForEntry } from '../lib/util/collection.util';
 import { applyDefaultsToDraftData } from '../lib/util/entry.util';
+import set from '../lib/util/set.util';
 
 import type { EditorialWorkflowAction } from '../actions/editorialWorkflow';
 import type { EntriesAction } from '../actions/entries';
@@ -216,15 +215,20 @@ function entryDraftReducer(
         : (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 
       const newEntry = cloneDeep(newState.entry);
+      console.log('newEntry', cloneDeep(newEntry));
+      console.log('equal 1?', newEntry.i18n?.fr === newEntry.i18n?.de);
 
       newState = {
         ...newState,
         entry: set(newEntry, `${dataPath.join('.')}.${path}`, value),
       };
+      console.log('setting', `${dataPath.join('.')}.${path}`, 'to', `"${value}"`);
 
       if (i18n) {
         newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale, path);
       }
+      console.log('newState.entry', cloneDeep(newState.entry));
+      console.log('equal 2?', newState.entry?.i18n?.fr === newState.entry?.i18n?.de);
 
       let hasChanged =
         !isEqual(newEntry?.meta, newState.original?.meta) ||

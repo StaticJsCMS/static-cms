@@ -1,5 +1,4 @@
 import once from 'lodash/once';
-import set from 'lodash/set';
 import sortBy from 'lodash/sortBy';
 
 import {
@@ -24,6 +23,7 @@ import {
   SORT_ENTRIES_SUCCESS,
 } from '../constants';
 import { VIEW_STYLES, VIEW_STYLE_TABLE } from '../constants/views';
+import set from '../lib/util/set.util';
 
 import type { EntriesAction } from '../actions/entries';
 import type { SearchAction } from '../actions/search';
