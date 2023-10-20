@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
+import _set from 'lodash/set';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -208,7 +209,7 @@ function entryDraftReducer(
 
       newState = {
         ...newState,
-        entry: set(newEntry, `${dataPath.join('.')}.${path}`, value),
+        entry: _set(newEntry, `${dataPath.join('.')}.${path}`, value),
       };
 
       if (i18n) {
