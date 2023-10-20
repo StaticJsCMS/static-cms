@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
-import _set from 'lodash/set';
+import set from 'lodash/set';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -25,7 +25,6 @@ import {
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
 import { fileForEntry } from '../lib/util/collection.util';
 import { applyDefaultsToDraftData } from '../lib/util/entry.util';
-import set from '../lib/util/set.util';
 
 import type { EntriesAction } from '../actions/entries';
 import type { Entry, FieldsErrors } from '../interface';
@@ -209,7 +208,7 @@ function entryDraftReducer(
 
       newState = {
         ...newState,
-        entry: _set(newEntry, `${dataPath.join('.')}.${path}`, value),
+        entry: set(newEntry, `${dataPath.join('.')}.${path}`, value),
       };
 
       if (i18n) {
