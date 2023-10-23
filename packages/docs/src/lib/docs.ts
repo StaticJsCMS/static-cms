@@ -137,6 +137,7 @@ export function fetchDocsContent(): [DocsPage[], DocsGroup[]] {
       title: doc.data.title,
       slug: doc.data.slug,
       beta: doc.data.beta ?? false,
+      deprecated: doc.data.deprecated ?? false,
     });
     return acc;
   }, {} as Record<string, DocsGroupLink[]>);
