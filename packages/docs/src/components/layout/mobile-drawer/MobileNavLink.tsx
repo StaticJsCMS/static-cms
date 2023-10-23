@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
 import BetaImage from '../../docs/BetaImage';
+import DeprecatedImage from '../../docs/DeprecatedImage';
 
 import type { MouseEvent } from 'react';
 import type { MenuLink } from '../../../interface';
@@ -15,7 +16,7 @@ interface MobileNavLinkProps {
 }
 
 const MobileNavLink = ({ link, onClick }: MobileNavLinkProps) => {
-  const { title, url, beta = false } = link;
+  const { title, url, beta = false, deprecated = false } = link;
   const { asPath } = useRouter();
 
   const selected = useMemo(() => {
@@ -35,7 +36,7 @@ const MobileNavLink = ({ link, onClick }: MobileNavLinkProps) => {
         primary={
           <>
             {title}
-            {beta ? <BetaImage /> : null}
+            {deprecated ? <DeprecatedImage /> : beta ? <BetaImage /> : null}
           </>
         }
         primaryTypographyProps={{
