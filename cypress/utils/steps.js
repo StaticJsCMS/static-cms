@@ -8,7 +8,9 @@ const {
   textColorNormal,
 } = require('./constants');
 
-function login(user, editorialWorkflow = false) {
+function login(user, options) {
+  const { editorialWorkflow = false } = options ?? {};
+
   cy.viewport(1200, 1200);
   if (user) {
     cy.visit('/', {

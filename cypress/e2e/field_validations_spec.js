@@ -85,24 +85,24 @@ describe('Test Backend Editorial Workflow', () => {
   });
 
   it('can validate object fields', () => {
-    login();
+    login({ editorialWorkflow: true });
     validateObjectFieldsAndExit(setting1);
   });
 
   // it('can validate fields nested in an object field', () => {
-  //   login();
+    // login({ editorialWorkflow: true });
   //   validateNestedObjectFieldsAndExit(setting1);
   // });
 
   // it('can validate list fields', () => {
-  //   login();
+    // login({ editorialWorkflow: true });
   //   validateListFieldsAndExit(setting2);
   // });
 
   // it('can validate deeply nested list fields', () => {
   //   cy.task('updateConfig', nestedListConfig);
 
-  //   login();
+  // login({ editorialWorkflow: true });
   //   validateNestedListFieldsAndExit(setting2);
   // });
 });

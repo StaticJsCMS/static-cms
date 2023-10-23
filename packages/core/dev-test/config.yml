@@ -1,17 +1,23 @@
 backend:
   name: test-repo
-site_url: https://example.com
+site_url: 'https://example.com'
 media_folder: assets/uploads
 media_library:
   folder_support: true
 locale: en
 publish_mode: editorial_workflow
 i18n:
+  # Required and can be one of multiple_folders, multiple_files or single_file
+  # multiple_folders - persists files in `<folder>/<locale>/<slug>.<extension>`
+  # multiple_files - persists files in `<folder>/<slug>.<locale>.<extension>`
+  # single_file - persists a single file in `<folder>/<slug>.<extension>`
   structure: multiple_files
-  locales:
-    - en
-    - de
-    - fr
+
+  # Required - a list of locales to show in the editor UI
+  locales: [en, de, fr]
+
+  # Optional, defaults to the first item in locales.
+  # The locale to be used for fields validation and as a baseline for the entry.
   default_locale: en
 collections:
   - name: posts
@@ -47,7 +53,7 @@ collections:
         - name: by-year
           label: Year
           field: date
-          pattern: \d{4}
+          pattern: '\d{4}'
     fields:
       - label: Title
         name: title
@@ -56,8 +62,8 @@ collections:
         name: date
         widget: datetime
         date_format: yyyy-MM-dd
-        time_format: HH:mm
-        format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+        time_format: 'HH:mm'
+        format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
       - label: Cover Image
         name: image
         widget: image
@@ -102,7 +108,7 @@ collections:
         label: Posts
         label_singular: Post
         widget: list
-        summary: '{{fields.post | split(''|'', ''$1'')}}'
+        summary: "{{fields.post | split('|', '$1')}}"
         condition:
           field: type
           value: internal
@@ -137,23 +143,21 @@ collections:
           - name: pattern
             label: Pattern Validation
             widget: boolean
-            pattern:
-              - 'true'
-              - Must be true
+            pattern: ['true', 'Must be true']
             required: false
           - name: prefix
             label: With Prefix
             widget: boolean
-            prefix: I'm a prefix
+            prefix: "I'm a prefix"
           - name: suffix
             label: With Suffix
             widget: boolean
-            suffix: I'm a suffix
+            suffix: "I'm a suffix"
           - name: prefix_and_suffix
             label: With Prefix and Suffix
             widget: boolean
-            prefix: I'm a prefix
-            suffix: I'm a suffix
+            prefix: "I'm a prefix"
+            suffix: "I'm a suffix"
       - name: code
         label: Code
         file: _widgets/code.json
@@ -165,13 +169,11 @@ collections:
           - name: with_default
             label: Required With Default
             widget: code
-            default: <div>Some html!</div>
+            default: '<div>Some html!</div>'
           - name: pattern
             label: Pattern Validation
             widget: code
-            pattern:
-              - .{12,}
-              - Must have at least 12 characters
+            pattern: ['.{12,}', 'Must have at least 12 characters']
             allow_input: true
             required: false
           - name: language
@@ -192,16 +194,14 @@ collections:
             required: false
             default:
               lang: html
-              code: <div>Some html!</div>
+              code: '<div>Some html!</div>'
           - name: language_with_default_language_and_value_string_default
-            label: >-
-              Language Selection With Default Language and Value (String
-              Default)
+            label: Language Selection With Default Language and Value (String Default)
             widget: code
             allow_language_selection: true
             required: false
             default_language: html
-            default: <div>Some html!</div>
+            default: '<div>Some html!</div>'
       - name: color
         label: Color
         file: _widgets/color.json
@@ -222,8 +222,7 @@ collections:
             label: Pattern Validation
             widget: color
             pattern:
-              - ^#[a-fA-F0-9]{3}$|^[a-fA-F0-9]{4}$|^[a-fA-F0-9]{6}$
-              - Must be a valid hex code
+              ['^#[a-fA-F0-9]{3}$|^[a-fA-F0-9]{4}$|^[a-fA-F0-9]{6}$', 'Must be a valid hex code']
             allow_input: true
             required: false
           - name: alpha
@@ -236,69 +235,67 @@ collections:
             widget: color
             enable_alpha: true
             required: false
-            default: rgba(175, 28, 28, 0.65)
+            default: 'rgba(175, 28, 28, 0.65)'
       - name: datetime
         label: DateTime
         file: _widgets/datetime.json
         description: DateTime widget
         fields:
           - name: required
-            label: Required Validation
+            label: 'Required Validation'
             widget: datetime
           - name: pattern
-            label: Pattern Validation
+            label: 'Pattern Validation'
             widget: datetime
-            format: MMM d, yyyy h:mm aaa
-            date_format: MMM d, yyyy
-            time_format: h:mm aaa
-            pattern:
-              - pm
-              - Must be in the afternoon
+            format: 'MMM d, yyyy h:mm aaa'
+            date_format: 'MMM d, yyyy'
+            time_format: 'h:mm aaa'
+            pattern: ['pm', 'Must be in the afternoon']
             required: false
           - name: date_and_time
             label: Date and Time
             widget: datetime
-            format: MMM d, yyyy h:mm aaa
-            date_format: MMM d, yyyy
-            time_format: h:mm aaa
+            format: 'MMM d, yyyy h:mm aaa'
+            date_format: 'MMM d, yyyy'
+            time_format: 'h:mm aaa'
             required: false
           - name: date_and_time_with_default
             label: Date and Time With Default
             widget: datetime
-            format: MMM d, yyyy h:mm aaa
-            date_format: MMM d, yyyy
-            time_format: h:mm aaa
+            format: 'MMM d, yyyy h:mm aaa'
+            date_format: 'MMM d, yyyy'
+            time_format: 'h:mm aaa'
             required: false
-            default: Jan 12, 2023 12:00 am
+            default: 'Jan 12, 2023 12:00 am'
           - name: date
             label: Date
             widget: datetime
-            format: MMM d, yyyy
+            format: 'MMM d, yyyy'
             time_format: false
             required: false
           - name: date_with_default
             label: Date With Default
             widget: datetime
-            format: MMM d, yyyy
-            date_format: MMM d, yyyy
+            format: 'MMM d, yyyy'
+            date_format: 'MMM d, yyyy'
             time_format: false
             required: false
-            default: Jan 12, 2023
+            default: 'Jan 12, 2023'
           - name: time
             label: Time
             widget: datetime
-            format: h:mm aaa
+            format: 'h:mm aaa'
             date_format: false
-            time_format: h:mm aaa
+            time_format: 'h:mm aaa'
             required: false
           - name: time_with_default
             label: Time With Default
             widget: datetime
-            format: h:mm aaa
+            format: 'h:mm aaa'
             date_format: false
-            time_format: h:mm aaa
+            time_format: 'h:mm aaa'
             required: false
-            default: 12:00 am
+            default: '12:00 am'
       - name: file
         label: File
         file: _widgets/file.json
@@ -316,9 +313,7 @@ collections:
           - name: pattern
             label: Pattern Validation
             widget: file
-            pattern:
-              - \.pdf
-              - Must be a pdf
+            pattern: ['\.pdf', 'Must be a pdf']
             required: false
           - name: choose_url
             label: Choose URL
@@ -358,9 +353,7 @@ collections:
           - name: pattern
             label: Pattern Validation
             widget: image
-            pattern:
-              - \.png
-              - Must be a png
+            pattern: ['\.png', 'Must be a png']
             required: false
           - name: choose_url
             label: Choose URL
@@ -416,6 +409,150 @@ collections:
         file: _widgets/list.yml
         description: List widget
         fields:
+          # - name: list
+          #   label: Required List
+          #   widget: list
+          #   fields:
+          #     - label: Name
+          #       name: name
+          #       widget: string
+          #       hint: First and Last
+          #     - label: Description
+          #       name: description
+          #       widget: text
+          # - name: with_default
+          #   label: Required With Default
+          #   widget: list
+          #   default:
+          #     - name: Bob Billy
+          #       description: Some text about bob
+          #   fields:
+          #     - label: Name
+          #       name: name
+          #       widget: string
+          #       hint: First and Last
+          #     - label: Description
+          #       name: description
+          #       widget: text
+          # - name: optional
+          #   label: Optional List
+          #   widget: list
+          #   required: false
+          #   fields:
+          #     - label: Name
+          #       name: name
+          #       widget: string
+          #       hint: First and Last
+          #     - label: Description
+          #       name: description
+          #       widget: text
+          # - name: list_with_object_child
+          #   label: List With Object Child
+          #   widget: list
+          #   fields:
+          #     - label: Name
+          #       name: name
+          #       widget: string
+          #       hint: First and Last
+          #     - label: Description
+          #       name: description
+          #       widget: text
+          #     - label: Object
+          #       name: object
+          #       widget: object
+          #       fields:
+          #         - label: Name
+          #           name: name
+          #           widget: string
+          #           hint: First and Last
+          #         - label: Description
+          #           name: description
+          #           widget: text
+          # - name: comma_separated_list
+          #   label: Comma Separated List
+          #   widget: list
+          # - name: delimiter_separated_list
+          #   label: Custom Delimiter (Semicolon) Separated List
+          #   widget: list
+          #   delimiter: ';'
+          #   default:
+          #     - 'tag-1'
+          #     - 'tag-2'
+          # - name: string_list
+          #   label: String List
+          #   widget: list
+          #   fields:
+          #     - label: Tag
+          #       name: tag
+          #       widget: string
+          # - name: number_list
+          #   label: Number List
+          #   widget: list
+          #   default:
+          #     - 5
+          #     - 13
+          #     - 2
+          #   fields:
+          #     - label: Value
+          #       name: value
+          #       widget: number
+          # - name: boolean_list
+          #   label: Boolean List
+          #   widget: list
+          #   default:
+          #     - false
+          #     - true
+          #   fields:
+          #     - label: Active
+          #       name: active
+          #       widget: boolean
+          # - name: typed_list
+          #   label: Typed List
+          #   widget: list
+          #   types:
+          #     - label: Type 1 Object
+          #       name: type_1_object
+          #       widget: object
+          #       fields:
+          #         - label: String
+          #           name: string
+          #           widget: string
+          #         - label: Boolean
+          #           name: boolean
+          #           widget: boolean
+          #         - label: Text
+          #           name: text
+          #           widget: text
+          #     - label: Type 2 Object
+          #       name: type_2_object
+          #       widget: object
+          #       fields:
+          #         - label: Number
+          #           name: number
+          #           widget: number
+          #         - label: Select
+          #           name: select
+          #           widget: select
+          #           options:
+          #             - a
+          #             - b
+          #             - c
+          #         - label: Datetime
+          #           name: datetime
+          #           widget: datetime
+          #         - label: Markdown
+          #           name: markdown
+          #           widget: markdown
+          #     - label: Type 3 Object
+          #       name: type_3_object
+          #       widget: object
+          #       fields:
+          #         - label: Image
+          #           name: image
+          #           widget: image
+          #         - label: File
+          #           name: file
+          #           widget: file
           - name: typed_list_with_default
             label: Typed List With Default
             widget: list
@@ -423,7 +560,7 @@ collections:
               - type: type_2_object
                 number: 5
                 select: c
-                datetime: 2022-12-05T20:22:52+0000
+                datetime: '2022-12-05T20:22:52+0000'
                 markdown: Some ***Markdown*** ~content~ text
             types:
               - label: Type 1 Object
@@ -442,7 +579,7 @@ collections:
               - label: Type 2 Object
                 name: type_2_object
                 widget: object
-                summary: '{{datetime | date(''yyyy-MM-dd'')}}'
+                summary: "{{datetime | date('yyyy-MM-dd')}}"
                 fields:
                   - label: Number
                     name: number
@@ -470,6 +607,64 @@ collections:
                   - label: File
                     name: file
                     widget: file
+          # - name: typed_list_with_condition
+          #   label: Typed List With Condition
+          #   widget: list
+          #   types:
+          #     - label: Type 1 Object
+          #       name: type_1_object
+          #       widget: object
+          #       fields:
+          #         - name: template
+          #           label: template
+          #           widget: select
+          #           options:
+          #             - column
+          #             - row
+          #             - banner
+          #           default: column
+          #         - label: String
+          #           name: string
+          #           widget: string
+          #         - label: Boolean
+          #           name: boolean
+          #           widget: boolean
+          #           condition:
+          #             field: template
+          #             value: banner
+          #         - label: Text
+          #           name: text
+          #           widget: text
+          #     - label: Type 2 Object
+          #       name: type_2_object
+          #       widget: object
+          #       fields:
+          #         - label: Number
+          #           name: number
+          #           widget: number
+          #         - label: Select
+          #           name: select
+          #           widget: select
+          #           options:
+          #             - a
+          #             - b
+          #             - c
+          #         - label: Datetime
+          #           name: datetime
+          #           widget: datetime
+          #         - label: Markdown
+          #           name: markdown
+          #           widget: markdown
+          #     - label: Type 3 Object
+          #       name: type_3_object
+          #       widget: object
+          #       fields:
+          #         - label: Image
+          #           name: image
+          #           widget: image
+          #         - label: File
+          #           name: file
+          #           widget: file
       - name: map
         label: Map
         file: _widgets/map.json
@@ -485,9 +680,7 @@ collections:
           - name: pattern
             label: Pattern Validation
             widget: map
-            pattern:
-              - \[-([7-9][0-9]|1[0-2][0-9])\.
-              - Must be between latitude -70 and -129
+            pattern: ['\[-([7-9][0-9]|1[0-2][0-9])\.', 'Must be between latitude -70 and -129']
             required: false
           - name: line_string
             label: Line String
@@ -518,9 +711,7 @@ collections:
           - name: pattern
             label: Pattern Validation
             widget: markdown
-            pattern:
-              - '# [a-zA-Z0-9]+'
-              - Must have a header
+            pattern: ['# [a-zA-Z0-9]+', 'Must have a header']
             required: false
           - name: folder_support
             label: Folder Support
@@ -538,23 +729,16 @@ collections:
                 - shortcode
                 - label: Insert
                   groups:
-                    - items:
-                        - image
-                        - file-link
-                    - items:
-                        - insert-table
+                    - items: ['image', 'file-link']
+                    - items: ['insert-table']
               empty:
                 - bold
                 - italic
                 - font
                 - label: Insert
                   groups:
-                    - items:
-                        - image
-                        - file-link
-                    - items:
-                        - blockquote
-                        - code-block
+                    - items: ['image', 'file-link']
+                    - items: ['blockquote', 'code-block']
               selection:
                 - bold
                 - italic
@@ -601,23 +785,21 @@ collections:
           - name: pattern
             label: Pattern Validation
             widget: number
-            pattern:
-              - '[0-9]{3,}'
-              - Must be at least 3 digits
+            pattern: ['[0-9]{3,}', 'Must be at least 3 digits']
             required: false
           - name: prefix
             label: With Prefix
             widget: number
-            prefix: $
+            prefix: "$"
           - name: suffix
             label: With Suffix
             widget: number
-            suffix: '%'
+            suffix: "%"
           - name: prefix_and_suffix
             label: With Prefix and Suffix
             widget: number
-            prefix: $
-            suffix: '%'
+            prefix: "$"
+            suffix: "%"
       - name: object
         label: Object
         file: _widgets/object.json
@@ -806,9 +988,7 @@ collections:
               - a
               - b
               - c
-            pattern:
-              - '[a-b]'
-              - Must be a or b
+            pattern: ['[a-b]', 'Must be a or b']
             required: false
           - label: Number Value
             name: number
@@ -853,9 +1033,7 @@ collections:
               - a
               - b
               - c
-            pattern:
-              - '[a-b]'
-              - Must be a or b
+            pattern: ['[a-b]', 'Must be a or b']
             multiple: true
             required: false
           - label: Multiple With Default
@@ -868,9 +1046,7 @@ collections:
               - a
               - b
               - c
-            pattern:
-              - '[a-b]'
-              - Must be a or b
+            pattern: ['[a-b]', 'Must be a or b']
             multiple: true
             required: false
           - label: Value and Label Multiple
@@ -899,41 +1075,37 @@ collections:
           - name: pattern
             label: Pattern Validation
             widget: string
-            pattern:
-              - .{12,}
-              - Must have at least 12 characters
+            pattern: ['.{12,}', 'Must have at least 12 characters']
             required: false
           - name: prefix
             label: With Prefix
             widget: string
-            prefix: $
+            prefix: "$"
           - name: suffix
             label: With Suffix
             widget: string
-            suffix: '%'
+            suffix: "%"
           - name: prefix_and_suffix
             label: With Prefix and Suffix
             widget: string
-            prefix: $
-            suffix: '%'
+            prefix: "$"
+            suffix: "%"
       - name: text
         label: Text
         file: _widgets/text.json
         description: Text widget
         fields:
           - name: required
-            label: Required Validation
+            label: 'Required Validation'
             widget: text
           - name: with_default
             label: Required With Default
             widget: text
             default: Default value
           - name: pattern
-            label: Pattern Validation
+            label: 'Pattern Validation'
             widget: text
-            pattern:
-              - .{12,}
-              - Must have at least 12 characters
+            pattern: ['.{12,}', 'Must have at least 12 characters']
             required: false
       - name: uuid
         label: UUID
@@ -950,7 +1122,7 @@ collections:
           - name: with_prefix
             label: With Prefix
             widget: uuid
-            prefix: book/
+            prefix: 'book/'
   - name: settings
     label: Settings
     delete: false
@@ -1034,7 +1206,7 @@ collections:
       - label: Text
         name: text
         widget: text
-        hint: Plain text, not markdown
+        hint: 'Plain text, not markdown'
       - label: Number
         name: number
         widget: number
@@ -1089,7 +1261,7 @@ collections:
         widget: select
         options:
           - label: One
-            value: One
+            value: 'One'
           - label: Two
             value: 2
           - label: Three
@@ -1349,28 +1521,32 @@ collections:
     identifier_field: slug
     create: true
     fields:
+      # The slug field will be omitted from the translation.
       - name: slug
         label: Slug
         widget: string
+      # same as 'i18n: translate'. Allows translation of the description field
       - name: description
         label: Description
         widget: text
         i18n: true
+      # The date field will be duplicated from the default locale.
       - name: date
         label: Date
         widget: datetime
         i18n: duplicate
   - name: pages
     label: Nested Pages
-    label_singular: Page
+    label_singular: 'Page'
     folder: _nested_pages
     create: true
+    # adding a nested object will show the collection folder structure
     nested:
-      depth: 100
-      summary: '{{title}}'
-      path:
-        label: Path
-        index_file: index
+      depth: 100 # max depth to show in the collection tree
+      summary: '{{title}}' # optional summary for a tree node, defaults to the inferred title field
+      # adding a path object allows editing the path of entries
+      # moving an existing entry will move the entire sub tree of the entry to the new location
+      path: { label: 'Path', index_file: 'index' }
     fields:
       - label: Title
         name: title

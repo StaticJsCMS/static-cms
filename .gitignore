@@ -2,3 +2,5 @@
 /node_modules
 *.log
 .vscode
+cypress/screenshots
+cypress/downloads
