@@ -161,20 +161,13 @@ function entryDraftReducer(
     }
 
     case DRAFT_UPDATE: {
-      let newState = { ...state };
-      if (!newState.entry) {
+      if (!state.entry) {
         return state;
       }
 
       const { data } = action.payload;
 
-      newState = {
-        ...newState,
-        entry: {
-          ...newState.entry,
-          data,
-        },
-      };
+      const newState = set(state, 'entry.data', data);
 
       let hasChanged =
         !isEqual(newState.entry?.meta, newState.original?.meta) ||
@@ -194,8 +187,7 @@ function entryDraftReducer(
     }
 
     case DRAFT_CHANGE_FIELD: {
-      let newState = { ...state };
-      if (!newState.entry) {
+      if (!state.entry) {
         return state;
       }
 
@@ -204,26 +196,21 @@ function entryDraftReducer(
         ? ['meta']
         : (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 
-      const newEntry = cloneDeep(newState.entry);
-
-      newState = {
-        ...newState,
-        entry: set(newEntry, `${dataPath.join('.')}.${path}`, value),
-      };
+      let newState = set(state, `entry.${dataPath.join('.')}.${path}`, value);
 
       if (i18n) {
         newState = duplicateI18nFields(newState, field, i18n.locales, i18n.defaultLocale, path);
       }
 
       let hasChanged =
-        !isEqual(newEntry?.meta, newState.original?.meta) ||
-        !isEqual(newEntry?.data, newState.original?.data);
+        !isEqual(newState.entry?.meta, newState.original?.meta) ||
+        !isEqual(newState.entry?.data, newState.original?.data);
 
-      const i18nData = newEntry?.i18n ?? {};
+      const i18nData = newState.entry?.i18n ?? {};
       for (const locale in i18nData) {
         hasChanged =
           hasChanged ||
-          !isEqual(newEntry?.i18n?.[locale]?.data, newState.original?.i18n?.[locale]?.data);
+          !isEqual(newState.entry?.i18n?.[locale]?.data, newState.original?.i18n?.[locale]?.data);
       }
 
       return {
