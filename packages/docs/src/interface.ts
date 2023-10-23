@@ -76,6 +76,7 @@ export interface DocsData {
   readonly weight: number;
   readonly slug: string;
   readonly beta?: boolean;
+  readonly deprecated?: boolean;
 }
 
 export interface DocsPageHeading {
@@ -95,6 +96,7 @@ export interface DocsGroupLink {
   readonly title: string;
   readonly slug: string;
   readonly beta: boolean;
+  readonly deprecated: boolean;
 }
 
 export interface DocsGroup {
@@ -133,6 +135,7 @@ export interface MenuLink {
   readonly title: string;
   readonly url: string;
   readonly beta?: boolean;
+  readonly deprecated?: boolean;
 }
 
 export interface MenuLinkSubGroup {

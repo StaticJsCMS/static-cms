@@ -134,6 +134,7 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
             title: link.title,
             url: `/docs/${link.slug}`,
             beta: link.beta,
+            deprecated: link.deprecated,
           })),
         })),
       },

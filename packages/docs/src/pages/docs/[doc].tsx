@@ -4,6 +4,7 @@ import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
 
 import BetaImage from '../../components/docs/BetaImage';
+import DeprecatedImage from '../../components/docs/DeprecatedImage';
 import DocsContent from '../../components/docs/DocsContent';
 import DocsLeftNav from '../../components/docs/DocsLeftNav';
 import DocsRightNav from '../../components/docs/DocsRightNav';
@@ -81,6 +82,7 @@ interface DocsProps {
   title: string;
   slug: string;
   beta: boolean;
+  deprecated: boolean;
   description: string;
   source: MDXRemoteSerializeResult;
 }
@@ -93,6 +95,7 @@ const Docs = ({
   description,
   source,
   beta,
+  deprecated,
 }: DocsProps) => {
   const theme = useTheme();
 
@@ -111,7 +114,7 @@ const Docs = ({
           <DocsContent>
             <Header1>
               {title}
-              {beta ? <BetaImage /> : null}
+              {deprecated ? <DeprecatedImage /> : beta ? <BetaImage /> : null}
             </Header1>
             <MDXRemote
               {...source}
@@ -186,6 +189,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
       title: data.title,
       slug: data.slug,
       beta: data.beta ?? false,
+      deprecated: data.deprecated ?? false,
       description: '',
       source,
     },
