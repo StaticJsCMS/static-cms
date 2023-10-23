@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import BetaImage from './BetaImage';
+import DeprecatedImage from './DeprecatedImage';
 
 import type { DocsGroupLink } from '../../interface';
 
@@ -66,7 +67,7 @@ const DocsLeftNavGroup = ({ name, links }: DocsLeftNavGroupProps) => {
                   primary={
                     <StyledListItemPrimary>
                       {link.title}
-                      {link.beta ? <BetaImage /> : null}
+                      {link.deprecated ? <DeprecatedImage /> : link.beta ? <BetaImage /> : null}
                     </StyledListItemPrimary>
                   }
                 />
