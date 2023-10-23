@@ -877,7 +877,6 @@ export function createEmptyDraft(collection: Collection, search: string) {
       mediaFiles: [],
     });
     newEntry = await backend.processEntry(state, collection, newEntry);
-    console.log('EQUAL?', newEntry.i18n?.de === newEntry.i18n?.['fr']);
     dispatch(emptyDraftCreated(newEntry));
   };
 }
