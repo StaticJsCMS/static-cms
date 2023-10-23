@@ -90,7 +90,7 @@ describe(`I18N Proxy Backend Simple Workflow - '${mode}' mode`, () => {
   it('can create entry with translation in locale_folders mode', () => {
     cy.task('updateConfig', { i18n: { structure: 'multiple_folders' } });
 
-    login(taskResult.data.user);
+    login({ user: taskResult.data.user });
 
     createEntryTranslateAndPublish(entry);
 
@@ -113,7 +113,7 @@ describe(`I18N Proxy Backend Simple Workflow - '${mode}' mode`, () => {
   it('can create entry with translation in single_file mode', () => {
     cy.task('updateConfig', { i18n: { structure: 'multiple_files' } });
 
-    login(taskResult.data.user);
+    login({ user: taskResult.data.user });
 
     createEntryTranslateAndPublish(entry);
 
@@ -136,7 +136,7 @@ describe(`I18N Proxy Backend Simple Workflow - '${mode}' mode`, () => {
   it('can create entry with translation in locale_file_extensions mode', () => {
     cy.task('updateConfig', { i18n: { structure: 'single_file' } });
 
-    login(taskResult.data.user);
+    login({ user: taskResult.data.user });
 
     createEntryTranslateAndPublish(entry);
 

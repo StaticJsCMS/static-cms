@@ -6,213 +6,164 @@ const {
   colorError,
   colorNormal,
   textColorNormal,
-} = require('./constants');
+} = require("./constants");
 
-function login(user, options) {
-  const { editorialWorkflow = false } = options ?? {};
+function login(options) {
+  const { user, editorialWorkflow = false } = options ?? {};
 
   cy.viewport(1200, 1200);
   if (user) {
-    cy.visit('/', {
+    cy.visit("/", {
       onBeforeLoad: () => {
         // https://github.com/cypress-io/cypress/issues/1208
-        window.indexedDB.deleteDatabase('localforage');
-        window.localStorage.setItem('static-cms-user', JSON.stringify(user));
+        window.indexedDB.deleteDatabase("localforage");
+        window.localStorage.setItem("static-cms-user", JSON.stringify(user));
         if (user.netlifySiteURL) {
-          window.localStorage.setItem('netlifySiteURL', user.netlifySiteURL);
+          window.localStorage.setItem("netlifySiteURL", user.netlifySiteURL);
         }
       },
     });
     if (user.netlifySiteURL && user.email && user.password) {
-      cy.get('input[name="email"]')
-        .clear()
-        .type(user.email);
-      cy.get('input[name="password"]')
-        .clear()
-        .type(user.password);
-      cy.contains('button', 'Login').click();
+      cy.get('input[name="email"]').clear().type(user.email);
+      cy.get('input[name="password"]').clear().type(user.password);
+      cy.contains("button", "Login").click();
     }
   } else {
-    cy.visit('/');
-    cy.contains('button', 'Login').click();
+    cy.visit("/");
+    cy.contains("button", "Login").click();
   }
 
   if (editorialWorkflow) {
-    cy.contains('div', 'Editorial Workflow');
+    cy.contains("div", "Editorial Workflow");
   } else {
-    cy.contains('a', 'New Post');
+    cy.contains("a", "New Post");
   }
 }
 
 function assertNotification(message) {
-  // if clock is use, a tick is needed for toastify to show the notifications
-  cy.clock().then(clock => {
-    if (clock) {
-      advanceClock(clock);
-    }
-    cy.get('.notif__container').within(() => {
+  cy.get(".CMS_SnackbarAlert_message", { timeout: 10000 })
+    .should("be.visible")
+    .within(() => {
       cy.contains(message);
-      cy.contains(message).invoke('hide');
+      cy.contains(message).invoke("hide");
     });
-  });
-}
-
-function assertColorOn(cssProperty, color, opts) {
-  if (opts.type && opts.type === 'label') {
-    (opts.scope ? opts.scope : cy).contains('label', opts.label).should($el => {
-      expect($el).to.have.css(cssProperty, color);
-    });
-  } else if (opts.type && opts.type === 'field') {
-    const assertion = $el => expect($el).to.have.css(cssProperty, color);
-    if (opts.isMarkdown) {
-      (opts.scope ? opts.scope : cy)
-        .contains('label', opts.label)
-        .next()
-        .children()
-        .eq(0)
-        .children()
-        .eq(1)
-        .should(assertion);
-    } else {
-      (opts.scope ? opts.scope : cy)
-        .contains('label', opts.label)
-        .next()
-        .should(assertion);
-    }
-  } else if (opts.el) {
-    opts.el.should($el => {
-      expect($el).to.have.css(cssProperty, color);
-    });
-  }
 }
 
 function exitEditor() {
-  cy.contains('a', 'Writing in').click();
+  cy.get(".CMS_Breadcrumbs_breadcrumb-link").first().click();
 }
 
 function goToWorkflow() {
-  cy.contains('a', 'Workflow').click();
+  cy.contains("a", "Workflow").click();
 }
 
 function goToCollections() {
-  cy.contains('a', 'Content').click();
+  cy.contains("a", "Content").click();
 }
 
 function goToMediaLibrary() {
-  cy.contains('button', 'Media').click();
+  cy.contains("button", "Media").click();
 }
 
 function assertUnpublishedEntryInEditor() {
-  cy.contains('button', 'Delete unpublished entry');
+  cy.contains("button", "Delete unpublished entry");
 }
 
 function assertPublishedEntryInEditor() {
-  cy.contains('button', 'Delete published entry');
+  cy.contains("button", "Delete published entry");
 }
 
 function assertUnpublishedChangesInEditor() {
-  cy.contains('button', 'Delete unpublished changes');
+  cy.contains("button", "Delete unpublished changes");
 }
 
 function goToEntry(entry) {
   goToCollections();
-  cy.get('a h2')
-    .first()
-    .contains(entry.title)
-    .click();
+  cy.get("a h2").first().contains(entry.title).click();
 }
 
 function updateWorkflowStatus({ title }, fromColumnHeading, toColumnHeading) {
-  cy.contains('h2', fromColumnHeading)
-    .parent()
-    .contains('a', title)
-    .drag();
-  cy.contains('h2', toColumnHeading)
-    .parent()
-    .drop();
-  cy.clock().then(clock => {
-    if (clock) {
-      advanceClock(clock);
-    }
-    assertNotification(notifications.updated);
-  });
+  cy.contains("h2", fromColumnHeading).parent().contains("a", title).drag();
+  cy.contains("h2", toColumnHeading).parent().drop();
+
+  cy.wait(500);
+
+  assertNotification(notifications.updated);
 }
 
 function publishWorkflowEntry({ title }, timeout) {
-  cy.contains('h2', workflowStatus.ready, { timeout })
+  cy.contains("h2", workflowStatus.ready, { timeout })
     .parent()
     .within(() => {
-      cy.contains('a', title)
+      cy.contains("a", title)
         .parent()
         .within(() => {
-          cy.contains('button', 'Publish new entry').click({ force: true });
+          cy.contains("button", "Publish new entry").click({ force: true });
         });
     });
   // assertNotification(notifications.published);
 }
 
 function deleteWorkflowEntry({ title }) {
-  cy.contains('a', title)
+  cy.contains("a", title)
     .parent()
     .within(() => {
-      cy.contains('button', 'Delete new entry').click({ force: true });
+      cy.contains("button", "Delete new entry").click({ force: true });
     });
 
   assertNotification(notifications.deletedUnpublished);
 }
 
-const STATUS_BUTTON_TEXT = 'Status:';
+const STATUS_BUTTON_TEXT = "Status:";
 
 function assertWorkflowStatusInEditor(status) {
-  cy.contains('[role="button"]', STATUS_BUTTON_TEXT).as('setStatusButton');
-  cy.get('@setStatusButton')
+  cy.contains('[role="button"]', STATUS_BUTTON_TEXT).as("setStatusButton");
+  cy.get("@setStatusButton")
     .parent()
     .within(() => {
-      cy.get('@setStatusButton').click();
+      cy.get("@setStatusButton").click();
       cy.contains('[role="menuitem"] span', status)
         .parent()
         .within(() => {
-          cy.get('svg');
+          cy.get("svg");
         });
-      cy.get('@setStatusButton').click();
+      cy.get("@setStatusButton").click();
     });
 }
 
 function assertPublishedEntry(entry) {
   if (Array.isArray(entry)) {
     const entries = entry.reverse();
-    cy.get('a h2').then(els => {
+    cy.get("a h2").then((els) => {
       cy.wrap(els.slice(0, entries.length)).each((el, idx) => {
         cy.wrap(el).contains(entries[idx].title);
       });
     });
   } else {
-    cy.get('a h2')
-      .first()
-      .contains(entry.title);
+    cy.get("a h2").first().contains(entry.title);
   }
 }
 
 function deleteEntryInEditor() {
-  cy.contains('button', 'Delete').click();
+  cy.contains("button", "Delete").click();
   assertNotification(notifications.deletedUnpublished);
 }
 
 function assertOnCollectionsPage() {
-  cy.url().should('contain', '/#/collections/posts');
+  cy.url().should("contain", "/#/collections/posts");
 }
 
 function assertEntryDeleted(entry) {
-  cy.get('body').then($body => {
-    const entriesHeaders = $body.find('a h2');
+  cy.get("body").then(($body) => {
+    const entriesHeaders = $body.find("a h2");
     if (entriesHeaders.length > 0) {
       if (Array.isArray(entry)) {
-        const titles = entry.map(e => e.title);
-        cy.get('a h2').each(el => {
+        const titles = entry.map((e) => e.title);
+        cy.get("a h2").each((el) => {
           expect(titles).not.to.include(el.text());
         });
       } else {
-        cy.get('a h2').each(el => {
+        cy.get("a h2").each((el) => {
           expect(entry.title).not.to.equal(el.text());
         });
       }
@@ -221,9 +172,7 @@ function assertEntryDeleted(entry) {
 }
 
 function assertWorkflowStatus({ title }, status) {
-  cy.contains('h2', status)
-    .parent()
-    .contains('a', title);
+  cy.contains("h2", status).parent().contains("a", title);
 }
 
 function updateWorkflowStatusInEditor(newStatus) {
@@ -232,62 +181,51 @@ function updateWorkflowStatusInEditor(newStatus) {
 }
 
 function publishEntryInEditor(publishType) {
-  selectDropdownItem('Publish', publishType);
+  selectDropdownItem("Publish", publishType);
   assertNotification(notifications.published);
 }
 
 function publishAndCreateNewEntryInEditor() {
-  selectDropdownItem('Publish', publishTypes.publishAndCreateNew);
+  selectDropdownItem("Publish", publishTypes.publishAndCreateNew);
   assertNotification(notifications.published);
-  cy.url().should('eq', `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[id^="title-field"]').should('have.value', '');
+  cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
+  cy.get('[id^="title-field"]').should("have.value", "");
 }
 
 function publishAndDuplicateEntryInEditor(entry) {
-  selectDropdownItem('Publish', publishTypes.publishAndDuplicate);
+  selectDropdownItem("Publish", publishTypes.publishAndDuplicate);
   assertNotification(notifications.published);
-  cy.url().should('eq', `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[id^="title-field"]').should('have.value', entry.title);
+  cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
+  cy.get('[id^="title-field"]').should("have.value", entry.title);
 }
 
 function selectDropdownItem(label, item) {
-  cy.contains('[role="button"]', label).as('dropDownButton');
-  cy.get('@dropDownButton')
+  cy.contains('[role="button"]', label).as("dropDownButton");
+  cy.get("@dropDownButton")
     .parent()
     .within(() => {
-      cy.get('@dropDownButton').click();
+      cy.get("@dropDownButton").click();
       cy.contains('[role="menuitem"] span', item).click();
     });
 }
 
 function flushClockAndSave() {
-  cy.clock().then(clock => {
-    // some input fields are de-bounced thus require advancing the clock
-    if (clock) {
-      advanceClock(clock);
-    }
+  cy.wait(260);
 
-    cy.contains('button', 'Save').click();
-  });
+  cy.contains("button", "Save").should("not.be.disabled").click();
+
+  cy.wait(260);
 }
 
 function populateEntry(entry, onDone = flushClockAndSave) {
   const keys = Object.keys(entry);
   for (const key of keys) {
     const value = entry[key];
-    if (key === 'body') {
-      cy.getMarkdownEditor()
-        .first()
-        .click()
-        .clear({ force: true })
-        .type(value, { force: true });
+    if (key === "body") {
+      cy.getMarkdownEditor().first().click().clear({ force: true }).type(value, { force: true });
     } else {
-      cy.get(`[id^="${key}-field"]`)
-        .first()
-        .clear({ force: true });
-      cy.get(`[id^="${key}-field"]`)
-        .first()
-        .type(value, { force: true });
+      cy.get(`[id^="${key}-field"]`).first().clear({ force: true });
+      cy.get(`[id^="${key}-field"]`).first().type(value, { force: true });
     }
   }
 
@@ -295,7 +233,7 @@ function populateEntry(entry, onDone = flushClockAndSave) {
 }
 
 function newPost() {
-  cy.contains('a', 'New Post').click();
+  cy.contains("a", "New Post").click();
 }
 
 function createPost(entry) {
@@ -319,25 +257,22 @@ function advanceClock(clock) {
 }
 
 function publishEntry({ createNew = false, duplicate = false } = {}) {
-  cy.clock().then(clock => {
-    // some input fields are de-bounced thus require advancing the clock
+  cy.wait(500);
+
+  if (createNew) {
     advanceClock(clock);
+    selectDropdownItem("Publish", publishTypes.publishAndCreateNew);
+    advanceClock(clock);
+  } else if (duplicate) {
+    advanceClock(clock);
+    selectDropdownItem("Publish", publishTypes.publishAndDuplicate);
+    advanceClock(clock);
+  } else {
+    selectDropdownItem("Publish", publishTypes.publishNow);
+  }
 
-    if (createNew) {
-      advanceClock(clock);
-      selectDropdownItem('Publish', publishTypes.publishAndCreateNew);
-      advanceClock(clock);
-    } else if (duplicate) {
-      advanceClock(clock);
-      selectDropdownItem('Publish', publishTypes.publishAndDuplicate);
-      advanceClock(clock);
-    } else {
-      selectDropdownItem('Publish', publishTypes.publishNow);
-    }
-
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(500);
-  });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(500);
 }
 
 function createPostAndPublish(entry) {
@@ -349,7 +284,7 @@ function createPostAndPublish(entry) {
 function createPostPublishAndCreateNew(entry) {
   newPost();
   populateEntry(entry, () => publishEntry({ createNew: true }));
-  cy.url().should('eq', `http://localhost:8080/#/collections/posts/new`);
+  cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
   // TODO: fix this test
   // previous entry data is somehow not cleared from the editor when opening new post
   // cy.get('[id^="title-field"]').should('have.value', '');
@@ -360,256 +295,198 @@ function createPostPublishAndCreateNew(entry) {
 function createPostPublishAndDuplicate(entry) {
   newPost();
   populateEntry(entry, () => publishEntry({ duplicate: true }));
-  cy.url().should('eq', `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[id^="title-field"]').should('have.value', entry.title);
+  cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
+  cy.get('[id^="title-field"]').should("have.value", entry.title);
 
   exitEditor();
 }
 
 function editPostAndPublish(entry1, entry2) {
   goToEntry(entry1);
-  cy.contains('button', 'Delete entry');
-  cy.contains('span', 'Published');
+  cy.contains("button", "Delete entry");
+  cy.contains("span", "Published");
 
   populateEntry(entry2, publishEntry);
   // existing entry slug should remain the same after save
   cy.url().should(
-    'eq',
-    `http://localhost:8080/#/collections/posts/entries/1970-01-01-${entry1.title
-      .toLowerCase()
-      .replace(/\s/, '-')}`,
+    "eq",
+    `http://localhost:8080/#/collections/posts/entries/1970-01-01-${entry1.title.toLowerCase().replace(/\s/, "-")}`
   );
 }
 
 function editPostPublishAndCreateNew(entry1, entry2) {
   goToEntry(entry1);
-  cy.contains('button', 'Delete entry');
-  cy.contains('span', 'Published');
+  cy.contains("button", "Delete entry");
+  cy.contains("span", "Published");
 
   populateEntry(entry2, () => publishEntry({ createNew: true }));
-  cy.url().should('eq', `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[id^="title-field"]').should('have.value', '');
+  cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
+  cy.get('[id^="title-field"]').should("have.value", "");
 }
 
 function editPostPublishAndDuplicate(entry1, entry2) {
   goToEntry(entry1);
-  cy.contains('button', 'Delete entry');
-  cy.contains('span', 'Published');
+  cy.contains("button", "Delete entry");
+  cy.contains("span", "Published");
 
   populateEntry(entry2, () => publishEntry({ duplicate: true }));
-  cy.url().should('eq', `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[id^="title-field"]').should('have.value', entry2.title);
+  cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
+  cy.get('[id^="title-field"]').should("have.value", entry2.title);
 }
 
 function duplicatePostAndPublish(entry1) {
   goToEntry(entry1);
-  cy.contains('button', 'Delete entry');
-  selectDropdownItem('Published', 'Duplicate');
+  cy.contains("button", "Delete entry");
+  selectDropdownItem("Published", "Duplicate");
   publishEntry();
 
   cy.url().should(
-    'eq',
-    `http://localhost:8080/#/collections/posts/entries/1970-01-01-${entry1.title
-      .toLowerCase()
-      .replace(/\s/, '-')}-1`,
+    "eq",
+    `http://localhost:8080/#/collections/posts/entries/1970-01-01-${entry1.title.toLowerCase().replace(/\s/, "-")}-1`
   );
 }
 
 function updateExistingPostAndExit(fromEntry, toEntry) {
   goToWorkflow();
-  cy.contains('h2', fromEntry.title)
-    .parent()
-    .click({ force: true });
+  cy.contains("h2", fromEntry.title).parent().click({ force: true });
   populateEntry(toEntry);
   exitEditor();
   goToWorkflow();
-  cy.contains('h2', toEntry.title);
+  cy.contains("h2", toEntry.title);
 }
 
 function unpublishEntry(entry) {
   goToCollections();
-  cy.contains('h2', entry.title)
-    .parent()
-    .click({ force: true });
-  selectDropdownItem('Published', 'Unpublish');
+  cy.contains("h2", entry.title).parent().click({ force: true });
+  selectDropdownItem("Published", "Unpublish");
   assertNotification(notifications.unpublished);
   goToWorkflow();
   assertWorkflowStatus(entry, workflowStatus.ready);
 }
 
 function duplicateEntry(entry) {
-  selectDropdownItem('Published', 'Duplicate');
-  cy.url().should('contain', '/#/collections/posts/new');
+  selectDropdownItem("Published", "Duplicate");
+  cy.url().should("contain", "/#/collections/posts/new");
   flushClockAndSave();
   updateWorkflowStatusInEditor(editorStatus.ready);
   publishEntryInEditor(publishTypes.publishNow);
   exitEditor();
-  cy.get('a h2').should($h2s => {
+  cy.get("a h2").should(($h2s) => {
     expect($h2s.eq(0)).to.contain(entry.title);
     expect($h2s.eq(1)).to.contain(entry.title);
   });
 }
 
 function validateObjectFields({ limit, author }) {
-  cy.get('a[href^="#/collections/settings"]').click();
-  cy.get('a[href^="#/collections/settings/entries/general"]').click();
-  cy.get('input[type=number]').type(limit);
-  cy.contains('button', 'Save').click();
+  cy.contains("a", "Settings").click();
+  cy.contains("a", "Site Settings").click();
+  cy.contains("label", "Number of posts on frontpage").click();
+  cy.focused().type(limit);
+  flushClockAndSave();
   assertNotification(notifications.error.missingField);
-  assertFieldErrorStatus('Default Author', colorError);
-  cy.contains('label', 'Default Author').click();
+  cy.contains(`[data-testid="field"]`, "Default Author").should("have.class", "CMS_Field_error");
+  cy.contains("label", "Default Author").click();
   cy.focused().type(author);
-  cy.contains('button', 'Save').click();
+  flushClockAndSave();
   assertNotification(notifications.saved);
-  assertFieldErrorStatus('Default Author', colorNormal);
+  cy.contains(`[data-testid="field"]`, "Default Author").should("not.have.class", "CMS_Field_error");
 }
 
 function validateNestedObjectFields({ limit, author }) {
-  cy.get('a[href^="#/collections/settings"]').click();
-  cy.get('a[href^="#/collections/settings/entries/general"]').click();
-  cy.contains('label', 'Default Author').click();
+  cy.contains("a", "Settings").click();
+  cy.contains("a", "Site Settings").click();
+  cy.contains("label", "Default Author").click();
   cy.focused().type(author);
-  cy.contains('button', 'Save').click();
+  flushClockAndSave();
   assertNotification(notifications.error.missingField);
-  cy.get('input[type=number]').type(limit + 1);
-  cy.contains('button', 'Save').click();
+  cy.get("input[type=number]").type(limit + 1);
+  flushClockAndSave();
   assertFieldValidationError(notifications.validation.range);
-  cy.get('input[type=number]')
-    .clear()
-    .type(-1);
-  cy.contains('button', 'Save').click();
+  cy.get("input[type=number]").clear().type(-1);
+  flushClockAndSave();
   assertFieldValidationError(notifications.validation.range);
-  cy.get('input[type=number]')
-    .clear()
-    .type(limit);
-  cy.contains('button', 'Save').click();
+  cy.get("input[type=number]").clear().type(limit);
+  flushClockAndSave();
   assertNotification(notifications.saved);
 }
 
 function validateListFields({ name, description }) {
-  cy.get('a[href^="#/collections/settings"]').click();
-  cy.get('a[href^="#/collections/settings/entries/authors"]').click();
-  cy.contains('button', 'Add').click();
-  cy.contains('button', 'Save').click();
+  cy.contains("a", "Settings").click();
+  cy.contains("a", "Authors").click();
+  cy.contains("button", "Add").click();
+  flushClockAndSave();
   assertNotification(notifications.error.missingField);
-  assertFieldErrorStatus('Authors', colorError);
-  cy.get('div[class*=SortableListItem]')
-    .eq(2)
-    .as('listControl');
-  assertFieldErrorStatus('Name', colorError, { scope: cy.get('@listControl') });
-  assertColorOn('background-color', colorError, {
-    type: 'label',
-    label: 'Description',
-    scope: cy.get('@listControl'),
-    isMarkdown: true,
-  });
-  assertListControlErrorStatus([colorError, colorError], '@listControl');
-  cy.get('input')
-    .eq(2)
-    .type(name);
-  cy.getMarkdownEditor()
-    .eq(2)
-    .type(description);
+  cy.contains(`[data-testid="list-field"]`, "Authors").should("have.class", "CMS_WidgetList_error");
+  cy.get(".CMS_WidgetList_ListItem_root").eq(2).as("listControl");
+  cy.get("@listControl").should("have.class", "CMS_WidgetList_ListItem_error");
+  cy.get("@listControl").contains(`[data-testid="field"]`, "Name").should("have.class", "CMS_Field_error");
+  cy.get("input").eq(2).type(name);
+  cy.get("textarea").eq(2).type(description);
   flushClockAndSave();
   assertNotification(notifications.saved);
-  assertFieldErrorStatus('Authors', colorNormal);
+  cy.contains(`[data-testid="list-field"]`, "Authors").should("not.have.class", "CMS_WidgetList_error");
 }
 
 function validateNestedListFields() {
-  cy.get('a[href^="#/collections/settings"]').click();
-  cy.get('a[href^="#/collections/settings/entries/hotel_locations"]').click();
+  cy.contains("a", "Settings").click();
+  cy.contains("a", "Hotel Locations").click();
 
   // add first city list item
-  cy.contains('button', 'hotel locations').click();
-  cy.contains('button', 'cities').click();
-  cy.contains('label', 'City')
-    .next()
-    .type('Washington DC');
-  cy.contains('label', 'Number of Hotels in City')
-    .next()
-    .type('5');
-  cy.contains('button', 'city locations').click();
+  cy.contains("button", "hotel locations").click();
+  cy.contains("button", "cities").click();
+  cy.contains("label", "City").next().type("Washington DC");
+  cy.contains("label", "Number of Hotels in City").next().type("5");
+  cy.contains("button", "city locations").click();
 
   // add second city list item
-  cy.contains('button', 'cities').click();
-  cy.contains('label', 'Cities')
-    .next()
-    .find('div[class*=SortableListItem]')
-    .eq(2)
-    .as('secondCitiesListControl');
-  cy.get('@secondCitiesListControl')
-    .contains('label', 'City')
-    .next()
-    .type('Boston');
-  cy.get('@secondCitiesListControl')
-    .contains('button', 'city locations')
-    .click();
+  cy.contains("button", "cities").click();
+  cy.contains("label", "Cities").next().find(".CMS_ErrorMessage_root").eq(2).as("secondCitiesListControl");
+  cy.get("@secondCitiesListControl").contains("label", "City").next().type("Boston");
+  cy.get("@secondCitiesListControl").contains("button", "city locations").click();
 
-  cy.contains('button', 'Save').click();
+  flushClockAndSave();
   assertNotification(notifications.error.missingField);
 
   // assert on fields
-  assertFieldErrorStatus('Hotel Locations', colorError);
-  assertFieldErrorStatus('Cities', colorError);
-  assertFieldErrorStatus('City', colorNormal);
-  assertFieldErrorStatus('City', colorNormal, { scope: cy.get('@secondCitiesListControl') });
-  assertFieldErrorStatus('Number of Hotels in City', colorNormal);
-  assertFieldErrorStatus('Number of Hotels in City', colorError, {
-    scope: cy.get('@secondCitiesListControl'),
-  });
-  assertFieldErrorStatus('City Locations', colorError);
-  assertFieldErrorStatus('City Locations', colorError, {
-    scope: cy.get('@secondCitiesListControl'),
-  });
-  assertFieldErrorStatus('Hotel Name', colorError);
-  assertFieldErrorStatus('Hotel Name', colorError, { scope: cy.get('@secondCitiesListControl') });
+  cy.contains(`[data-testid="field"]`, "Hotel Locations").should("have.class", "CMS_Field_error");
+  cy.contains(`[data-testid="field"]`, "Cities").should("have.class", "CMS_Field_error");
+  cy.contains(`[data-testid="field"]`, "City").should("not.have.class", "CMS_Field_error");
+  cy.contains(`[data-testid="field"]`, "City", { scope: cy.get("@secondCitiesListControl") }).should(
+    "not.have.class",
+    "CMS_Field_error"
+  );
+  cy.contains(`[data-testid="field"]`, "Number of Hotels in City").should("not.have.class", "CMS_Field_error");
+  cy.contains(`[data-testid="field"]`, "Number of Hotels in City", {
+    scope: cy.get("@secondCitiesListControl"),
+  }).should("have.class", "CMS_Field_error");
+  cy.contains(`[data-testid="field"]`, "City Locations").should("have.class", "CMS_Field_error");
+  cy.contains(`[data-testid="field"]`, "City Locations", {
+    scope: cy.get("@secondCitiesListControl"),
+  }).should("have.class", "CMS_Field_error");
+  cy.contains(`[data-testid="field"]`, "Hotel Name").should("have.class", "CMS_Field_error");
+  cy.contains(`[data-testid="field"]`, "Hotel Name", { scope: cy.get("@secondCitiesListControl") }).should(
+    "have.class",
+    "CMS_Field_error"
+  );
 
   // list control aliases
-  cy.contains('label', 'Hotel Locations')
+  cy.contains("label", "Hotel Locations").next().find(".CMS_ErrorMessage_root").first().as("hotelLocationsListControl");
+  cy.contains("label", "Cities").next().find(".CMS_ErrorMessage_root").eq(0).as("firstCitiesListControl");
+  cy.contains("label", "City Locations")
     .next()
-    .find('div[class*=SortableListItem]')
-    .first()
-    .as('hotelLocationsListControl');
-  cy.contains('label', 'Cities')
-    .next()
-    .find('div[class*=SortableListItem]')
+    .find(".CMS_ErrorMessage_root")
     .eq(0)
-    .as('firstCitiesListControl');
-  cy.contains('label', 'City Locations')
-    .next()
-    .find('div[class*=SortableListItem]')
-    .eq(0)
-    .as('firstCityLocationsListControl');
-  cy.contains('label', 'Cities')
-    .next()
-    .find('div[class*=SortableListItem]')
-    .eq(3)
-    .as('secondCityLocationsListControl');
+    .as("firstCityLocationsListControl");
+  cy.contains("label", "Cities").next().find(".CMS_ErrorMessage_root").eq(3).as("secondCityLocationsListControl");
 
-  // assert on list controls
-  assertListControlErrorStatus([colorError, colorError], '@hotelLocationsListControl');
-  assertListControlErrorStatus([colorError, colorError], '@firstCitiesListControl');
-  assertListControlErrorStatus([colorError, colorError], '@secondCitiesListControl');
-  assertListControlErrorStatus([colorError, colorError], '@firstCityLocationsListControl');
-  assertListControlErrorStatus([colorError, colorError], '@secondCityLocationsListControl');
-
-  cy.contains('label', 'Hotel Name')
-    .next()
-    .type('The Ritz Carlton');
-  cy.contains('button', 'Save').click();
+  cy.contains("label", "Hotel Name").next().type("The Ritz Carlton");
+  flushClockAndSave();
   assertNotification(notifications.error.missingField);
-  assertListControlErrorStatus([colorNormal, textColorNormal], '@firstCitiesListControl');
 
   // fill out rest of form and save
-  cy.get('@secondCitiesListControl')
-    .contains('label', 'Number of Hotels in City')
-    .type(3);
-  cy.get('@secondCitiesListControl')
-    .contains('label', 'Hotel Name')
-    .type('Grand Hyatt');
-  cy.contains('label', 'Country')
-    .next()
-    .type('United States');
+  cy.get("@secondCitiesListControl").contains("label", "Number of Hotels in City").type(3);
+  cy.get("@secondCitiesListControl").contains("label", "Hotel Name").type("Grand Hyatt");
+  cy.contains("label", "Country").next().type("United States");
   flushClockAndSave();
   assertNotification(notifications.saved);
 }
@@ -635,47 +512,8 @@ function validateNestedListFieldsAndExit(setting) {
 }
 
 function assertFieldValidationError({ message, fieldLabel }) {
-  cy.contains('label', fieldLabel)
-    .siblings('ul[class*=ControlErrorsList]')
-    .contains(message);
-  assertFieldErrorStatus(fieldLabel, colorError);
-}
-
-function assertFieldErrorStatus(label, color, opts = { isMarkdown: false }) {
-  assertColorOn('background-color', color, {
-    type: 'label',
-    label,
-    scope: opts.scope,
-    isMarkdown: opts.isMarkdown,
-  });
-  assertColorOn('border-color', color, {
-    type: 'field',
-    label,
-    scope: opts.scope,
-    isMarkdown: opts.isMarkdown,
-  });
-}
-
-function assertListControlErrorStatus(colors = ['', ''], alias) {
-  cy.get(alias).within(() => {
-    // assert list item border has correct color
-    assertColorOn('border-right-color', colors[0], {
-      el: cy
-        .root()
-        .children()
-        .eq(2),
-    });
-    // collapse list item
-    cy.get('button[class*=TopBarButton-button]')
-      .first()
-      .click();
-    // assert list item label text has correct color
-    assertColorOn('color', colors[1], { el: cy.get('div[class*=NestedObjectLabel]').first() });
-    // uncollapse list item
-    cy.get('button[class*=TopBarButton-button]')
-      .first()
-      .click();
-  });
+  cy.contains("label", fieldLabel).siblings(".CMS_ErrorMessage_root").contains(message);
+  cy.contains(`[data-testid="field"]`, fieldLabel).should("have.class", "CMS_Field_error");
 }
 
 module.exports = {

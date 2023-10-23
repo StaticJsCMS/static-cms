@@ -19,7 +19,7 @@ export default function({ entries, getUser }) {
       });
       cy.reload();
 
-      login(getUser());
+      login({ user: getUser() });
       createPostAndExit(entries[0]);
       createPostAndExit(entries[1]);
       createPostAndExit(entries[2]);

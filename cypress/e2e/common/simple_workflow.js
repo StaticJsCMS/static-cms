@@ -2,11 +2,11 @@ import { login, createPostAndPublish, assertPublishedEntry } from '../../utils/s
 
 export default function({ entries, getUser }) {
   it('successfully loads', () => {
-    login(getUser());
+    login({ user: getUser() });
   });
 
   it('can create an entry', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPostAndPublish(entries[0]);
     assertPublishedEntry(entries[0]);
   });

@@ -11,22 +11,22 @@ import { workflowStatus } from '../../utils/constants';
 
 export default function({ entries, getUser, getForkUser }) {
   it('successfully loads', () => {
-    login(getUser());
+    login({ user: getUser() });
   });
 
   it('can create an entry', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPostAndExit(entries[0]);
   });
 
   it('can update an entry', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPostAndExit(entries[0]);
     updateExistingPostAndExit(entries[0], entries[1]);
   });
 
   it('can publish an editorial workflow entry', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPostAndExit(entries[0]);
     goToWorkflow();
     updateWorkflowStatus(entries[0], workflowStatus.draft, workflowStatus.ready);
@@ -34,29 +34,29 @@ export default function({ entries, getUser, getForkUser }) {
   });
 
   it('successfully forks repository and loads', () => {
-    login(getForkUser());
+    login({ user: getForkUser() });
   });
 
   it('can create an entry on fork', () => {
-    login(getForkUser());
+    login({ user: getForkUser() });
     createPostAndExit(entries[0]);
   });
 
   it('can update a draft entry on fork', () => {
-    login(getForkUser());
+    login({ user: getForkUser() });
     createPostAndExit(entries[0]);
     updateExistingPostAndExit(entries[0], entries[1]);
   });
 
   it('can change entry status from fork', () => {
-    login(getForkUser());
+    login({ user: getForkUser() });
     createPostAndExit(entries[0]);
     goToWorkflow();
     updateWorkflowStatus(entries[0], workflowStatus.draft, workflowStatus.review);
   });
 
   it('can delete review entry from fork', () => {
-    login(getForkUser());
+    login({ user: getForkUser() });
     createPostAndExit(entries[0]);
     goToWorkflow();
     updateWorkflowStatus(entries[0], workflowStatus.draft, workflowStatus.review);
@@ -64,7 +64,7 @@ export default function({ entries, getUser, getForkUser }) {
   });
 
   it('can return entry to draft and delete it', () => {
-    login(getForkUser());
+    login({ user: getForkUser() });
     createPostAndExit(entries[0]);
     goToWorkflow();
     updateWorkflowStatus(entries[0], workflowStatus.draft, workflowStatus.review);

@@ -28,8 +28,6 @@ export const beforeEach = (taskResult, backend) => {
     console.log('loading fixture:', fixture);
     cy.stubFetch({ fixture });
   }
-
-  return cy.clock(0, ['Date']);
 };
 
 export const afterEach = (taskResult, backend) => {

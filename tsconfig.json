@@ -55,6 +55,7 @@
       "@staticcms/core": ["./packages/core/src"],
       "@staticcms/core/*": ["./packages/core/src/*"]
     },
-    "types": ["@types/jest", "@testing-library/jest-dom"]
-  }
+    "types": ["@types/jest", "@testing-library/jest-dom", "cypress"]
+  },
+  "include": ["cypress/**/*.*"]
 }

@@ -20,7 +20,7 @@ export default function({ entry, getUser }) {
     it(`can create and publish entry with translation in ${structure} mode`, () => {
       cy.task('updateConfig', { i18n: { structure } });
 
-      login(getUser());
+      login({ user: getUser() });
 
       createEntryTranslateAndSave(entry);
       assertUnpublishedEntryInEditor();
@@ -36,7 +36,7 @@ export default function({ entry, getUser }) {
     it(`can update translated entry in ${structure} mode`, () => {
       cy.task('updateConfig', { i18n: { structure: 'multiple_folders' } });
 
-      login(getUser());
+      login({ user: getUser() });
 
       createEntryTranslateAndSave(entry);
       assertUnpublishedEntryInEditor();

@@ -252,9 +252,7 @@ describe('Test Backend Editorial Workflow', () => {
     cy.get('[id^="path-field"]').should('have.value', 'directory/sub-directory');
     cy.get('[id^="path-field"]').type('/new-path');
     cy.get('[id^="title-field"]').type('New Path Title');
-    cy.clock().then(clock => {
-      clock.tick(150);
-    });
+    cy.wait(150);
     cy.contains('button', 'Save').click();
     assertNotification(notifications.saved);
     updateWorkflowStatusInEditor(editorStatus.ready);
@@ -276,9 +274,7 @@ describe('Test Backend Editorial Workflow', () => {
 
     cy.contains('a', 'New Page').click();
     cy.get('[id^="title-field"]').type('New Path Title');
-    cy.clock().then(clock => {
-      clock.tick(150);
-    });
+    cy.wait(150);
     cy.contains('button', 'Save').click();
 
     assertFieldValidationError({
@@ -298,9 +294,7 @@ describe('Test Backend Editorial Workflow', () => {
     cy.get('[id^="path-field"]').type('new-directory');
     cy.get('[id^="title-field"]').clear();
     cy.get('[id^="title-field"]').type('New Directory');
-    cy.clock().then(clock => {
-      clock.tick(150);
-    });
+    cy.wait(150);
     cy.contains('button', 'Save').click();
     assertNotification(notifications.saved);
     updateWorkflowStatusInEditor(editorStatus.ready);

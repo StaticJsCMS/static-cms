@@ -20,22 +20,22 @@ import { workflowStatus, editorStatus } from '../../utils/constants';
 
 export default function({ entries, getUser }) {
   it('successfully loads', () => {
-    login(getUser());
+    login({ user: getUser() });
   });
 
   it('can create an entry', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPostAndExit(entries[0]);
   });
 
   it('can update an entry', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPostAndExit(entries[0]);
     updateExistingPostAndExit(entries[0], entries[1]);
   });
 
   it('can publish an editorial workflow entry', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPostAndExit(entries[0]);
     goToWorkflow();
     updateWorkflowStatus(entries[0], workflowStatus.draft, workflowStatus.ready);
@@ -43,7 +43,7 @@ export default function({ entries, getUser }) {
   });
 
   it('can change workflow status', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPostAndExit(entries[0]);
     goToWorkflow();
     updateWorkflowStatus(entries[0], workflowStatus.draft, workflowStatus.review);
@@ -54,7 +54,7 @@ export default function({ entries, getUser }) {
   });
 
   it('can change status on and publish multiple entries', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPostAndExit(entries[0]);
     createPostAndExit(entries[1]);
     createPostAndExit(entries[2]);
@@ -70,7 +70,7 @@ export default function({ entries, getUser }) {
   });
 
   it('can delete an entry', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPost(entries[0]);
     deleteEntryInEditor();
     assertOnCollectionsPage();
@@ -78,7 +78,7 @@ export default function({ entries, getUser }) {
   });
 
   it('can update workflow status from within the editor', () => {
-    login(getUser());
+    login({ user: getUser() });
     createPost(entries[0]);
     assertWorkflowStatusInEditor(editorStatus.draft);
     updateWorkflowStatusInEditor(editorStatus.review);

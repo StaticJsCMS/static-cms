@@ -150,7 +150,6 @@ export default function({ entries, getUser }) {
 
   it('should show published entry image in global media library', () => {
     publishPostWithImage(entries[0]);
-    cy.clock().tick();
     goToMediaLibrary();
     assertImagesInLibrary();
     matchImageSnapshot();
