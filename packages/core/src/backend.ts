@@ -3,7 +3,6 @@ import attempt from 'lodash/attempt';
 import flatten from 'lodash/flatten';
 import get from 'lodash/get';
 import isError from 'lodash/isError';
-import set from 'lodash/set';
 import uniq from 'lodash/uniq';
 import { dirname, extname } from 'path';
 
@@ -53,6 +52,7 @@ import { DRAFT_MEDIA_FILES, selectMediaFilePublicPath } from './lib/util/media.u
 import { selectCustomPath, slugFromCustomPath } from './lib/util/nested.util';
 import { isNotNullish, isNullish } from './lib/util/null.util';
 import { fileSearch, sortByScore } from './lib/util/search.util';
+import set from './lib/util/set.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
 import { getUseWorkflow } from './reducers/selectors/config';
 import createEntry from './valueObjects/createEntry';
@@ -193,19 +193,22 @@ export function expandSearchEntries(
   field: string;
 })[] {
   // expand the entries for the purpose of the search
-  const expandedEntries = entries.reduce((acc, e) => {
-    const expandedFields = searchFields.reduce((acc, f) => {
-      const fields = expandPath({ data: e.data, path: f });
-      acc.push(...fields);
+  const expandedEntries = entries.reduce(
+    (acc, e) => {
+      const expandedFields = searchFields.reduce((acc, f) => {
+        const fields = expandPath({ data: e.data, path: f });
+        acc.push(...fields);
+        return acc;
+      }, [] as string[]);
+
+      for (let i = 0; i < expandedFields.length; i++) {
+        acc.push({ ...e, field: expandedFields[i] });
+      }
+
       return acc;
-    }, [] as string[]);
-
-    for (let i = 0; i < expandedFields.length; i++) {
-      acc.push({ ...e, field: expandedFields[i] });
-    }
-
-    return acc;
-  }, [] as (Entry & { field: string })[]);
+    },
+    [] as (Entry & { field: string })[],
+  );
 
   return expandedEntries;
 }
@@ -215,27 +218,30 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]): En
   const fields = entries.map(f => f.field);
   const arrayPaths: Record<string, Set<string>> = {};
 
-  const merged = entries.reduce((acc, e) => {
-    if (!acc[e.slug]) {
-      const { field: _field, ...rest } = e;
-      acc[e.slug] = rest;
-      arrayPaths[e.slug] = new Set();
-    }
+  const merged = entries.reduce(
+    (acc, e) => {
+      if (!acc[e.slug]) {
+        const { field: _field, ...rest } = e;
+        acc[e.slug] = rest;
+        arrayPaths[e.slug] = new Set();
+      }
 
-    const nestedFields = e.field.split('.');
-    let value: ValueOrNestedValue = acc[e.slug].data;
-    for (let i = 0; i < nestedFields.length; i++) {
-      if (isNotNullish(value)) {
-        value = value[nestedFields[i]];
-        if (Array.isArray(value)) {
-          const path = nestedFields.slice(0, i + 1).join('.');
-          arrayPaths[e.slug] = arrayPaths[e.slug].add(path);
+      const nestedFields = e.field.split('.');
+      let value: ValueOrNestedValue = acc[e.slug].data;
+      for (let i = 0; i < nestedFields.length; i++) {
+        if (isNotNullish(value)) {
+          value = value[nestedFields[i]];
+          if (Array.isArray(value)) {
+            const path = nestedFields.slice(0, i + 1).join('.');
+            arrayPaths[e.slug] = arrayPaths[e.slug].add(path);
+          }
         }
       }
-    }
 
-    return acc;
-  }, {} as Record<string, Entry>);
+      return acc;
+    },
+    {} as Record<string, Entry>,
+  );
 
   // this keeps the search score sorting order designated by the order in entries
   // and filters non matching items
