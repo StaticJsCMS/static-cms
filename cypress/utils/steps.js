@@ -8,7 +8,7 @@ const {
   textColorNormal,
 } = require('./constants');
 
-function login(user) {
+function login(user, editorialWorkflow = false) {
   cy.viewport(1200, 1200);
   if (user) {
     cy.visit('/', {
@@ -34,7 +34,12 @@ function login(user) {
     cy.visit('/');
     cy.contains('button', 'Login').click();
   }
-  cy.contains('a', 'New Post');
+
+  if (editorialWorkflow) {
+    cy.contains('div', 'Editorial Workflow');
+  } else {
+    cy.contains('a', 'New Post');
+  }
 }
 
 function assertNotification(message) {
