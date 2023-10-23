@@ -137,6 +137,7 @@ const Docs = ({
                 Template,
                 Templates,
                 BetaImage,
+                DeprecatedImage,
                 Deprecated,
               }}
             />
