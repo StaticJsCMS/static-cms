@@ -14,19 +14,22 @@
 }
 
 & .CMS_Editor_i18n {
-  @apply flex
+  @apply hidden
     w-full
     overflow-y-auto
     h-main-mobile
     md:h-main;
+
+  &.CMS_Editor_i18n-active {
+    @apply flex;
+  }
 }
 
 & .CMS_Editor_mobile-i18n {
   @apply flex
     w-full
     overflow-y-auto
-    h-main-mobile
-    md:hidden;
+    h-main-mobile;
 }
 
 & .CMS_Editor_root {

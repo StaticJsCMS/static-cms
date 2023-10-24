@@ -1794,6 +1794,62 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
         },
       ],
     },
+    {
+      name: 'i18n_playground_multiple_folders',
+      label: 'i18n (Multiple Folders)',
+      i18n: {
+        structure: 'multiple_folders',
+        locales: ['en', 'de', 'fr'],
+        defaultLocale: 'en',
+      },
+      folder: 'packages/core/dev-test/backends/proxy/_i18n_playground_multiple_folders',
+      identifier_field: 'slug',
+      create: true,
+      fields: [
+        {
+          name: 'slug',
+          label: 'Slug',
+          widget: 'string',
+        },
+        {
+          name: 'description',
+          label: 'Description',
+          widget: 'text',
+          i18n: true,
+        },
+        {
+          name: 'date',
+          label: 'Date',
+          widget: 'datetime',
+          i18n: 'duplicate',
+        },
+      ],
+    },
+    {
+      name: 'i18n_playground_single_file',
+      label: 'i18n (Single File)',
+      i18n: {
+        structure: 'single_file',
+        locales: ['en', 'de', 'fr'],
+        defaultLocale: 'en',
+      },
+      folder: 'packages/core/dev-test/backends/proxy/_i18n_playground_single_file',
+      identifier_field: 'slug',
+      create: true,
+      fields: [
+        {
+          name: 'slug',
+          label: 'Slug',
+          widget: 'string',
+        },
+        {
+          name: 'description',
+          label: 'Description',
+          widget: 'text',
+          i18n: true,
+        },
+      ],
+    },
   ],
 };
 
