@@ -1,4 +1,18 @@
 .CMS_LocaleDropdown_root {
+  &:not(.CMS_LocaleDropdown_no-edit) {
+    @apply flex
+      gap-2
+      items-center;
+  }
+}
+
+.CMS_LocaleDropdown_dropdown {
+}
+
+.CMS_LocaleDropdown_errors-icon {
+  @apply w-7
+    h-7
+    text-red-500;
 }
 
 .CMS_LocaleDropdown_no-edit {

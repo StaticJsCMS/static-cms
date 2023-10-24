@@ -79,6 +79,7 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
     <Button
       key="button"
       aria-label={label ?? tooltip}
+      title={label ?? tooltip}
       variant="text"
       data-testid={`toolbar-button-${label ?? tooltip}`.replace(' ', '-').toLowerCase()}
       onClick={handleOnClick}

@@ -108,6 +108,7 @@ const EditorControlPane = ({
       {i18n?.locales && locale ? (
         <div className={classes.locale_dropdown_wrapper}>
           <LocaleDropdown
+            locale={locale}
             locales={i18n.locales}
             defaultLocale={i18n.defaultLocale}
             dropdownText={t('editor.editorControlPane.i18n.writingInLocale', {
