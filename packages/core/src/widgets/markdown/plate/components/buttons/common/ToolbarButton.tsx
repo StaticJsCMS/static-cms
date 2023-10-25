@@ -82,6 +82,7 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
       key="button"
       aria-label={label ?? tooltip}
       color="secondary"
+      title={label ?? tooltip}
       variant="text"
       data-testid={`toolbar-button-${id}`}
       onClick={handleOnClick}

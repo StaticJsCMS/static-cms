@@ -75,7 +75,7 @@ const EditorControlPane: FC<EditorControlPaneProps> = ({
         widget: 'string',
         i18n: 'none',
         hint: ``,
-      }) as StringField,
+      } as StringField),
     [collection],
   );
 
@@ -112,6 +112,7 @@ const EditorControlPane: FC<EditorControlPaneProps> = ({
       {i18n?.locales && locale ? (
         <div className={classes.locale_dropdown_wrapper}>
           <LocaleDropdown
+            locale={locale}
             locales={i18n.locales}
             defaultLocale={i18n.defaultLocale}
             dropdownText={t('editor.editorControlPane.i18n.writingInLocale', {
