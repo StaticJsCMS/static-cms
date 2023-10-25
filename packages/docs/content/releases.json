@@ -1,6 +1,17 @@
 {
   "releases": [
     {
+      "date": "2023-10-24T10:00:00.000Z",
+      "version": "v3.4.0",
+      "type": "minor",
+      "description": "Improve i18n error checking"
+    },
+    {
+      "date": "2023-10-23T10:00:00.000Z",
+      "version": "v3.3.11",
+      "type": "patch"
+    },
+    {
       "date": "2023-10-15T10:00:00.000Z",
       "version": "v3.3.10",
       "type": "patch"

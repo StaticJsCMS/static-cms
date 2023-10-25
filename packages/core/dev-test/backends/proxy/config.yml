@@ -495,9 +495,57 @@ collections:
                 name: file
                 widget: file
   - name: i18n_playground
-    label: i18n Playground
+    label: i18n (Multiple Files)
     i18n: true
     folder: packages/core/dev-test/backends/proxy/_i18n_playground
+    identifier_field: slug
+    create: true
+    fields:
+      # The slug field will be omitted from the translation.
+      - name: slug
+        label: Slug
+        widget: string
+      # same as 'i18n: translate'. Allows translation of the description field
+      - name: description
+        label: Description
+        widget: text
+        i18n: true
+      # The date field will be duplicated from the default locale.
+      - name: date
+        label: Date
+        widget: datetime
+        i18n: duplicate
+  - name: i18n_playground_multiple_folders
+    label: i18n (Multiple Folders)
+    i18n:
+      structure: multiple_folders
+      locales: [en, de, fr]
+      defaultLocale: en
+    folder: packages/core/dev-test/backends/proxy/_i18n_playground_multiple_folders
+    identifier_field: slug
+    create: true
+    fields:
+      # The slug field will be omitted from the translation.
+      - name: slug
+        label: Slug
+        widget: string
+      # same as 'i18n: translate'. Allows translation of the description field
+      - name: description
+        label: Description
+        widget: text
+        i18n: true
+      # The date field will be duplicated from the default locale.
+      - name: date
+        label: Date
+        widget: datetime
+        i18n: duplicate
+  - name: i18n_playground_single_file
+    label: i18n (Single File)
+    i18n:
+      structure: single_file
+      locales: [en, de, fr]
+      defaultLocale: en
+    folder: packages/core/dev-test/backends/proxy/_i18n_playground_multiple_folders
     identifier_field: slug
     create: true
     fields:

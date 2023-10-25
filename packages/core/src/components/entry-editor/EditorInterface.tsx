@@ -6,7 +6,7 @@ import { ScrollSyncPane } from 'react-scroll-sync';
 import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
 import { summaryFormatter } from '@staticcms/core/lib/formatters';
 import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
-import useIsMobile from '@staticcms/core/lib/hooks/useIsMobile';
+import { useIsSmallScreen } from '@staticcms/core/lib/hooks/useMediaQuery';
 import { getI18nInfo, getPreviewEntry, hasI18n } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import {
@@ -41,6 +41,7 @@ export const classes = generateClassNames('Editor', [
   'default',
   'i18n',
   'i18n-panel',
+  'i18n-active',
   'split-view',
   'wrapper-preview',
   'wrapper-i18n-side-by-side',
@@ -149,7 +150,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   const config = useAppSelector(selectConfig);
   const useWorkflow = useAppSelector(selectUseWorkflow);
 
-  const isMobile = useIsMobile();
+  const isSmallScreen = useIsSmallScreen();
 
   const isLoading = useAppSelector(selectIsFetching);
   const disabled = useMemo(
@@ -162,8 +163,8 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
 
   const { locales, default_locale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
   const translatedLocales = useMemo(
-    () => locales?.filter(locale => locale !== default_locale) ?? [],
-    [locales, default_locale],
+    () => (isSmallScreen ? locales : locales?.filter(locale => locale !== default_locale)) ?? [],
+    [isSmallScreen, locales, default_locale],
   );
 
   const [previewActive, setPreviewActive] = useState(
@@ -179,6 +180,10 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   const [selectedLocale, setSelectedLocale] = useState<string>(
     (i18nActive ? translatedLocales?.[0] : default_locale) ?? 'en',
   );
+
+  useEffect(() => {
+    setSelectedLocale((i18nActive ? translatedLocales?.[0] : default_locale) ?? 'en');
+  }, [default_locale, i18nActive, translatedLocales]);
 
   useEffect(() => {
     loadScroll();
@@ -338,32 +343,43 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   );
 
   const editorLocale = useMemo(
-    () => (
-      <div key={selectedLocale} className={classes.i18n}>
-        <EditorControlPane
-          collection={collection}
-          entry={entry}
-          fields={fields}
-          fieldsErrors={fieldsErrors}
-          locale={selectedLocale}
-          onLocaleChange={handleLocaleChange}
-          submitted={submitted}
-          canChangeLocale
-          context="i18nSplit"
-          hideBorder
-          disabled={disabled}
-        />
-      </div>
-    ),
+    () =>
+      locales
+        ?.filter(l => l !== default_locale)
+        .map(locale => (
+          <div
+            key={locale}
+            className={classNames(
+              classes.i18n,
+              selectedLocale === locale && classes['i18n-active'],
+            )}
+          >
+            <EditorControlPane
+              collection={collection}
+              entry={entry}
+              fields={fields}
+              fieldsErrors={fieldsErrors}
+              locale={locale}
+              onLocaleChange={handleLocaleChange}
+              submitted={submitted}
+              canChangeLocale
+              context="i18nSplit"
+              hideBorder
+              disabled={disabled}
+            />
+          </div>
+        )),
     [
+      locales,
+      default_locale,
+      selectedLocale,
       collection,
-      disabled,
       entry,
       fields,
       fieldsErrors,
       handleLocaleChange,
-      selectedLocale,
       submitted,
+      disabled,
     ],
   );
 
@@ -388,23 +404,24 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   );
 
   const mobileLocaleEditor = useMemo(
-    () => (
-      <div key={selectedLocale} className={classes.i18n}>
-        <EditorControlPane
-          collection={collection}
-          entry={entry}
-          fields={fields}
-          fieldsErrors={fieldsErrors}
-          locale={selectedLocale}
-          onLocaleChange={handleLocaleChange}
-          allowDefaultLocale
-          submitted={submitted}
-          canChangeLocale
-          hideBorder
-          disabled={disabled}
-        />
-      </div>
-    ),
+    () =>
+      isSmallScreen ? (
+        <div key={selectedLocale} className={classes.i18n}>
+          <EditorControlPane
+            collection={collection}
+            entry={entry}
+            fields={fields}
+            fieldsErrors={fieldsErrors}
+            locale={selectedLocale}
+            onLocaleChange={handleLocaleChange}
+            allowDefaultLocale
+            submitted={submitted}
+            canChangeLocale
+            hideBorder
+            disabled={disabled}
+          />
+        </div>
+      ) : null,
     [
       collection,
       disabled,
@@ -412,6 +429,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       fields,
       fieldsErrors,
       handleLocaleChange,
+      isSmallScreen,
       selectedLocale,
       submitted,
     ],
@@ -419,7 +437,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
 
   const editorWithPreview = (
     <>
-      {!isMobile ? (
+      {!isSmallScreen ? (
         <PanelGroup
           key="editor-with-preview"
           autoSaveId={`editor-with-preview-${collection.name}`}
@@ -465,7 +483,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
 
   const editorSideBySideLocale = (
     <>
-      {!isMobile ? (
+      {!isSmallScreen ? (
         <PanelGroup
           key="editor-side-by-side-locale"
           autoSaveId={`editor-side-by-side-locale-${collection.name}`}
