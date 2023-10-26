@@ -7,7 +7,7 @@ import { addFileTemplateFields } from '../widgets/stringTemplate';
 import useEntries from './useEntries';
 import useTranslate from './useTranslate';
 
-import type { Breadcrumb, Collection, Entry } from '@staticcms/core/interface';
+import type { Breadcrumb, CollectionWithDefaults, Entry } from '@staticcms/core/interface';
 
 interface EntryDetails {
   isNewEntry: boolean;
@@ -15,7 +15,7 @@ interface EntryDetails {
 }
 
 export default function useBreadcrumbs(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   filterTerm: string | undefined | null,
   entryDetails?: EntryDetails,
 ) {

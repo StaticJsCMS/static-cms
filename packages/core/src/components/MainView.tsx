@@ -8,7 +8,7 @@ import Navbar from './navbar/Navbar';
 import Sidebar from './navbar/Sidebar';
 
 import type { FC, ReactNode } from 'react';
-import type { Breadcrumb, Collection } from '../interface';
+import type { Breadcrumb, CollectionWithDefaults } from '../interface';
 
 import './MainView.css';
 
@@ -37,7 +37,7 @@ interface MainViewProps {
   noMargin?: boolean;
   noScroll?: boolean;
   children: ReactNode;
-  collection?: Collection;
+  collection?: CollectionWithDefaults;
 }
 
 const MainView: FC<MainViewProps> = ({

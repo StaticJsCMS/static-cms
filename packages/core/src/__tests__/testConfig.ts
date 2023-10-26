@@ -1793,7 +1793,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
       i18n: {
         structure: 'multiple_folders',
         locales: ['en', 'de', 'fr'],
-        defaultLocale: 'en',
+        default_locale: 'en',
       },
       folder: 'packages/core/dev-test/backends/proxy/_i18n_playground_multiple_folders',
       identifier_field: 'slug',
@@ -1824,7 +1824,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
       i18n: {
         structure: 'single_file',
         locales: ['en', 'de', 'fr'],
-        defaultLocale: 'en',
+        default_locale: 'en',
       },
       folder: 'packages/core/dev-test/backends/proxy/_i18n_playground_single_file',
       identifier_field: 'slug',

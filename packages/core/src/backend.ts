@@ -62,10 +62,10 @@ import type {
   BackendInitializer,
   BackupEntry,
   BaseField,
-  Collection,
   CollectionFile,
-  Collections,
-  Config,
+  CollectionWithDefaults,
+  CollectionsWithDefaults,
+  ConfigWithDefaults,
   Credentials,
   DataFile,
   DisplayURL,
@@ -73,7 +73,7 @@ import type {
   EntryData,
   EventData,
   FilterRule,
-  FolderCollection,
+  FolderCollectionWithDefaults,
   I18nInfo,
   ImplementationEntry,
   MediaField,
@@ -245,7 +245,7 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]): En
 
   // this keeps the search score sorting order designated by the order in entries
   // and filters non matching items
-  Object.keys(merged).forEach(slug => {
+  return Object.keys(merged).map(slug => {
     let data = merged[slug].data ?? {};
     for (const path of arrayPaths[slug]) {
       const array = get(data, path) as unknown[];
@@ -266,9 +266,12 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]): En
 
       data = set(data, path, filtered);
     }
-  });
 
-  return Object.values(merged);
+    return {
+      ...merged[slug],
+      data,
+    };
+  });
 }
 
 interface AuthStore {
@@ -279,7 +282,7 @@ interface AuthStore {
 
 interface BackendOptions<EF extends BaseField> {
   backendName: string;
-  config: Config<EF>;
+  config: ConfigWithDefaults<EF>;
   authStore?: AuthStore;
 }
 
@@ -299,11 +302,13 @@ export interface MediaFile {
   isDirectory?: boolean;
 }
 
-function selectHasMetaPath(collection: Collection): collection is FolderCollection {
+function selectHasMetaPath(
+  collection: CollectionWithDefaults,
+): collection is FolderCollectionWithDefaults {
   return Boolean('folder' in collection && collection.meta?.path);
 }
 
-function prepareMetaPath(path: string, collection: Collection) {
+function prepareMetaPath(path: string, collection: CollectionWithDefaults) {
   if (!selectHasMetaPath(collection)) {
     return path;
   }
@@ -311,7 +316,7 @@ function prepareMetaPath(path: string, collection: Collection) {
   return dir.slice(collection.folder!.length + 1) || '/';
 }
 
-function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
+function collectionDepth<EF extends BaseField>(collection: CollectionWithDefaults<EF>) {
   let depth;
   depth =
     ('nested' in collection && collection.nested?.depth) || getPathDepth(collection.path ?? '');
@@ -335,7 +340,9 @@ function i18nRuleString(ruleString: string, { default_locale, structure }: I18nI
   return ruleString;
 }
 
-function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegExp | undefined {
+function collectionRegex<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF>,
+): RegExp | undefined {
   let ruleString = '';
 
   if ('folder' in collection && collection.path) {
@@ -352,7 +359,7 @@ function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegE
 export class Backend<EF extends BaseField = UnknownField, BC extends BackendClass = BackendClass> {
   implementation: BC;
   backendName: string;
-  config: Config<EF>;
+  config: ConfigWithDefaults<EF>;
   authStore?: AuthStore;
   user?: User | null;
   backupSync: AsyncLock;
@@ -365,7 +372,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     this.deleteAnonymousBackup();
     this.config = config;
     this.implementation = implementation.init(this.config, {
-      useWorkflow: getUseWorkflow(this.config as Config),
+      useWorkflow: getUseWorkflow(this.config as ConfigWithDefaults),
       updateUserCredentials: this.updateUserCredentials,
       initialWorkflowStatus: WorkflowStatus.DRAFT,
     }) as BC;
@@ -414,10 +421,6 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return Promise.resolve(null);
   }
 
-  isGitBackend() {
-    return this.implementation.isGitBackend?.() || false;
-  }
-
   updateUserCredentials = (updatedCredentials: Credentials) => {
     const storedUser = this.authStore!.retrieve();
     if (storedUser && storedUser.backendName === this.backendName) {
@@ -457,7 +460,12 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   getToken = () => this.implementation.getToken();
 
-  async entryExist(collection: Collection, path: string, slug: string, useWorkflow: boolean) {
+  async entryExist(
+    collection: CollectionWithDefaults,
+    path: string,
+    slug: string,
+    useWorkflow: boolean,
+  ) {
     const unpublishedEntry =
       useWorkflow &&
       (await this.implementation
@@ -484,9 +492,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   }
 
   async generateUniqueSlug(
-    collection: Collection,
+    collection: CollectionWithDefaults,
     entry: Entry,
-    config: Config,
+    config: ConfigWithDefaults,
     usedSlugs: string[],
     customPath: string | undefined,
   ) {
@@ -518,7 +526,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   processEntries<EF extends BaseField>(
     loadedEntries: ImplementationEntry[],
-    collection: Collection<EF>,
+    collection: CollectionWithDefaults<EF>,
   ): Entry[] {
     const entries = loadedEntries.map(loadedEntry =>
       createEntry(
@@ -549,7 +557,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return filteredEntries;
   }
 
-  async listEntries(collection: Collection) {
+  async listEntries(collection: CollectionWithDefaults) {
     const extension = selectFolderEntryExtension(collection);
     let listMethod: () => Promise<ImplementationEntry[]>;
     if ('folder' in collection) {
@@ -588,7 +596,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   // repeats the process. Once there is no available "next" action, it
   // returns all the collected entries. Used to retrieve all entries
   // for local searches and queries.
-  async listAllEntries<EF extends BaseField>(collection: Collection<EF>) {
+  async listAllEntries<EF extends BaseField>(collection: CollectionWithDefaults<EF>) {
     if ('folder' in collection && collection.folder && this.implementation.allEntriesByFolder) {
       const depth = collectionDepth(collection);
       const extension = selectFolderEntryExtension(collection);
@@ -602,7 +610,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         .then(entries => this.processEntries(entries, collection));
     }
 
-    const response = await this.listEntries(collection as Collection);
+    const response = await this.listEntries(collection as CollectionWithDefaults);
     const { entries } = response;
     let { cursor } = response;
     while (cursor && cursor.actions?.has('next')) {
@@ -617,7 +625,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return `\n\n${error.stack}`;
   }
 
-  async search(collections: Collection[], searchTerm: string): Promise<SearchResponse> {
+  async search(collections: CollectionWithDefaults[], searchTerm: string): Promise<SearchResponse> {
     // Perform a local search by requesting all entries. For each
     // collection, load it, search, and call onCollectionResults with
     // its results.
@@ -677,13 +685,13 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   }
 
   async query<EF extends BaseField>(
-    collection: Collection<EF>,
+    collection: CollectionWithDefaults<EF>,
     searchFields: string[],
     searchTerm: string,
     file?: string,
     limit?: number,
   ): Promise<SearchQueryResponse> {
-    const entries = await this.listAllEntries(collection as Collection);
+    const entries = await this.listAllEntries(collection as CollectionWithDefaults);
     if (file) {
       let hits = fileSearch(
         entries.find(e => e.slug === file),
@@ -719,7 +727,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   traverseCursor(cursor: Cursor, action: string): Promise<{ entries: Entry[]; cursor: Cursor }> {
     const [data, unwrappedCursor] = cursor.unwrapData();
     // TODO: stop assuming all cursors are for collections
-    const collection = data.collection as Collection;
+    const collection = data.collection as CollectionWithDefaults;
     return this.implementation.traverseCursor!(unwrappedCursor, action).then(
       async ({ entries, cursor: newCursor }) => ({
         entries: this.processEntries(entries, collection),
@@ -732,7 +740,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   }
 
   async getLocalDraftBackup(
-    collection: Collection,
+    collection: CollectionWithDefaults,
     slug: string,
   ): Promise<{ entry: Entry | null }> {
     const key = getEntryBackupKey(collection.name, slug);
@@ -772,7 +780,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return { entry };
   }
 
-  async persistLocalDraftBackup(entry: Entry, collection: Collection) {
+  async persistLocalDraftBackup(entry: Entry, collection: CollectionWithDefaults) {
     try {
       await this.backupSync.acquire();
       const key = getEntryBackupKey(collection.name, entry.slug);
@@ -813,7 +821,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     }
   }
 
-  async deleteLocalDraftBackup(collection: Collection, slug: string) {
+  async deleteLocalDraftBackup(collection: CollectionWithDefaults, slug: string) {
     try {
       await this.backupSync.acquire();
       await localForage.removeItem(getEntryBackupKey(collection.name, slug));
@@ -836,7 +844,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   async getEntry<EF extends BaseField>(
     state: RootState<EF>,
-    collection: Collection<EF>,
+    collection: CollectionWithDefaults<EF>,
     slug: string,
   ) {
     const path = selectEntryPath(collection, slug) as string;
@@ -886,7 +894,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return Promise.reject(err);
   }
 
-  entryWithFormat<EF extends BaseField>(collection: Collection<EF>) {
+  entryWithFormat<EF extends BaseField>(collection: CollectionWithDefaults<EF>) {
     return (entry: Entry): Entry => {
       const format = resolveFormat(collection, entry);
       if (entry && entry.raw !== undefined) {
@@ -904,7 +912,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   async processEntry<EF extends BaseField>(
     state: RootState<EF>,
-    collection: Collection<EF>,
+    collection: CollectionWithDefaults<EF>,
     entry: Entry,
   ) {
     const configState = state.config;
@@ -1061,27 +1069,27 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return { entry, author: { login, name } };
   }
 
-  async invokePrePublishEvent(entry: Entry, collection: Collection) {
+  async invokePrePublishEvent(entry: Entry, collection: CollectionWithDefaults) {
     const eventData = await this.getEventData(entry);
     return await invokeEvent({ name: 'prePublish', collection: collection.name, data: eventData });
   }
 
-  async invokePostPublishEvent(entry: Entry, collection: Collection) {
+  async invokePostPublishEvent(entry: Entry, collection: CollectionWithDefaults) {
     const eventData = await this.getEventData(entry);
     return await invokeEvent({ name: 'postPublish', collection: collection.name, data: eventData });
   }
 
-  async invokePreSaveEvent(entry: Entry, collection: Collection): Promise<EntryData> {
+  async invokePreSaveEvent(entry: Entry, collection: CollectionWithDefaults): Promise<EntryData> {
     const eventData = await this.getEventData(entry);
     return await invokeEvent({ name: 'preSave', collection: collection.name, data: eventData });
   }
 
-  async invokePostSaveEvent(entry: Entry, collection: Collection): Promise<void> {
+  async invokePostSaveEvent(entry: Entry, collection: CollectionWithDefaults): Promise<void> {
     const eventData = await this.getEventData(entry);
     await invokeEvent({ name: 'postSave', collection: collection.name, data: eventData });
   }
 
-  async persistMedia(config: Config, file: AssetProxy) {
+  async persistMedia(config: ConfigWithDefaults, file: AssetProxy) {
     const user = (await this.currentUser()) as User;
     const options = {
       commitMessage: commitMessageFormatter('uploadMedia', config, {
@@ -1095,7 +1103,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   async deleteEntry<EF extends BaseField>(
     state: RootState<EF>,
-    collection: Collection<EF>,
+    collection: CollectionWithDefaults<EF>,
     slug: string,
   ) {
     const configState = state.config;
@@ -1126,7 +1134,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     await this.implementation.deleteFiles(paths, commitMessage);
   }
 
-  async deleteMedia(config: Config, path: string) {
+  async deleteMedia(config: ConfigWithDefaults, path: string) {
     const user = (await this.currentUser()) as User;
     const commitMessage = commitMessageFormatter('deleteMedia', config, {
       path,
@@ -1136,14 +1144,14 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return this.implementation.deleteFiles([path], commitMessage);
   }
 
-  entryToRaw(collection: Collection, entry: Entry): string {
+  entryToRaw(collection: CollectionWithDefaults, entry: Entry): string {
     const format = resolveFormat(collection, entry);
     const fieldsOrder = this.fieldsOrder(collection, entry);
     const fieldsComments = selectFieldsComments(collection, entry);
     return format ? format.toFile(entry.data ?? {}, fieldsOrder, fieldsComments) : '';
   }
 
-  fieldsOrder(collection: Collection, entry: Entry) {
+  fieldsOrder(collection: CollectionWithDefaults, entry: Entry) {
     if ('fields' in collection) {
       return collection.fields?.map(f => f!.name) ?? [];
     }
@@ -1165,7 +1173,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
    * Editorial Workflows
    */
   async processUnpublishedEntry(
-    collection: Collection,
+    collection: CollectionWithDefaults,
     entryData: UnpublishedEntry,
     withMediaFiles: boolean,
   ) {
@@ -1241,7 +1249,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     }
   }
 
-  async unpublishedEntries(collections: Collections) {
+  async unpublishedEntries(collections: CollectionsWithDefaults) {
     const ids = await this.implementation.unpublishedEntries();
     const entries = (
       await Promise.all(
@@ -1262,7 +1270,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return { pagination: 0, entries };
   }
 
-  async unpublishedEntry(state: RootState, collection: Collection, slug: string) {
+  async unpublishedEntry(state: RootState, collection: CollectionWithDefaults, slug: string) {
     const entryData = await this.implementation.unpublishedEntry({
       collection: collection.name,
       slug,
@@ -1285,14 +1293,14 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return this.implementation.deleteUnpublishedEntry(collection, slug);
   }
 
-  async publishUnpublishedEntry(collection: Collection, entry: Entry) {
+  async publishUnpublishedEntry(collection: CollectionWithDefaults, entry: Entry) {
     await this.invokePrePublishEvent(entry, collection);
     await this.implementation.publishUnpublishedEntry(collection.name, entry.slug);
     await this.invokePostPublishEvent(entry, collection);
   }
 }
 
-export function resolveBackend<EF extends BaseField>(config?: Config<EF>) {
+export function resolveBackend<EF extends BaseField>(config?: ConfigWithDefaults<EF>) {
   if (!config?.backend.name) {
     throw new Error('No backend defined in configuration');
   }
@@ -1311,7 +1319,7 @@ export function resolveBackend<EF extends BaseField>(config?: Config<EF>) {
 export const currentBackend = (function () {
   let backend: Backend;
 
-  return <EF extends BaseField = UnknownField>(config: Config<EF>) => {
+  return <EF extends BaseField = UnknownField>(config: ConfigWithDefaults<EF>) => {
     if (backend) {
       return backend;
     }

@@ -6,11 +6,7 @@ const {
   mergeExpandedEntries: actualMergeExpandedEntries,
 } = jest.requireActual('@staticcms/core/backend');
 
-const isGitBackend = jest.fn().mockReturnValue(true);
-
-export const resolveBackend = jest.fn().mockReturnValue({
-  isGitBackend,
-});
+export const resolveBackend = jest.fn().mockReturnValue({});
 
 export const currentBackend = jest.fn();
 

@@ -26,7 +26,7 @@ import StrikethroughToolbarButton from '../components/buttons/StrikethroughToolb
 import UnorderedListButton from '../components/buttons/UnorderedListToolbarButton';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   LowLevelMarkdownToolbarButtonType,
   MarkdownField,
   MarkdownToolbarButtonType,
@@ -40,7 +40,7 @@ const classes = generateClassNames('WidgetMarkdown_MenuToolbar', ['root', 'butto
 
 export default function useToolbarButtons(
   toolbarButtons: MarkdownToolbarItem[],
-  collection: Collection<MarkdownField>,
+  collection: CollectionWithDefaults<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
 ): ReactNode[] {
@@ -52,7 +52,7 @@ export default function useToolbarButtons(
 
 export function getToolbarButtons(
   toolbarButtons: MarkdownToolbarItem[] | MarkdownToolbarButtonType[],
-  collection: Collection<MarkdownField>,
+  collection: CollectionWithDefaults<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
 ): ReactNode[] {
@@ -93,21 +93,21 @@ export function getToolbarButtons(
 
 function getToolbarButton(
   name: MarkdownToolbarButtonType,
-  collection: Collection<MarkdownField>,
+  collection: CollectionWithDefaults<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
   variant: 'button',
 ): ReactNode;
 function getToolbarButton(
   name: LowLevelMarkdownToolbarButtonType,
-  collection: Collection<MarkdownField>,
+  collection: CollectionWithDefaults<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
   variant: 'menu',
 ): ReactNode;
 function getToolbarButton(
   name: MarkdownToolbarButtonType | LowLevelMarkdownToolbarButtonType,
-  collection: Collection<MarkdownField>,
+  collection: CollectionWithDefaults<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
   variant: 'button' | 'menu',

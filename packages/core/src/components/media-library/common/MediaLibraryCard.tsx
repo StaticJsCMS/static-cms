@@ -15,7 +15,11 @@ import Image from '../../common/image/Image';
 import Pill from '../../common/pill/Pill';
 import CopyToClipBoardButton from './CopyToClipBoardButton';
 
-import type { Collection, MediaField, MediaLibraryDisplayURL } from '@staticcms/core/interface';
+import type {
+  CollectionWithDefaults,
+  MediaField,
+  MediaLibraryDisplayURL,
+} from '@staticcms/core/interface';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 
 import './MediaLibraryCard.css';
@@ -50,7 +54,7 @@ interface MediaLibraryCardProps {
   isViewableImage: boolean;
   isDraft?: boolean;
   isDirectory?: boolean;
-  collection?: Collection;
+  collection?: CollectionWithDefaults;
   field?: MediaField;
   currentFolder?: string;
   hasSelection: boolean;

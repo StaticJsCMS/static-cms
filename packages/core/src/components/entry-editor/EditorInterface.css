@@ -28,7 +28,12 @@
 }
 
 .CMS_Editor_i18n {
-  @apply w-full;
+  @apply w-full
+    hidden;
+
+  &.CMS_Editor_i18n-active {
+    @apply flex;
+  }
 }
 
 .CMS_Editor_toolbar {
@@ -76,9 +81,7 @@
 }
 
 .CMS_Editor_mobile-root {
-  @apply !flex
-    lg:!hidden
-    w-full
+  @apply w-full
     overflow-y-auto
     h-main-mobile;
 

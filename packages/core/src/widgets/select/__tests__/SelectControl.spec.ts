@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { act, waitFor } from '@testing-library/react';
 
 import { mockSelectField } from '@staticcms/test/data/fields.mock';

@@ -26,7 +26,7 @@ import MenuItemButton from '../common/menu/MenuItemButton';
 import EditorWorkflowToolbarButtons from './EditorWorkflowToolbarButtons';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import type { Collection, EditorPersistOptions } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, EditorPersistOptions } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler } from 'react';
 
 import './EditorToolbar.css';
@@ -53,7 +53,7 @@ export interface EditorToolbarProps {
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
   hasChanged: boolean;
-  collection: Collection;
+  collection: CollectionWithDefaults;
   isNewEntry: boolean;
   isModification?: boolean;
   showPreviewToggle: boolean;

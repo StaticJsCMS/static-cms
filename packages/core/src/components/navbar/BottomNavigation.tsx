@@ -13,7 +13,7 @@ import IconButton from '../common/button/IconButton';
 import NavigationDrawer from './NavigationDrawer';
 import QuickCreate from './QuickCreate';
 
-import type { Collection } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 import './BottomNavigation.css';
@@ -31,7 +31,7 @@ export const classes = generateClassNames('BottomNavigation', [
 ]);
 
 export interface BottomNavigationProps {
-  collection: Collection | undefined;
+  collection: CollectionWithDefaults | undefined;
 }
 
 const BottomNavigation: FC<BottomNavigationProps> = ({ collection }) => {

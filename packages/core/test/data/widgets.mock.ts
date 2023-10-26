@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+import { applyDefaults } from '@staticcms/core/actions/config';
 import { createMockFolderCollection } from './collections.mock';
 import { createMockConfig } from './config.mock';
 import { createMockEntry } from './entry.mock';
@@ -44,10 +45,12 @@ export const createMockWidgetControlProps = <T, F extends BaseField = UnknownFie
     rawFieldsErrors ?? (rawErrors ? { [`${path}.${options.field.name}`]: errors } : {});
   const hasErrors = Boolean(rawErrors && rawErrors.length > 0);
 
+  const configWithDefaults = applyDefaults(config);
+
   return {
     label: 'Mock Widget',
-    config,
-    collection,
+    config: configWithDefaults,
+    collection: configWithDefaults.collections[0],
     collectionFile: undefined,
     entry,
     value,

@@ -7,7 +7,7 @@ import set from './util/set.util';
 
 import type {
   BaseField,
-  Collection,
+  CollectionWithDefaults,
   Entry,
   EntryData,
   Field,
@@ -19,8 +19,6 @@ import type {
 } from '../interface';
 import type { EntryDraftState } from '../reducers/entryDraft';
 
-export const I18N = 'i18n';
-
 export const I18N_STRUCTURE_MULTIPLE_FOLDERS = 'multiple_folders';
 export const I18N_STRUCTURE_MULTIPLE_FILES = 'multiple_files';
 export const I18N_STRUCTURE_SINGLE_FILE = 'single_file';
@@ -30,23 +28,28 @@ export const I18N_FIELD_DUPLICATE = 'duplicate';
 export const I18N_FIELD_NONE = 'none';
 
 export function hasI18n<EF extends BaseField>(
-  collection: Collection<EF> | i18nCollection<EF>,
+  collection: CollectionWithDefaults<EF> | i18nCollection<EF>,
 ): collection is i18nCollection<EF> {
-  return I18N in collection;
+  return Boolean('i18n' in collection && collection.i18n);
 }
 
 export function getI18nInfo<EF extends BaseField>(collection: i18nCollection<EF>): I18nInfo;
-export function getI18nInfo<EF extends BaseField>(collection: Collection<EF>): I18nInfo | null;
 export function getI18nInfo<EF extends BaseField>(
-  collection: Collection<EF> | i18nCollection<EF>,
+  collection: CollectionWithDefaults<EF>,
+): I18nInfo | null;
+export function getI18nInfo<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF> | i18nCollection<EF>,
 ): I18nInfo | null {
-  if (!hasI18n(collection) || typeof collection[I18N] !== 'object') {
+  if (!hasI18n(collection) || typeof collection.i18n !== 'object') {
     return null;
   }
   return collection.i18n;
 }
 
-export function getI18nFilesDepth<EF extends BaseField>(collection: Collection<EF>, depth: number) {
+export function getI18nFilesDepth<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF>,
+  depth: number,
+) {
   const i18nInfo = getI18nInfo(collection);
   if (i18nInfo) {
     const { structure } = i18nInfo;
@@ -71,7 +74,7 @@ export function isFieldHidden(field: Field, locale?: string, defaultLocale?: str
 }
 
 export function getLocaleDataPath(locale: string) {
-  return [I18N, locale, 'data'];
+  return ['i18n', locale, 'data'];
 }
 
 export function getDataPath(locale: string, defaultLocale: string | undefined) {
@@ -116,7 +119,7 @@ export function getLocaleFromPath(structure: I18nStructure, extension: string, p
 }
 
 export function getFilePaths<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   extension: string,
   path: string,
   slug: string,
@@ -167,7 +170,7 @@ export interface i18nFile {
 }
 
 export function getI18nFiles<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   extension: string,
   entryDraft: Entry,
   entryToRaw: (entryDraft: Entry) => string,
@@ -222,7 +225,7 @@ export function getI18nFiles<EF extends BaseField>(
 }
 
 export function getI18nBackup(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   entry: Entry,
   entryToRaw: (entry: Entry) => string,
 ): Record<
@@ -276,7 +279,7 @@ export function formatI18nBackup(
 }
 
 function mergeValues<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   structure: I18nStructure,
   defaultLocale: string | undefined,
   values: { locale: string; value: Entry }[],
@@ -329,7 +332,7 @@ function mergeSingleFileValue(
 }
 
 export async function getI18nEntry<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   extension: string,
   path: string,
   slug: string,
@@ -369,7 +372,7 @@ export async function getI18nEntry<EF extends BaseField>(
 }
 
 export function groupEntries<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   extension: string,
   entries: Entry[],
 ): Entry[] {
@@ -403,7 +406,7 @@ export function groupEntries<EF extends BaseField>(
 }
 
 export function getI18nDataFiles(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   extension: string,
   path: string,
   slug: string,
@@ -439,7 +442,7 @@ export function getI18nDataFiles(
 }
 
 export function duplicateDefaultI18nFields(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataFields: any,
 ): {
@@ -538,7 +541,7 @@ function mergeI18nData(
 }
 
 export function getPreviewEntry(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   entry: Entry,
   locale: string | undefined,
   defaultLocale: string | undefined,
@@ -565,7 +568,7 @@ export function getPreviewEntry(
 }
 
 export function serializeI18n(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   entry: Entry,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   serializeValues: (data: any) => any,

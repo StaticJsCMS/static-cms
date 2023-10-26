@@ -17,8 +17,8 @@ import mediaLibraryClasses from './MediaLibrary.classes';
 import MediaLibraryCard from './MediaLibraryCard';
 
 import type {
-  Collection,
-  CollectionFile,
+  CollectionFileWithDefaults,
+  CollectionWithDefaults,
   MediaField,
   MediaFile,
   MediaLibraryDisplayURL,
@@ -53,8 +53,8 @@ export interface MediaLibraryCardGridProps {
   cardDraftText: string;
   loadDisplayURL: (asset: MediaFile) => void;
   displayURLs: MediaLibraryState['displayURLs'];
-  collection?: Collection;
-  collectionFile?: CollectionFile;
+  collection?: CollectionWithDefaults;
+  collectionFile?: CollectionFileWithDefaults;
   field?: MediaField;
   isDialog: boolean;
   onDelete: (file: MediaFile) => void;

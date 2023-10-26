@@ -5,10 +5,10 @@ import { oneLine, stripIndent } from 'common-tags';
 
 import Cursor from '@staticcms/core/lib/util/Cursor';
 import {
-  createMockFilesCollection,
-  createMockFolderCollection,
+  createMockFilesCollectionWithDefaults,
+  createMockFolderCollectionWithDefaults,
 } from '@staticcms/test/data/collections.mock';
-import { createMockConfig } from '@staticcms/test/data/config.mock';
+import { createMockConfig, createMockConfigWithDefaults } from '@staticcms/test/data/config.mock';
 import mockFetch from '@staticcms/test/mockFetch';
 import AuthenticationPage from '../AuthenticationPage';
 import GitLab from '../implementation';
@@ -17,7 +17,11 @@ import type {
   Backend as BackendType,
   LocalStorageAuthStore as LocalStorageAuthStoreType,
 } from '@staticcms/core/backend';
-import type { Config, FilesCollection, FolderCollection } from '@staticcms/core/interface';
+import type {
+  ConfigWithDefaults,
+  FilesCollectionWithDefaults,
+  FolderCollectionWithDefaults,
+} from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { FetchMethod } from '@staticcms/test/mockFetch';
 
@@ -163,21 +167,21 @@ describe('gitlab backend', () => {
   let authStore: InstanceType<typeof LocalStorageAuthStoreType>;
   const repo = 'foo/bar';
 
-  const collectionContentConfig = createMockFolderCollection({
+  const collectionContentConfig = createMockFolderCollectionWithDefaults({
     name: 'foo',
     folder: 'content',
     format: 'json-frontmatter',
     fields: [{ name: 'title', widget: 'string' }],
-  }) as unknown as FolderCollection;
+  }) as unknown as FolderCollectionWithDefaults;
 
-  const collectionManyEntriesConfig = createMockFolderCollection({
+  const collectionManyEntriesConfig = createMockFolderCollectionWithDefaults({
     name: 'foo',
     folder: 'many-entries',
     format: 'json-frontmatter',
     fields: [{ name: 'title', widget: 'string' }],
-  }) as unknown as FolderCollection;
+  }) as unknown as FolderCollectionWithDefaults;
 
-  const collectionFilesConfig = createMockFilesCollection({
+  const collectionFilesConfig = createMockFilesCollectionWithDefaults({
     name: 'foo',
     files: [
       {
@@ -193,21 +197,21 @@ describe('gitlab backend', () => {
         fields: [{ name: 'title', widget: 'string' }],
       },
     ],
-  }) as unknown as FilesCollection;
+  }) as unknown as FilesCollectionWithDefaults;
 
-  const defaultConfig = createMockConfig({
+  const defaultConfig = createMockConfigWithDefaults({
     backend: {
       name: 'gitlab',
       repo,
     },
     collections: [],
-  }) as Config;
+  }) as ConfigWithDefaults;
 
   const mockCredentials = { token: 'MOCK_TOKEN' };
   const expectedRepo = encodeURIComponent(repo);
   const expectedRepoUrl = `/projects/${expectedRepo}`;
 
-  function resolveBackend(config: Config) {
+  function resolveBackend(config: ConfigWithDefaults) {
     authStore = new LocalStorageAuthStore();
     return new Backend(
       {
@@ -308,7 +312,7 @@ describe('gitlab backend', () => {
   }
 
   function interceptCollection(
-    collection: FolderCollection,
+    collection: FolderCollectionWithDefaults,
     { verb = 'GET', repeat = 1, page: expectedPage }: InterceptCollectionOptions = {},
   ) {
     const url = `${expectedRepoUrl}/repository/tree`;
@@ -474,7 +478,7 @@ describe('gitlab backend', () => {
       const entry = await backend.getEntry(
         {
           config: {
-            config: createMockConfig({ collections: [createMockFolderCollection()] }),
+            config: createMockConfig({ collections: [createMockFolderCollectionWithDefaults()] }),
           },
           integrations: [],
           entryDraft: {},

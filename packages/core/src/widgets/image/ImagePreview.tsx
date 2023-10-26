@@ -3,7 +3,7 @@ import React from 'react';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   Entry,
   FileOrImageField,
   WidgetPreviewProps,
@@ -12,7 +12,7 @@ import type { FC } from 'react';
 
 interface ImageAssetProps {
   value: string;
-  collection: Collection<FileOrImageField>;
+  collection: CollectionWithDefaults<FileOrImageField>;
   field: FileOrImageField;
   entry: Entry;
 }

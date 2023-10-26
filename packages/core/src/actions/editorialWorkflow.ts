@@ -45,14 +45,20 @@ import { loadMedia } from './mediaLibrary';
 import type { NavigateFunction } from 'react-router-dom';
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { Collection, Collections, Config, Entry, EntryDraft } from '../interface';
+import type {
+  CollectionWithDefaults,
+  CollectionsWithDefaults,
+  ConfigWithDefaults,
+  Entry,
+  EntryDraft,
+} from '../interface';
 import type { RootState } from '../store';
 
 /*
  * Simple Action Creators (Internal)
  */
 
-function unpublishedEntryLoading(collection: Collection, slug: string) {
+function unpublishedEntryLoading(collection: CollectionWithDefaults, slug: string) {
   return {
     type: UNPUBLISHED_ENTRY_REQUEST,
     payload: {
@@ -62,7 +68,7 @@ function unpublishedEntryLoading(collection: Collection, slug: string) {
   } as const;
 }
 
-function unpublishedEntryLoaded(collection: Collection, entry: Entry) {
+function unpublishedEntryLoaded(collection: CollectionWithDefaults, entry: Entry) {
   return {
     type: UNPUBLISHED_ENTRY_SUCCESS,
     payload: {
@@ -72,7 +78,7 @@ function unpublishedEntryLoaded(collection: Collection, entry: Entry) {
   } as const;
 }
 
-function unpublishedEntryRedirected(collection: Collection, slug: string) {
+function unpublishedEntryRedirected(collection: CollectionWithDefaults, slug: string) {
   return {
     type: UNPUBLISHED_ENTRY_REDIRECT,
     payload: {
@@ -106,7 +112,7 @@ function unpublishedEntriesFailed(error: Error) {
   } as const;
 }
 
-function unpublishedEntryPersisting(collection: Collection, slug: string) {
+function unpublishedEntryPersisting(collection: CollectionWithDefaults, slug: string) {
   return {
     type: UNPUBLISHED_ENTRY_PERSIST_REQUEST,
     payload: {
@@ -116,7 +122,7 @@ function unpublishedEntryPersisting(collection: Collection, slug: string) {
   } as const;
 }
 
-function unpublishedEntryPersisted(collection: Collection, entry: Entry) {
+function unpublishedEntryPersisted(collection: CollectionWithDefaults, entry: Entry) {
   return {
     type: UNPUBLISHED_ENTRY_PERSIST_SUCCESS,
     payload: {
@@ -127,7 +133,11 @@ function unpublishedEntryPersisted(collection: Collection, entry: Entry) {
   } as const;
 }
 
-function unpublishedEntryPersistedFail(error: unknown, collection: Collection, slug: string) {
+function unpublishedEntryPersistedFail(
+  error: unknown,
+  collection: CollectionWithDefaults,
+  slug: string,
+) {
   return {
     type: UNPUBLISHED_ENTRY_PERSIST_FAILURE,
     payload: {
@@ -217,7 +227,7 @@ function unpublishedEntryDeleteError(collection: string, slug: string) {
  * Exported Thunk Action Creators
  */
 
-export function loadUnpublishedEntry(collection: Collection, slug: string) {
+export function loadUnpublishedEntry(collection: CollectionWithDefaults, slug: string) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     if (!state.config.config) {
@@ -275,7 +285,7 @@ export function loadUnpublishedEntry(collection: Collection, slug: string) {
   };
 }
 
-export function loadUnpublishedEntries(collections: Collections) {
+export function loadUnpublishedEntries(collections: CollectionsWithDefaults) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     if (!state.config.config) {
@@ -312,7 +322,7 @@ export function loadUnpublishedEntries(collections: Collections) {
 }
 
 export function persistUnpublishedEntry(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   rootSlug: string | undefined,
   existingUnpublishedEntry: boolean,
   navigate: NavigateFunction,
@@ -566,7 +576,7 @@ export function publishUnpublishedEntry(
   };
 }
 
-export function unpublishPublishedEntry(collection: Collection, slug: string) {
+export function unpublishPublishedEntry(collection: CollectionWithDefaults, slug: string) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     if (!state.config.config) {
@@ -585,7 +595,7 @@ export function unpublishPublishedEntry(collection: Collection, slug: string) {
       .deleteEntry(state, collection, slug)
       .then(() =>
         backend.persistEntry({
-          config: state.config.config as Config,
+          config: state.config.config as ConfigWithDefaults,
           collection,
           entryDraft,
           assetProxies: [],

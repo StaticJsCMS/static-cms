@@ -6,7 +6,7 @@ import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import MainView from '../MainView';
 import CollectionView from './CollectionView';
 
-import type { Collection } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 const MultiSearchCollectionPage: FC = () => {
@@ -30,7 +30,7 @@ const MultiSearchCollectionPage: FC = () => {
 };
 
 interface SingleCollectionPageProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   isSearchResults?: boolean;
   isSingleSearchResult?: boolean;
 }
@@ -69,7 +69,7 @@ const SingleCollectionPage: FC<SingleCollectionPageProps> = ({
 };
 
 interface CollectionPageProps {
-  collection?: Collection;
+  collection?: CollectionWithDefaults;
   isSearchResults?: boolean;
   isSingleSearchResult?: boolean;
 }

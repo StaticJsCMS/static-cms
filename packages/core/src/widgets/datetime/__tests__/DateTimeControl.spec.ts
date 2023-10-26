@@ -4,7 +4,7 @@
 import { fireEvent, getByText } from '@testing-library/dom';
 import '@testing-library/jest-dom';
 import { act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 
 import { mockDateField, mockDateTimeField, mockTimeField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';

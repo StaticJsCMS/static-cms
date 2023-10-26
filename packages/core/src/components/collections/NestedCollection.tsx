@@ -10,7 +10,7 @@ import { getTreeData } from '@staticcms/core/lib/util/nested.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import NavLink from '../navbar/NavLink';
 
-import type { Collection, Entry } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry } from '@staticcms/core/interface';
 import type { TreeNodeData } from '@staticcms/core/lib/util/nested.util';
 import type { FC, MouseEvent } from 'react';
 
@@ -38,7 +38,7 @@ function getNodeTitle(node: TreeNodeData) {
 }
 
 interface TreeNodeProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   treeData: TreeNodeData[];
   rootIsActive: boolean;
   path: string;
@@ -184,7 +184,7 @@ export function updateNode(
 }
 
 export interface NestedCollectionProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   filterTerm: string;
 }
 
@@ -195,7 +195,7 @@ const NestedCollection: FC<NestedCollectionProps> = ({ collection, filterTerm })
   const [useFilter, setUseFilter] = useState(true);
 
   const [prevRootIsActive, setPrevRootIsActive] = useState(false);
-  const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
+  const [prevCollection, setPrevCollection] = useState<CollectionWithDefaults | null>(null);
   const [prevEntries, setPrevEntries] = useState<Entry[] | null>(null);
   const [prevPath, setPrevPath] = useState<string | null>(null);
 

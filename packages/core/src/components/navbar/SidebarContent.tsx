@@ -15,7 +15,7 @@ import NestedCollection from '../collections/NestedCollection';
 import NavLink from './NavLink';
 import sidebarClasses from './Sidebar.classes';
 
-import type { Collection } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 const SidebarContent: FC = () => {
@@ -29,7 +29,7 @@ const SidebarContent: FC = () => {
   const collections = useAppSelector(selectCollections);
 
   const collection = useMemo(
-    () => (name ? collections[name] : collections[0]) as Collection | undefined,
+    () => (name ? collections[name] : collections[0]) as CollectionWithDefaults | undefined,
     [collections, name],
   );
 

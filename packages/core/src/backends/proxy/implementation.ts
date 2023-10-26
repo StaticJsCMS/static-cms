@@ -8,16 +8,16 @@ import {
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
-  BackendEntry,
   BackendClass,
-  Config,
+  BackendEntry,
+  ConfigWithDefaults,
   DisplayURL,
   ImplementationEntry,
   ImplementationFile,
-  PersistOptions,
-  User,
   ImplementationMediaFile,
+  PersistOptions,
   UnpublishedEntry,
+  User,
 } from '@staticcms/core/interface';
 import type { Cursor } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
@@ -60,7 +60,7 @@ export default class ProxyBackend implements BackendClass {
   branch: string;
   cmsLabelPrefix?: string;
 
-  constructor(config: Config, options = {}) {
+  constructor(config: ConfigWithDefaults, options = {}) {
     if (!config.backend.proxy_url) {
       throw new Error('The Proxy backend needs a "proxy_url" in the backend configuration.');
     }
@@ -71,10 +71,6 @@ export default class ProxyBackend implements BackendClass {
     this.publicFolder = config.public_folder;
     this.options = options;
     this.cmsLabelPrefix = config.backend.cms_label_prefix;
-  }
-
-  isGitBackend() {
-    return false;
   }
 
   status() {

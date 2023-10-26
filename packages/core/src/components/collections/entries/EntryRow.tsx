@@ -18,12 +18,17 @@ import TableRow from '../../common/table/TableRow';
 import WorkflowStatusPill from '../../workflow/WorkflowStatusPill';
 import entriesClasses from './Entries.classes';
 
-import type { BackupEntry, Collection, Entry, TranslatedProps } from '@staticcms/core/interface';
+import type {
+  BackupEntry,
+  CollectionWithDefaults,
+  Entry,
+  TranslatedProps,
+} from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface EntryRowProps {
   entry: Entry;
-  collection: Collection;
+  collection: CollectionWithDefaults;
   collectionLabel?: string;
   columnFields: string[];
 }

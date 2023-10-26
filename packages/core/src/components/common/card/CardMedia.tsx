@@ -5,7 +5,7 @@ import cardClasses from './Card.classes';
 
 import type {
   BaseField,
-  Collection,
+  CollectionWithDefaults,
   Entry,
   MediaField,
   UnknownField,
@@ -16,7 +16,7 @@ interface CardMediaProps<EF extends BaseField> {
   width?: string | number;
   height?: string | number;
   alt?: string;
-  collection?: Collection<EF>;
+  collection?: CollectionWithDefaults<EF>;
   field?: MediaField;
   entry?: Entry;
 }

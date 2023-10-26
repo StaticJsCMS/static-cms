@@ -19,7 +19,7 @@ import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type {
   BackendClass,
   BackendEntry,
-  Config,
+  ConfigWithDefaults,
   DataFile,
   DisplayURL,
   ImplementationEntry,
@@ -151,13 +151,9 @@ export default class TestBackend implements BackendClass {
   mediaFolder?: string;
   options: { initialWorkflowStatus?: string };
 
-  constructor(config: Config, options = {}) {
+  constructor(config: ConfigWithDefaults, options = {}) {
     this.options = options;
     this.mediaFolder = config.media_folder;
-  }
-
-  isGitBackend() {
-    return false;
   }
 
   status() {

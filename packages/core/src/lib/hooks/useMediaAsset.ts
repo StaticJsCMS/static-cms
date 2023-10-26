@@ -7,14 +7,14 @@ import useDebounce from './useDebounce';
 
 import type {
   BaseField,
-  Collection,
+  CollectionWithDefaults,
   Entry,
   MediaField,
   UnknownField,
 } from '@staticcms/core/interface';
 
 export function useGetMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
-  collection?: Collection<EF>,
+  collection?: CollectionWithDefaults<EF>,
   field?: T,
   entry?: Entry,
   currentFolder?: string,
@@ -44,7 +44,7 @@ export function useGetMediaAsset<T extends MediaField, EF extends BaseField = Un
 
 export default function useMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
   url: string | undefined | null,
-  collection?: Collection<EF>,
+  collection?: CollectionWithDefaults<EF>,
   field?: T,
   entry?: Entry,
   currentFolder?: string,
