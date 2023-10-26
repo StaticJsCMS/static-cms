@@ -101,7 +101,7 @@ import { createTablePlugin } from './plugins/table';
 import { trailingBlockPlugin } from './plugins/trailing-block';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   Entry,
   MarkdownField,
   WidgetControlProps,
@@ -112,7 +112,7 @@ import type { MdEditor, MdValue } from './plateTypes';
 
 export interface PlateEditorProps {
   initialValue: MdValue;
-  collection: Collection<MarkdownField>;
+  collection: CollectionWithDefaults<MarkdownField>;
   entry: Entry;
   field: MarkdownField;
   useMdx: boolean;

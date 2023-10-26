@@ -1,7 +1,7 @@
 import Cursor, { CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util/Cursor';
 import GiteaImplementation from '../implementation';
 
-import type { Config, UnknownField } from '@staticcms/core';
+import type { ConfigWithDefaults, UnknownField } from '@staticcms/core';
 import type API from '../API';
 import type { AssetProxy } from '@staticcms/core/valueObjects';
 
@@ -14,7 +14,7 @@ describe('gitea backend implementation', () => {
       repo: 'owner/repo',
       api_root: 'https://try.gitea.io/api/v1',
     },
-  } as Config<UnknownField>;
+  } as ConfigWithDefaults<UnknownField>;
 
   const createObjectURL = jest.fn();
   global.URL = {

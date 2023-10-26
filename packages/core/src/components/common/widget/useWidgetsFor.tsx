@@ -4,8 +4,8 @@ import { useInferredFieldsByName } from '@staticcms/core/lib/util/collection.uti
 import getWidgetFor from './widgetFor';
 
 import type {
-  Collection,
-  Config,
+  CollectionWithDefaults,
+  ConfigWithDefaults,
   Entry,
   EntryData,
   Field,
@@ -16,8 +16,8 @@ import type {
 import type { ReactNode } from 'react';
 
 export default function useWidgetsFor(
-  config: Config | undefined,
-  collection: Collection,
+  config: ConfigWithDefaults | undefined,
+  collection: CollectionWithDefaults,
   fields: Field[],
   entry: Entry,
   data: EntryData = entry.data,

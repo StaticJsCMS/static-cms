@@ -13,8 +13,7 @@ import Menu from '../../common/menu/Menu';
 import MenuGroup from '../../common/menu/MenuGroup';
 import MenuItemButton from '../../common/menu/MenuItemButton';
 
-import type { FC } from 'react';
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import './LocaleDropdown.css';
 

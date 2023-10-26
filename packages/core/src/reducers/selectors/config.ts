@@ -1,14 +1,17 @@
 import { EDITORIAL_WORKFLOW } from '@staticcms/core/constants/publishModes';
 
-import type { Config } from '@staticcms/core/interface';
+import type { ConfigWithDefaults } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 
-export function selectLocale(config?: Config) {
+export function selectLocale(config?: ConfigWithDefaults) {
   return config?.locale || 'en';
 }
 
 export function selectConfig(state: RootState) {
   return state.config.config;
+}
+export function selectOriginConfig(state: RootState) {
+  return state.config.originalConfig;
 }
 
 export function selectIsSearchEnabled(state: RootState) {
@@ -19,7 +22,7 @@ export function selectDisplayUrl(state: RootState) {
   return state.config.config?.display_url;
 }
 
-export function getUseWorkflow(config?: Config) {
+export function getUseWorkflow(config?: ConfigWithDefaults) {
   return config?.publish_mode === EDITORIAL_WORKFLOW;
 }
 

@@ -7,7 +7,7 @@ import useDebounce from './useDebounce';
 
 import type {
   BaseField,
-  Collection,
+  CollectionWithDefaults,
   Entry,
   MediaField,
   UnknownField,
@@ -15,7 +15,7 @@ import type {
 
 export default function useIsMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
   url: string,
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   field: T,
   entry: Entry,
   currentFolder?: string,

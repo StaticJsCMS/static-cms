@@ -4,12 +4,12 @@ import { Navigate, useParams } from 'react-router-dom';
 import useDefaultPath from '@staticcms/core/lib/hooks/useDefaultPath';
 import Editor from './Editor';
 
-import type { Collections } from '@staticcms/core/interface';
+import type { CollectionsWithDefaults } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 interface EditorRouteProps {
   newRecord?: boolean;
-  collections: Collections;
+  collections: CollectionsWithDefaults;
 }
 
 const EditorRoute: FC<EditorRouteProps> = ({ newRecord = false, collections }) => {

@@ -2,9 +2,13 @@ import type {
   BaseField,
   Collection,
   CollectionFile,
+  CollectionFileWithDefaults,
+  CollectionWithDefaults,
   Field,
   FilesCollection,
+  FilesCollectionWithDefaults,
   FolderCollection,
+  FolderCollectionWithDefaults,
 } from '@staticcms/core/interface';
 
 export const createMockFolderCollection = <EF extends BaseField>(
@@ -36,6 +40,14 @@ export const createMockFolderCollection = <EF extends BaseField>(
   ...extra,
 });
 
+export const createMockFolderCollectionWithDefaults = <EF extends BaseField>(
+  extra: Partial<CollectionWithDefaults<EF>> = {},
+  ...fields: Field<EF>[]
+): FolderCollectionWithDefaults<EF> => ({
+  ...createMockFolderCollection(extra, ...fields),
+  i18n: extra.i18n,
+});
+
 export const createMockCollectionFile = <EF extends BaseField>(
   extra: Partial<CollectionFile<EF>> = {},
   ...fields: Field<EF>[]
@@ -57,6 +69,14 @@ export const createMockCollectionFile = <EF extends BaseField>(
   ...extra,
 });
 
+export const createMockCollectionFileWithDefaults = <EF extends BaseField>(
+  extra: Partial<CollectionFileWithDefaults<EF>> = {},
+  ...fields: Field<EF>[]
+): CollectionFileWithDefaults<EF> => ({
+  ...createMockCollectionFile(extra, ...fields),
+  i18n: extra.i18n,
+});
+
 export const createMockFilesCollection = <EF extends BaseField>(
   extra: Omit<Partial<FilesCollection<EF>>, 'files'> & Pick<FilesCollection<EF>, 'files'>,
 ): FilesCollection<EF> => ({
@@ -73,4 +93,13 @@ export const createMockFilesCollection = <EF extends BaseField>(
     },
   },
   ...extra,
+});
+
+export const createMockFilesCollectionWithDefaults = <EF extends BaseField>(
+  extra: Omit<Partial<FilesCollectionWithDefaults<EF>>, 'files'> &
+    Pick<FilesCollectionWithDefaults<EF>, 'files'>,
+): FilesCollectionWithDefaults<EF> => ({
+  ...createMockFilesCollection(extra),
+  i18n: extra.i18n,
+  files: extra.files,
 });

@@ -11,7 +11,7 @@ import { selectSearchedEntries } from '@staticcms/core/reducers/selectors/entrie
 import Entries from './Entries';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
-import type { Collections } from '@staticcms/core/interface';
+import type { CollectionsWithDefaults } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
@@ -74,7 +74,7 @@ const EntriesSearch: FC<EntriesSearchProps> = ({
 interface EntriesSearchOwnProps {
   searchTerm: string;
   filterTerm: string;
-  collections: Collections;
+  collections: CollectionsWithDefaults;
   viewStyle: ViewStyle;
 }
 

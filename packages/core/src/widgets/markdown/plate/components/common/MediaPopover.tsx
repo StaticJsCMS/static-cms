@@ -9,7 +9,7 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   FileOrImageField,
   MarkdownField,
   MediaPath,
@@ -30,7 +30,7 @@ export interface MediaPopoverProps<T extends FileOrImageField | MarkdownField> {
   url: string;
   text?: string;
   forImage?: boolean;
-  collection: Collection<T>;
+  collection: CollectionWithDefaults<T>;
   field: T;
   onMediaToggle?: (open: boolean) => void;
   onMediaChange: (newValue: MediaPath<string>) => void;

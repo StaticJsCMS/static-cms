@@ -3,7 +3,7 @@
  */
 import '@testing-library/jest-dom';
 import { act, getByTestId, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import React from 'react';
 
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';

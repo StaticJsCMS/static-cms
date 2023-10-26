@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { Collection, Collections } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, CollectionsWithDefaults } from '@staticcms/core/interface';
 import type { ChangeEvent, FC, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
 
 import './CollectionSearch.css';
@@ -23,8 +23,8 @@ export const classes = generateClassNames('CollectionSearch', [
 ]);
 
 interface CollectionSearchProps {
-  collections: Collections;
-  collection?: Collection;
+  collections: CollectionsWithDefaults;
+  collection?: CollectionWithDefaults;
   searchTerm: string | undefined;
   onSubmit: (query: string, collection?: string) => void;
 }

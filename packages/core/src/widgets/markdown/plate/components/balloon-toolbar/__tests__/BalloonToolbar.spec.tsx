@@ -20,15 +20,15 @@ import {
 import React, { useRef } from 'react';
 import { useFocused } from 'slate-react';
 
-import { configLoaded } from '@staticcms/core/actions/config';
+import { applyDefaults, configLoaded } from '@staticcms/core/actions/config';
 import { store } from '@staticcms/core/store';
-import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
+import { createMockFolderCollectionWithDefaults } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { mockMarkdownField } from '@staticcms/test/data/fields.mock';
 import { renderWithProviders } from '@staticcms/test/test-utils';
 import BalloonToolbar from '../BalloonToolbar';
 
-import type { Config, MarkdownField } from '@staticcms/core/interface';
+import type { Config, ConfigWithDefaults } from '@staticcms/core/interface';
 import type { MdEditor } from '@staticcms/markdown/plate/plateTypes';
 import type { TRange } from '@udecode/plate';
 import type { FC } from 'react';
@@ -48,7 +48,7 @@ const BalloonToolbarWrapper: FC<BalloonToolbarWrapperProps> = ({ useMdx = false 
         key="balloon-toolbar"
         useMdx={useMdx}
         containerRef={ref.current}
-        collection={createMockFolderCollection({}, mockMarkdownField)}
+        collection={createMockFolderCollectionWithDefaults({}, mockMarkdownField)}
         field={mockMarkdownField}
         disabled={false}
       />
@@ -56,9 +56,11 @@ const BalloonToolbarWrapper: FC<BalloonToolbarWrapperProps> = ({ useMdx = false 
   );
 };
 
-const config = createMockConfig({
+const originalConfig = createMockConfig({
   collections: [],
-}) as unknown as Config<MarkdownField>;
+}) as unknown as Config;
+
+let config: ConfigWithDefaults;
 
 describe(BalloonToolbar.name, () => {
   const mockUseEditor = usePlateEditorState as jest.Mock;
@@ -79,7 +81,9 @@ describe(BalloonToolbar.name, () => {
   beforeEach(() => {
     jest.useFakeTimers();
 
-    store.dispatch(configLoaded(config as unknown as Config));
+    config = applyDefaults(originalConfig) as unknown as ConfigWithDefaults;
+
+    store.dispatch(configLoaded(config, originalConfig));
 
     mockEditor = {
       selection: undefined,

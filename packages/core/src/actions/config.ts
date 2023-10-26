@@ -1,19 +1,14 @@
 import deepmerge from 'deepmerge';
 import { produce } from 'immer';
+import cloneDeep from 'lodash/cloneDeep';
 import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import yaml from 'yaml';
 
-import { resolveBackend } from '@staticcms/core/backend';
 import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../constants';
 import validateConfig from '../constants/configSchema';
 import { SIMPLE as SIMPLE_PUBLISH_MODE } from '../constants/publishModes';
-import {
-  I18N,
-  I18N_FIELD_NONE,
-  I18N_FIELD_TRANSLATE,
-  I18N_STRUCTURE_SINGLE_FILE,
-} from '../lib/i18n';
+import { I18N_FIELD_NONE, I18N_FIELD_TRANSLATE, I18N_STRUCTURE_SINGLE_FILE } from '../lib/i18n';
 import { selectDefaultSortableFields } from '../lib/util/collection.util';
 
 import type { AnyAction } from 'redux';
@@ -23,8 +18,15 @@ import type {
   BaseField,
   Collection,
   CollectionFile,
+  CollectionFileWithDefaults,
+  CollectionWithDefaults,
   Config,
+  ConfigWithDefaults,
   Field,
+  FilesCollection,
+  FilesCollectionWithDefaults,
+  FolderCollection,
+  FolderCollectionWithDefaults,
   I18nInfo,
   LocalBackend,
   UnknownField,
@@ -78,10 +80,10 @@ const setFieldDefaults =
   };
 
 function setI18nField<T extends BaseField = UnknownField>(field: T) {
-  if (field[I18N] === true) {
-    return { ...field, [I18N]: I18N_FIELD_TRANSLATE };
-  } else if (field[I18N] === false || !field[I18N]) {
-    return { ...field, [I18N]: I18N_FIELD_NONE };
+  if (field.i18n === true) {
+    return { ...field, ['i18n']: I18N_FIELD_TRANSLATE };
+  } else if (field.i18n === false || !field['i18n']) {
+    return { ...field, ['i18n']: I18N_FIELD_NONE };
   }
   return field;
 }
@@ -110,7 +112,7 @@ function setI18nDefaultsForFields(collectionOrFileFields: Field[], hasI18n: bool
   } else {
     return traverseFields(collectionOrFileFields, field => {
       const newField = { ...field };
-      delete newField[I18N];
+      delete newField.i18n;
       return newField;
     });
   }
@@ -134,163 +136,215 @@ function throwOnMissingDefaultLocale(i18n?: Partial<I18nInfo>) {
   }
 }
 
+function applyFolderCollectionDefaults(
+  originalCollection: FolderCollection,
+  collectionI18n: I18nInfo | undefined,
+): FolderCollectionWithDefaults {
+  const collection: FolderCollectionWithDefaults = {
+    ...originalCollection,
+    i18n: collectionI18n,
+  };
+
+  if (collection.path && !collection.media_folder) {
+    // default value for media folder when using the path config
+    collection.media_folder = '';
+  }
+
+  if ('media_folder' in collection && !('public_folder' in collection)) {
+    collection.public_folder = collection.media_folder;
+  }
+
+  if ('fields' in collection && collection.fields) {
+    collection.fields = traverseFields(collection.fields, setFieldDefaults(collection));
+  }
+
+  collection.folder = trim(collection.folder, '/');
+
+  return collection;
+}
+
+function applyCollectionFileDefaults(
+  originalFile: CollectionFile,
+  collection: Collection,
+  collectionI18n: I18nInfo | undefined,
+): CollectionFileWithDefaults {
+  const file: CollectionFileWithDefaults = {
+    ...originalFile,
+    i18n: undefined,
+  };
+
+  file.file = trimStart(file.file, '/');
+
+  if ('media_folder' in file && !('public_folder' in file)) {
+    file.public_folder = file.media_folder;
+  }
+
+  file.media_library = {
+    ...(collection.media_library ?? {}),
+    ...(file.media_library ?? {}),
+  };
+
+  if (file.fields) {
+    file.fields = traverseFields(file.fields, setFieldDefaults(collection, file));
+  }
+
+  let fileI18n: I18nInfo | undefined;
+
+  if (originalFile.i18n && collectionI18n) {
+    fileI18n = getI18nDefaults(originalFile.i18n, {
+      locales: collectionI18n.locales,
+      default_locale: collectionI18n.default_locale,
+      structure: collectionI18n.structure,
+    });
+    file.i18n = fileI18n;
+  } else {
+    fileI18n = undefined;
+    delete file.i18n;
+  }
+
+  throwOnInvalidFileCollectionStructure(fileI18n);
+
+  if (file.fields) {
+    file.fields = setI18nDefaultsForFields(file.fields, Boolean(fileI18n));
+  }
+
+  if (collection.editor && !file.editor) {
+    file.editor = collection.editor;
+  }
+
+  return file;
+}
+
+function applyFilesCollectionDefaults(
+  originalCollection: FilesCollection,
+  collectionI18n: I18nInfo | undefined,
+): FilesCollectionWithDefaults {
+  const collection: FilesCollectionWithDefaults = {
+    ...originalCollection,
+    i18n: collectionI18n,
+    files: originalCollection.files.map(f =>
+      applyCollectionFileDefaults(f, originalCollection, collectionI18n),
+    ),
+  };
+
+  throwOnInvalidFileCollectionStructure(collectionI18n);
+
+  return collection;
+}
+
+function applyCollectionDefaults(
+  originalCollection: Collection,
+  config: Config,
+): CollectionWithDefaults {
+  let collection: CollectionWithDefaults;
+
+  let collectionI18n: I18nInfo | undefined;
+
+  if (config.i18n && originalCollection.i18n) {
+    collectionI18n = getI18nDefaults(originalCollection.i18n, config.i18n);
+  } else {
+    collectionI18n = undefined;
+  }
+
+  if ('folder' in originalCollection) {
+    collection = applyFolderCollectionDefaults(originalCollection, collectionI18n);
+  } else {
+    collection = applyFilesCollectionDefaults(originalCollection, collectionI18n);
+  }
+
+  if (config.editor && !collection.editor) {
+    collection.editor = config.editor;
+  }
+
+  collection.media_library = {
+    ...(config.media_library ?? {}),
+    ...(collection.media_library ?? {}),
+  };
+
+  if ('fields' in collection && collection.fields) {
+    collection.fields = setI18nDefaultsForFields(collection.fields, Boolean(collectionI18n));
+  }
+
+  const { view_filters, view_groups } = collection;
+
+  if (!collection.sortable_fields) {
+    collection.sortable_fields = {
+      fields: selectDefaultSortableFields(collection, config),
+    };
+  }
+
+  collection.view_filters = {
+    default: collection.view_filters?.default,
+    filters: (view_filters?.filters ?? []).map(filter => {
+      return {
+        ...filter,
+        id: `${filter.field}__${filter.pattern}`,
+      };
+    }),
+  };
+
+  collection.view_groups = {
+    default: collection.view_groups?.default,
+    groups: (view_groups?.groups ?? []).map(group => {
+      return {
+        ...group,
+        id: `${group.field}__${group.pattern}`,
+      };
+    }),
+  };
+
+  return collection;
+}
+
 export function applyDefaults<EF extends BaseField = UnknownField>(
-  originalConfig: Config<EF>,
-): Config<EF> {
-  return produce(originalConfig, (config: Config) => {
-    config.publish_mode = config.publish_mode || SIMPLE_PUBLISH_MODE;
-    config.slug = config.slug || {};
-    config.collections = config.collections || [];
+  originConfig: Config<EF>,
+): ConfigWithDefaults<EF> {
+  const clonedConfig = cloneDeep(originConfig) as Config;
 
-    // Use `site_url` as default `display_url`.
-    if (!config.display_url && config.site_url) {
-      config.display_url = config.site_url;
-    }
+  const config: ConfigWithDefaults = {
+    ...clonedConfig,
+    collections: (clonedConfig.collections ?? []).map(c =>
+      applyCollectionDefaults(c, clonedConfig),
+    ),
+  };
 
-    // Use media_folder as default public_folder.
-    const defaultPublicFolder = `/${trimStart(config.media_folder, '/')}`;
-    if (!('public_folder' in config)) {
-      config.public_folder = defaultPublicFolder;
-    }
+  config.publish_mode = config.publish_mode ?? SIMPLE_PUBLISH_MODE;
+  config.slug = config.slug ?? {};
+  config.collections = config.collections ?? [];
 
-    // default values for the slug config
-    if (!('encoding' in config.slug)) {
-      config.slug.encoding = 'unicode';
-    }
+  // Use `site_url` as default `display_url`.
+  if (!config.display_url && config.site_url) {
+    config.display_url = config.site_url;
+  }
 
-    if (!('clean_accents' in config.slug)) {
-      config.slug.clean_accents = false;
-    }
+  // Use media_folder as default public_folder.
+  const defaultPublicFolder = `/${trimStart(config.media_folder, '/')}`;
+  if (!('public_folder' in config)) {
+    config.public_folder = defaultPublicFolder;
+  }
 
-    if (!('sanitize_replacement' in config.slug)) {
-      config.slug.sanitize_replacement = '-';
-    }
+  // default values for the slug config
+  if (!('encoding' in config.slug)) {
+    config.slug.encoding = 'unicode';
+  }
 
-    const i18n = config[I18N];
+  if (!('clean_accents' in config.slug)) {
+    config.slug.clean_accents = false;
+  }
 
-    if (i18n) {
-      i18n.default_locale = i18n.default_locale ?? i18n.locales[0];
-    }
+  if (!('sanitize_replacement' in config.slug)) {
+    config.slug.sanitize_replacement = '-';
+  }
 
-    throwOnMissingDefaultLocale(i18n);
+  const i18n = config.i18n;
 
-    const backend = resolveBackend(config);
+  if (i18n) {
+    i18n.default_locale = i18n.default_locale ?? i18n.locales[0];
+  }
 
-    for (const collection of config.collections) {
-      let collectionI18n = collection[I18N];
+  throwOnMissingDefaultLocale(i18n);
 
-      if (config.editor && !collection.editor) {
-        collection.editor = config.editor;
-      }
-
-      collection.media_library = {
-        ...(config.media_library ?? {}),
-        ...(collection.media_library ?? {}),
-      };
-
-      if (i18n && collectionI18n) {
-        collectionI18n = getI18nDefaults(collectionI18n, i18n);
-        collection[I18N] = collectionI18n;
-      } else {
-        collectionI18n = undefined;
-        delete collection[I18N];
-      }
-
-      if ('fields' in collection && collection.fields) {
-        collection.fields = setI18nDefaultsForFields(collection.fields, Boolean(collectionI18n));
-      }
-
-      const { view_filters, view_groups } = collection;
-
-      if ('folder' in collection && collection.folder) {
-        if (collection.path && !collection.media_folder) {
-          // default value for media folder when using the path config
-          collection.media_folder = '';
-        }
-
-        if ('media_folder' in collection && !('public_folder' in collection)) {
-          collection.public_folder = collection.media_folder;
-        }
-
-        if ('fields' in collection && collection.fields) {
-          collection.fields = traverseFields(collection.fields, setFieldDefaults(collection));
-        }
-
-        collection.folder = trim(collection.folder, '/');
-      }
-
-      if ('files' in collection && collection.files) {
-        throwOnInvalidFileCollectionStructure(collectionI18n);
-
-        for (const file of collection.files) {
-          file.file = trimStart(file.file, '/');
-
-          if ('media_folder' in file && !('public_folder' in file)) {
-            file.public_folder = file.media_folder;
-          }
-
-          file.media_library = {
-            ...(collection.media_library ?? {}),
-            ...(file.media_library ?? {}),
-          };
-
-          if (file.fields) {
-            file.fields = traverseFields(file.fields, setFieldDefaults(collection, file));
-          }
-
-          let fileI18n = file[I18N];
-
-          if (fileI18n && collectionI18n) {
-            fileI18n = getI18nDefaults(fileI18n, {
-              locales: collectionI18n.locales ?? i18n?.locales,
-              default_locale: collectionI18n.default_locale ?? i18n?.default_locale,
-              structure: collectionI18n.structure ?? i18n?.structure,
-            });
-            file[I18N] = fileI18n;
-          } else {
-            fileI18n = undefined;
-            delete file[I18N];
-          }
-
-          throwOnInvalidFileCollectionStructure(fileI18n);
-
-          if (file.fields) {
-            file.fields = setI18nDefaultsForFields(file.fields, Boolean(fileI18n));
-          }
-
-          if (collection.editor && !file.editor) {
-            file.editor = collection.editor;
-          }
-        }
-      }
-
-      if (!collection.sortable_fields) {
-        collection.sortable_fields = {
-          fields: selectDefaultSortableFields(collection, backend),
-        };
-      }
-
-      collection.view_filters = {
-        default: collection.view_filters?.default,
-        filters: (view_filters?.filters ?? []).map(filter => {
-          return {
-            ...filter,
-            id: `${filter.field}__${filter.pattern}`,
-          };
-        }),
-      };
-
-      collection.view_groups = {
-        default: collection.view_groups?.default,
-        groups: (view_groups?.groups ?? []).map(group => {
-          return {
-            ...group,
-            id: `${group.field}__${group.pattern}`,
-          };
-        }),
-      };
-    }
-  });
+  return config as ConfigWithDefaults<EF>;
 }
 
 export function parseConfig(data: string) {
@@ -322,10 +376,13 @@ async function getConfigYaml(file: string): Promise<Config> {
   return parseConfig(await response.text());
 }
 
-export function configLoaded(config: Config) {
+export function configLoaded(config: ConfigWithDefaults, originalConfig: Config) {
   return {
     type: CONFIG_SUCCESS,
-    payload: config,
+    payload: {
+      config,
+      originalConfig,
+    },
   } as const;
 }
 
@@ -424,24 +481,29 @@ export async function handleLocalBackend(originalConfig: Config) {
   });
 }
 
-export function loadConfig(manualConfig: Config | undefined, onLoad: (config: Config) => unknown) {
-  if (window.CMS_CONFIG) {
-    return configLoaded(window.CMS_CONFIG);
-  }
-
+export function loadConfig(
+  manualConfig: Config | undefined,
+  onLoad: (config: ConfigWithDefaults) => unknown,
+) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
     dispatch(configLoading());
 
     try {
-      const configUrl = getConfigUrl();
-      const mergedConfig = manualConfig ? manualConfig : await getConfigYaml(configUrl);
+      let originalConfig: Config;
 
-      validateConfig(mergedConfig);
+      if (window.CMS_CONFIG) {
+        originalConfig = window.CMS_CONFIG;
+      } else {
+        const configUrl = getConfigUrl();
+        originalConfig = manualConfig ? manualConfig : await getConfigYaml(configUrl);
+      }
 
-      const withLocalBackend = await handleLocalBackend(mergedConfig);
+      validateConfig(originalConfig);
+
+      const withLocalBackend = await handleLocalBackend(originalConfig);
       const config = applyDefaults(withLocalBackend);
 
-      dispatch(configLoaded(config));
+      dispatch(configLoaded(config, originalConfig));
 
       if (typeof onLoad === 'function') {
         onLoad(config);

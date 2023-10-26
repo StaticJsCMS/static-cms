@@ -33,8 +33,8 @@ import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type {
   BaseField,
-  Collection,
-  CollectionFile,
+  CollectionWithDefaults,
+  CollectionFileWithDefaults,
   DisplayURLState,
   Field,
   ImplementationMediaFile,
@@ -57,8 +57,8 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
     allowMultiple?: boolean;
     replaceIndex?: number;
     config?: MediaLibraryConfig;
-    collection?: Collection<EF>;
-    collectionFile?: CollectionFile<EF>;
+    collection?: CollectionWithDefaults<EF>;
+    collectionFile?: CollectionFileWithDefaults<EF>;
     field?: EF;
     insertOptions?: MediaLibrarInsertOptions;
   } = {},
@@ -89,8 +89,8 @@ export function openMediaLibrary<EF extends BaseField = UnknownField>(
       allowMultiple,
       replaceIndex,
       config,
-      collection: collection as Collection,
-      collectionFile: collectionFile as CollectionFile,
+      collection: collection as CollectionWithDefaults,
+      collectionFile: collectionFile as CollectionFileWithDefaults,
       field: field as Field,
       insertOptions,
     },

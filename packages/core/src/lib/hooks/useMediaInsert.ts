@@ -6,7 +6,7 @@ import { selectMediaPath } from '@staticcms/core/reducers/selectors/mediaLibrary
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   MediaField,
   MediaLibrarInsertOptions,
   MediaPath,
@@ -22,7 +22,7 @@ export interface OpenMediaLibraryProps {
 export default function useMediaInsert<T extends string | string[], F extends MediaField>(
   value: MediaPath<T> | undefined,
   options: {
-    collection: Collection<F>;
+    collection: CollectionWithDefaults<F>;
     field: F;
     controlID?: string;
     forImage?: boolean;

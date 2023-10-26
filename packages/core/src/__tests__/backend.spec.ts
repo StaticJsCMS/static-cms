@@ -1,5 +1,5 @@
-import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
-import { createMockConfig } from '@staticcms/test/data/config.mock';
+import { createMockFolderCollectionWithDefaults } from '@staticcms/test/data/collections.mock';
+import { createMockConfig, createMockConfigWithDefaults } from '@staticcms/test/data/config.mock';
 import {
   createMockEntry,
   createMockExpandedEntry,
@@ -18,7 +18,12 @@ import { sanitizeChar, sanitizeSlug } from '../lib/urlHelper';
 import { asyncLock } from '../lib/util/asyncLock';
 import localForage from '../lib/util/localForage';
 
-import type { BackendClass, BackendInitializer, Collection, Config } from '../interface';
+import type {
+  BackendClass,
+  BackendInitializer,
+  CollectionWithDefaults,
+  ConfigWithDefaults,
+} from '../interface';
 import type { RootState } from '../store';
 import type { AssetProxy } from '../valueObjects';
 
@@ -30,14 +35,14 @@ jest.mock('../lib/urlHelper');
 describe('Backend', () => {
   describe('filterEntries', () => {
     let backend: Backend;
-    let collection: Collection;
+    let collection: CollectionWithDefaults;
 
     beforeEach(() => {
       (getBackend as jest.Mock).mockReturnValue({
         init: jest.fn(),
       });
 
-      collection = createMockFolderCollection();
+      collection = createMockFolderCollectionWithDefaults();
 
       backend = resolveBackend(
         createMockConfig({
@@ -154,9 +159,9 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockFolderCollection({
+      const collection = createMockFolderCollectionWithDefaults({
         name: 'posts',
-      }) as Collection;
+      }) as CollectionWithDefaults;
 
       const backend = new Backend(initializer, {
         config: createMockConfig({ collections: [collection] }),
@@ -183,9 +188,9 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockFolderCollection({
+      const collection = createMockFolderCollectionWithDefaults({
         name: 'posts',
-      }) as Collection;
+      }) as CollectionWithDefaults;
 
       const backend = new Backend(initializer, {
         config: createMockConfig({ collections: [collection] }),
@@ -212,10 +217,10 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockFolderCollection({
+      const collection = createMockFolderCollectionWithDefaults({
         name: 'posts',
         format: 'json-frontmatter',
-      }) as Collection;
+      }) as CollectionWithDefaults;
 
       const backend = new Backend(initializer, {
         config: createMockConfig({ collections: [collection] }),
@@ -261,10 +266,10 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockFolderCollection({
+      const collection = createMockFolderCollectionWithDefaults({
         name: 'posts',
         format: 'json-frontmatter',
-      }) as Collection;
+      }) as CollectionWithDefaults;
 
       const backend = new Backend(initializer, {
         config: createMockConfig({ collections: [collection] }),
@@ -317,10 +322,10 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockFolderCollection({
+      const collection = createMockFolderCollectionWithDefaults({
         name: 'posts',
         format: 'json-frontmatter',
-      }) as Collection;
+      }) as CollectionWithDefaults;
 
       const backend = new Backend(initializer, {
         config: createMockConfig({ collections: [collection] }),
@@ -354,10 +359,10 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockFolderCollection({
+      const collection = createMockFolderCollectionWithDefaults({
         name: 'posts',
         format: 'json-frontmatter',
-      }) as Collection;
+      }) as CollectionWithDefaults;
 
       const backend = new Backend(initializer, {
         config: createMockConfig({ collections: [collection] }),
@@ -405,9 +410,9 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockFolderCollection({
+      const collection = createMockFolderCollectionWithDefaults({
         name: 'posts',
-      }) as Collection;
+      }) as CollectionWithDefaults;
 
       const config = createMockConfig({ backend: { name: 'github' }, collections: [collection] });
 
@@ -448,11 +453,11 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockFolderCollection({
+      const collection = createMockFolderCollectionWithDefaults({
         name: 'posts',
         folder: 'src/posts',
         fields: [],
-      }) as Collection;
+      }) as CollectionWithDefaults;
 
       const config = createMockConfig({
         media_folder: 'static/images',
@@ -507,7 +512,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      const collection = createMockFolderCollection({
+      const collection = createMockFolderCollectionWithDefaults({
         name: 'posts',
         fields: [
           {
@@ -518,7 +523,7 @@ describe('Backend', () => {
         folder: 'posts',
         slug: '{{slug}}',
         path: 'sub_dir/{{slug}}',
-      }) as unknown as Collection;
+      }) as unknown as CollectionWithDefaults;
 
       const entry = createMockEntry({
         data: {
@@ -554,7 +559,7 @@ describe('Backend', () => {
 
       (implementation.getEntry as jest.Mock).mockResolvedValueOnce({ data: 'data' });
 
-      const collection = createMockFolderCollection({
+      const collection = createMockFolderCollectionWithDefaults({
         name: 'posts',
         fields: [
           {
@@ -565,7 +570,7 @@ describe('Backend', () => {
         folder: 'posts',
         slug: '{{slug}}',
         path: 'sub_dir/{{slug}}',
-      }) as unknown as Collection;
+      }) as unknown as CollectionWithDefaults;
 
       const entry = createMockEntry({
         data: {
@@ -615,7 +620,7 @@ describe('Backend', () => {
 
   describe('search/query', () => {
     const collections = [
-      createMockFolderCollection({
+      createMockFolderCollectionWithDefaults({
         name: 'posts',
         folder: 'posts',
         fields: [
@@ -626,7 +631,7 @@ describe('Backend', () => {
           { name: 'nested', widget: 'object', fields: [{ name: 'title', widget: 'string' }] },
         ],
       }),
-      createMockFolderCollection({
+      createMockFolderCollectionWithDefaults({
         name: 'pages',
         folder: 'pages',
         fields: [
@@ -637,7 +642,7 @@ describe('Backend', () => {
           { name: 'nested', widget: 'object', fields: [{ name: 'title', widget: 'string' }] },
         ],
       }),
-    ] as unknown as Collection[];
+    ] as unknown as CollectionWithDefaults[];
 
     const posts = [
       createMockEntry({
@@ -686,7 +691,7 @@ describe('Backend', () => {
       }),
     ];
 
-    let config: Config;
+    let config: ConfigWithDefaults;
 
     const implementation = {
       listAllEntries: jest.fn(),
@@ -702,7 +707,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      config = createMockConfig({ collections });
+      config = createMockConfigWithDefaults({ collections });
 
       backend = new Backend(initializer, { config, backendName: 'github' });
       (backend.listAllEntries as jest.Mock) = jest.fn(collection => {
@@ -760,7 +765,7 @@ describe('Backend', () => {
 
     it('should search in file collection using top level fields', async () => {
       const collections = [
-        createMockFolderCollection({
+        createMockFolderCollectionWithDefaults({
           name: 'files',
           files: [
             {
@@ -777,7 +782,7 @@ describe('Backend', () => {
             },
           ],
         }),
-      ] as unknown as Collection[];
+      ] as unknown as CollectionWithDefaults[];
 
       expect(await backend.search(collections, 'find me by author')).toEqual({
         entries: [files[0]],
