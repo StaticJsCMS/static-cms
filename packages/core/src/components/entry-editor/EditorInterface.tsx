@@ -303,7 +303,7 @@ const EditorInterface = ({
   const editorLocale = useMemo(
     () =>
       locales
-        ?.filter(l => l !== defaultLocale)
+        ?.filter(locale => isSmallScreen || locale !== defaultLocale)
         .map(locale => (
           <div
             key={locale}
@@ -319,9 +319,10 @@ const EditorInterface = ({
               fieldsErrors={fieldsErrors}
               locale={locale}
               onLocaleChange={handleLocaleChange}
+              allowDefaultLocale={isSmallScreen}
               submitted={submitted}
               canChangeLocale
-              context="i18nSplit"
+              context={!isSmallScreen ? 'i18nSplit' : undefined}
               hideBorder
               t={t}
             />
@@ -334,6 +335,7 @@ const EditorInterface = ({
       fields,
       fieldsErrors,
       handleLocaleChange,
+      isSmallScreen,
       locales,
       selectedLocale,
       submitted,
@@ -345,38 +347,6 @@ const EditorInterface = ({
     () =>
       collectHasI18n ? getPreviewEntry(collection, entry, selectedLocale, defaultLocale) : entry,
     [collectHasI18n, collection, defaultLocale, entry, selectedLocale],
-  );
-
-  const mobileLocaleEditor = useMemo(
-    () =>
-      isSmallScreen ? (
-        <div key={selectedLocale} className={classes['mobile-i18n']}>
-          <EditorControlPane
-            collection={collection}
-            entry={entry}
-            fields={fields}
-            fieldsErrors={fieldsErrors}
-            locale={selectedLocale}
-            onLocaleChange={handleLocaleChange}
-            allowDefaultLocale
-            submitted={submitted}
-            canChangeLocale
-            hideBorder
-            t={t}
-          />
-        </div>
-      ) : null,
-    [
-      collection,
-      entry,
-      fields,
-      fieldsErrors,
-      handleLocaleChange,
-      isSmallScreen,
-      selectedLocale,
-      submitted,
-      t,
-    ],
   );
 
   const editorWithPreview = (
@@ -396,16 +366,15 @@ const EditorInterface = ({
     </div>
   );
 
-  const editorSideBySideLocale = (
-    <>
-      <div className={classNames(classes.root, classes['wrapper-i18n-side-by-side'])}>
-        <ScrollSyncPane>{editor}</ScrollSyncPane>
-        <ScrollSyncPane>
-          <>{editorLocale}</>
-        </ScrollSyncPane>
-      </div>
-      {mobileLocaleEditor}
-    </>
+  const editorSideBySideLocale = isSmallScreen ? (
+    <>{editorLocale}</>
+  ) : (
+    <div className={classNames(classes.root, classes['wrapper-i18n-side-by-side'])}>
+      <ScrollSyncPane>{editor}</ScrollSyncPane>
+      <ScrollSyncPane>
+        <>{editorLocale}</>
+      </ScrollSyncPane>
+    </div>
   );
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
