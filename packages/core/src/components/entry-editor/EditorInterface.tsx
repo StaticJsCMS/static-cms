@@ -345,7 +345,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   const editorLocale = useMemo(
     () =>
       locales
-        ?.filter(locale => locale !== default_locale)
+        ?.filter(locale => isSmallScreen || locale !== default_locale)
         .map(locale => (
           <div
             key={locale}
@@ -361,9 +361,10 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
               fieldsErrors={fieldsErrors}
               locale={locale}
               onLocaleChange={handleLocaleChange}
+              allowDefaultLocale={isSmallScreen}
               submitted={submitted}
               canChangeLocale
-              context="i18nSplit"
+              context={!isSmallScreen ? 'i18nSplit' : undefined}
               hideBorder
               disabled={disabled}
             />
@@ -378,6 +379,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       fields,
       fieldsErrors,
       handleLocaleChange,
+      isSmallScreen,
       submitted,
       disabled,
     ],
@@ -401,47 +403,6 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
         showMobilePreview={showMobilePreview}
       />
     </div>
-  );
-
-  const mobileLocaleEditor = useMemo(
-    () =>
-      isSmallScreen
-        ? locales?.map(locale => (
-            <div
-              key={locale}
-              className={classNames(
-                classes.i18n,
-                selectedLocale === locale && classes['i18n-active'],
-              )}
-            >
-              <EditorControlPane
-                collection={collection}
-                entry={entry}
-                fields={fields}
-                fieldsErrors={fieldsErrors}
-                locale={locale}
-                onLocaleChange={handleLocaleChange}
-                allowDefaultLocale
-                submitted={submitted}
-                canChangeLocale
-                hideBorder
-                disabled={disabled}
-              />
-            </div>
-          ))
-        : null,
-    [
-      collection,
-      disabled,
-      entry,
-      fields,
-      fieldsErrors,
-      handleLocaleChange,
-      isSmallScreen,
-      locales,
-      selectedLocale,
-      submitted,
-    ],
   );
 
   const editorWithPreview = (
@@ -519,7 +480,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
             useWorkflow && classes.workflow,
           )}
         >
-          {mobileLocaleEditor}
+          {editorLocale}
           {mobilePreview}
         </div>
       )}
