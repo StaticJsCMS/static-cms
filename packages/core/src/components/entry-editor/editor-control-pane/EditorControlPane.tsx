@@ -75,7 +75,7 @@ const EditorControlPane: FC<EditorControlPaneProps> = ({
         widget: 'string',
         i18n: 'none',
         hint: ``,
-      } as StringField),
+      }) as StringField,
     [collection],
   );
 
