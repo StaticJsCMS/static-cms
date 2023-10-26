@@ -1158,11 +1158,18 @@ describe('config', () => {
       expect(dispatch).toHaveBeenCalledWith({
         type: 'CONFIG_SUCCESS',
         payload: {
-          backend: { repo: 'test-repo' },
-          collections: [],
-          publish_mode: 'simple',
-          slug: { encoding: 'unicode', clean_accents: false, sanitize_replacement: '-' },
-          public_folder: '/',
+          config: {
+            backend: { repo: 'test-repo' },
+            collections: [],
+            publish_mode: 'simple',
+            slug: { encoding: 'unicode', clean_accents: false, sanitize_replacement: '-' },
+            public_folder: '/',
+          },
+          originalConfig: {
+            backend: {
+              repo: 'test-repo',
+            },
+          },
         },
       });
     });
@@ -1221,11 +1228,18 @@ describe('config', () => {
       expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: 'CONFIG_SUCCESS',
         payload: {
-          backend: { repo: 'github' },
-          collections: [],
-          publish_mode: 'simple',
-          slug: { encoding: 'unicode', clean_accents: false, sanitize_replacement: '-' },
-          public_folder: '/',
+          config: {
+            backend: { repo: 'github' },
+            collections: [],
+            publish_mode: 'simple',
+            slug: { encoding: 'unicode', clean_accents: false, sanitize_replacement: '-' },
+            public_folder: '/',
+          },
+          originalConfig: {
+            backend: {
+              repo: 'github',
+            },
+          },
         },
       });
     });

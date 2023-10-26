@@ -6,7 +6,7 @@ import { stringTemplate } from '../widgets';
 import { selectEntryCollectionTitle, selectFolderEntryExtension } from './collection.util';
 import { isEmpty, isNotEmpty } from './string.util';
 
-import type { BaseField, Collection, Entry, Slug } from '@staticcms/core/interface';
+import type { BaseField, CollectionWithDefaults, Entry, Slug } from '@staticcms/core/interface';
 
 const { addFileTemplateFields } = stringTemplate;
 
@@ -26,7 +26,7 @@ export type TreeNodeData = SingleTreeNodeData & {
 
 export function selectCustomPath(
   entry: Entry,
-  collection: Collection,
+  collection: CollectionWithDefaults,
   rootSlug: string | undefined,
   slugConfig: Slug | undefined,
 ): string | undefined {
@@ -43,7 +43,7 @@ export function selectCustomPath(
   return customPath;
 }
 
-export function customPathFromSlug(collection: Collection, slug: string): string {
+export function customPathFromSlug(collection: CollectionWithDefaults, slug: string): string {
   if (!('nested' in collection) || !collection.nested) {
     return '';
   }
@@ -57,7 +57,7 @@ export function customPathFromSlug(collection: Collection, slug: string): string
   return slug;
 }
 
-export function slugFromCustomPath(collection: Collection, customPath: string): string {
+export function slugFromCustomPath(collection: CollectionWithDefaults, customPath: string): string {
   if (!('folder' in collection)) {
     return '';
   }
@@ -69,7 +69,7 @@ export function slugFromCustomPath(collection: Collection, customPath: string): 
 }
 
 export function getNestedSlug(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   entry: Entry,
   slug: string | undefined,
   slugConfig: Slug | undefined,
@@ -94,7 +94,7 @@ export function getNestedSlug(
 }
 
 export function getTreeData<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   entries: Entry[],
 ): TreeNodeData[] {
   const collectionFolder = 'folder' in collection ? collection.folder : '';

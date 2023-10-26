@@ -23,7 +23,7 @@ import AuthenticationPage from './AuthenticationPage';
 import type {
   BackendClass,
   BackendEntry,
-  Config,
+  ConfigWithDefaults,
   Credentials,
   DisplayURL,
   ImplementationFile,
@@ -62,7 +62,7 @@ export default class Gitea implements BackendClass {
   };
   _mediaDisplayURLSem?: Semaphore;
 
-  constructor(config: Config, options = {}) {
+  constructor(config: ConfigWithDefaults, options = {}) {
     this.options = {
       proxied: false,
       API: null,
@@ -84,11 +84,6 @@ export default class Gitea implements BackendClass {
     this.mediaFolder = config.media_folder;
     this.lock = asyncLock();
   }
-
-  isGitBackend() {
-    return true;
-  }
-
   async status() {
     const auth =
       (await this.api

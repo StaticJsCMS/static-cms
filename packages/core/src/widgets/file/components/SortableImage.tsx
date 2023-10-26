@@ -8,7 +8,7 @@ import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Image from '@staticcms/core/components/common/image/Image';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { Collection, FileOrImageField } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, FileOrImageField } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler } from 'react';
 
 import './SortableImage.css';
@@ -28,7 +28,7 @@ const classes = generateClassNames('WidgetFileImage_SortableImage', [
 export interface SortableImageProps {
   id: string;
   itemValue: string;
-  collection: Collection<FileOrImageField>;
+  collection: CollectionWithDefaults<FileOrImageField>;
   field: FileOrImageField;
   onRemove?: MouseEventHandler;
   onReplace?: MouseEventHandler;

@@ -3,9 +3,9 @@
  */
 import '@testing-library/jest-dom';
 import { act, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 
-import { configLoaded } from '@staticcms/core/actions/config';
+import { applyDefaults, configLoaded } from '@staticcms/core/actions/config';
 import * as backend from '@staticcms/core/backend';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { store } from '@staticcms/core/store';
@@ -18,7 +18,9 @@ import RelationControl from '../RelationControl';
 
 import type {
   Collection,
+  CollectionWithDefaults,
   Config,
+  ConfigWithDefaults,
   DateTimeField,
   Entry,
   ListField,
@@ -26,6 +28,7 @@ import type {
   RelationField,
   TextField,
 } from '@staticcms/core/interface';
+import type { WidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 
 jest.mock('@staticcms/core/backend');
 
@@ -74,7 +77,7 @@ const bodyField: TextField = {
   name: 'body',
 };
 
-const config = createMockConfig({
+const originalConfig = createMockConfig({
   collections: [
     createMockFolderCollection(
       {
@@ -89,18 +92,27 @@ const config = createMockConfig({
   ],
 });
 
-const searchCollection = config.collections[0];
+let config: ConfigWithDefaults<RelationField>;
+let searchCollection: CollectionWithDefaults<RelationField>;
 
 describe(RelationControl.name, () => {
-  const renderControl = createWidgetControlHarness(RelationControl, {
-    field: mockRelationField,
-    config,
-  });
+  let renderControl: WidgetControlHarness<string | string[], RelationField>;
   let currentBackendSpy: jest.SpyInstance;
   let mockListAllEntries: jest.Mock;
 
   beforeEach(() => {
-    store.dispatch(configLoaded(config as unknown as Config));
+    config = applyDefaults(originalConfig);
+
+    renderControl = createWidgetControlHarness(RelationControl, {
+      field: mockRelationField,
+      config,
+    });
+
+    searchCollection = config.collections[0];
+
+    store.dispatch(
+      configLoaded(config as unknown as ConfigWithDefaults, originalConfig as unknown as Config),
+    );
 
     const mockEntries: Entry[] = [
       createMockEntry({

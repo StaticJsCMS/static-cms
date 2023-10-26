@@ -9,8 +9,8 @@ import type {
   BackendInitializerOptions,
   BaseField,
   ChangeEventListener,
-  Collection,
-  Config,
+  CollectionWithDefaults,
+  ConfigWithDefaults,
   CustomIcon,
   Entry,
   EntryData,
@@ -101,7 +101,7 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
 
 interface CardPreviews {
   component: TemplatePreviewCardComponent<ObjectValue>;
-  getHeight?: (data: { collection: Collection; entry: Entry }) => number;
+  getHeight?: (data: { collection: CollectionWithDefaults; entry: Entry }) => number;
 }
 
 interface Registry {
@@ -374,7 +374,7 @@ export function getWidgetValueSerializer(widgetName: string): WidgetValueSeriali
  * Backends
  */
 export function registerBackend<
-  T extends { new (config: Config, options: BackendInitializerOptions): BackendClass },
+  T extends { new (config: ConfigWithDefaults, options: BackendInitializerOptions): BackendClass },
 >(name: string, BackendClass: T) {
   if (!name || !BackendClass) {
     console.error(
@@ -384,7 +384,7 @@ export function registerBackend<
     console.error(`Backend [${name}] already registered. Please choose a different name.`);
   } else {
     registry.backends[name] = {
-      init: (config: Config, options: BackendInitializerOptions) =>
+      init: (config: ConfigWithDefaults, options: BackendInitializerOptions) =>
         new BackendClass(config, options),
     };
   }

@@ -22,8 +22,8 @@ import {
 
 import type { MediaLibraryAction } from '../actions/mediaLibrary';
 import type {
-  Collection,
-  CollectionFile,
+  CollectionFileWithDefaults,
+  CollectionWithDefaults,
   MediaField,
   MediaFile,
   MediaLibrarInsertOptions,
@@ -41,8 +41,8 @@ export type MediaLibraryState = {
   page?: number;
   files?: MediaFile[];
   config?: MediaLibraryConfig;
-  collection?: Collection;
-  collectionFile?: CollectionFile;
+  collection?: CollectionWithDefaults;
+  collectionFile?: CollectionFileWithDefaults;
   field?: MediaField;
   value?: string | string[];
   alt?: string;

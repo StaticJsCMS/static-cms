@@ -234,6 +234,11 @@ export interface CollectionFile<EF extends BaseField = UnknownField> {
   publish?: boolean;
 }
 
+export interface CollectionFileWithDefaults<EF extends BaseField = UnknownField>
+  extends Omit<CollectionFile<EF>, 'i18n'> {
+  i18n?: I18nInfo;
+}
+
 interface Nested {
   summary?: string;
   depth: number;
@@ -252,8 +257,8 @@ export interface I18nSettings {
 export type Format = keyof typeof formatExtensions;
 
 export interface i18nCollection<EF extends BaseField = UnknownField>
-  extends Omit<Collection<EF>, 'i18n'> {
-  i18n: Required<Collection<EF>>['i18n'];
+  extends Omit<CollectionWithDefaults<EF>, 'i18n'> {
+  i18n: Required<CollectionWithDefaults<EF>>['i18n'];
 }
 
 export interface BaseCollection {
@@ -269,7 +274,7 @@ export interface BaseCollection {
   sortable_fields?: SortableFields;
   view_filters?: ViewFilters;
   view_groups?: ViewGroups;
-  i18n?: boolean | I18nInfo;
+  i18n?: boolean | Partial<I18nInfo>;
   hide?: boolean;
   editor?: EditorConfig;
   identifier_field?: string;
@@ -283,11 +288,20 @@ export interface BaseCollection {
   media_library?: MediaLibraryConfig;
 }
 
+export interface BaseCollectionWithDefaults extends Omit<BaseCollection, 'i18n'> {
+  i18n?: I18nInfo;
+}
+
 export interface FilesCollection<EF extends BaseField = UnknownField> extends BaseCollection {
   files: CollectionFile<EF>[];
 }
 
-export interface FolderCollection<EF extends BaseField = UnknownField> extends BaseCollection {
+export interface FilesCollectionWithDefaults<EF extends BaseField = UnknownField>
+  extends BaseCollectionWithDefaults {
+  files: CollectionFileWithDefaults<EF>[];
+}
+
+export interface BaseFolderCollection<EF extends BaseField = UnknownField> {
   folder: string;
   fields: Field<EF>[];
   create?: boolean;
@@ -299,11 +313,26 @@ export interface FolderCollection<EF extends BaseField = UnknownField> extends B
   };
 }
 
+export type FolderCollection<EF extends BaseField = UnknownField> = BaseCollection &
+  BaseFolderCollection<EF>;
+
+export type FolderCollectionWithDefaults<EF extends BaseField = UnknownField> =
+  BaseCollectionWithDefaults & BaseFolderCollection<EF>;
+
 export type Collection<EF extends BaseField = UnknownField> =
   | FilesCollection<EF>
   | FolderCollection<EF>;
 
+export type CollectionWithDefaults<EF extends BaseField = UnknownField> =
+  | FilesCollectionWithDefaults<EF>
+  | FolderCollectionWithDefaults<EF>;
+
 export type Collections<EF extends BaseField = UnknownField> = Record<string, Collection<EF>>;
+
+export type CollectionsWithDefaults<EF extends BaseField = UnknownField> = Record<
+  string,
+  CollectionWithDefaults<EF>
+>;
 
 export type MediaFile = BackendMediaFile & { key?: string };
 
@@ -321,9 +350,9 @@ export interface MediaPath<T = string | string[]> {
 }
 
 export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = ObjectValue> {
-  collection: Collection<F>;
-  collectionFile: CollectionFile<F> | undefined;
-  config: Config<F>;
+  collection: CollectionWithDefaults<F>;
+  collectionFile: CollectionFileWithDefaults<F> | undefined;
+  config: ConfigWithDefaults<F>;
   entry: Entry<EV>;
   field: F;
   fieldsErrors: FieldsErrors;
@@ -348,8 +377,8 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
 }
 
 export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownField> {
-  config: Config<F>;
-  collection: Collection<F>;
+  config: ConfigWithDefaults<F>;
+  collection: CollectionWithDefaults<F>;
   entry: Entry;
   field: RenderedField<F>;
   value: T | undefined | null;
@@ -375,7 +404,7 @@ export type WidgetsFor<P = ObjectValue> = <K extends keyof P>(
     };
 
 export interface TemplatePreviewProps<T = ObjectValue, EF extends BaseField = UnknownField> {
-  collection: Collection<EF>;
+  collection: CollectionWithDefaults<EF>;
   fields: Field<EF>[];
   entry: Entry<T>;
   document: Document | undefined | null;
@@ -390,7 +419,7 @@ export type TemplatePreviewComponent<
 > = ComponentType<TemplatePreviewProps<T, EF>>;
 
 export interface TemplatePreviewCardProps<T = EntryData, EF extends BaseField = UnknownField> {
-  collection: Collection<EF>;
+  collection: CollectionWithDefaults<EF>;
   fields: Field<EF>[];
   entry: Entry<T>;
   status?: WorkflowStatus | 'published';
@@ -405,7 +434,7 @@ export type TemplatePreviewCardComponent<
 > = ComponentType<TemplatePreviewCardProps<T, EF>>;
 
 export interface FieldPreviewProps<T = unknown, F extends BaseField = UnknownField> {
-  collection: Collection<F>;
+  collection: CollectionWithDefaults<F>;
   field: Field<F>;
   value: T;
 }
@@ -457,9 +486,9 @@ export interface PersistOptions {
 }
 
 export interface PersistArgs {
-  config: Config;
+  config: ConfigWithDefaults;
   rootSlug: string | undefined;
-  collection: Collection;
+  collection: CollectionWithDefaults;
   entryDraft: EntryDraft;
   assetProxies: AssetProxy[];
   usedSlugs: string[];
@@ -533,7 +562,7 @@ export interface AuthenticatorConfig {
 
 export abstract class BackendClass {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor(_config: Config, _options: BackendInitializerOptions) {}
+  constructor(_config: ConfigWithDefaults, _options: BackendInitializerOptions) {}
 
   abstract authComponent(): FC<AuthenticationPageProps>;
   abstract restoreUser(user: User): Promise<User>;
@@ -573,7 +602,6 @@ export abstract class BackendClass {
     action: string,
   ): Promise<{ entries: ImplementationEntry[]; cursor: Cursor }>;
 
-  abstract isGitBackend(): boolean;
   abstract status(): Promise<{
     auth: { status: boolean };
     api: { status: boolean; statusPage: string };
@@ -1012,6 +1040,11 @@ export interface Config<EF extends BaseField = UnknownField> {
   theme?: Themes;
 }
 
+export interface ConfigWithDefaults<EF extends BaseField = UnknownField>
+  extends Omit<Config<EF>, 'collections'> {
+  collections: CollectionWithDefaults<EF>[];
+}
+
 export interface ThemeColor {
   main: string;
   light: string;
@@ -1060,10 +1093,6 @@ export interface Themes {
   themes?: (Theme | PartialTheme)[];
 }
 
-export interface InitOptions<EF extends BaseField = UnknownField> {
-  config: Config<EF>;
-}
-
 export interface BackendInitializerOptions {
   updateUserCredentials: (credentials: Credentials) => void;
   /**
@@ -1074,7 +1103,7 @@ export interface BackendInitializerOptions {
 }
 
 export interface BackendInitializer<EF extends BaseField = UnknownField> {
-  init: (config: Config<EF>, options: BackendInitializerOptions) => BackendClass;
+  init: (config: ConfigWithDefaults<EF>, options: BackendInitializerOptions) => BackendClass;
 }
 
 export interface AuthorData {
@@ -1172,7 +1201,7 @@ export interface AuthenticationPageProps {
   base_url?: string;
   siteId?: string;
   authEndpoint?: string;
-  config: Config;
+  config: ConfigWithDefaults;
   error?: string | undefined;
   clearHash?: () => void;
 }
@@ -1236,7 +1265,7 @@ export interface PreviewStyle {
 }
 
 export interface MarkdownPluginFactoryProps {
-  config: Config<MarkdownField>;
+  config: ConfigWithDefaults<MarkdownField>;
   field: MarkdownField;
   mode: 'editor' | 'preview';
 }
@@ -1331,7 +1360,7 @@ export interface BackupEntry {
 }
 
 export interface CollectionEntryData {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   imageFieldName: string | null | undefined;
   descriptionFieldName: string | null | undefined;
   dateFieldName: string | null | undefined;

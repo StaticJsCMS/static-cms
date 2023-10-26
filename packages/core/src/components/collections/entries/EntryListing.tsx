@@ -12,9 +12,9 @@ import EntryListingTable from './EntryListingTable';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
 import type {
-  Collection,
   CollectionEntryData,
-  Collections,
+  CollectionWithDefaults,
+  CollectionsWithDefaults,
   DateTimeField,
   Entry,
   Field,
@@ -33,11 +33,11 @@ export interface BaseEntryListingProps {
 }
 
 export interface SingleCollectionEntryListingProps extends BaseEntryListingProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
 }
 
 export interface MultipleCollectionEntryListingProps extends BaseEntryListingProps {
-  collections: Collections;
+  collections: CollectionsWithDefaults;
 }
 
 export type EntryListingProps =
@@ -63,7 +63,10 @@ const EntryListing: FC<EntryListingProps> = ({
     }
   }, [handleCursorActions, hasMore]);
 
-  const inferFields = useCallback((collection?: Collection) => getInferredFields(collection), []);
+  const inferFields = useCallback(
+    (collection?: CollectionWithDefaults) => getInferredFields(collection),
+    [],
+  );
 
   const isSingleCollectionInList = useMemo(
     () => !('collections' in otherProps) || Object.keys(otherProps.collections).length === 1,

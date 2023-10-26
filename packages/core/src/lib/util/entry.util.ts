@@ -1,14 +1,19 @@
 import isEqual from 'lodash/isEqual';
 
-import { isNotNullish } from './null.util';
 import {
   I18N_FIELD_DUPLICATE,
   I18N_FIELD_TRANSLATE,
   duplicateDefaultI18nFields,
   hasI18n,
 } from '../i18n';
+import { isNotNullish } from './null.util';
 
-import type { Collection, EntryData, Field, ObjectValue } from '@staticcms/core/interface';
+import type {
+  CollectionWithDefaults,
+  EntryData,
+  Field,
+  ObjectValue,
+} from '@staticcms/core/interface';
 
 export function applyDefaultsToDraftData(
   fields: Field[],
@@ -64,7 +69,7 @@ export function createEmptyDraftData(fields: Field[], skipField?: (field: Field)
   return applyDefaultsToDraftData(fields, skipField);
 }
 
-export function createEmptyDraftI18nData(collection: Collection, dataFields: Field[]) {
+export function createEmptyDraftI18nData(collection: CollectionWithDefaults, dataFields: Field[]) {
   if (!hasI18n(collection)) {
     return {};
   }

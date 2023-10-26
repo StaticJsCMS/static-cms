@@ -8,8 +8,8 @@ import { getTypedFieldForValue } from '@staticcms/list/typedListHelpers';
 import PreviewHOC from './PreviewHOC';
 
 import type {
-  Collection,
-  Config,
+  CollectionWithDefaults,
+  ConfigWithDefaults,
   Entry,
   EntryData,
   Field,
@@ -33,8 +33,8 @@ export const classes = generateClassNames('WidgetPreview', ['label']);
  * exposed for use in custom preview templates.
  */
 export default function getWidgetFor(
-  config: Config,
-  collection: Collection,
+  config: ConfigWithDefaults,
+  collection: CollectionWithDefaults,
   name: string,
   fields: Field[],
   entry: Entry,
@@ -116,8 +116,8 @@ export default function getWidgetFor(
  * Retrieves widgets for nested fields (children of object/list fields)
  */
 function getNestedWidgets(
-  config: Config,
-  collection: Collection,
+  config: ConfigWithDefaults,
+  collection: CollectionWithDefaults,
   fields: Field[],
   entry: Entry,
   inferredFields: Record<string, InferredField>,
@@ -155,8 +155,8 @@ function getNestedWidgets(
  * Retrieves widgets for nested fields (children of object/list fields)
  */
 function getTypedNestedWidgets(
-  config: Config,
-  collection: Collection,
+  config: ConfigWithDefaults,
+  collection: CollectionWithDefaults,
   field: ListField,
   entry: Entry,
   inferredFields: Record<string, InferredField>,
@@ -187,8 +187,8 @@ function getTypedNestedWidgets(
  * Use getWidgetFor as a mapping function for recursive widget retrieval
  */
 function widgetsForNestedFields(
-  config: Config,
-  collection: Collection,
+  config: ConfigWithDefaults,
+  collection: CollectionWithDefaults,
   fields: Field[],
   entry: Entry,
   inferredFields: Record<string, InferredField>,
@@ -214,9 +214,9 @@ function widgetsForNestedFields(
 }
 
 function getWidget(
-  config: Config,
+  config: ConfigWithDefaults,
   field: RenderedField<Field>,
-  collection: Collection,
+  collection: CollectionWithDefaults,
   value: ValueOrNestedValue | ReactNode,
   entry: Entry,
   idx: number | null = null,

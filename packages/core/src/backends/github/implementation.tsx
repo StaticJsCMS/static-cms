@@ -27,7 +27,7 @@ import AuthenticationPage from './AuthenticationPage';
 import type {
   BackendClass,
   BackendEntry,
-  Config,
+  ConfigWithDefaults,
   Credentials,
   DisplayURL,
   ImplementationFile,
@@ -82,7 +82,7 @@ export default class GitHub implements BackendClass {
   };
   _mediaDisplayURLSem?: Semaphore;
 
-  constructor(config: Config, options = {}) {
+  constructor(config: ConfigWithDefaults, options = {}) {
     this.options = {
       proxied: false,
       API: null,
@@ -118,10 +118,6 @@ export default class GitHub implements BackendClass {
     this.mediaFolder = config.media_folder;
     this.previewContext = config.backend.preview_context || '';
     this.lock = asyncLock();
-  }
-
-  isGitBackend() {
-    return true;
   }
 
   async status() {

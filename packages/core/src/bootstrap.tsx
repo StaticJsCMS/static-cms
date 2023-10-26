@@ -115,7 +115,7 @@ function bootstrap<F extends BaseField = UnknownField>(opts?: {
       if (config.backend.name !== 'git-gateway') {
         store.dispatch(authenticateUser() as unknown as AnyAction);
       }
-    }) as AnyAction,
+    }) as unknown as AnyAction,
   );
 
   /**

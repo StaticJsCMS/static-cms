@@ -25,7 +25,7 @@ import WorkflowStatusPill from '../../workflow/WorkflowStatusPill';
 
 import type {
   BackupEntry,
-  Collection,
+  CollectionWithDefaults,
   DateTimeFormats,
   Entry,
   FileOrImageField,
@@ -55,7 +55,7 @@ export interface EntryCardProps {
   descriptionFieldName: string | null | undefined;
   dateFieldName: string | null | undefined;
   dateFormats: DateTimeFormats | undefined;
-  collection: Collection;
+  collection: CollectionWithDefaults;
   noMargin?: boolean;
   backTo?: string;
   children?: ReactNode;

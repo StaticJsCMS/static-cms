@@ -16,7 +16,7 @@ import Entries from './Entries';
 import entriesClasses from './Entries.classes';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
-import type { Collection, Entry, GroupOfEntries } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry, GroupOfEntries } from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { FC } from 'react';
 import type { t } from 'react-polyglot';
@@ -179,7 +179,7 @@ const EntriesCollection: FC<EntriesCollectionProps> = ({
 };
 
 interface EntriesCollectionOwnProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   viewStyle: ViewStyle;
   readyToLoad: boolean;
   filterTerm: string;

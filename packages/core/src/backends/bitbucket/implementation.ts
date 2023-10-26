@@ -38,7 +38,7 @@ import GitLfsClient from './git-lfs-client';
 import type {
   BackendClass,
   BackendEntry,
-  Config,
+  ConfigWithDefaults,
   Credentials,
   DisplayURL,
   ImplementationFile,
@@ -89,7 +89,7 @@ export default class BitbucketBackend implements BackendClass {
   _largeMediaClientPromise?: Promise<GitLfsClient>;
   authType: string;
 
-  constructor(config: Config, options = {}) {
+  constructor(config: ConfigWithDefaults, options = {}) {
     this.options = {
       proxied: false,
       API: null,
@@ -123,10 +123,6 @@ export default class BitbucketBackend implements BackendClass {
     this.previewContext = config.backend.preview_context || '';
     this.lock = asyncLock();
     this.authType = config.backend.auth_type || '';
-  }
-
-  isGitBackend() {
-    return true;
   }
 
   async status() {

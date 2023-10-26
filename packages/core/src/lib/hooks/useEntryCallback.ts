@@ -12,7 +12,7 @@ import DataUpdateEvent from '../util/events/DataEvent';
 import { useWindowEvent } from '../util/window.util';
 import useDebouncedCallback from './useDebouncedCallback';
 
-import type { Collection, EntryData, Field } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, EntryData, Field } from '@staticcms/core/interface';
 
 async function handleChange(
   path: string[],
@@ -65,7 +65,7 @@ async function handleChange(
 
 interface EntryCallbackProps {
   hasLivePreview: boolean;
-  collection: Collection;
+  collection: CollectionWithDefaults;
   slug: string | undefined;
   callback: () => void;
 }

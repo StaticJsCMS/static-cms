@@ -12,7 +12,7 @@ import EditorControl from './EditorControl';
 import LocaleDropdown from './LocaleDropdown';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   Entry,
   Field,
   FieldsErrors,
@@ -30,7 +30,7 @@ export const classes = generateClassNames('EditorControlPane', [
 ]);
 
 export interface EditorControlPaneProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   entry: Entry;
   fields: Field[];
   fieldsErrors: FieldsErrors;

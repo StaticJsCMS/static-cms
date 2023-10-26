@@ -30,7 +30,7 @@ import type {
   AuthenticationPageProps,
   BackendClass,
   BackendEntry,
-  Config,
+  ConfigWithDefaults,
   Credentials,
   DisplayURL,
   DisplayURLObject,
@@ -121,7 +121,7 @@ async function apiGet(path: string) {
 }
 
 export default class GitGateway implements BackendClass {
-  config: Config;
+  config: ConfigWithDefaults;
   api?: GitHubAPI | GitLabAPI | BitBucketAPI;
   branch: string;
   squashMerges: boolean;
@@ -143,7 +143,7 @@ export default class GitGateway implements BackendClass {
     API: GitHubAPI | GitLabAPI | BitBucketAPI | null;
     initialWorkflowStatus: WorkflowStatus;
   };
-  constructor(config: Config, options = {}) {
+  constructor(config: ConfigWithDefaults, options = {}) {
     this.options = {
       proxied: true,
       API: null,
@@ -175,10 +175,6 @@ export default class GitGateway implements BackendClass {
     }
 
     this.backend = null;
-  }
-
-  isGitBackend() {
-    return true;
   }
 
   async status() {

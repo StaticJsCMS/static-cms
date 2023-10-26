@@ -43,7 +43,11 @@ import Loader from '../common/progress/Loader';
 import MediaLibraryModal from '../media-library/MediaLibraryModal';
 import EditorInterface from './EditorInterface';
 
-import type { Collection, EditorPersistOptions, Entry } from '@staticcms/core/interface';
+import type {
+  CollectionWithDefaults,
+  EditorPersistOptions,
+  Entry,
+} from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 import type { Blocker } from 'history';
 import type { FC } from 'react';
@@ -79,7 +83,7 @@ const Editor: FC<EditorProps> = ({
 
   const createBackup = useMemo(
     () =>
-      debounce(function (entry: Entry, collection: Collection) {
+      debounce(function (entry: Entry, collection: CollectionWithDefaults) {
         if (config?.disable_local_backup || !slug) {
           return;
         }
@@ -414,7 +418,7 @@ const Editor: FC<EditorProps> = ({
     },
   });
 
-  const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
+  const [prevCollection, setPrevCollection] = useState<CollectionWithDefaults | null>(null);
   const [prevSlug, setPrevSlug] = useState<string | undefined | null>(null);
   useEffect(() => {
     if (newRecord && slug !== prevSlug) {

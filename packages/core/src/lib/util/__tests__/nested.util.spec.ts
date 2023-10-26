@@ -1,8 +1,8 @@
 import { getTreeData } from '../nested.util';
 
-import type { Collection, Entry } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry } from '@staticcms/core/interface';
 
-const collection: Collection = {
+const collection: CollectionWithDefaults = {
   create: true,
   fields: [
     { label: 'Title', name: 'title', widget: 'string' },

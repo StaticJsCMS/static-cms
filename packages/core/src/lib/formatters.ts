@@ -15,8 +15,8 @@ import {
 
 import type {
   BaseField,
-  Collection,
-  Config,
+  CollectionWithDefaults,
+  ConfigWithDefaults,
   Entry,
   EntryData,
   Field,
@@ -37,14 +37,14 @@ const variableRegex = /\{\{([^}]+)\}\}/g;
 type Options<EF extends BaseField> = {
   slug?: string;
   path?: string;
-  collection?: Collection<EF>;
+  collection?: CollectionWithDefaults<EF>;
   authorLogin?: string;
   authorName?: string;
 };
 
 export function commitMessageFormatter<EF extends BaseField>(
   type: keyof typeof commitMessageTemplates,
-  config: Config<EF>,
+  config: ConfigWithDefaults<EF>,
   { slug, path, collection, authorLogin, authorName }: Options<EF>,
 ) {
   const templates = { ...commitMessageTemplates, ...(config.backend.commit_messages || {}) };
@@ -93,7 +93,7 @@ export function getProcessSegment(slugConfig?: Slug, ignoreValues?: string[]) {
 }
 
 export function slugFormatter<EF extends BaseField = UnknownField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   entryData: EntryData,
   slugConfig: Slug | undefined,
   fields: Field[] | undefined,
@@ -140,7 +140,7 @@ export function slugFormatter<EF extends BaseField = UnknownField>(
 export function summaryFormatter<EF extends BaseField>(
   summaryTemplate: string,
   entry: Entry,
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   slugConfig?: Slug,
 ) {
   const collectionFields = getFields(collection, entry.slug);
@@ -170,7 +170,7 @@ export function summaryFormatter<EF extends BaseField>(
 export function folderFormatter<EF extends BaseField>(
   folderTemplate: string,
   entry: Entry | null | undefined,
-  collection: Collection<EF> | undefined,
+  collection: CollectionWithDefaults<EF> | undefined,
   defaultFolder: string,
   folderKey: string,
   slugConfig?: Slug,

@@ -26,7 +26,7 @@ import EditorPreviewPane from './editor-preview-pane/EditorPreviewPane';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type {
-  Collection,
+  CollectionWithDefaults,
   EditorPersistOptions,
   Entry,
   Field,
@@ -95,7 +95,7 @@ const EditorContent: FC<EditorContentProps> = ({
 interface EditorInterfaceProps {
   draftKey: string;
   entry: Entry;
-  collection: Collection;
+  collection: CollectionWithDefaults;
   fields: Field[] | undefined;
   fieldsErrors: FieldsErrors;
   onPersist: (opts?: EditorPersistOptions) => void;

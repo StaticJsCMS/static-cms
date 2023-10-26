@@ -28,7 +28,7 @@ import EntriesCollection from './entries/EntriesCollection';
 import EntriesSearch from './entries/EntriesSearch';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   SortDirection,
   TranslatedProps,
   ViewFilter,
@@ -62,7 +62,7 @@ const CollectionView: FC<CollectionViewProps> = ({
   const t = useTranslate();
 
   const [readyToLoad, setReadyToLoad] = useState(false);
-  const [prevCollection, setPrevCollection] = useState<Collection | null>();
+  const [prevCollection, setPrevCollection] = useState<CollectionWithDefaults | null>();
 
   useEffect(() => {
     setPrevCollection(collection);
@@ -274,7 +274,9 @@ function mapStateToProps(state: RootState, ownProps: TranslatedProps<CollectionV
     filterTerm = '',
     t,
   } = ownProps;
-  const collection = (name ? collections[name] : collections[0]) as Collection | undefined;
+  const collection = (name ? collections[name] : collections[0]) as
+    | CollectionWithDefaults
+    | undefined;
   const sort = selectEntriesSort(state, collection?.name);
   const sortableFields = selectSortableFields(collection, t);
   const viewFilters = selectViewFilters(collection);

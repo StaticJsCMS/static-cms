@@ -9,19 +9,24 @@ import {
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFocused } from 'slate-react';
 
+import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { MediaPopover } from '@staticcms/markdown';
-import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 
-import type { Collection, Entry, MarkdownField, MediaPath } from '@staticcms/core/interface';
+import type {
+  CollectionWithDefaults,
+  Entry,
+  MarkdownField,
+  MediaPath,
+} from '@staticcms/core/interface';
 import type { MdImageElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { TMediaElement } from '@udecode/plate-media';
 import type { FC } from 'react';
 
 export interface WithImageElementProps {
-  collection: Collection<MarkdownField>;
+  collection: CollectionWithDefaults<MarkdownField>;
   entry: Entry;
   field: MarkdownField;
 }

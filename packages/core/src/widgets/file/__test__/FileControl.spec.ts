@@ -3,9 +3,9 @@
  */
 import '@testing-library/jest-dom';
 import { act, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 
-import { configLoaded } from '@staticcms/core/actions/config';
+import { applyDefaults, configLoaded } from '@staticcms/core/actions/config';
 import {
   insertMedia,
   mediaDisplayURLSuccess,
@@ -18,7 +18,13 @@ import { mockFileField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import withFileControl from '../withFileControl';
 
-import type { Config, MediaFile } from '@staticcms/core/interface';
+import type {
+  Config,
+  ConfigWithDefaults,
+  FileOrImageField,
+  MediaFile,
+} from '@staticcms/core/interface';
+import type { WidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 
 jest.mock('@staticcms/core/backend');
 
@@ -56,20 +62,26 @@ jest.mock('@staticcms/core/lib/hooks/useMediaAsset', () => (url: string) => url)
 describe('File Control', () => {
   const FileControl = withFileControl();
   const collection = createMockFolderCollection({}, mockFileField);
-  const config = createMockConfig({
+  const originalConfig = createMockConfig({
     collections: [collection],
   });
 
   const mockInsertMedia = insertMedia as jest.Mock;
 
-  const renderControl = createWidgetControlHarness(
-    FileControl,
-    { field: mockFileField, config },
-    { withMediaLibrary: true },
-  );
+  let renderControl: WidgetControlHarness<string | string[], FileOrImageField>;
 
   beforeEach(() => {
-    store.dispatch(configLoaded(config as unknown as Config));
+    const config = applyDefaults(originalConfig);
+
+    renderControl = createWidgetControlHarness(
+      FileControl,
+      { field: mockFileField, config },
+      { withMediaLibrary: true },
+    );
+
+    store.dispatch(
+      configLoaded(config as unknown as ConfigWithDefaults, originalConfig as unknown as Config),
+    );
     store.dispatch(mediaDisplayURLSuccess('12345', 'path/to/file1.txt'));
     store.dispatch(mediaDisplayURLSuccess('67890', 'path/to/file2.png'));
 

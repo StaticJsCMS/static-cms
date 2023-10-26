@@ -10,7 +10,7 @@ import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
 import LivePreviewLoadedEvent from '@staticcms/core/lib/util/events/LivePreviewLoadedEvent';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectConfig, selectOriginConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import ErrorBoundary from '../../ErrorBoundary';
@@ -20,7 +20,12 @@ import EditorPreviewContent from './EditorPreviewContent';
 import PreviewFrameContent from './PreviewFrameContent';
 
 import type { EditorSize } from '@staticcms/core/constants/views';
-import type { Collection, Entry, Field, TemplatePreviewProps } from '@staticcms/core/interface';
+import type {
+  CollectionWithDefaults,
+  Entry,
+  Field,
+  TemplatePreviewProps,
+} from '@staticcms/core/interface';
 import type DataUpdateEvent from '@staticcms/core/lib/util/events/DataEvent';
 import type { FC } from 'react';
 
@@ -104,7 +109,7 @@ const FrameGlobalStyles = `
 `;
 
 export interface EditorPreviewPaneProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   fields: Field[];
   entry: Entry;
   previewInFrame: boolean;
@@ -126,6 +131,7 @@ const EditorPreviewPane: FC<EditorPreviewPaneProps> = props => {
     showMobilePreview,
   } = props;
 
+  const originalConfig = useAppSelector(selectOriginConfig);
   const config = useAppSelector(selectConfig);
 
   const { widgetFor, widgetsFor } = useWidgetsFor(config, collection, fields, entry);
@@ -209,7 +215,7 @@ const EditorPreviewPane: FC<EditorPreviewPaneProps> = props => {
           !showMobilePreview && classes['show-mobile-preview'],
         )}
       >
-        <ErrorBoundary config={config} t={t}>
+        <ErrorBoundary config={originalConfig} t={t}>
           {livePreviewUrlTemplate ? (
             <iframe
               key="live-preview-frame"
@@ -263,12 +269,12 @@ const EditorPreviewPane: FC<EditorPreviewPaneProps> = props => {
     );
   }, [
     collection,
-    config,
     editorSize,
     element,
     handleLivePreviewIframeLoaded,
     initialFrameContent,
     livePreviewUrlTemplate,
+    originalConfig,
     previewComponent,
     previewInFrame,
     previewProps,
