@@ -10,9 +10,10 @@
 }
 
 .CMS_LocaleDropdown_errors-icon {
+  color: var(--error-main);
+
   @apply w-7
-    h-7
-    text-red-500;
+    h-7;
 }
 
 .CMS_LocaleDropdown_no-edit {

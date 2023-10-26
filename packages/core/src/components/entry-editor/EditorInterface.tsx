@@ -345,7 +345,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
   const editorLocale = useMemo(
     () =>
       locales
-        ?.filter(l => l !== default_locale)
+        ?.filter(locale => locale !== default_locale)
         .map(locale => (
           <div
             key={locale}
@@ -405,23 +405,31 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
 
   const mobileLocaleEditor = useMemo(
     () =>
-      isSmallScreen ? (
-        <div key={selectedLocale} className={classes.i18n}>
-          <EditorControlPane
-            collection={collection}
-            entry={entry}
-            fields={fields}
-            fieldsErrors={fieldsErrors}
-            locale={selectedLocale}
-            onLocaleChange={handleLocaleChange}
-            allowDefaultLocale
-            submitted={submitted}
-            canChangeLocale
-            hideBorder
-            disabled={disabled}
-          />
-        </div>
-      ) : null,
+      isSmallScreen
+        ? locales?.map(locale => (
+            <div
+              key={locale}
+              className={classNames(
+                classes.i18n,
+                selectedLocale === locale && classes['i18n-active'],
+              )}
+            >
+              <EditorControlPane
+                collection={collection}
+                entry={entry}
+                fields={fields}
+                fieldsErrors={fieldsErrors}
+                locale={locale}
+                onLocaleChange={handleLocaleChange}
+                allowDefaultLocale
+                submitted={submitted}
+                canChangeLocale
+                hideBorder
+                disabled={disabled}
+              />
+            </div>
+          ))
+        : null,
     [
       collection,
       disabled,
@@ -430,6 +438,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       fieldsErrors,
       handleLocaleChange,
       isSmallScreen,
+      locales,
       selectedLocale,
       submitted,
     ],
