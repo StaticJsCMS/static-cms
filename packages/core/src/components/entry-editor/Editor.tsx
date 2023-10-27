@@ -72,7 +72,7 @@ const Editor: FC<EditorProps> = ({ name: collectionName, slug, newRecord }) => {
   const config = useAppSelector(selectConfig);
   const entryDraft = useAppSelector(selectEntryDraft);
 
-  const collection = useAppSelector(selectCollection(collectionName));
+  const collection = useAppSelector(state => selectCollection(state, collectionName));
 
   const useWorkflow = useAppSelector(selectUseWorkflow);
 

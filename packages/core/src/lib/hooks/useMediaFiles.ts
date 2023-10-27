@@ -20,11 +20,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
   const entry = useAppSelector(selectEditingDraft);
   const config = useAppSelector(selectConfig);
 
-  const collectionSelector = useMemo(
-    () => selectCollection(entry?.collection),
-    [entry?.collection],
-  );
-  const collection = useAppSelector(collectionSelector);
+  const collection = useAppSelector(state => selectCollection(state, entry?.collection));
   const collectionFile = useMemo(
     () => fileForEntry(collection, entry?.slug),
     [collection, entry?.slug],

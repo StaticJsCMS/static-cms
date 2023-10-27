@@ -509,7 +509,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     let i = 1;
     let uniqueSlug = slug;
 
-    // Check for duplicate slug in loaded entities store first before repo
+    // Check for duplicate slug in loaded entries store first before repo
     while (
       usedSlugs.includes(uniqueSlug) ||
       (await this.entryExist(

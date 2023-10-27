@@ -123,7 +123,7 @@ const testEntryMediaFiles: Record<string, MediaFile[]> = {
 };
 
 describe('useMediaFiles', () => {
-  const mockSelectCollection = selectCollection as jest.Mock;
+  const mockSelectCollection = selectCollection as unknown as jest.Mock;
   const mockSelectConfig = selectConfig as jest.Mock;
   const mockSelectEditingDraft = selectEditingDraft as jest.Mock;
   const mockSelectMediaLibraryFiles = selectMediaLibraryFiles as jest.Mock;

@@ -24,13 +24,13 @@ import type { Entries } from '../interface';
 export interface EditorialWorkflowState {
   isFetching: boolean;
   ids: string[];
-  entities: Entries;
+  entries: Entries;
 }
 
 const initialState: EditorialWorkflowState = {
   isFetching: false,
   ids: [],
-  entities: {},
+  entries: {},
 };
 
 function unpublishedEntries(
@@ -41,10 +41,10 @@ function unpublishedEntries(
     case UNPUBLISHED_ENTRY_REQUEST: {
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [`${action.payload.collection}.${action.payload.slug}`]: {
-            ...state.entities[`${action.payload.collection}.${action.payload.slug}`],
+            ...state.entries[`${action.payload.collection}.${action.payload.slug}`],
             isFetching: true,
           },
         },
@@ -54,7 +54,7 @@ function unpublishedEntries(
     case UNPUBLISHED_ENTRY_DELETE_SUCCESS:
     case UNPUBLISHED_ENTRY_REDIRECT:
       const newEntities = {
-        ...state.entities,
+        ...state.entries,
       };
 
       delete newEntities[`${action.payload.collection}.${action.payload.slug}`];
@@ -68,13 +68,13 @@ function unpublishedEntries(
       return {
         ...state,
         ids: newIds,
-        entities: newEntities,
+        entries: newEntities,
       };
     case UNPUBLISHED_ENTRY_SUCCESS: {
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [`${action.payload.collection}.${action.payload.entry.slug}`]: action.payload.entry,
         },
       };
@@ -87,7 +87,7 @@ function unpublishedEntries(
     }
     case UNPUBLISHED_ENTRIES_SUCCESS: {
       const newEntities = {
-        ...state.entities,
+        ...state.entries,
       };
 
       action.payload.entries.forEach(entry => {
@@ -99,7 +99,7 @@ function unpublishedEntries(
 
       return {
         ...state,
-        entities: newEntities,
+        entries: newEntities,
         ids: action.payload.entries.map(entry => entry.slug),
       };
     }
@@ -110,10 +110,10 @@ function unpublishedEntries(
 
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [`${action.payload.collection}.${action.payload.slug}`]: {
-            ...state.entities[`${action.payload.collection}.${action.payload.slug}`],
+            ...state.entries[`${action.payload.collection}.${action.payload.slug}`],
             isPersisting: true,
           },
         },
@@ -133,8 +133,8 @@ function unpublishedEntries(
       return {
         ...state,
         ids: newIds,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [`${action.payload.collection}.${action.payload.entry.slug}`]: {
             ...action.payload.entry,
             isPersisting: false,
@@ -149,10 +149,10 @@ function unpublishedEntries(
 
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [`${action.payload.collection}.${action.payload.slug}`]: {
-            ...state.entities[`${action.payload.collection}.${action.payload.slug}`],
+            ...state.entries[`${action.payload.collection}.${action.payload.slug}`],
             isPersisting: false,
           },
         },
@@ -161,10 +161,10 @@ function unpublishedEntries(
     case UNPUBLISHED_ENTRY_STATUS_CHANGE_REQUEST: {
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [`${action.payload.collection}.${action.payload.slug}`]: {
-            ...state.entities[`${action.payload.collection}.${action.payload.slug}`],
+            ...state.entries[`${action.payload.collection}.${action.payload.slug}`],
             isUpdatingStatus: true,
           },
         },
@@ -173,10 +173,10 @@ function unpublishedEntries(
     case UNPUBLISHED_ENTRY_STATUS_CHANGE_SUCCESS: {
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [`${action.payload.collection}.${action.payload.slug}`]: {
-            ...state.entities[`${action.payload.collection}.${action.payload.slug}`],
+            ...state.entries[`${action.payload.collection}.${action.payload.slug}`],
             status: action.payload.newStatus,
             isUpdatingStatus: false,
           },
@@ -186,10 +186,10 @@ function unpublishedEntries(
     case UNPUBLISHED_ENTRY_STATUS_CHANGE_FAILURE: {
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [`${action.payload.collection}.${action.payload.slug}`]: {
-            ...state.entities[`${action.payload.collection}.${action.payload.slug}`],
+            ...state.entries[`${action.payload.collection}.${action.payload.slug}`],
             isUpdatingStatus: false,
           },
         },
@@ -198,10 +198,10 @@ function unpublishedEntries(
     case UNPUBLISHED_ENTRY_PUBLISH_REQUEST: {
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [`${action.payload.collection}.${action.payload.slug}`]: {
-            ...state.entities[`${action.payload.collection}.${action.payload.slug}`],
+            ...state.entries[`${action.payload.collection}.${action.payload.slug}`],
             isPublishing: true,
           },
         },

@@ -9,10 +9,10 @@ import type { Entry } from '@staticcms/core/interface';
 export type BoardEntry = Entry & { boardStatus: WorkflowStatus };
 
 export default function useWorkflowEntriesByCollection(status: WorkflowStatus) {
-  const entities = useAppSelector(selectUnpublishedEntries);
+  const entries = useAppSelector(selectUnpublishedEntries);
 
   return useMemo(
-    () => Object.values(entities).filter(entry => entry.status === status),
-    [entities, status],
+    () => Object.values(entries).filter(entry => entry.status === status),
+    [entries, status],
   );
 }

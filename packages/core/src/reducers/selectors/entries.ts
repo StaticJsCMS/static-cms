@@ -80,7 +80,7 @@ export function selectViewStyle(entries: RootState): ViewStyle {
 }
 
 export function selectEntriesBySlugs(state: RootState) {
-  return state.entries.entities;
+  return state.entries.entries;
 }
 
 function getEntry(entries: Entries, collectionName: string, slug: string) {

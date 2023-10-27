@@ -135,11 +135,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
   );
   const [initialOptions, setInitialOptions] = useState<HitOption[]>([]);
 
-  const searchCollectionSelector = useMemo(
-    () => selectCollection(field.collection),
-    [field.collection],
-  );
-  const searchCollection = useAppSelector(searchCollectionSelector);
+  const searchCollection = useAppSelector(state => selectCollection(state, field.collection));
   const searchCollectionFields = useMemo(
     () => getFields(searchCollection, entry.slug),
     [entry.slug, searchCollection],

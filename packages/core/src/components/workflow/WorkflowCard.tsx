@@ -49,7 +49,7 @@ const WorkflowCard: FC<WorkflowCardProps> = ({ entry }) => {
     id: `${entry.collection}|${entry.slug}`,
   });
 
-  const collection = useAppSelector(selectCollection(entry.collection));
+  const collection = useAppSelector(state => selectCollection(state, entry.collection));
   const inferredFields = useInferredFields(collection);
 
   const dateField = useMemo(
