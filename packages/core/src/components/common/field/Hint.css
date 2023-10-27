@@ -1,12 +1,18 @@
 .CMS_Hint_root {
   @apply w-full
-    flex
-    text-xs
-    italic;
+    text-xs;
 
   &:not(.CMS_Hint_inline) {
     @apply px-3
       pt-1;
+  }
+}
+
+.CMS_Hint_link {
+  color: inherit;
+
+  &:hover {
+    @apply underline;
   }
 }
 
