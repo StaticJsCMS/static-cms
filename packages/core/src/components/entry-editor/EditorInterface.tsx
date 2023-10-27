@@ -421,6 +421,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
             classes.root,
             editorSize === EDITOR_SIZE_COMPACT && classes.compact,
           )}
+          disablePointerEventsDuringResize={true}
         >
           <Panel defaultSize={COMPACT_EDITOR_DEFAULT_WIDTH} minSize={COMPACT_EDITOR_DEFAULT_WIDTH}>
             <ScrollSyncPane>{editor}</ScrollSyncPane>
