@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 
 import useCursor from '@staticcms/core/lib/hooks/useCursor';
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -16,6 +18,7 @@ export const classes = generateClassNames('Hint', [
   'cursor-text',
   'cursor-default',
   'error',
+  'link',
 ]);
 
 export interface HintProps {
@@ -51,7 +54,18 @@ const Hint: FC<HintProps> = ({
         className,
       )}
     >
-      {children}
+      <ReactMarkdown
+        remarkPlugins={[gfm]}
+        allowedElements={['a', 'strong', 'em', 'del']}
+        unwrapDisallowed={true}
+        components={{
+          a: ({ node: _node, ...props }) => (
+            <a {...props} target="_blank" rel="noopener noreferrer" className={classes.link} />
+          ),
+        }}
+      >
+        {children}
+      </ReactMarkdown>
     </div>
   );
 };
