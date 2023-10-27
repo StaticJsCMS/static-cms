@@ -19,6 +19,10 @@ export const selectFieldErrors =
 
 export const selectAllFieldErrors = (state: RootState) => state.entryDraft.fieldsErrors ?? {};
 
+export function selectEntryDraft(state: RootState) {
+  return state.entryDraft;
+}
+
 export function selectEditingDraft(state: RootState) {
   return state.entryDraft.entry;
 }

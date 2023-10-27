@@ -41,11 +41,11 @@ import ValidationErrorTypes from '../constants/validationErrorTypes';
 import { hasI18n, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
 import { Cursor } from '../lib/util';
-import { selectFields, updateFieldByKey } from '../lib/util/collection.util';
+import { getFields, updateFieldByKey } from '../lib/util/collection.util';
 import { createEmptyDraftData, createEmptyDraftI18nData } from '../lib/util/entry.util';
 import { selectCollectionEntriesCursor } from '../reducers/selectors/cursors';
 import {
-  selectEntriesSortField,
+  selectEntriesSelectedSort,
   selectIsFetching,
   selectPublishedSlugs,
 } from '../reducers/selectors/entries';
@@ -710,7 +710,7 @@ export function loadEntries(collection: CollectionWithDefaults, page = 0) {
       return;
     }
     const state = getState();
-    const sortField = selectEntriesSortField(collection.name)(state);
+    const sortField = selectEntriesSelectedSort(state, collection.name);
     if (sortField) {
       return dispatch(sortByField(collection, sortField.key, sortField.direction));
     }
@@ -926,7 +926,7 @@ export function getSerializedEntry(collection: CollectionWithDefaults, entry: En
    * Serialize the values of any fields with registered serializers, and
    * update the entry and entryDraft with the serialized values.
    */
-  const fields = selectFields(collection, entry.slug);
+  const fields = getFields(collection, entry.slug);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function serializeData(data: any) {
@@ -954,7 +954,7 @@ export function persistEntry(
     const state = getState();
     const entryDraft = state.entryDraft;
     const fieldsErrors = entryDraft.fieldsErrors;
-    const usedSlugs = selectPublishedSlugs(collection.name)(state);
+    const usedSlugs = selectPublishedSlugs(state, collection.name);
 
     // Early return if draft contains validation errors
     if (Object.keys(fieldsErrors).length > 0) {

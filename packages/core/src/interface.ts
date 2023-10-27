@@ -52,8 +52,14 @@ import type {
 import type Cursor from './lib/util/Cursor';
 import type AssetProxy from './valueObjects/AssetProxy';
 
+export interface Page {
+  isFetching?: boolean;
+  page?: number;
+  ids: string[];
+}
+
 export interface Pages {
-  [collection: string]: { isFetching?: boolean; page?: number; ids: string[] };
+  [collection: string]: Page;
 }
 
 export type SortableField<EF extends BaseField = UnknownField> =
@@ -137,7 +143,7 @@ export interface Entry<T = ObjectValue> {
   };
 }
 
-export type Entities = Record<string, Entry>;
+export type Entries = Record<string, Entry>;
 
 export interface FieldError {
   type: string;

@@ -143,7 +143,7 @@ export function summaryFormatter<EF extends BaseField>(
   collection: CollectionWithDefaults<EF>,
   slugConfig?: Slug,
 ) {
-  const collectionFields = getFields(collection, entry.slug);
+  const collectionFields = getFields(collection, entry.slug) as Field[];
 
   const slug = slugFormatter(collection, entry.data, slugConfig, collectionFields);
 
@@ -186,7 +186,7 @@ export function folderFormatter<EF extends BaseField>(
     'folder' in collection ? collection.folder : '',
   );
 
-  const collectionFields = getFields(collection, entry.slug);
+  const collectionFields = getFields(collection, entry.slug) as Field[];
 
   const slug = slugFormatter(collection, entry.data, slugConfig, collectionFields);
 

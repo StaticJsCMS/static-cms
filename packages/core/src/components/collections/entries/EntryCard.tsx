@@ -9,7 +9,7 @@ import { getEntryBackupKey } from '@staticcms/core/lib/util/backup.util';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import {
   selectEntryCollectionTitle,
-  selectFields,
+  getFields,
   selectTemplateName,
 } from '@staticcms/core/lib/util/collection.util';
 import localForage from '@staticcms/core/lib/util/localForage';
@@ -131,7 +131,7 @@ const EntryCard: FC<EntryCardProps> = ({
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
 
-  const fields = selectFields(collection, entry.slug);
+  const fields = useMemo(() => getFields(collection, entry.slug), [collection, entry.slug]);
 
   const config = useAppSelector(selectConfig);
 

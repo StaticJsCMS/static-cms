@@ -336,7 +336,7 @@ export function persistUnpublishedEntry(
     const entryDraft = state.entryDraft;
     const fieldsErrors = entryDraft.fieldsErrors;
     const unpublishedSlugs = selectUnpublishedSlugs(state, collection.name);
-    const publishedSlugs = selectPublishedSlugs(collection.name)(state);
+    const publishedSlugs = selectPublishedSlugs(state, collection.name);
     const usedSlugs = publishedSlugs.concat(unpublishedSlugs);
     const entriesLoaded = state.editorialWorkflow.ids;
 

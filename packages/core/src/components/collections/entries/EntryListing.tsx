@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 
 import { VIEW_STYLE_TABLE } from '@staticcms/core/constants/views';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
-import { getInferredFields, selectFields } from '@staticcms/core/lib/util/collection.util';
+import { getInferredFields, getFields } from '@staticcms/core/lib/util/collection.util';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { toTitleCaseFromKey } from '@staticcms/core/lib/util/string.util';
 import { getDatetimeFormats } from '@staticcms/datetime/datetime.util';
@@ -93,7 +93,7 @@ const EntryListing: FC<EntryListingProps> = ({
     }
 
     const fieldNames = otherProps.collection.summary_fields;
-    const collectionFields = selectFields(otherProps.collection).reduce(
+    const collectionFields = getFields(otherProps.collection).reduce(
       (acc, f) => {
         acc[f.name] = f;
         return acc;

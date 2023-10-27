@@ -29,7 +29,7 @@ import type { EntriesAction } from '../actions/entries';
 import type { SearchAction } from '../actions/search';
 import type { ViewStyle } from '../constants/views';
 import type {
-  Entities,
+  Entries,
   Entry,
   Filter,
   FilterMap,
@@ -115,7 +115,7 @@ function persistViewStyle(viewStyle: string | undefined) {
 
 export type EntriesState = {
   pages: Pages;
-  entities: Entities;
+  entities: Entries;
   sort: Sort;
   filter?: Filter;
   group?: Group;

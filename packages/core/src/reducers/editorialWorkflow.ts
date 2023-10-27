@@ -19,12 +19,12 @@ import {
 import { isEmpty } from '../lib/util/string.util';
 
 import type { EditorialWorkflowAction } from '../actions/editorialWorkflow';
-import type { Entities } from '../interface';
+import type { Entries } from '../interface';
 
 export interface EditorialWorkflowState {
   isFetching: boolean;
   ids: string[];
-  entities: Entities;
+  entities: Entries;
 }
 
 const initialState: EditorialWorkflowState = {
