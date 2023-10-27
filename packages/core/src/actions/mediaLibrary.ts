@@ -226,7 +226,7 @@ export function persistMedia(
     }
 
     const backend = currentBackend(config);
-    const files: MediaFile[] = selectMediaFiles(field)(state);
+    const files: MediaFile[] = selectMediaFiles(state, field);
     const fileName = sanitizeSlug(file.name.toLowerCase(), config.slug);
     const existingFile = files.find(existingFile => existingFile.name.toLowerCase() === fileName);
 

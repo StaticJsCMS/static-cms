@@ -43,8 +43,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   } = options;
 
   const finalControlID = useMemo(() => controlID ?? uuid(), [controlID]);
-  const mediaPathSelector = useMemo(() => selectMediaPath(finalControlID), [finalControlID]);
-  const mediaPath = useAppSelector(mediaPathSelector);
+  const mediaPath = useAppSelector(state => selectMediaPath(state, finalControlID));
 
   useEffect(() => {
     if (mediaPath && (!value || mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {
