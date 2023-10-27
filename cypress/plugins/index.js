@@ -42,7 +42,7 @@ module.exports = async (on, config) => {
   // `on` is used to hook into various events Cypress emits
   on('task', {
     async setupBackend({ backend, options }) {
-      console.log('Preparing environment for backend', backend);
+      console.info('Preparing environment for backend', backend);
       await copyBackendFiles(backend);
 
       let result = null;
@@ -71,7 +71,7 @@ module.exports = async (on, config) => {
     },
     async teardownBackend(taskData) {
       const { backend } = taskData;
-      console.log('Tearing down backend', backend);
+      console.info('Tearing down backend', backend);
 
       switch (backend) {
         case 'github':
@@ -91,14 +91,14 @@ module.exports = async (on, config) => {
           break;
       }
 
-      console.log('Restoring defaults');
+      console.info('Restoring defaults');
       await copyBackendFiles('test');
 
       return null;
     },
     async setupBackendTest(taskData) {
       const { backend, testName } = taskData;
-      console.log(`Setting up single test '${testName}' for backend`, backend);
+      console.info(`Setting up single test '${testName}' for backend`, backend);
 
       switch (backend) {
         case 'github':
@@ -123,7 +123,7 @@ module.exports = async (on, config) => {
     async teardownBackendTest(taskData) {
       const { backend, testName } = taskData;
 
-      console.log(`Tearing down single test '${testName}' for backend`, backend);
+      console.info(`Tearing down single test '${testName}' for backend`, backend);
 
       switch (backend) {
         case 'github':
@@ -148,7 +148,7 @@ module.exports = async (on, config) => {
     async seedRepo(taskData) {
       const { backend } = taskData;
 
-      console.log(`Seeding repository for backend`, backend);
+      console.info(`Seeding repository for backend`, backend);
 
       switch (backend) {
         case 'github':
@@ -161,7 +161,7 @@ module.exports = async (on, config) => {
     async switchToVersion(taskData) {
       const { version } = taskData;
 
-      console.log(`Switching CMS to version '${version}'`);
+      console.info(`Switching CMS to version '${version}'`);
 
       await switchVersion(version);
 

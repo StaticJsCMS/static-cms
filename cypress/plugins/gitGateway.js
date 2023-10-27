@@ -93,13 +93,13 @@ async function waitForDeploys(netlifyApiToken, siteId) {
   for (let i = 0; i < 10; i++) {
     const deploys = await get(netlifyApiToken, `sites/${siteId}/deploys`);
     if (deploys.some(deploy => deploy.state === 'ready')) {
-      console.log('Deploy finished for site:', siteId);
+      console.info('Deploy finished for site:', siteId);
       return;
     }
-    console.log('Waiting on deploy of site:', siteId);
+    console.info('Waiting on deploy of site:', siteId);
     await new Promise(resolve => setTimeout(resolve, 30 * 1000));
   }
-  console.log('Timed out waiting on deploy of site:', siteId);
+  console.info('Timed out waiting on deploy of site:', siteId);
 }
 
 async function createUser(netlifyApiToken, siteUrl, email, password) {
@@ -113,7 +113,7 @@ async function createUser(netlifyApiToken, siteUrl, email, password) {
   });
 
   if (response.ok) {
-    console.log('User created successfully');
+    console.info('User created successfully');
   } else {
     throw new Error('Failed to create user');
   }
@@ -198,19 +198,19 @@ async function setupGitGateway(options) {
   if (process.env.RECORD_FIXTURES) {
     const { netlifyApiToken } = getEnvs();
 
-    console.log(`Creating Netlify Site for provider: ${provider}`);
+    console.info(`Creating Netlify Site for provider: ${provider}`);
     let site_id, ssl_url;
     try {
       ({ site_id, ssl_url } = await methods[provider].createSite(netlifyApiToken, result));
     } catch (e) {
-      console.log(e);
+      console.error(e);
       throw e;
     }
 
-    console.log('Enabling identity for site:', site_id);
+    console.info('Enabling identity for site:', site_id);
     await enableIdentity(netlifyApiToken, site_id);
 
-    console.log('Enabling git gateway for site:', site_id);
+    console.info('Enabling git gateway for site:', site_id);
     const token = methods[provider].token();
     await enableGitGateway(
       netlifyApiToken,
@@ -220,7 +220,7 @@ async function setupGitGateway(options) {
       `${result.owner}/${result.repo}`,
     );
 
-    console.log('Enabling large media for site:', site_id);
+    console.info('Enabling large media for site:', site_id);
     await enableLargeMedia(netlifyApiToken, site_id);
 
     const git = getGitClient(result.tempDir);
@@ -237,12 +237,12 @@ async function setupGitGateway(options) {
     await git.push('origin', 'master');
 
     await waitForDeploys(netlifyApiToken, site_id);
-    console.log('Creating user for site:', site_id, 'with email:', email);
+    console.info('Creating user for site:', site_id, 'with email:', email);
 
     try {
       await createUser(netlifyApiToken, ssl_url, email, password);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     return {
@@ -277,7 +277,7 @@ async function teardownGitGateway(taskData) {
   if (process.env.RECORD_FIXTURES) {
     const { netlifyApiToken } = getEnvs();
     const { site_id } = taskData;
-    console.log('Deleting Netlify site:', site_id);
+    console.info('Deleting Netlify site:', site_id);
     await del(netlifyApiToken, `sites/${site_id}`);
 
     const result = await methods[taskData.provider].teardown(taskData);

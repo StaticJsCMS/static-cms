@@ -72,9 +72,9 @@ const stubFetch = (win, routes) => {
     if (routeIndex >= 0) {
       let route = routes.splice(routeIndex, 1)[0];
       const message = `matched ${args[0]} to ${route.url} ${route.method} ${route.status}`;
-      console.log(message);
+      console.info(message);
       if (route.status === 302) {
-        console.log(`resolving redirect to ${route.headers.Location}`);
+        console.info(`resolving redirect to ${route.headers.Location}`);
         routeIndex = routes.findIndex(r => matchRoute(r, [route.headers.Location]));
         route = routes.splice(routeIndex, 1)[0];
       }
@@ -117,7 +117,7 @@ const stubFetch = (win, routes) => {
       };
       return Promise.resolve(fetchResponse);
     } else {
-      console.log(`No route match for fetch args: ${JSON.stringify(args)}`);
+      console.info(`No route match for fetch args: ${JSON.stringify(args)}`);
       return fetch(...args);
     }
   });
@@ -174,7 +174,7 @@ Cypress.Commands.add('selection', { prevSubject: true }, (subject, fn) => {
 
 Cypress.Commands.add('print', { prevSubject: 'optional' }, (subject, str) => {
   cy.log(str);
-  console.log(`cy.log: ${str}`);
+  console.info(`cy.log: ${str}`);
   return cy.wrap(subject);
 });
 

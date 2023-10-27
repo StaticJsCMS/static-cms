@@ -472,9 +472,7 @@ function validateNestedListFields() {
     .eq(0)
     .within(() => {
       cy.get('[data-testid="field-City"]').should("not.have.class", "CMS_Field_error");
-      cy.get('[data-testid="field-Number of Hotels in City"]')
-        .then(($el) => console.log($el))
-        .should("not.have.class", "CMS_Field_error");
+      cy.get('[data-testid="field-Number of Hotels in City"]').should("not.have.class", "CMS_Field_error");
       cy.get('[data-testid="list-field-City Locations"]').should("have.class", "CMS_WidgetList_error");
       cy.get('[data-testid="field-Hotel Name"]').should("have.class", "CMS_Field_error");
     });
@@ -536,7 +534,7 @@ function discardDraft() {
           .should((_) => {})
           .then(($el) => {
             if ($el.length) {
-              $el.trigger('click');
+              $el.trigger("click");
               cy.get('[data-testid="confirm-button"]').click();
             }
           });

@@ -91,7 +91,7 @@ async function prepareTestBitBucketRepo({ lfs }) {
     .slice(2);
   const testRepoName = `${repo}-${Date.now()}-${postfix}`;
 
-  console.log('Creating repository', testRepoName);
+  console.info('Creating repository', testRepoName);
   await post(token, `repositories/${owner}/${testRepoName}`, JSON.stringify({ scm: 'git' }));
 
   const tempDir = path.join('.temp', testRepoName);
@@ -100,11 +100,11 @@ async function prepareTestBitBucketRepo({ lfs }) {
 
   const repoUrl = `git@bitbucket.org:${owner}/${repo}.git`;
 
-  console.log('Cloning repository', repoUrl);
+  console.info('Cloning repository', repoUrl);
   await git.clone(repoUrl, tempDir);
   git = getGitClient(tempDir);
 
-  console.log('Pushing to new repository', testRepoName);
+  console.info('Pushing to new repository', testRepoName);
 
   await git.removeRemote('origin');
   await git.addRemote(
@@ -114,7 +114,7 @@ async function prepareTestBitBucketRepo({ lfs }) {
   await git.push(['-u', 'origin', 'master']);
 
   if (lfs) {
-    console.log(`Enabling LFS for repo ${owner}/${repo}`);
+    console.info(`Enabling LFS for repo ${owner}/${repo}`);
     await git.addConfig('commit.gpgsign', 'false');
     await git.raw(['lfs', 'track', '*.png', '*.jpg']);
     await git.add('.gitattributes');
@@ -134,36 +134,36 @@ async function getUser() {
 async function deleteRepositories({ owner, repo, tempDir }) {
   const { token } = await getEnvs();
 
-  console.log('Deleting repository', `${owner}/${repo}`);
+  console.info('Deleting repository', `${owner}/${repo}`);
   await fs.remove(tempDir);
 
   await del(token, `repositories/${owner}/${repo}`);
 }
 
 async function resetOriginRepo({ owner, repo, tempDir }) {
-  console.log('Resetting origin repo:', `${owner}/${repo}`);
+  console.info('Resetting origin repo:', `${owner}/${repo}`);
 
   const { token } = await getEnvs();
 
   const pullRequests = await get(token, `repositories/${owner}/${repo}/pullrequests`);
   const ids = pullRequests.values.map(mr => mr.id);
 
-  console.log('Closing pull requests:', ids);
+  console.info('Closing pull requests:', ids);
   await Promise.all(
     ids.map(id => post(token, `repositories/${owner}/${repo}/pullrequests/${id}/decline`)),
   );
   const branches = await get(token, `repositories/${owner}/${repo}/refs/branches`);
   const toDelete = branches.values.filter(b => b.name !== 'master').map(b => b.name);
 
-  console.log('Deleting branches', toDelete);
+  console.info('Deleting branches', toDelete);
   await Promise.all(
     toDelete.map(branch => del(token, `repositories/${owner}/${repo}/refs/branches/${branch}`)),
   );
 
-  console.log('Resetting master');
+  console.info('Resetting master');
   const git = getGitClient(tempDir);
   await git.push(['--force', 'origin', 'master']);
-  console.log('Done resetting origin repo:', `${owner}/${repo}`);
+  console.info('Done resetting origin repo:', `${owner}/${repo}`);
 }
 
 async function resetRepositories({ owner, repo, tempDir }) {
@@ -173,7 +173,7 @@ async function resetRepositories({ owner, repo, tempDir }) {
 async function setupBitBucket(options) {
   const { lfs = false, ...rest } = options;
   if (process.env.RECORD_FIXTURES) {
-    console.log('Running tests in "record" mode - live data with be used!');
+    console.info('Running tests in "record" mode - live data with be used!');
     const [user, repoData] = await Promise.all([getUser(), prepareTestBitBucketRepo({ lfs })]);
 
     await updateConfig(config => {
@@ -186,7 +186,7 @@ async function setupBitBucket(options) {
 
     return { ...repoData, user, mockResponses: false };
   } else {
-    console.log('Running tests in "playback" mode - local data with be used');
+    console.info('Running tests in "playback" mode - local data with be used');
 
     await updateConfig(config => {
       merge(config, rest, {
@@ -325,7 +325,7 @@ async function teardownBitBucketTest(taskData) {
     try {
       const filename = getExpectationsFilename(taskData);
 
-      console.log('Persisting recorded data for test:', path.basename(filename));
+      console.info('Persisting recorded data for test:', path.basename(filename));
 
       const { owner, token } = await getEnvs();
 
@@ -346,7 +346,7 @@ async function teardownBitBucketTest(taskData) {
 
       await fs.writeFile(filename, toPersistString);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     await resetMockServerState();

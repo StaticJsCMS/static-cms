@@ -25,7 +25,7 @@ export const beforeEach = (taskResult, backend) => {
 
   if (taskResult.data.mockResponses) {
     const fixture = `${spec}__${testName}.json`;
-    console.log('loading fixture:', fixture);
+    console.info('loading fixture:', fixture);
     cy.stubFetch({ fixture });
   }
 };

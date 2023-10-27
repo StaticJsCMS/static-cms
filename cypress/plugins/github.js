@@ -66,7 +66,7 @@ async function prepareTestGitHubRepo() {
 
   const client = getGitHubClient(token);
 
-  console.log('Creating repository', testRepoName);
+  console.info('Creating repository', testRepoName);
   await client.repos.createForAuthenticatedUser({
     name: testRepoName,
   });
@@ -77,11 +77,11 @@ async function prepareTestGitHubRepo() {
 
   const repoUrl = `git@github.com:${owner}/${repo}.git`;
 
-  console.log('Cloning repository', repoUrl);
+  console.info('Cloning repository', repoUrl);
   await git.clone(repoUrl, tempDir);
   git = getGitClient(tempDir);
 
-  console.log('Pushing to new repository', testRepoName);
+  console.info('Pushing to new repository', testRepoName);
 
   await git.removeRemote('origin');
   await git.addRemote(
@@ -118,7 +118,7 @@ async function deleteRepositories({ owner, repo, tempDir }) {
     }
   };
 
-  console.log('Deleting repository', `${owner}/${repo}`);
+  console.info('Deleting repository', `${owner}/${repo}`);
   await fs.remove(tempDir);
 
   let client = getGitHubClient(token);
@@ -129,7 +129,7 @@ async function deleteRepositories({ owner, repo, tempDir }) {
     })
     .catch(errorHandler);
 
-  console.log('Deleting forked repository', `${forkOwner}/${repo}`);
+  console.info('Deleting forked repository', `${forkOwner}/${repo}`);
   client = getGitHubClient(forkToken);
   await client.repos
     .delete({
@@ -148,7 +148,7 @@ async function batchRequests(items, batchSize, func) {
 }
 
 async function resetOriginRepo({ owner, repo, tempDir }) {
-  console.log('Resetting origin repo:', `${owner}/${repo}`);
+  console.info('Resetting origin repo:', `${owner}/${repo}`);
   const { token } = getEnvs();
   const client = getGitHubClient(token);
 
@@ -158,7 +158,7 @@ async function resetOriginRepo({ owner, repo, tempDir }) {
     state: 'open',
   });
   const numbers = prs.map(pr => pr.number);
-  console.log('Closing prs:', numbers);
+  console.info('Closing prs:', numbers);
 
   await batchRequests(numbers, 10, async pull_number => {
     await client.pulls.update({
@@ -172,7 +172,7 @@ async function resetOriginRepo({ owner, repo, tempDir }) {
   const { data: branches } = await client.repos.listBranches({ owner, repo });
   const refs = branches.filter(b => b.name !== 'master').map(b => `heads/${b.name}`);
 
-  console.log('Deleting refs', refs);
+  console.info('Deleting refs', refs);
 
   await batchRequests(refs, 10, async ref => {
     await client.git.deleteRef({
@@ -182,10 +182,10 @@ async function resetOriginRepo({ owner, repo, tempDir }) {
     });
   });
 
-  console.log('Resetting master');
+  console.info('Resetting master');
   const git = getGitClient(tempDir);
   await git.push(['--force', 'origin', 'master']);
-  console.log('Done resetting origin repo:', `${owner}/${repo}`);
+  console.info('Done resetting origin repo:', `${owner}/${repo}`);
 }
 
 async function resetForkedRepo({ repo }) {
@@ -194,11 +194,11 @@ async function resetForkedRepo({ repo }) {
 
   const { data: repos } = await client.repos.list();
   if (repos.some(r => r.name === repo)) {
-    console.log('Resetting forked repo:', `${forkOwner}/${repo}`);
+    console.info('Resetting forked repo:', `${forkOwner}/${repo}`);
     const { data: branches } = await client.repos.listBranches({ owner: forkOwner, repo });
     const refs = branches.filter(b => b.name !== 'master').map(b => `heads/${b.name}`);
 
-    console.log('Deleting refs', refs);
+    console.info('Deleting refs', refs);
     await Promise.all(
       refs.map(ref =>
         client.git.deleteRef({
@@ -208,7 +208,7 @@ async function resetForkedRepo({ repo }) {
         }),
       ),
     );
-    console.log('Done resetting forked repo:', `${forkOwner}/${repo}`);
+    console.info('Done resetting forked repo:', `${forkOwner}/${repo}`);
   }
 }
 
@@ -219,7 +219,7 @@ async function resetRepositories({ owner, repo, tempDir }) {
 
 async function setupGitHub(options) {
   if (process.env.RECORD_FIXTURES) {
-    console.log('Running tests in "record" mode - live data with be used!');
+    console.info('Running tests in "record" mode - live data with be used!');
     const [user, forkUser, repoData] = await Promise.all([
       getUser(),
       getForkUser(),
@@ -236,7 +236,7 @@ async function setupGitHub(options) {
 
     return { ...repoData, user, forkUser, mockResponses: false };
   } else {
-    console.log('Running tests in "playback" mode - local data with be used');
+    console.info('Running tests in "playback" mode - local data with be used');
 
     await updateConfig(config => {
       merge(config, options, {
@@ -393,7 +393,7 @@ async function teardownGitHubTest(taskData, { transformRecordedData } = defaultO
     try {
       const filename = getExpectationsFilename(taskData);
 
-      console.log('Persisting recorded data for test:', path.basename(filename));
+      console.info('Persisting recorded data for test:', path.basename(filename));
 
       const { owner, token, forkOwner, forkToken } = getEnvs();
 
@@ -417,7 +417,7 @@ async function teardownGitHubTest(taskData, { transformRecordedData } = defaultO
 
       await fs.writeFile(filename, toPersistString);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     await resetMockServerState();
@@ -434,7 +434,7 @@ async function seedGitHubRepo(taskData) {
     const repo = taskData.repo;
 
     try {
-      console.log('Getting master branch');
+      console.info('Getting master branch');
       const { data: master } = await client.repos.getBranch({
         owner,
         repo,
@@ -446,7 +446,7 @@ async function seedGitHubRepo(taskData) {
       const batchSize = 5;
       await batchRequests(prs, batchSize, async i => {
         const branch = `seed_branch_${i}`;
-        console.log(`Creating branch ${branch}`);
+        console.info(`Creating branch ${branch}`);
         await client.git.createRef({
           owner,
           repo,
@@ -455,7 +455,7 @@ async function seedGitHubRepo(taskData) {
         });
 
         const path = `seed/file_${i}`;
-        console.log(`Creating file ${path}`);
+        console.info(`Creating file ${path}`);
         await client.repos.createOrUpdateFile({
           owner,
           repo,
@@ -466,7 +466,7 @@ async function seedGitHubRepo(taskData) {
         });
 
         const title = `Non CMS Pull Request ${i}`;
-        console.log(`Creating PR ${title}`);
+        console.info(`Creating PR ${title}`);
         await client.pulls.create({
           owner,
           repo,
@@ -476,7 +476,7 @@ async function seedGitHubRepo(taskData) {
         });
       });
     } catch (e) {
-      console.log(e);
+      console.error(e);
       throw e;
     }
   }

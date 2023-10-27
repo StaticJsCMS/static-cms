@@ -34,7 +34,7 @@ const startServer = async (repoDir, mode) => {
     MODE: mode,
   };
 
-  console.log(`Starting proxy server on port '${port}' with mode ${mode}`);
+  console.info(`Starting proxy server on port '${port}' with mode ${mode}`);
   if (await fs.pathExists(distIndex)) {
     serverProcess = spawn('node', [distIndex], { env, cwd: serverDir });
   } else {
@@ -44,7 +44,7 @@ const startServer = async (repoDir, mode) => {
   return new Promise((resolve, reject) => {
     serverProcess.stdout.on('data', data => {
       const message = data.toString().trim();
-      console.log(`server:stdout: ${message}`);
+      console.info(`server:stdout: ${message}`);
       if (message.includes('Static CMS Proxy Server listening on port')) {
         resolve(serverProcess);
       }

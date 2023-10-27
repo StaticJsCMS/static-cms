@@ -57,7 +57,7 @@ async function prepareTestGitLabRepo() {
 
   const client = getGitLabClient(token);
 
-  console.log('Creating repository', testRepoName);
+  console.info('Creating repository', testRepoName);
   await client.Projects.create({
     name: testRepoName,
     lfs_enabled: false,
@@ -69,11 +69,11 @@ async function prepareTestGitLabRepo() {
 
   const repoUrl = `git@gitlab.com:${owner}/${repo}.git`;
 
-  console.log('Cloning repository', repoUrl);
+  console.info('Cloning repository', repoUrl);
   await git.clone(repoUrl, tempDir);
   git = getGitClient(tempDir);
 
-  console.log('Pushing to new repository', testRepoName);
+  console.info('Pushing to new repository', testRepoName);
 
   await git.removeRemote('origin');
   await git.addRemote('origin', `https://oauth2:${token}@gitlab.com/${owner}/${testRepoName}`);
@@ -104,7 +104,7 @@ async function deleteRepositories({ owner, repo, tempDir }) {
     }
   };
 
-  console.log('Deleting repository', `${owner}/${repo}`);
+  console.info('Deleting repository', `${owner}/${repo}`);
   await fs.remove(tempDir);
 
   const client = getGitLabClient(token);
@@ -112,7 +112,7 @@ async function deleteRepositories({ owner, repo, tempDir }) {
 }
 
 async function resetOriginRepo({ owner, repo, tempDir }) {
-  console.log('Resetting origin repo:', `${owner}/${repo}`);
+  console.info('Resetting origin repo:', `${owner}/${repo}`);
 
   const { token } = getEnvs();
   const client = getGitLabClient(token);
@@ -123,20 +123,20 @@ async function resetOriginRepo({ owner, repo, tempDir }) {
     state: 'opened',
   });
   const ids = mergeRequests.map(mr => mr.iid);
-  console.log('Closing merge requests:', ids);
+  console.info('Closing merge requests:', ids);
   await Promise.all(
     ids.map(id => client.MergeRequests.edit(projectId, id, { state_event: 'close' })),
   );
   const branches = await client.Branches.all(projectId);
   const toDelete = branches.filter(b => b.name !== 'master').map(b => b.name);
 
-  console.log('Deleting branches', toDelete);
+  console.info('Deleting branches', toDelete);
   await Promise.all(toDelete.map(branch => client.Branches.remove(projectId, branch)));
 
-  console.log('Resetting master');
+  console.info('Resetting master');
   const git = getGitClient(tempDir);
   await git.push(['--force', 'origin', 'master']);
-  console.log('Done resetting origin repo:', `${owner}/${repo}`);
+  console.info('Done resetting origin repo:', `${owner}/${repo}`);
 }
 
 async function resetRepositories({ owner, repo, tempDir }) {
@@ -145,7 +145,7 @@ async function resetRepositories({ owner, repo, tempDir }) {
 
 async function setupGitLab(options) {
   if (process.env.RECORD_FIXTURES) {
-    console.log('Running tests in "record" mode - live data with be used!');
+    console.info('Running tests in "record" mode - live data with be used!');
     const [user, repoData] = await Promise.all([getUser(), prepareTestGitLabRepo()]);
 
     await updateConfig(config => {
@@ -158,7 +158,7 @@ async function setupGitLab(options) {
 
     return { ...repoData, user, mockResponses: false };
   } else {
-    console.log('Running tests in "playback" mode - local data with be used');
+    console.info('Running tests in "playback" mode - local data with be used');
 
     await updateConfig(config => {
       merge(config, options, {
@@ -295,7 +295,7 @@ async function teardownGitLabTest(taskData, { transformRecordedData } = defaultO
     try {
       const filename = getExpectationsFilename(taskData);
 
-      console.log('Persisting recorded data for test:', path.basename(filename));
+      console.info('Persisting recorded data for test:', path.basename(filename));
 
       const { owner, token } = getEnvs();
 
@@ -316,7 +316,7 @@ async function teardownGitLabTest(taskData, { transformRecordedData } = defaultO
 
       await fs.writeFile(filename, toPersistString);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     await resetMockServerState();
