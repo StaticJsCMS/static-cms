@@ -178,7 +178,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
 
   return (
     <div
-      data-testid="list-field"
+      data-testid={`code-field-${label}`}
       className={classNames(
         classes.root,
         disabled && classes.disabled,
@@ -202,7 +202,7 @@ const CodeControl: FC<WidgetControlProps<string | { [key: string]: string }, Cod
             variant="inline"
             disabled={disabled}
           >
-            {label}
+            {label.trim()}
           </Label>
           {open && allowLanguageSelection ? (
             <SettingsButton onClick={toggleSettings} disabled={disabled} />

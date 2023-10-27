@@ -380,21 +380,27 @@ function duplicateEntry(entry) {
 function validateObjectFields({ limit, author }) {
   cy.contains("a", "Settings").click();
   cy.contains("a", "Site Settings").click();
+
+  discardDraft();
+
   cy.contains("label", "Number of posts on frontpage").click();
   cy.focused().type(limit);
   flushClockAndSave();
   assertNotification(notifications.error.missingField);
-  cy.contains(`[data-testid="field"]`, "Default Author").should("have.class", "CMS_Field_error");
+  cy.get('[data-testid="field-Default Author"]').should("have.class", "CMS_Field_error");
   cy.contains("label", "Default Author").click();
   cy.focused().type(author);
   flushClockAndSave();
   assertNotification(notifications.saved);
-  cy.contains(`[data-testid="field"]`, "Default Author").should("not.have.class", "CMS_Field_error");
+  cy.get('[data-testid="field-Default Author"]').should("not.have.class", "CMS_Field_error");
 }
 
 function validateNestedObjectFields({ limit, author }) {
   cy.contains("a", "Settings").click();
   cy.contains("a", "Site Settings").click();
+
+  discardDraft();
+
   cy.contains("label", "Default Author").click();
   cy.focused().type(author);
   flushClockAndSave();
@@ -413,72 +419,76 @@ function validateNestedObjectFields({ limit, author }) {
 function validateListFields({ name, description }) {
   cy.contains("a", "Settings").click();
   cy.contains("a", "Authors").click();
+
+  discardDraft();
+
   cy.contains("button", "Add").click();
   flushClockAndSave();
   assertNotification(notifications.error.missingField);
-  cy.contains(`[data-testid="list-field"]`, "Authors").should("have.class", "CMS_WidgetList_error");
+  cy.get('[data-testid="list-field-Authors"]').should("have.class", "CMS_WidgetList_error");
   cy.get(".CMS_WidgetList_ListItem_root").eq(2).as("listControl");
   cy.get("@listControl").should("have.class", "CMS_WidgetList_ListItem_error");
-  cy.get("@listControl").contains(`[data-testid="field"]`, "Name").should("have.class", "CMS_Field_error");
+  cy.get("@listControl").get('[data-testid="field-Name"]').should("have.class", "CMS_Field_error");
   cy.get("input").eq(2).type(name);
   cy.get("textarea").eq(2).type(description);
   flushClockAndSave();
   assertNotification(notifications.saved);
-  cy.contains(`[data-testid="list-field"]`, "Authors").should("not.have.class", "CMS_WidgetList_error");
+  cy.get('[data-testid="list-field-Authors"]').should("not.have.class", "CMS_WidgetList_error");
 }
 
 function validateNestedListFields() {
   cy.contains("a", "Settings").click();
   cy.contains("a", "Hotel Locations").click();
 
+  discardDraft();
+
   // add first city list item
-  cy.contains("button", "hotel locations").click();
-  cy.contains("button", "cities").click();
+  cy.contains("button", "Add Hotel Locations").click();
+  cy.contains("button", "Add Cities").click();
   cy.contains("label", "City").next().type("Washington DC");
   cy.contains("label", "Number of Hotels in City").next().type("5");
-  cy.contains("button", "city locations").click();
+  cy.contains("button", "Add City Locations").click();
+  cy.get('[data-testid="field-Hotel Name"]').should("exist");
 
   // add second city list item
-  cy.contains("button", "cities").click();
-  cy.contains("label", "Cities").next().find(".CMS_ErrorMessage_root").eq(2).as("secondCitiesListControl");
+  cy.contains("button", "Add Cities").click();
+
+  cy.get('[data-testid="list-item-field-Cities"]')
+    .eq(0)
+    .within(() => {});
+  cy.get('[data-testid="list-item-field-Cities"]').eq(1).as("secondCitiesListControl");
+
   cy.get("@secondCitiesListControl").contains("label", "City").next().type("Boston");
-  cy.get("@secondCitiesListControl").contains("button", "city locations").click();
+  cy.get("@secondCitiesListControl").contains("button", "Add City Locations").click();
 
   flushClockAndSave();
   assertNotification(notifications.error.missingField);
 
   // assert on fields
-  cy.contains(`[data-testid="field"]`, "Hotel Locations").should("have.class", "CMS_Field_error");
-  cy.contains(`[data-testid="field"]`, "Cities").should("have.class", "CMS_Field_error");
-  cy.contains(`[data-testid="field"]`, "City").should("not.have.class", "CMS_Field_error");
-  cy.contains(`[data-testid="field"]`, "City", { scope: cy.get("@secondCitiesListControl") }).should(
-    "not.have.class",
-    "CMS_Field_error"
-  );
-  cy.contains(`[data-testid="field"]`, "Number of Hotels in City").should("not.have.class", "CMS_Field_error");
-  cy.contains(`[data-testid="field"]`, "Number of Hotels in City", {
-    scope: cy.get("@secondCitiesListControl"),
-  }).should("have.class", "CMS_Field_error");
-  cy.contains(`[data-testid="field"]`, "City Locations").should("have.class", "CMS_Field_error");
-  cy.contains(`[data-testid="field"]`, "City Locations", {
-    scope: cy.get("@secondCitiesListControl"),
-  }).should("have.class", "CMS_Field_error");
-  cy.contains(`[data-testid="field"]`, "Hotel Name").should("have.class", "CMS_Field_error");
-  cy.contains(`[data-testid="field"]`, "Hotel Name", { scope: cy.get("@secondCitiesListControl") }).should(
-    "have.class",
-    "CMS_Field_error"
-  );
+  cy.get('[data-testid="list-field-Hotel Locations"]').should("have.class", "CMS_WidgetList_error");
+  cy.get('[data-testid="list-item-field-Cities"]').should("have.class", "CMS_WidgetList_ListItem_error");
+
+  cy.get('[data-testid="list-item-field-Cities"]')
+    .eq(0)
+    .within(() => {
+      cy.get('[data-testid="field-City"]').should("not.have.class", "CMS_Field_error");
+      cy.get('[data-testid="field-Number of Hotels in City"]')
+        .then(($el) => console.log($el))
+        .should("not.have.class", "CMS_Field_error");
+      cy.get('[data-testid="list-field-City Locations"]').should("have.class", "CMS_WidgetList_error");
+      cy.get('[data-testid="field-Hotel Name"]').should("have.class", "CMS_Field_error");
+    });
+
+  cy.get('[data-testid="list-item-field-Cities"]')
+    .eq(1)
+    .within(() => {
+      cy.get('[data-testid="field-City"]').should("not.have.class", "CMS_Field_error");
+      cy.get('[data-testid="field-Number of Hotels in City"]').should("have.class", "CMS_Field_error");
+      cy.get('[data-testid="list-field-City Locations"]').should("have.class", "CMS_WidgetList_error");
+      cy.get('[data-testid="field-Hotel Name"]').should("have.class", "CMS_Field_error");
+    });
 
   // list control aliases
-  cy.contains("label", "Hotel Locations").next().find(".CMS_ErrorMessage_root").first().as("hotelLocationsListControl");
-  cy.contains("label", "Cities").next().find(".CMS_ErrorMessage_root").eq(0).as("firstCitiesListControl");
-  cy.contains("label", "City Locations")
-    .next()
-    .find(".CMS_ErrorMessage_root")
-    .eq(0)
-    .as("firstCityLocationsListControl");
-  cy.contains("label", "Cities").next().find(".CMS_ErrorMessage_root").eq(3).as("secondCityLocationsListControl");
-
   cy.contains("label", "Hotel Name").next().type("The Ritz Carlton");
   flushClockAndSave();
   assertNotification(notifications.error.missingField);
@@ -513,7 +523,25 @@ function validateNestedListFieldsAndExit(setting) {
 
 function assertFieldValidationError({ message, fieldLabel }) {
   cy.contains("label", fieldLabel).siblings(".CMS_ErrorMessage_root").contains(message);
-  cy.contains(`[data-testid="field"]`, fieldLabel).should("have.class", "CMS_Field_error");
+  cy.get(`[data-testid="field-${fieldLabel}"]`).should("have.class", "CMS_Field_error");
+}
+
+function discardDraft() {
+  cy.get('[data-testid="editor-extra-menu"]')
+    .should((_) => {})
+    .then(($el) => {
+      if ($el.length) {
+        cy.get('[data-testid="editor-extra-menu"]').click();
+        cy.get('[data-testid="discard-button"]')
+          .should((_) => {})
+          .then(($el) => {
+            if ($el.length) {
+              $el.trigger('click');
+              cy.get('[data-testid="confirm-button"]').click();
+            }
+          });
+      }
+    });
 }
 
 module.exports = {

@@ -20,29 +20,29 @@ describe("Test Backend Editorial Workflow", () => {
     cy.task("setupBackend", { backend: "test" });
   });
 
-  // it("can validate object fields", () => {
-  //   login({ editorialWorkflow: true });
+  it("can validate object fields", () => {
+    login({ editorialWorkflow: true });
 
-  //   cy.contains("a", "Posts").click();
+    cy.contains("a", "Posts").click();
 
-  //   validateObjectFieldsAndExit(setting1);
-  // });
+    validateObjectFieldsAndExit(setting1);
+  });
 
-  // it("can validate fields nested in an object field", () => {
-  //   login({ editorialWorkflow: true });
+  it("can validate fields nested in an object field", () => {
+    login({ editorialWorkflow: true });
 
-  //   cy.contains("a", "Posts").click();
+    cy.contains("a", "Posts").click();
 
-  //   validateNestedObjectFieldsAndExit(setting1);
-  // });
+    validateNestedObjectFieldsAndExit(setting1);
+  });
 
-  // it("can validate list fields", () => {
-  //   login({ editorialWorkflow: true });
+  it("can validate list fields", () => {
+    login({ editorialWorkflow: true });
 
-  //   cy.contains("a", "Posts").click();
+    cy.contains("a", "Posts").click();
 
-  //   validateListFieldsAndExit(setting2);
-  // });
+    validateListFieldsAndExit(setting2);
+  });
 
   it("can validate deeply nested list fields", () => {
     login({ editorialWorkflow: true });

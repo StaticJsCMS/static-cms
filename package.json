@@ -18,7 +18,7 @@
     "release-next": "lerna publish --no-private --dist-tag next",
     "sync-locales": "lerna run sync-locales --scope @staticcms/tools",
     "test:ci": "lerna run test:ci",
-    "test:e2e": "cypress run --browser chrome --spec cypress/e2e/field_validations_spec.js",
+    "test:e2e": "cypress run --browser chrome --headed --spec cypress/e2e/field_validations_spec.js",
     "test:e2e:headless": "cypress run --browser chrome --headless --spec cypress/e2e/field_validations_spec.js",
     "test:integration:ci": "lerna run test:integration:ci",
     "test:integration": "lerna run test:integration",
@@ -28,8 +28,7 @@
   "devDependencies": {
     "all-contributors-cli": "6.26.1",
     "cypress": "12.17.4",
-    "cypress-image-snapshot": "4.0.1",
-    "cypress-jest-adapter": "0.1.1",
+    "@simonsmith/cypress-image-snapshot": "9.0.1",
     "cypress-plugin-tab": "1.0.5",
     "execa": "5.1.1",
     "husky": "8.0.3",

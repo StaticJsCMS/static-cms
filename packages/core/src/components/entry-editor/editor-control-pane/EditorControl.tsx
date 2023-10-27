@@ -124,12 +124,29 @@ const EditorControl: FC<EditorControlProps> = ({
       return;
     }
 
-    if ((!dirty && !submitted) || disabled || i18nDisabled) {
+    if (
+      (!dirty && !submitted) ||
+      disabled ||
+      i18nDisabled ||
+      (forList && field.widget === 'object' && field.fields.length === 1)
+    ) {
       return;
     }
 
     const validateValue = async () => {
       const errors = await validate(field, internalValue, widget, t);
+      if (path === 'hotel_locations.0.0.city_locations.0') {
+        console.log(
+          '[errors]',
+          errors,
+          'value',
+          `"${internalValue}"`,
+          'field',
+          field,
+          'forSingleList',
+          forSingleList,
+        );
+      }
       dispatch(changeDraftFieldValidation(path, errors, i18n, isMeta));
     };
 
@@ -148,6 +165,8 @@ const EditorControl: FC<EditorControlProps> = ({
     disabled,
     isMeta,
     i18nDisabled,
+    forList,
+    forSingleList,
   ]);
 
   const clearChildValidation = useCallback(() => {

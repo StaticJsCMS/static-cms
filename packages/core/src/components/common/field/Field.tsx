@@ -94,7 +94,7 @@ const Field: FC<FieldProps> = ({
           disabled={disabled}
           className={classes.label}
         >
-          {label}
+          {label.trim()}
         </Label>
       ) : null,
     [finalCursor, disabled, hasErrors, label, variant],
@@ -161,7 +161,7 @@ const Field: FC<FieldProps> = ({
   }
 
   return (
-    <div data-testid="field" className={rootClassNames} onClick={handleOnClick}>
+    <div data-testid={`field-${label?.trim()}`} className={rootClassNames} onClick={handleOnClick}>
       <div data-testid="field-wrapper" className={wrapperClassNames}>
         {renderedLabel}
         {children}

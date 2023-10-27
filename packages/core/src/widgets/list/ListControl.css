@@ -9,8 +9,12 @@
     &:not(.CMS_WidgetList_disabled) {
       &:hover,
       &:focus-within {
-        & .CMS_WidgetList_summary {
-          color: var(--primary-main);
+        & > .CMS_WidgetList_field-wrapper {
+          & > .CMS_WidgetList_expand-button {
+            & .CMS_WidgetList_summary {
+              color: var(--primary-main);
+            }
+          }
         }
       }
     }
@@ -18,8 +22,12 @@
 
   &.CMS_WidgetList_error {
     &:not(.CMS_WidgetList_disabled) {
-      & .CMS_WidgetList_summary {
-        color: var(--error-main);
+      & > .CMS_WidgetList_field-wrapper {
+        & > .CMS_WidgetList_expand-button {
+          & .CMS_WidgetList_summary {
+            color: var(--error-main);
+          }
+        }
       }
     }
   }

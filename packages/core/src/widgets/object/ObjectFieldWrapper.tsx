@@ -44,7 +44,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
 
   return (
     <div
-      data-testid="object-field"
+      data-testid={`object-field-${openLabel?.trim()}`}
       className={classNames(
         widgetObjectClasses.root,
         disabled && widgetObjectClasses.disabled,
@@ -69,7 +69,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
           variant="inline"
           disabled={disabled}
         >
-          {open ? openLabel : closedLabel}
+          {open ? openLabel.trim() : closedLabel.trim()}
         </Label>
       </button>
       <Collapse in={open} appear={false}>

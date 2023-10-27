@@ -44,7 +44,7 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
 
   return (
     <div
-      data-testid="list-field"
+      data-testid={`list-field-${openLabel?.trim()}`}
       className={classNames(
         widgetListClasses.root,
         disabled && widgetListClasses.disabled,
@@ -68,7 +68,7 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
             variant="inline"
             disabled={disabled}
           >
-            {open ? openLabel : closedLabel}
+            {open ? openLabel.trim() : closedLabel.trim()}
           </Label>
           <ChevronRightIcon className={widgetListClasses['expand-button-icon']} />
         </button>

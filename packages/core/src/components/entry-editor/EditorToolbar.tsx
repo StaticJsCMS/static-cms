@@ -299,7 +299,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
 
   return (
     <div className={classNames(classes.root, className)}>
-      {showI18nToggle || showPreviewToggle || canDelete ? (
+      {showI18nToggle || showPreviewToggle || canDelete || hasChanged ? (
         <Menu
           key="extra-menu"
           label={<MoreVertIcon className={classes['more-menu-label-icon']} />}
@@ -310,6 +310,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
           hideDropdownIcon
           aria-label="more options dropdown"
           disabled={disabled}
+          data-testid="editor-extra-menu"
         >
           {showI18nToggle || showPreviewToggle ? (
             <MenuGroup>
@@ -353,6 +354,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                 onClick={handleDiscardDraft}
                 startIcon={TrashIcon}
                 color="warning"
+                data-testid="discard-button"
               >
                 {t('editor.editorToolbar.discardChanges')}
               </MenuItemButton>
