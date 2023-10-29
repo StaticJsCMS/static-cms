@@ -41,7 +41,7 @@ function login(options) {
 }
 
 function assertNotification(message) {
-  cy.get(".CMS_SnackbarAlert_message", { timeout: 10000 })
+  cy.get('[data-testid="toast-messages"]', { timeout: 10000 })
     .should("be.visible")
     .within(() => {
       cy.contains(message);
@@ -50,7 +50,7 @@ function assertNotification(message) {
 }
 
 function exitEditor() {
-  cy.get(".CMS_Breadcrumbs_breadcrumb-link").first().click();
+  cy.get('[data-testid="breadcrumb-link"]').first().click();
 }
 
 function goToWorkflow() {
@@ -426,7 +426,7 @@ function validateListFields({ name, description }) {
   flushClockAndSave();
   assertNotification(notifications.error.missingField);
   cy.get('[data-testid="list-field-Authors"]').should("have.class", "CMS_WidgetList_error");
-  cy.get(".CMS_WidgetList_ListItem_root").eq(2).as("listControl");
+  cy.get('[data-testid="list-item-field-Author"]').eq(2).as("listControl");
   cy.get("@listControl").should("have.class", "CMS_WidgetList_ListItem_error");
   cy.get("@listControl").get('[data-testid="field-Name"]').should("have.class", "CMS_Field_error");
   cy.get("input").eq(2).type(name);
@@ -520,7 +520,7 @@ function validateNestedListFieldsAndExit(setting) {
 }
 
 function assertFieldValidationError({ message, fieldLabel }) {
-  cy.contains("label", fieldLabel).siblings(".CMS_ErrorMessage_root").contains(message);
+  cy.contains("label", fieldLabel).siblings('[data-testid="error"]').contains(message);
   cy.get(`[data-testid="field-${fieldLabel}"]`).should("have.class", "CMS_Field_error");
 }
 

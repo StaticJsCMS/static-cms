@@ -52,6 +52,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
                 {breadcrumb.to ? (
                   <Link
                     key={`link-${index}`}
+                    data-testid="breadcrumb-link"
                     className={classNames(
                       classes['breadcrumb-link'],
                       index + 1 === breadcrumbs.length && classes['breadcrumb-truncated'],
@@ -81,6 +82,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
           <Link
             key="final-non-editor-breadcrumb-link"
             className={classes['mobile-current-breadcrumb-link']}
+            data-testid="breadcrumb-link"
             to={backTo ? backTo : finalNonEditorBreadcrumb.to!}
           >
             {inEditor ? <ArrowBackIcon className={classes['mobile-backlink']} /> : null}
