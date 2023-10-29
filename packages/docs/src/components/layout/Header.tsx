@@ -139,6 +139,10 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
         })),
       },
       {
+        title: 'Examples',
+        url: '/docs/examples',
+      },
+      {
         title: 'Community',
         url: '/community',
       },
