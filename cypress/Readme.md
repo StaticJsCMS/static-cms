@@ -70,14 +70,3 @@ To avoid recording all the tests over and over again, a recommended process is t
 2. Run the test in recording mode.
 3. Exit Cypress and stop the proxy.
 4. Run the test normally (with mock data) to verify the recording works.
-
-## Debugging Playback Failures
-
-Most common failures are:
-
-1. The [recorded data](utils/mock-server.js#L17) is not [transformed](plugins/common.js#L34) properly (e.g. sanitization broke something).
-2. The [stubbed requests and responses](support/commands.js#L82) are not [matched](support/commands.js#L32) properly (e.g. timestamp changes in request body between recording and playback).
-
-Dumping all recorded data as is to a file [here](utils/mock-server.js#L24) and adding a `debugger;` statement [here](support/commands.js#L52) is useful to gain insights.
-
-Also comparing console log messages between recording and playback is very useful (ordering of requests, etc.)

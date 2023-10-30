@@ -5,7 +5,6 @@ const { updateConfig } = require("../utils/config");
 const { escapeRegExp } = require("../utils/regexp");
 const { getExpectationsFilename, transformRecordedData: transformData, getGitClient } = require("./common");
 const { merge } = require("lodash");
-const { retrieveRecordedExpectations, resetMockServerState } = require("../utils/mock-server");
 
 const BITBUCKET_REPO_OWNER_SANITIZED_VALUE = "owner";
 const BITBUCKET_REPO_NAME_SANITIZED_VALUE = "repo";
@@ -168,59 +167,30 @@ async function resetRepositories({ owner, repo, tempDir }) {
 
 async function setupBitBucket(options) {
   const { lfs = false, ...rest } = options;
-  if (process.env.RECORD_FIXTURES) {
-    console.info('Running tests in "record" mode - live data will be used!');
-    const [user, repoData] = await Promise.all([getUser(), prepareTestBitBucketRepo({ lfs })]);
 
-    console.info("Updating config...");
-    await updateConfig((config) => {
-      merge(config, rest, {
-        backend: {
-          repo: `${repoData.owner}/${repoData.repo}`,
-        },
-      });
-    });
+  console.info("Running tests - live data will be used!");
+  const [user, repoData] = await Promise.all([getUser(), prepareTestBitBucketRepo({ lfs })]);
 
-    return { ...repoData, user, mockResponses: false };
-  } else {
-    console.info('Running tests in "playback" mode - local data will be used');
-
-    console.info("Updating config...");
-    await updateConfig((config) => {
-      merge(config, rest, {
-        backend: {
-          repo: `${BITBUCKET_REPO_OWNER_SANITIZED_VALUE}/${BITBUCKET_REPO_NAME_SANITIZED_VALUE}`,
-        },
-      });
-    });
-
-    return {
-      owner: BITBUCKET_REPO_OWNER_SANITIZED_VALUE,
-      repo: BITBUCKET_REPO_NAME_SANITIZED_VALUE,
-      user: {
-        ...FAKE_OWNER_USER,
-        token: BITBUCKET_REPO_TOKEN_SANITIZED_VALUE,
-        backendName: "bitbucket",
+  console.info("Updating config...");
+  await updateConfig((config) => {
+    merge(config, rest, {
+      backend: {
+        repo: `${repoData.owner}/${repoData.repo}`,
       },
+    });
+  });
 
-      mockResponses: true,
-    };
-  }
+  return { ...repoData, user };
 }
 
 async function teardownBitBucket(taskData) {
-  if (process.env.RECORD_FIXTURES) {
-    await deleteRepositories(taskData);
-  }
+  await deleteRepositories(taskData);
 
   return null;
 }
 
 async function setupBitBucketTest(taskData) {
-  if (process.env.RECORD_FIXTURES) {
-    await resetRepositories(taskData);
-    await resetMockServerState();
-  }
+  await resetRepositories(taskData);
 
   return null;
 }
@@ -246,6 +216,7 @@ const transformRecordedData = (expectation, toSanitize) => {
     let body;
     if (httpRequest.body && httpRequest.body.type === "JSON" && httpRequest.body.json) {
       const bodyObject = JSON.parse(httpRequest.body.json);
+      console.log("bodyObject.encoding", bodyObject.encoding);
       if (bodyObject.encoding === "base64") {
         // sanitize encoded data
         const decodedBody = Buffer.from(bodyObject.content, "base64").toString("binary");
@@ -278,7 +249,11 @@ const transformRecordedData = (expectation, toSanitize) => {
         content: httpResponse.body.base64Bytes,
       };
     } else if (httpResponse.body) {
-      responseBody = httpResponse.body;
+      if (httpResponse.body && httpResponse.body.type === "JSON" && httpResponse.body.json) {
+        responseBody = JSON.stringify(httpResponse.body.json);
+      } else {
+        responseBody = httpResponse.body;
+      }
     }
 
     // replace recorded user with fake one
@@ -293,36 +268,7 @@ const transformRecordedData = (expectation, toSanitize) => {
 };
 
 async function teardownBitBucketTest(taskData) {
-  if (process.env.RECORD_FIXTURES) {
-    await resetRepositories(taskData);
-
-    try {
-      const filename = getExpectationsFilename(taskData);
-
-      console.info("Persisting recorded data for test:", path.basename(filename));
-
-      const { owner, token } = await getEnvs();
-
-      const expectations = await retrieveRecordedExpectations();
-
-      const toSanitize = {
-        owner,
-        repo: taskData.repo,
-        token,
-        ownerName: taskData.user.name,
-      };
-      // transform the mock proxy recorded requests into Cypress route format
-      const toPersist = expectations.map((expectation) => transformRecordedData(expectation, toSanitize));
-
-      const toPersistString = sanitizeString(JSON.stringify(toPersist, null, 2), toSanitize);
-
-      await fs.writeFile(filename, toPersistString);
-    } catch (e) {
-      console.error(e);
-    }
-
-    await resetMockServerState();
-  }
+  await resetRepositories(taskData);
 
   return null;
 }
