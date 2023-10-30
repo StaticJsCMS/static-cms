@@ -69,10 +69,19 @@ collections:
         name: image
         widget: image
         required: false
+      - label: Description
+        name: description
+        widget: text
+      - label: Category
+        name: category
+        widget: string
       - label: Body
         name: body
         widget: markdown
         hint: Main content goes here.
+      - label: Tags
+        name: tags
+        widget: list
   - name: faq
     label: FAQ
     folder: _faqs
