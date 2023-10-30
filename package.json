@@ -20,6 +20,7 @@
     "test:ci": "lerna run test:ci",
     "test:e2e": "cypress run --browser chrome --headed --spec cypress/e2e/simple_workflow_spec_bitbucket_backend.js",
     "test:e2e:headless": "cypress run --browser chrome --headless --spec cypress/e2e/simple_workflow_spec_bitbucket_backend.js",
+    "test:e2e:record-fixtures:dev": "RECORD_FIXTURES=true cypress open --spec cypress/e2e/simple_workflow_spec_bitbucket_backend.js",
     "test:integration:ci": "lerna run test:integration:ci",
     "test:integration": "lerna run test:integration",
     "test": "lerna run test",

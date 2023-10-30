@@ -347,7 +347,7 @@ export default class API {
   }
 
   async isShaExistsInBranch(branch: string, sha: string) {
-    const { values }: { values: BitBucketCommit[] } = await this.requestJSON({
+    const response: { values: BitBucketCommit[] } = await this.requestJSON({
       url: `${this.repoURL}/commits`,
       params: { include: branch, pagelen: '100' },
     }).catch(e => {
@@ -355,7 +355,9 @@ export default class API {
       return [];
     });
 
-    return values.some(v => v.hash === sha);
+    console.log('response', response);
+
+    return response?.values?.some(v => v.hash === sha);
   }
 
   getEntriesAndCursor = (jsonResponse: BitBucketSrcResult) => {
