@@ -4,16 +4,21 @@ const mockserver = require("mockserver-node");
 const PROXY_PORT = 1080;
 const PROXY_HOST = "localhost";
 
-const start = () => {
-  return mockserver.start_mockserver({
+const start = async () => {
+  await mockserver.start_mockserver({
     serverPort: PROXY_PORT,
   });
+
+  console.log("Mock server started!");
 };
 
-const stop = () =>
+const stop = async () => {
   mockserver.stop_mockserver({
     serverPort: PROXY_PORT,
   });
+
+  console.log("Mock server stopped!");
+};
 
 const retrieveRecordedExpectations = async () => {
   const promise = new Promise((resolve, reject) => {

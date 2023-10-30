@@ -306,7 +306,7 @@ Cypress.Commands.add('clickModeToggle', () => {
 });
 
 Cypress.Commands.add('getMarkdownEditor', () => {
-  return cy.get('[data-slate-editor]');
+  return cy.get('[data-slate-editor="true"]');
 });
 
 Cypress.Commands.add('confirmMarkdownEditorContent', expectedDomString => {

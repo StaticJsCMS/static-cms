@@ -79,7 +79,7 @@ function assertUnpublishedChangesInEditor() {
 
 function goToEntry(entry) {
   goToCollections();
-  cy.get("a h2").first().contains(entry.title).click();
+  cy.get("a").first().contains(entry.title).click();
 }
 
 function updateWorkflowStatus({ title }, fromColumnHeading, toColumnHeading) {
@@ -130,13 +130,13 @@ function assertWorkflowStatusInEditor(status) {
 function assertPublishedEntry(entry) {
   if (Array.isArray(entry)) {
     const entries = entry.reverse();
-    cy.get("a h2").then((els) => {
+    cy.get("a").then((els) => {
       cy.wrap(els.slice(0, entries.length)).each((el, idx) => {
         cy.wrap(el).contains(entries[idx].title);
       });
     });
   } else {
-    cy.get("a h2").first().contains(entry.title);
+    cy.get("a").first().contains(entry.title);
   }
 }
 
@@ -151,15 +151,15 @@ function assertOnCollectionsPage() {
 
 function assertEntryDeleted(entry) {
   cy.get("body").then(($body) => {
-    const entriesHeaders = $body.find("a h2");
+    const entriesHeaders = $body.find("a");
     if (entriesHeaders.length > 0) {
       if (Array.isArray(entry)) {
         const titles = entry.map((e) => e.title);
-        cy.get("a h2").each((el) => {
+        cy.get("a").each((el) => {
           expect(titles).not.to.include(el.text());
         });
       } else {
-        cy.get("a h2").each((el) => {
+        cy.get("a").each((el) => {
           expect(entry.title).not.to.equal(el.text());
         });
       }
@@ -212,7 +212,11 @@ function populateEntry(entry, onDone = flushClockAndSave) {
   const keys = Object.keys(entry);
   for (const key of keys) {
     const value = entry[key];
+    console.log('typing in key', key)
     if (key === "Body") {
+      console.log('cy.getMarkdownEditor()', cy.getMarkdownEditor().$el)
+      cy.getMarkdownEditor().click().clear({ force: true }).type(value, { force: true });
+      console.log('cy.getMarkdownEditor()', cy.getMarkdownEditor().first().$el)
       cy.getMarkdownEditor().first().click().clear({ force: true }).type(value, { force: true });
     } else {
       cy.get(`[data-testid="field-${key}"]`).click();
@@ -363,7 +367,7 @@ function duplicateEntry(entry) {
   updateWorkflowStatusInEditor(editorStatus.ready);
   publishEntryInEditor(publishTypes.publishNow);
   exitEditor();
-  cy.get("a h2").should(($h2s) => {
+  cy.get("a").should(($h2s) => {
     expect($h2s.eq(0)).to.contain(entry.title);
     expect($h2s.eq(1)).to.contain(entry.title);
   });

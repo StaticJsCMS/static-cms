@@ -6,6 +6,7 @@ export default defineConfig({
     runMode: 0,
     openMode: 0,
   },
+  chromeWebSecurity: false,
   e2e: {
     video: false,
     // We've imported your old cypress plugins here.
