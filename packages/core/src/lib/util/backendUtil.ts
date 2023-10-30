@@ -44,6 +44,7 @@ function catchFormatErrors<T extends keyof typeof formatters>(
 const responseFormatters = {
   json: catchFormatErrors('json', async (res: Response) => {
     const contentType = res.headers.get('Content-Type') || '';
+    console.log('contentType', contentType);
     if (!contentType.startsWith('application/json') && !contentType.startsWith('text/json')) {
       throw new Error(`${contentType} is not a valid JSON Content-Type`);
     }

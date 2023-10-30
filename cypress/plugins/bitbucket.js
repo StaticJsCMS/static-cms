@@ -57,6 +57,7 @@ const API_URL = 'https://api.bitbucket.org/2.0/';
 function get(token, path) {
   return fetch(`${API_URL}${path}`, {
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   }).then(r => r.json());
@@ -67,6 +68,7 @@ function post(token, path, body) {
     method: 'POST',
     ...(body ? { body } : {}),
     headers: {
+      'Content-Type': 'application/json',
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       Authorization: `Bearer ${token}`,
     },
@@ -77,6 +79,7 @@ function del(token, path) {
   return fetch(`${API_URL}${path}`, {
     method: 'DELETE',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });

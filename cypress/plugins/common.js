@@ -34,7 +34,9 @@ const HEADERS_TO_IGNORE = [
 const transformRecordedData = (expectation, requestBodySanitizer, responseBodySanitizer) => {
   const { httpRequest, httpResponse } = expectation;
 
-  const responseHeaders = {};
+  const responseHeaders = {
+    "Content-Type": "application/json; charset=utf-8"
+  };
 
   Object.keys(httpResponse.headers)
     .filter(key => !HEADERS_TO_IGNORE.includes(key.toLowerCase()))
