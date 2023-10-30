@@ -234,7 +234,7 @@ async function setupGitGateway(options) {
     await git.addConfig('commit.gpgsign', 'false');
     await git.add('.lfsconfig');
     await git.commit('add .lfsconfig');
-    await git.push('origin', 'master');
+    await git.push('origin', 'main');
 
     await waitForDeploys(netlifyApiToken, site_id);
     console.info('Creating user for site:', site_id, 'with email:', email);

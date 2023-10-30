@@ -31,7 +31,7 @@ async function switchVersion(version) {
   const replaceString =
     version === 'latest'
       ? '<script src="dist/static-cms.js"></script>'
-      : `<script src="https://unpkg.com/static-cms@${version}/dist/static-cms.js"></script>`;
+      : `<script src="https://unpkg.com/@staticcms/app@${version}/dist/static-cms-app.js"></script>`;
 
   await fs.writeFile(
     htmlFile,

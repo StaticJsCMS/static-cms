@@ -51,11 +51,11 @@ describe(`I18N Proxy Backend Simple Workflow - '${mode}' mode`, () => {
   const taskResult = { data: {} };
 
   const entry = {
-    title: 'first title',
-    body: 'first body',
-    description: 'first description',
-    category: 'first category',
-    tags: 'tag1',
+    Title: 'first title',
+    Body: 'first body',
+    Description: 'first description',
+    Category: 'first category',
+    Tags: 'tag1',
   };
 
   before(() => {

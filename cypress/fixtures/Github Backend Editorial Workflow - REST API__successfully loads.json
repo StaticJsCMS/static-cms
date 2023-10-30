@@ -48,12 +48,12 @@
       "Content-Security-Policy": "default-src 'none'",
       "content-length": "7417"
     },
-    "response": "{\n  \"id\": 255074717,\n  \"node_id\": \"MDEwOlJlcG9zaXRvcnkyNTUwNzQ3MTc=\",\n  \"name\": \"repo\",\n  \"full_name\": \"owner/repo\",\n  \"private\": false,\n  \"owner\": {\n    \"login\": \"owner\",\n    \"id\": 26760571,\n    \"node_id\": \"MDQ6VXNlcjI2NzYwNTcx\",\n    \"avatar_url\": \"https://avatars1.githubusercontent.com/u/7892489?v=4\",\n    \"gravatar_id\": \"\",\n    \"url\": \"https://api.github.com/users/owner\",\n    \"html_url\": \"https://github.com/owner\",\n    \"followers_url\": \"https://api.github.com/users/owner/followers\",\n    \"following_url\": \"https://api.github.com/users/owner/following{/other_user}\",\n    \"gists_url\": \"https://api.github.com/users/owner/gists{/gist_id}\",\n    \"starred_url\": \"https://api.github.com/users/owner/starred{/owner}{/repo}\",\n    \"subscriptions_url\": \"https://api.github.com/users/owner/subscriptions\",\n    \"organizations_url\": \"https://api.github.com/users/owner/orgs\",\n    \"repos_url\": \"https://api.github.com/users/owner/repos\",\n    \"events_url\": \"https://api.github.com/users/owner/events{/privacy}\",\n    \"received_events_url\": \"https://api.github.com/users/owner/received_events\",\n    \"type\": \"User\",\n    \"site_admin\": false\n  },\n  \"html_url\": \"https://github.com/owner/repo\",\n  \"description\": null,\n  \"fork\": false,\n  \"url\": \"https://api.github.com/repos/owner/repo\",\n  \"forks_url\": \"https://api.github.com/repos/owner/repo/forks\",\n  \"keys_url\": \"https://api.github.com/repos/owner/repo/keys{/key_id}\",\n  \"collaborators_url\": \"https://api.github.com/repos/owner/repo/collaborators{/collaborator}\",\n  \"teams_url\": \"https://api.github.com/repos/owner/repo/teams\",\n  \"hooks_url\": \"https://api.github.com/repos/owner/repo/hooks\",\n  \"issue_events_url\": \"https://api.github.com/repos/owner/repo/issues/events{/number}\",\n  \"events_url\": \"https://api.github.com/repos/owner/repo/events\",\n  \"assignees_url\": \"https://api.github.com/repos/owner/repo/assignees{/user}\",\n  \"branches_url\": \"https://api.github.com/repos/owner/repo/branches{/branch}\",\n  \"tags_url\": \"https://api.github.com/repos/owner/repo/tags\",\n  \"blobs_url\": \"https://api.github.com/repos/owner/repo/git/blobs{/sha}\",\n  \"git_tags_url\": \"https://api.github.com/repos/owner/repo/git/tags{/sha}\",\n  \"git_refs_url\": \"https://api.github.com/repos/owner/repo/git/refs{/sha}\",\n  \"trees_url\": \"https://api.github.com/repos/owner/repo/git/trees{/sha}\",\n  \"statuses_url\": \"https://api.github.com/repos/owner/repo/statuses/{sha}\",\n  \"languages_url\": \"https://api.github.com/repos/owner/repo/languages\",\n  \"stargazers_url\": \"https://api.github.com/repos/owner/repo/stargazers\",\n  \"contributors_url\": \"https://api.github.com/repos/owner/repo/contributors\",\n  \"subscribers_url\": \"https://api.github.com/repos/owner/repo/subscribers\",\n  \"subscription_url\": \"https://api.github.com/repos/owner/repo/subscription\",\n  \"commits_url\": \"https://api.github.com/repos/owner/repo/commits{/sha}\",\n  \"git_commits_url\": \"https://api.github.com/repos/owner/repo/git/commits{/sha}\",\n  \"comments_url\": \"https://api.github.com/repos/owner/repo/comments{/number}\",\n  \"issue_comment_url\": \"https://api.github.com/repos/owner/repo/issues/comments{/number}\",\n  \"contents_url\": \"https://api.github.com/repos/owner/repo/contents/{+path}\",\n  \"compare_url\": \"https://api.github.com/repos/owner/repo/compare/{base}...{head}\",\n  \"merges_url\": \"https://api.github.com/repos/owner/repo/merges\",\n  \"archive_url\": \"https://api.github.com/repos/owner/repo/{archive_format}{/ref}\",\n  \"downloads_url\": \"https://api.github.com/repos/owner/repo/downloads\",\n  \"issues_url\": \"https://api.github.com/repos/owner/repo/issues{/number}\",\n  \"pulls_url\": \"https://api.github.com/repos/owner/repo/pulls{/number}\",\n  \"milestones_url\": \"https://api.github.com/repos/owner/repo/milestones{/number}\",\n  \"notifications_url\": \"https://api.github.com/repos/owner/repo/notifications{?since,all,participating}\",\n  \"labels_url\": \"https://api.github.com/repos/owner/repo/labels{/name}\",\n  \"releases_url\": \"https://api.github.com/repos/owner/repo/releases{/id}\",\n  \"deployments_url\": \"https://api.github.com/repos/owner/repo/deployments\",\n  \"created_at\": \"2020-04-12T12:11:03Z\",\n  \"updated_at\": \"2020-04-12T12:11:03Z\",\n  \"pushed_at\": \"2020-04-12T12:11:23Z\",\n  \"git_url\": \"git://github.com/owner/repo.git\",\n  \"ssh_url\": \"git@github.com:owner/repo.git\",\n  \"clone_url\": \"https://github.com/owner/repo.git\",\n  \"svn_url\": \"https://github.com/owner/repo\",\n  \"homepage\": null,\n  \"size\": 0,\n  \"stargazers_count\": 0,\n  \"watchers_count\": 0,\n  \"language\": null,\n  \"has_issues\": true,\n  \"has_projects\": true,\n  \"has_downloads\": true,\n  \"has_wiki\": true,\n  \"has_pages\": false,\n  \"forks_count\": 0,\n  \"mirror_url\": null,\n  \"archived\": false,\n  \"disabled\": false,\n  \"open_issues_count\": 0,\n  \"license\": null,\n  \"forks\": 0,\n  \"open_issues\": 0,\n  \"watchers\": 0,\n  \"default_branch\": \"master\",\n  \"permissions\": {\n    \"admin\": true,\n    \"push\": true,\n    \"pull\": true\n  },\n  \"temp_clone_token\": \"\",\n  \"allow_squash_merge\": true,\n  \"allow_merge_commit\": true,\n  \"allow_rebase_merge\": true,\n  \"delete_branch_on_merge\": false,\n  \"network_count\": 0,\n  \"subscribers_count\": 1\n}\n",
+    "response": "{\n  \"id\": 255074717,\n  \"node_id\": \"MDEwOlJlcG9zaXRvcnkyNTUwNzQ3MTc=\",\n  \"name\": \"repo\",\n  \"full_name\": \"owner/repo\",\n  \"private\": false,\n  \"owner\": {\n    \"login\": \"owner\",\n    \"id\": 26760571,\n    \"node_id\": \"MDQ6VXNlcjI2NzYwNTcx\",\n    \"avatar_url\": \"https://avatars1.githubusercontent.com/u/7892489?v=4\",\n    \"gravatar_id\": \"\",\n    \"url\": \"https://api.github.com/users/owner\",\n    \"html_url\": \"https://github.com/owner\",\n    \"followers_url\": \"https://api.github.com/users/owner/followers\",\n    \"following_url\": \"https://api.github.com/users/owner/following{/other_user}\",\n    \"gists_url\": \"https://api.github.com/users/owner/gists{/gist_id}\",\n    \"starred_url\": \"https://api.github.com/users/owner/starred{/owner}{/repo}\",\n    \"subscriptions_url\": \"https://api.github.com/users/owner/subscriptions\",\n    \"organizations_url\": \"https://api.github.com/users/owner/orgs\",\n    \"repos_url\": \"https://api.github.com/users/owner/repos\",\n    \"events_url\": \"https://api.github.com/users/owner/events{/privacy}\",\n    \"received_events_url\": \"https://api.github.com/users/owner/received_events\",\n    \"type\": \"User\",\n    \"site_admin\": false\n  },\n  \"html_url\": \"https://github.com/owner/repo\",\n  \"description\": null,\n  \"fork\": false,\n  \"url\": \"https://api.github.com/repos/owner/repo\",\n  \"forks_url\": \"https://api.github.com/repos/owner/repo/forks\",\n  \"keys_url\": \"https://api.github.com/repos/owner/repo/keys{/key_id}\",\n  \"collaborators_url\": \"https://api.github.com/repos/owner/repo/collaborators{/collaborator}\",\n  \"teams_url\": \"https://api.github.com/repos/owner/repo/teams\",\n  \"hooks_url\": \"https://api.github.com/repos/owner/repo/hooks\",\n  \"issue_events_url\": \"https://api.github.com/repos/owner/repo/issues/events{/number}\",\n  \"events_url\": \"https://api.github.com/repos/owner/repo/events\",\n  \"assignees_url\": \"https://api.github.com/repos/owner/repo/assignees{/user}\",\n  \"branches_url\": \"https://api.github.com/repos/owner/repo/branches{/branch}\",\n  \"tags_url\": \"https://api.github.com/repos/owner/repo/tags\",\n  \"blobs_url\": \"https://api.github.com/repos/owner/repo/git/blobs{/sha}\",\n  \"git_tags_url\": \"https://api.github.com/repos/owner/repo/git/tags{/sha}\",\n  \"git_refs_url\": \"https://api.github.com/repos/owner/repo/git/refs{/sha}\",\n  \"trees_url\": \"https://api.github.com/repos/owner/repo/git/trees{/sha}\",\n  \"statuses_url\": \"https://api.github.com/repos/owner/repo/statuses/{sha}\",\n  \"languages_url\": \"https://api.github.com/repos/owner/repo/languages\",\n  \"stargazers_url\": \"https://api.github.com/repos/owner/repo/stargazers\",\n  \"contributors_url\": \"https://api.github.com/repos/owner/repo/contributors\",\n  \"subscribers_url\": \"https://api.github.com/repos/owner/repo/subscribers\",\n  \"subscription_url\": \"https://api.github.com/repos/owner/repo/subscription\",\n  \"commits_url\": \"https://api.github.com/repos/owner/repo/commits{/sha}\",\n  \"git_commits_url\": \"https://api.github.com/repos/owner/repo/git/commits{/sha}\",\n  \"comments_url\": \"https://api.github.com/repos/owner/repo/comments{/number}\",\n  \"issue_comment_url\": \"https://api.github.com/repos/owner/repo/issues/comments{/number}\",\n  \"contents_url\": \"https://api.github.com/repos/owner/repo/contents/{+path}\",\n  \"compare_url\": \"https://api.github.com/repos/owner/repo/compare/{base}...{head}\",\n  \"merges_url\": \"https://api.github.com/repos/owner/repo/merges\",\n  \"archive_url\": \"https://api.github.com/repos/owner/repo/{archive_format}{/ref}\",\n  \"downloads_url\": \"https://api.github.com/repos/owner/repo/downloads\",\n  \"issues_url\": \"https://api.github.com/repos/owner/repo/issues{/number}\",\n  \"pulls_url\": \"https://api.github.com/repos/owner/repo/pulls{/number}\",\n  \"milestones_url\": \"https://api.github.com/repos/owner/repo/milestones{/number}\",\n  \"notifications_url\": \"https://api.github.com/repos/owner/repo/notifications{?since,all,participating}\",\n  \"labels_url\": \"https://api.github.com/repos/owner/repo/labels{/name}\",\n  \"releases_url\": \"https://api.github.com/repos/owner/repo/releases{/id}\",\n  \"deployments_url\": \"https://api.github.com/repos/owner/repo/deployments\",\n  \"created_at\": \"2020-04-12T12:11:03Z\",\n  \"updated_at\": \"2020-04-12T12:11:03Z\",\n  \"pushed_at\": \"2020-04-12T12:11:23Z\",\n  \"git_url\": \"git://github.com/owner/repo.git\",\n  \"ssh_url\": \"git@github.com:owner/repo.git\",\n  \"clone_url\": \"https://github.com/owner/repo.git\",\n  \"svn_url\": \"https://github.com/owner/repo\",\n  \"homepage\": null,\n  \"size\": 0,\n  \"stargazers_count\": 0,\n  \"watchers_count\": 0,\n  \"language\": null,\n  \"has_issues\": true,\n  \"has_projects\": true,\n  \"has_downloads\": true,\n  \"has_wiki\": true,\n  \"has_pages\": false,\n  \"forks_count\": 0,\n  \"mirror_url\": null,\n  \"archived\": false,\n  \"disabled\": false,\n  \"open_issues_count\": 0,\n  \"license\": null,\n  \"forks\": 0,\n  \"open_issues\": 0,\n  \"watchers\": 0,\n  \"default_branch\": \"main\",\n  \"permissions\": {\n    \"admin\": true,\n    \"push\": true,\n    \"pull\": true\n  },\n  \"temp_clone_token\": \"\",\n  \"allow_squash_merge\": true,\n  \"allow_merge_commit\": true,\n  \"allow_rebase_merge\": true,\n  \"delete_branch_on_merge\": false,\n  \"network_count\": 0,\n  \"subscribers_count\": 1\n}\n",
     "status": 200
   },
   {
     "method": "GET",
-    "url": "/repos/owner/repo/git/trees/master:static/media",
+    "url": "/repos/owner/repo/git/trees/main:static/media",
     "headers": {
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
@@ -78,7 +78,7 @@
   },
   {
     "method": "GET",
-    "url": "/repos/owner/repo/git/trees/master:content/posts",
+    "url": "/repos/owner/repo/git/trees/main:content/posts",
     "headers": {
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
@@ -208,7 +208,7 @@
   },
   {
     "method": "GET",
-    "url": "/repos/owner/repo/commits?path=content/posts/2016-01-09---Perfecting-the-Art-of-Perfection.md&sha=master",
+    "url": "/repos/owner/repo/commits?path=content/posts/2016-01-09---Perfecting-the-Art-of-Perfection.md&sha=main",
     "headers": {
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
@@ -260,7 +260,7 @@
   },
   {
     "method": "GET",
-    "url": "/repos/owner/repo/commits?path=content/posts/2016-02-02---A-Brief-History-of-Typography.md&sha=master",
+    "url": "/repos/owner/repo/commits?path=content/posts/2016-02-02---A-Brief-History-of-Typography.md&sha=main",
     "headers": {
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
@@ -286,7 +286,7 @@
   },
   {
     "method": "GET",
-    "url": "/repos/owner/repo/commits?path=content/posts/2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&sha=master",
+    "url": "/repos/owner/repo/commits?path=content/posts/2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&sha=main",
     "headers": {
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
@@ -312,7 +312,7 @@
   },
   {
     "method": "GET",
-    "url": "/repos/owner/repo/commits?path=content/posts/2017-19-08---Humane-Typography-in-the-Digital-Age.md&sha=master",
+    "url": "/repos/owner/repo/commits?path=content/posts/2017-19-08---Humane-Typography-in-the-Digital-Age.md&sha=main",
     "headers": {
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
@@ -338,7 +338,7 @@
   },
   {
     "method": "GET",
-    "url": "/repos/owner/repo/commits?path=content/posts/2017-18-08---The-Birth-of-Movable-Type.md&sha=master",
+    "url": "/repos/owner/repo/commits?path=content/posts/2017-18-08---The-Birth-of-Movable-Type.md&sha=main",
     "headers": {
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",

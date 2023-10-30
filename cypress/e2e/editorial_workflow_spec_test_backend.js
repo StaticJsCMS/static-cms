@@ -27,16 +27,16 @@ import {
 import { workflowStatus, editorStatus, publishTypes, notifications } from '../utils/constants';
 
 const entry1 = {
-  title: 'first title',
-  body: 'first body',
+  Title: 'first title',
+  Body: 'first body',
 };
 const entry2 = {
-  title: 'second title',
-  body: 'second body',
+  Title: 'second title',
+  Body: 'second body',
 };
 const entry3 = {
-  title: 'third title',
-  body: 'third body',
+  Title: 'third title',
+  Body: 'third body',
 };
 
 describe('Test Backend Editorial Workflow', () => {
@@ -249,9 +249,9 @@ describe('Test Backend Editorial Workflow', () => {
     inSidebar(() => cy.contains('a', 'Sub Directory').click());
     cy.contains('a', 'New Page').click();
 
-    cy.get('[id^="path-field"]').should('have.value', 'directory/sub-directory');
-    cy.get('[id^="path-field"]').type('/new-path');
-    cy.get('[id^="title-field"]').type('New Path Title');
+    cy.get('[data-testid="field-Path"]').should('have.value', 'directory/sub-directory');
+    cy.get('[data-testid="field-Path"]').type('/new-path');
+    cy.get('[data-testid="field-Title"]').type('New Path Title');
     cy.wait(150);
     cy.contains('button', 'Save').click();
     assertNotification(notifications.saved);
@@ -273,7 +273,7 @@ describe('Test Backend Editorial Workflow', () => {
     inSidebar(() => cy.contains('a', 'Sub Directory').click());
 
     cy.contains('a', 'New Page').click();
-    cy.get('[id^="title-field"]').type('New Path Title');
+    cy.get('[data-testid="field-Title"]').type('New Path Title');
     cy.wait(150);
     cy.contains('button', 'Save').click();
 
@@ -289,11 +289,11 @@ describe('Test Backend Editorial Workflow', () => {
     inSidebar(() => cy.contains('a', 'Pages').click());
     inGrid(() => cy.contains('a', 'Directory').click());
 
-    cy.get('[id^="path-field"]').should('have.value', 'directory');
-    cy.get('[id^="path-field"]').clear();
-    cy.get('[id^="path-field"]').type('new-directory');
-    cy.get('[id^="title-field"]').clear();
-    cy.get('[id^="title-field"]').type('New Directory');
+    cy.get('[data-testid="field-Path"]').should('have.value', 'directory');
+    cy.get('[data-testid="field-Path"]').clear();
+    cy.get('[data-testid="field-Path"]').type('new-directory');
+    cy.get('[data-testid="field-Title"]').clear();
+    cy.get('[data-testid="field-Title"]').type('New Directory');
     cy.wait(150);
     cy.contains('button', 'Save').click();
     assertNotification(notifications.saved);

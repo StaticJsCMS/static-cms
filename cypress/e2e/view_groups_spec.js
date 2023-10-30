@@ -10,8 +10,8 @@ const assertGroupsCount = count => {
   cy.get('[class*=GroupContainer]').should('have.length', count);
 };
 
-const assertEachGroupCount = (id, count) => {
-  cy.get(`[id='${id}']`).within(() => {
+const assertEachGroupCount = (name, count) => {
+  cy.get(`[data-testid="${name}"]`).within(() => {
     assertEntriesCount(count);
   });
 };

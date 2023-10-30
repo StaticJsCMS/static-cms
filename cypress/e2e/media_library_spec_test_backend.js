@@ -2,8 +2,8 @@ import fixture from './common/media_library';
 
 const entries = [
   {
-    title: 'first title',
-    body: 'first body',
+    Title: 'first title',
+    Body: 'first body',
   },
 ];
 

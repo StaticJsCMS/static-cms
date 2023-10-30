@@ -56,7 +56,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/gitlab/repository/tree?path=static/media&ref=master&per_page=100&recursive=false",
+    "url": "/.netlify/git/gitlab/repository/tree?path=static/media&ref=main&per_page=100&recursive=false",
     "headers": {
       "Accept-Ranges": "bytes",
       "Access-Control-Allow-Credentials": "true",
@@ -71,7 +71,7 @@
       "Content-Type": "application/json",
       "Expect-Ct": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
       "Gitlab-Sv": "localhost",
-      "Link": "</repository/tree?id=owner%2Frepo&page=1&path=static%2Fmedia&per_page=100&recursive=false&ref=master>; rel=\"first\",</repository/tree?id=owner%2Frepo&page=1&path=static%2Fmedia&per_page=100&recursive=false&ref=master>; rel=\"last\"",
+      "Link": "</repository/tree?id=owner%2Frepo&page=1&path=static%2Fmedia&per_page=100&recursive=false&ref=main>; rel=\"first\",</repository/tree?id=owner%2Frepo&page=1&path=static%2Fmedia&per_page=100&recursive=false&ref=main>; rel=\"last\"",
       "Referrer-Policy": "strict-origin-when-cross-origin",
       "Server": "Netlify",
       "Set-Cookie": "__cfduid=d3fae3604ef59334d037aa48972faa8901586688178; expires=Tue, 12-May-20 10:42:58 GMT; path=/; domain=.gitlab.com; HttpOnly; SameSite=Lax; Secure",
@@ -95,7 +95,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/gitlab/repository/tree?path=content/posts&ref=master&recursive=false",
+    "url": "/.netlify/git/gitlab/repository/tree?path=content/posts&ref=main&recursive=false",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS",
@@ -109,7 +109,7 @@
       "Content-Type": "application/json",
       "Expect-Ct": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
       "Gitlab-Sv": "localhost",
-      "Link": "</repository/tree?id=owner%2Frepo&page=1&path=content%2Fposts&per_page=20&recursive=false&ref=master>; rel=\"first\",</repository/tree?id=owner%2Frepo&page=1&path=content%2Fposts&per_page=20&recursive=false&ref=master>; rel=\"last\"",
+      "Link": "</repository/tree?id=owner%2Frepo&page=1&path=content%2Fposts&per_page=20&recursive=false&ref=main>; rel=\"first\",</repository/tree?id=owner%2Frepo&page=1&path=content%2Fposts&per_page=20&recursive=false&ref=main>; rel=\"last\"",
       "Referrer-Policy": "strict-origin-when-cross-origin",
       "Server": "Netlify",
       "Set-Cookie": "__cfduid=d3fae3604ef59334d037aa48972faa8901586688178; expires=Tue, 12-May-20 10:42:58 GMT; path=/; domain=.gitlab.com; HttpOnly; SameSite=Lax; Secure",
@@ -133,7 +133,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/gitlab/repository/commits?path=content/posts/2016-01-09---Perfecting-the-Art-of-Perfection.md&ref_name=master",
+    "url": "/.netlify/git/gitlab/repository/commits?path=content/posts/2016-01-09---Perfecting-the-Art-of-Perfection.md&ref_name=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS",
@@ -147,7 +147,7 @@
       "Content-Type": "application/json",
       "Expect-Ct": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
       "Gitlab-Sv": "localhost",
-      "Link": "</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-01-09---Perfecting-the-Art-of-Perfection.md&per_page=20&ref_name=master>; rel=\"first\",</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-01-09---Perfecting-the-Art-of-Perfection.md&per_page=20&ref_name=master>; rel=\"last\"",
+      "Link": "</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-01-09---Perfecting-the-Art-of-Perfection.md&per_page=20&ref_name=main>; rel=\"first\",</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-01-09---Perfecting-the-Art-of-Perfection.md&per_page=20&ref_name=main>; rel=\"last\"",
       "Referrer-Policy": "strict-origin-when-cross-origin",
       "Server": "Netlify",
       "Set-Cookie": "__cfduid=d7f5516f660f29894c8ef8f15ea269b0f1586688178; expires=Tue, 12-May-20 10:42:58 GMT; path=/; domain=.gitlab.com; HttpOnly; SameSite=Lax; Secure",
@@ -171,7 +171,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/gitlab/repository/files/content%2Fposts%2F2016-01-09---Perfecting-the-Art-of-Perfection.md/raw?ref=master",
+    "url": "/.netlify/git/gitlab/repository/files/content%2Fposts%2F2016-01-09---Perfecting-the-Art-of-Perfection.md/raw?ref=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS",
@@ -202,7 +202,7 @@
       "X-Gitlab-File-Name": "2016-01-09---Perfecting-the-Art-of-Perfection.md",
       "X-Gitlab-File-Path": "content/posts/2016-01-09---Perfecting-the-Art-of-Perfection.md",
       "X-Gitlab-Last-Commit-Id": "2bc3fa39d8adb9e008e52793854338399fc6e4ad",
-      "X-Gitlab-Ref": "master",
+      "X-Gitlab-Ref": "main",
       "X-Gitlab-Size": "1707",
       "Age": "1",
       "Connection": "keep-alive",
@@ -214,7 +214,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/gitlab/repository/files/content%2Fposts%2F2016-01-12---The-Origins-of-Social-Stationery-Lettering.md/raw?ref=master",
+    "url": "/.netlify/git/gitlab/repository/files/content%2Fposts%2F2016-01-12---The-Origins-of-Social-Stationery-Lettering.md/raw?ref=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS",
@@ -245,7 +245,7 @@
       "X-Gitlab-File-Name": "2016-01-12---The-Origins-of-Social-Stationery-Lettering.md",
       "X-Gitlab-File-Path": "content/posts/2016-01-12---The-Origins-of-Social-Stationery-Lettering.md",
       "X-Gitlab-Last-Commit-Id": "2bc3fa39d8adb9e008e52793854338399fc6e4ad",
-      "X-Gitlab-Ref": "master",
+      "X-Gitlab-Ref": "main",
       "X-Gitlab-Size": "2565",
       "Age": "1",
       "Connection": "keep-alive",
@@ -257,7 +257,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/gitlab/repository/files/content%2Fposts%2F2016-02-02---A-Brief-History-of-Typography.md/raw?ref=master",
+    "url": "/.netlify/git/gitlab/repository/files/content%2Fposts%2F2016-02-02---A-Brief-History-of-Typography.md/raw?ref=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS",
@@ -288,7 +288,7 @@
       "X-Gitlab-File-Name": "2016-02-02---A-Brief-History-of-Typography.md",
       "X-Gitlab-File-Path": "content/posts/2016-02-02---A-Brief-History-of-Typography.md",
       "X-Gitlab-Last-Commit-Id": "2bc3fa39d8adb9e008e52793854338399fc6e4ad",
-      "X-Gitlab-Ref": "master",
+      "X-Gitlab-Ref": "main",
       "X-Gitlab-Size": "2786",
       "Age": "1",
       "Connection": "keep-alive",
@@ -300,7 +300,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/gitlab/repository/commits?path=content/posts/2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&ref_name=master",
+    "url": "/.netlify/git/gitlab/repository/commits?path=content/posts/2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&ref_name=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS",
@@ -314,7 +314,7 @@
       "Content-Type": "application/json",
       "Expect-Ct": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
       "Gitlab-Sv": "localhost",
-      "Link": "</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&per_page=20&ref_name=master>; rel=\"first\",</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&per_page=20&ref_name=master>; rel=\"last\"",
+      "Link": "</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&per_page=20&ref_name=main>; rel=\"first\",</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&per_page=20&ref_name=main>; rel=\"last\"",
       "Referrer-Policy": "strict-origin-when-cross-origin",
       "Server": "Netlify",
       "Set-Cookie": "__cfduid=d1960e512bd0ab25c817adc158341ca4b1586688179; expires=Tue, 12-May-20 10:42:59 GMT; path=/; domain=.gitlab.com; HttpOnly; SameSite=Lax; Secure",
@@ -338,7 +338,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/gitlab/repository/commits?path=content/posts/2016-02-02---A-Brief-History-of-Typography.md&ref_name=master",
+    "url": "/.netlify/git/gitlab/repository/commits?path=content/posts/2016-02-02---A-Brief-History-of-Typography.md&ref_name=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS",
@@ -352,7 +352,7 @@
       "Content-Type": "application/json",
       "Expect-Ct": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
       "Gitlab-Sv": "localhost",
-      "Link": "</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-02-02---A-Brief-History-of-Typography.md&per_page=20&ref_name=master>; rel=\"first\",</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-02-02---A-Brief-History-of-Typography.md&per_page=20&ref_name=master>; rel=\"last\"",
+      "Link": "</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-02-02---A-Brief-History-of-Typography.md&per_page=20&ref_name=main>; rel=\"first\",</repository/commits?id=owner%2Frepo&order=default&page=1&path=content%2Fposts%2F2016-02-02---A-Brief-History-of-Typography.md&per_page=20&ref_name=main>; rel=\"last\"",
       "Referrer-Policy": "strict-origin-when-cross-origin",
       "Server": "Netlify",
       "Set-Cookie": "__cfduid=d1960e512bd0ab25c817adc158341ca4b1586688179; expires=Tue, 12-May-20 10:42:59 GMT; path=/; domain=.gitlab.com; HttpOnly; SameSite=Lax; Secure",

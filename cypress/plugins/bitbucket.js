@@ -111,7 +111,7 @@ async function prepareTestBitBucketRepo({ lfs }) {
     'origin',
     `https://x-token-auth:${token}@bitbucket.org/${owner}/${testRepoName}`,
   );
-  await git.push(['-u', 'origin', 'master']);
+  await git.push(['-u', 'origin', 'main']);
 
   if (lfs) {
     console.info(`Enabling LFS for repo ${owner}/${repo}`);
@@ -119,7 +119,7 @@ async function prepareTestBitBucketRepo({ lfs }) {
     await git.raw(['lfs', 'track', '*.png', '*.jpg']);
     await git.add('.gitattributes');
     await git.commit('chore: track images files under LFS');
-    await git.push('origin', 'master');
+    await git.push('origin', 'main');
   }
 
   return { owner, repo: testRepoName, tempDir };
@@ -153,16 +153,16 @@ async function resetOriginRepo({ owner, repo, tempDir }) {
     ids.map(id => post(token, `repositories/${owner}/${repo}/pullrequests/${id}/decline`)),
   );
   const branches = await get(token, `repositories/${owner}/${repo}/refs/branches`);
-  const toDelete = branches.values.filter(b => b.name !== 'master').map(b => b.name);
+  const toDelete = branches.values.filter(b => b.name !== 'main').map(b => b.name);
 
   console.info('Deleting branches', toDelete);
   await Promise.all(
     toDelete.map(branch => del(token, `repositories/${owner}/${repo}/refs/branches/${branch}`)),
   );
 
-  console.info('Resetting master');
+  console.info('Resetting main');
   const git = getGitClient(tempDir);
-  await git.push(['--force', 'origin', 'master']);
+  await git.push(['--force', 'origin', 'main']);
   console.info('Done resetting origin repo:', `${owner}/${repo}`);
 }
 
@@ -173,7 +173,7 @@ async function resetRepositories({ owner, repo, tempDir }) {
 async function setupBitBucket(options) {
   const { lfs = false, ...rest } = options;
   if (process.env.RECORD_FIXTURES) {
-    console.info('Running tests in "record" mode - live data with be used!');
+    console.info('Running tests in "record" mode - live data will be used!');
     const [user, repoData] = await Promise.all([getUser(), prepareTestBitBucketRepo({ lfs })]);
 
     await updateConfig(config => {
@@ -186,7 +186,7 @@ async function setupBitBucket(options) {
 
     return { ...repoData, user, mockResponses: false };
   } else {
-    console.info('Running tests in "playback" mode - local data with be used');
+    console.info('Running tests in "playback" mode - local data will be used');
 
     await updateConfig(config => {
       merge(config, rest, {

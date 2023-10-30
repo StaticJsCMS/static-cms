@@ -1,10 +1,10 @@
 import { newPost, populateEntry, publishEntry, flushClockAndSave } from '../../utils/steps';
 
 const enterTranslation = str => {
-  cy.get(`[id^="title-field"]`)
+  cy.get('[data-testid="field-Title"]')
     .first()
     .clear({ force: true });
-  cy.get(`[id^="title-field"]`)
+  cy.get('[data-testid="field-Title"]')
     .first()
     .type(str, { force: true });
 };
@@ -39,12 +39,12 @@ export const updateTranslation = () => {
 
 export const assertTranslation = () => {
   cy.get('.Pane2').within(() => {
-    cy.get(`[id^="title-field"]`).should('have.value', 'de');
+    cy.get('[data-testid="field-Title"]').should('have.value', 'de');
 
     cy.contains('span', 'Writing in DE').click();
     cy.contains('span', 'fr').click();
 
-    cy.get(`[id^="title-field"]`).should('have.value', 'fr');
+    cy.get('[data-testid="field-Title"]').should('have.value', 'fr');
   });
 };
 

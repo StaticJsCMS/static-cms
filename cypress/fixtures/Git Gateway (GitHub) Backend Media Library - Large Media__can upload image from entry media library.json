@@ -56,7 +56,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/branches/master",
+    "url": "/.netlify/git/github/branches/main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -81,12 +81,12 @@
       "Vary": "Origin,Accept,Authorization,Cookie,X-GitHub-OTP,Accept-Encoding,Accept,X-Requested-With",
       "content-length": "4757"
     },
-    "response": "{\n  \"name\": \"master\",\n  \"commit\": {\n    \"sha\": \"919b7ce0846f25371e0585e302d8fc7e63fb515c\",\n    \"node_id\": \"MDY6Q29tbWl0MjU1MDc1OTQzOjkxOWI3Y2UwODQ2ZjI1MzcxZTA1ODVlMzAyZDhmYzdlNjNmYjUxNWM=\",\n    \"commit\": {\n      \"author\": {\n        \"name\": \"owner\",\n        \"email\": \"owner@users.noreply.github.com\",\n        \"date\": \"2020-04-12T12:18:55Z\"\n      },\n      \"committer\": {\n        \"name\": \"owner\",\n        \"email\": \"owner@users.noreply.github.com\",\n        \"date\": \"2020-04-12T12:18:55Z\"\n      },\n      \"message\": \"add .lfsconfig\",\n      \"tree\": {\n        \"sha\": \"491f2279cd0955712449776a54f8b58b3bc38d4d\",\n        \"url\": \"https://api.github.com/repos/owner/repo/git/trees/491f2279cd0955712449776a54f8b58b3bc38d4d\"\n      },\n      \"url\": \"https://api.github.com/repos/owner/repo/git/commits/919b7ce0846f25371e0585e302d8fc7e63fb515c\",\n      \"comment_count\": 0,\n      \"verification\": {\n        \"verified\": false,\n        \"reason\": \"unsigned\",\n        \"signature\": null,\n        \"payload\": null\n      }\n    },\n    \"url\": \"https://api.github.com/repos/owner/repo/commits/919b7ce0846f25371e0585e302d8fc7e63fb515c\",\n    \"html_url\": \"https://github.com/owner/repo/commit/919b7ce0846f25371e0585e302d8fc7e63fb515c\",\n    \"comments_url\": \"https://api.github.com/repos/owner/repo/commits/919b7ce0846f25371e0585e302d8fc7e63fb515c/comments\",\n    \"author\": {\n      \"login\": \"owner\",\n      \"id\": 26760571,\n      \"node_id\": \"MDQ6VXNlcjI2NzYwNTcx\",\n      \"avatar_url\": \"https://avatars1.githubusercontent.com/u/7892489?v=4\",\n      \"gravatar_id\": \"\",\n      \"url\": \"https://api.github.com/users/owner\",\n      \"html_url\": \"https://github.com/owner\",\n      \"followers_url\": \"https://api.github.com/users/owner/followers\",\n      \"following_url\": \"https://api.github.com/users/owner/following{/other_user}\",\n      \"gists_url\": \"https://api.github.com/users/owner/gists{/gist_id}\",\n      \"starred_url\": \"https://api.github.com/users/owner/starred{/owner}{/repo}\",\n      \"subscriptions_url\": \"https://api.github.com/users/owner/subscriptions\",\n      \"organizations_url\": \"https://api.github.com/users/owner/orgs\",\n      \"repos_url\": \"https://api.github.com/users/owner/repos\",\n      \"events_url\": \"https://api.github.com/users/owner/events{/privacy}\",\n      \"received_events_url\": \"https://api.github.com/users/owner/received_events\",\n      \"type\": \"User\",\n      \"site_admin\": false\n    },\n    \"committer\": {\n      \"login\": \"owner\",\n      \"id\": 26760571,\n      \"node_id\": \"MDQ6VXNlcjI2NzYwNTcx\",\n      \"avatar_url\": \"https://avatars1.githubusercontent.com/u/7892489?v=4\",\n      \"gravatar_id\": \"\",\n      \"url\": \"https://api.github.com/users/owner\",\n      \"html_url\": \"https://github.com/owner\",\n      \"followers_url\": \"https://api.github.com/users/owner/followers\",\n      \"following_url\": \"https://api.github.com/users/owner/following{/other_user}\",\n      \"gists_url\": \"https://api.github.com/users/owner/gists{/gist_id}\",\n      \"starred_url\": \"https://api.github.com/users/owner/starred{/owner}{/repo}\",\n      \"subscriptions_url\": \"https://api.github.com/users/owner/subscriptions\",\n      \"organizations_url\": \"https://api.github.com/users/owner/orgs\",\n      \"repos_url\": \"https://api.github.com/users/owner/repos\",\n      \"events_url\": \"https://api.github.com/users/owner/events{/privacy}\",\n      \"received_events_url\": \"https://api.github.com/users/owner/received_events\",\n      \"type\": \"User\",\n      \"site_admin\": false\n    },\n    \"parents\": [\n      {\n        \"sha\": \"b33a2edece736f6f228c7ec28c385c57d5f890af\",\n        \"url\": \"https://api.github.com/repos/owner/repo/commits/b33a2edece736f6f228c7ec28c385c57d5f890af\",\n        \"html_url\": \"https://github.com/owner/repo/commit/b33a2edece736f6f228c7ec28c385c57d5f890af\"\n      }\n    ]\n  },\n  \"_links\": {\n    \"self\": \"https://api.github.com/repos/owner/repo/branches/master\",\n    \"html\": \"https://github.com/owner/repo/tree/master\"\n  },\n  \"protected\": false,\n  \"protection\": {\n    \"enabled\": false,\n    \"required_status_checks\": {\n      \"enforcement_level\": \"off\",\n      \"contexts\": [\n\n      ]\n    }\n  },\n  \"protection_url\": \"https://api.github.com/repos/owner/repo/branches/master/protection\"\n}\n",
+    "response": "{\n  \"name\": \"main\",\n  \"commit\": {\n    \"sha\": \"919b7ce0846f25371e0585e302d8fc7e63fb515c\",\n    \"node_id\": \"MDY6Q29tbWl0MjU1MDc1OTQzOjkxOWI3Y2UwODQ2ZjI1MzcxZTA1ODVlMzAyZDhmYzdlNjNmYjUxNWM=\",\n    \"commit\": {\n      \"author\": {\n        \"name\": \"owner\",\n        \"email\": \"owner@users.noreply.github.com\",\n        \"date\": \"2020-04-12T12:18:55Z\"\n      },\n      \"committer\": {\n        \"name\": \"owner\",\n        \"email\": \"owner@users.noreply.github.com\",\n        \"date\": \"2020-04-12T12:18:55Z\"\n      },\n      \"message\": \"add .lfsconfig\",\n      \"tree\": {\n        \"sha\": \"491f2279cd0955712449776a54f8b58b3bc38d4d\",\n        \"url\": \"https://api.github.com/repos/owner/repo/git/trees/491f2279cd0955712449776a54f8b58b3bc38d4d\"\n      },\n      \"url\": \"https://api.github.com/repos/owner/repo/git/commits/919b7ce0846f25371e0585e302d8fc7e63fb515c\",\n      \"comment_count\": 0,\n      \"verification\": {\n        \"verified\": false,\n        \"reason\": \"unsigned\",\n        \"signature\": null,\n        \"payload\": null\n      }\n    },\n    \"url\": \"https://api.github.com/repos/owner/repo/commits/919b7ce0846f25371e0585e302d8fc7e63fb515c\",\n    \"html_url\": \"https://github.com/owner/repo/commit/919b7ce0846f25371e0585e302d8fc7e63fb515c\",\n    \"comments_url\": \"https://api.github.com/repos/owner/repo/commits/919b7ce0846f25371e0585e302d8fc7e63fb515c/comments\",\n    \"author\": {\n      \"login\": \"owner\",\n      \"id\": 26760571,\n      \"node_id\": \"MDQ6VXNlcjI2NzYwNTcx\",\n      \"avatar_url\": \"https://avatars1.githubusercontent.com/u/7892489?v=4\",\n      \"gravatar_id\": \"\",\n      \"url\": \"https://api.github.com/users/owner\",\n      \"html_url\": \"https://github.com/owner\",\n      \"followers_url\": \"https://api.github.com/users/owner/followers\",\n      \"following_url\": \"https://api.github.com/users/owner/following{/other_user}\",\n      \"gists_url\": \"https://api.github.com/users/owner/gists{/gist_id}\",\n      \"starred_url\": \"https://api.github.com/users/owner/starred{/owner}{/repo}\",\n      \"subscriptions_url\": \"https://api.github.com/users/owner/subscriptions\",\n      \"organizations_url\": \"https://api.github.com/users/owner/orgs\",\n      \"repos_url\": \"https://api.github.com/users/owner/repos\",\n      \"events_url\": \"https://api.github.com/users/owner/events{/privacy}\",\n      \"received_events_url\": \"https://api.github.com/users/owner/received_events\",\n      \"type\": \"User\",\n      \"site_admin\": false\n    },\n    \"committer\": {\n      \"login\": \"owner\",\n      \"id\": 26760571,\n      \"node_id\": \"MDQ6VXNlcjI2NzYwNTcx\",\n      \"avatar_url\": \"https://avatars1.githubusercontent.com/u/7892489?v=4\",\n      \"gravatar_id\": \"\",\n      \"url\": \"https://api.github.com/users/owner\",\n      \"html_url\": \"https://github.com/owner\",\n      \"followers_url\": \"https://api.github.com/users/owner/followers\",\n      \"following_url\": \"https://api.github.com/users/owner/following{/other_user}\",\n      \"gists_url\": \"https://api.github.com/users/owner/gists{/gist_id}\",\n      \"starred_url\": \"https://api.github.com/users/owner/starred{/owner}{/repo}\",\n      \"subscriptions_url\": \"https://api.github.com/users/owner/subscriptions\",\n      \"organizations_url\": \"https://api.github.com/users/owner/orgs\",\n      \"repos_url\": \"https://api.github.com/users/owner/repos\",\n      \"events_url\": \"https://api.github.com/users/owner/events{/privacy}\",\n      \"received_events_url\": \"https://api.github.com/users/owner/received_events\",\n      \"type\": \"User\",\n      \"site_admin\": false\n    },\n    \"parents\": [\n      {\n        \"sha\": \"b33a2edece736f6f228c7ec28c385c57d5f890af\",\n        \"url\": \"https://api.github.com/repos/owner/repo/commits/b33a2edece736f6f228c7ec28c385c57d5f890af\",\n        \"html_url\": \"https://github.com/owner/repo/commit/b33a2edece736f6f228c7ec28c385c57d5f890af\"\n      }\n    ]\n  },\n  \"_links\": {\n    \"self\": \"https://api.github.com/repos/owner/repo/branches/main\",\n    \"html\": \"https://github.com/owner/repo/tree/main\"\n  },\n  \"protected\": false,\n  \"protection\": {\n    \"enabled\": false,\n    \"required_status_checks\": {\n      \"enforcement_level\": \"off\",\n      \"contexts\": [\n\n      ]\n    }\n  },\n  \"protection_url\": \"https://api.github.com/repos/owner/repo/branches/main/protection\"\n}\n",
     "status": 200
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/git/trees/master:static/media",
+    "url": "/.netlify/git/github/git/trees/main:static/media",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -115,7 +115,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/git/trees/master:content/posts",
+    "url": "/.netlify/git/github/git/trees/main:content/posts",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -235,7 +235,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/commits?path=content/posts/2016-01-09---Perfecting-the-Art-of-Perfection.md&sha=master",
+    "url": "/.netlify/git/github/commits?path=content/posts/2016-01-09---Perfecting-the-Art-of-Perfection.md&sha=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -325,7 +325,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/commits?path=content/posts/2016-02-02---A-Brief-History-of-Typography.md&sha=master",
+    "url": "/.netlify/git/github/commits?path=content/posts/2016-02-02---A-Brief-History-of-Typography.md&sha=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -355,7 +355,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/commits?path=content/posts/2017-19-08---Humane-Typography-in-the-Digital-Age.md&sha=master",
+    "url": "/.netlify/git/github/commits?path=content/posts/2017-19-08---Humane-Typography-in-the-Digital-Age.md&sha=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -385,7 +385,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/commits?path=content/posts/2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&sha=master",
+    "url": "/.netlify/git/github/commits?path=content/posts/2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&sha=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -415,7 +415,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/commits?path=content/posts/2017-18-08---The-Birth-of-Movable-Type.md&sha=master",
+    "url": "/.netlify/git/github/commits?path=content/posts/2017-18-08---The-Birth-of-Movable-Type.md&sha=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",

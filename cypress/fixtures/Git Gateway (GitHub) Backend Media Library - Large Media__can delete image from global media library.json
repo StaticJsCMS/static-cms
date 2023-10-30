@@ -56,7 +56,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/branches/master",
+    "url": "/.netlify/git/github/branches/main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -81,12 +81,12 @@
       "Vary": "Origin,Accept,Authorization,Cookie,X-GitHub-OTP,Accept-Encoding,Accept,X-Requested-With",
       "content-length": "4757"
     },
-    "response": "{\"name\":\"master\",\"commit\":{\"sha\":\"53145723604c528d6ce5f8d034b3e86234aa170a\",\"node_id\":\"MDY6Q29tbWl0Mjg2NzcxMTE2OjUzMTQ1NzIzNjA0YzUyOGQ2Y2U1ZjhkMDM0YjNlODYyMzRhYTE3MGE=\",\"commit\":{\"author\":{\"name\":\"owner\",\"email\":\"owner@users.noreply.github.com\",\"date\":\"2020-08-11T14:50:01Z\"},\"committer\":{\"name\":\"owner\",\"email\":\"owner@users.noreply.github.com\",\"date\":\"2020-08-11T14:50:01Z\"},\"message\":\"add .lfsconfig\",\"tree\":{\"sha\":\"9801bc49ad87a5f15cbe4e701e0a9899e7500038\",\"url\":\"https://api.github.com/repos/owner/repo/git/trees/9801bc49ad87a5f15cbe4e701e0a9899e7500038\"},\"url\":\"https://api.github.com/repos/owner/repo/git/commits/53145723604c528d6ce5f8d034b3e86234aa170a\",\"comment_count\":0,\"verification\":{\"verified\":false,\"reason\":\"unsigned\",\"signature\":null,\"payload\":null}},\"url\":\"https://api.github.com/repos/owner/repo/commits/53145723604c528d6ce5f8d034b3e86234aa170a\",\"html_url\":\"https://github.com/owner/repo/commit/53145723604c528d6ce5f8d034b3e86234aa170a\",\"comments_url\":\"https://api.github.com/repos/owner/repo/commits/53145723604c528d6ce5f8d034b3e86234aa170a/comments\",\"author\":{\"login\":\"owner\",\"id\":26760571,\"node_id\":\"MDQ6VXNlcjI2NzYwNTcx\",\"avatar_url\":\"https://avatars1.githubusercontent.com/u/7892489?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/owner\",\"html_url\":\"https://github.com/owner\",\"followers_url\":\"https://api.github.com/users/owner/followers\",\"following_url\":\"https://api.github.com/users/owner/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/owner/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/owner/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/owner/subscriptions\",\"organizations_url\":\"https://api.github.com/users/owner/orgs\",\"repos_url\":\"https://api.github.com/users/owner/repos\",\"events_url\":\"https://api.github.com/users/owner/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/owner/received_events\",\"type\":\"User\",\"site_admin\":false},\"committer\":{\"login\":\"owner\",\"id\":26760571,\"node_id\":\"MDQ6VXNlcjI2NzYwNTcx\",\"avatar_url\":\"https://avatars1.githubusercontent.com/u/7892489?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/owner\",\"html_url\":\"https://github.com/owner\",\"followers_url\":\"https://api.github.com/users/owner/followers\",\"following_url\":\"https://api.github.com/users/owner/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/owner/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/owner/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/owner/subscriptions\",\"organizations_url\":\"https://api.github.com/users/owner/orgs\",\"repos_url\":\"https://api.github.com/users/owner/repos\",\"events_url\":\"https://api.github.com/users/owner/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/owner/received_events\",\"type\":\"User\",\"site_admin\":false},\"parents\":[{\"sha\":\"cb2e8e6e165648920f696fe4c50113d15ee95937\",\"url\":\"https://api.github.com/repos/owner/repo/commits/cb2e8e6e165648920f696fe4c50113d15ee95937\",\"html_url\":\"https://github.com/owner/repo/commit/cb2e8e6e165648920f696fe4c50113d15ee95937\"}]},\"_links\":{\"self\":\"https://api.github.com/repos/owner/repo/branches/master\",\"html\":\"https://github.com/owner/repo/tree/master\"},\"protected\":false,\"protection\":{\"enabled\":false,\"required_status_checks\":{\"enforcement_level\":\"off\",\"contexts\":[]}},\"protection_url\":\"https://api.github.com/repos/owner/repo/branches/master/protection\"}",
+    "response": "{\"name\":\"main\",\"commit\":{\"sha\":\"53145723604c528d6ce5f8d034b3e86234aa170a\",\"node_id\":\"MDY6Q29tbWl0Mjg2NzcxMTE2OjUzMTQ1NzIzNjA0YzUyOGQ2Y2U1ZjhkMDM0YjNlODYyMzRhYTE3MGE=\",\"commit\":{\"author\":{\"name\":\"owner\",\"email\":\"owner@users.noreply.github.com\",\"date\":\"2020-08-11T14:50:01Z\"},\"committer\":{\"name\":\"owner\",\"email\":\"owner@users.noreply.github.com\",\"date\":\"2020-08-11T14:50:01Z\"},\"message\":\"add .lfsconfig\",\"tree\":{\"sha\":\"9801bc49ad87a5f15cbe4e701e0a9899e7500038\",\"url\":\"https://api.github.com/repos/owner/repo/git/trees/9801bc49ad87a5f15cbe4e701e0a9899e7500038\"},\"url\":\"https://api.github.com/repos/owner/repo/git/commits/53145723604c528d6ce5f8d034b3e86234aa170a\",\"comment_count\":0,\"verification\":{\"verified\":false,\"reason\":\"unsigned\",\"signature\":null,\"payload\":null}},\"url\":\"https://api.github.com/repos/owner/repo/commits/53145723604c528d6ce5f8d034b3e86234aa170a\",\"html_url\":\"https://github.com/owner/repo/commit/53145723604c528d6ce5f8d034b3e86234aa170a\",\"comments_url\":\"https://api.github.com/repos/owner/repo/commits/53145723604c528d6ce5f8d034b3e86234aa170a/comments\",\"author\":{\"login\":\"owner\",\"id\":26760571,\"node_id\":\"MDQ6VXNlcjI2NzYwNTcx\",\"avatar_url\":\"https://avatars1.githubusercontent.com/u/7892489?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/owner\",\"html_url\":\"https://github.com/owner\",\"followers_url\":\"https://api.github.com/users/owner/followers\",\"following_url\":\"https://api.github.com/users/owner/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/owner/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/owner/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/owner/subscriptions\",\"organizations_url\":\"https://api.github.com/users/owner/orgs\",\"repos_url\":\"https://api.github.com/users/owner/repos\",\"events_url\":\"https://api.github.com/users/owner/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/owner/received_events\",\"type\":\"User\",\"site_admin\":false},\"committer\":{\"login\":\"owner\",\"id\":26760571,\"node_id\":\"MDQ6VXNlcjI2NzYwNTcx\",\"avatar_url\":\"https://avatars1.githubusercontent.com/u/7892489?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/owner\",\"html_url\":\"https://github.com/owner\",\"followers_url\":\"https://api.github.com/users/owner/followers\",\"following_url\":\"https://api.github.com/users/owner/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/owner/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/owner/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/owner/subscriptions\",\"organizations_url\":\"https://api.github.com/users/owner/orgs\",\"repos_url\":\"https://api.github.com/users/owner/repos\",\"events_url\":\"https://api.github.com/users/owner/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/owner/received_events\",\"type\":\"User\",\"site_admin\":false},\"parents\":[{\"sha\":\"cb2e8e6e165648920f696fe4c50113d15ee95937\",\"url\":\"https://api.github.com/repos/owner/repo/commits/cb2e8e6e165648920f696fe4c50113d15ee95937\",\"html_url\":\"https://github.com/owner/repo/commit/cb2e8e6e165648920f696fe4c50113d15ee95937\"}]},\"_links\":{\"self\":\"https://api.github.com/repos/owner/repo/branches/main\",\"html\":\"https://github.com/owner/repo/tree/main\"},\"protected\":false,\"protection\":{\"enabled\":false,\"required_status_checks\":{\"enforcement_level\":\"off\",\"contexts\":[]}},\"protection_url\":\"https://api.github.com/repos/owner/repo/branches/main/protection\"}",
     "status": 200
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/git/trees/master:static/media",
+    "url": "/.netlify/git/github/git/trees/main:static/media",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -115,7 +115,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/git/trees/master:content/posts",
+    "url": "/.netlify/git/github/git/trees/main:content/posts",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -295,7 +295,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/commits?path=content/posts/2016-01-09---Perfecting-the-Art-of-Perfection.md&sha=master",
+    "url": "/.netlify/git/github/commits?path=content/posts/2016-01-09---Perfecting-the-Art-of-Perfection.md&sha=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -325,7 +325,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/git/trees/master:",
+    "url": "/.netlify/git/github/git/trees/main:",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -355,7 +355,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/commits?path=content/posts/2017-19-08---Humane-Typography-in-the-Digital-Age.md&sha=master",
+    "url": "/.netlify/git/github/commits?path=content/posts/2017-19-08---Humane-Typography-in-the-Digital-Age.md&sha=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -385,7 +385,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/commits?path=content/posts/2016-02-02---A-Brief-History-of-Typography.md&sha=master",
+    "url": "/.netlify/git/github/commits?path=content/posts/2016-02-02---A-Brief-History-of-Typography.md&sha=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -415,7 +415,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/commits?path=content/posts/2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&sha=master",
+    "url": "/.netlify/git/github/commits?path=content/posts/2016-01-12---The-Origins-of-Social-Stationery-Lettering.md&sha=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -475,7 +475,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/commits?path=content/posts/2017-18-08---The-Birth-of-Movable-Type.md&sha=master",
+    "url": "/.netlify/git/github/commits?path=content/posts/2017-18-08---The-Birth-of-Movable-Type.md&sha=main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -505,7 +505,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/git/trees/master:",
+    "url": "/.netlify/git/github/git/trees/main:",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -651,7 +651,7 @@
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/branches/master",
+    "url": "/.netlify/git/github/branches/main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -676,7 +676,7 @@
       "Vary": "Origin,Accept,Authorization,Cookie,X-GitHub-OTP,Accept-Encoding,Accept,X-Requested-With",
       "content-length": "4757"
     },
-    "response": "{\"name\":\"master\",\"commit\":{\"sha\":\"53145723604c528d6ce5f8d034b3e86234aa170a\",\"node_id\":\"MDY6Q29tbWl0Mjg2NzcxMTE2OjUzMTQ1NzIzNjA0YzUyOGQ2Y2U1ZjhkMDM0YjNlODYyMzRhYTE3MGE=\",\"commit\":{\"author\":{\"name\":\"owner\",\"email\":\"owner@users.noreply.github.com\",\"date\":\"2020-08-11T14:50:01Z\"},\"committer\":{\"name\":\"owner\",\"email\":\"owner@users.noreply.github.com\",\"date\":\"2020-08-11T14:50:01Z\"},\"message\":\"add .lfsconfig\",\"tree\":{\"sha\":\"9801bc49ad87a5f15cbe4e701e0a9899e7500038\",\"url\":\"https://api.github.com/repos/owner/repo/git/trees/9801bc49ad87a5f15cbe4e701e0a9899e7500038\"},\"url\":\"https://api.github.com/repos/owner/repo/git/commits/53145723604c528d6ce5f8d034b3e86234aa170a\",\"comment_count\":0,\"verification\":{\"verified\":false,\"reason\":\"unsigned\",\"signature\":null,\"payload\":null}},\"url\":\"https://api.github.com/repos/owner/repo/commits/53145723604c528d6ce5f8d034b3e86234aa170a\",\"html_url\":\"https://github.com/owner/repo/commit/53145723604c528d6ce5f8d034b3e86234aa170a\",\"comments_url\":\"https://api.github.com/repos/owner/repo/commits/53145723604c528d6ce5f8d034b3e86234aa170a/comments\",\"author\":{\"login\":\"owner\",\"id\":26760571,\"node_id\":\"MDQ6VXNlcjI2NzYwNTcx\",\"avatar_url\":\"https://avatars1.githubusercontent.com/u/7892489?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/owner\",\"html_url\":\"https://github.com/owner\",\"followers_url\":\"https://api.github.com/users/owner/followers\",\"following_url\":\"https://api.github.com/users/owner/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/owner/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/owner/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/owner/subscriptions\",\"organizations_url\":\"https://api.github.com/users/owner/orgs\",\"repos_url\":\"https://api.github.com/users/owner/repos\",\"events_url\":\"https://api.github.com/users/owner/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/owner/received_events\",\"type\":\"User\",\"site_admin\":false},\"committer\":{\"login\":\"owner\",\"id\":26760571,\"node_id\":\"MDQ6VXNlcjI2NzYwNTcx\",\"avatar_url\":\"https://avatars1.githubusercontent.com/u/7892489?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/owner\",\"html_url\":\"https://github.com/owner\",\"followers_url\":\"https://api.github.com/users/owner/followers\",\"following_url\":\"https://api.github.com/users/owner/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/owner/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/owner/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/owner/subscriptions\",\"organizations_url\":\"https://api.github.com/users/owner/orgs\",\"repos_url\":\"https://api.github.com/users/owner/repos\",\"events_url\":\"https://api.github.com/users/owner/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/owner/received_events\",\"type\":\"User\",\"site_admin\":false},\"parents\":[{\"sha\":\"cb2e8e6e165648920f696fe4c50113d15ee95937\",\"url\":\"https://api.github.com/repos/owner/repo/commits/cb2e8e6e165648920f696fe4c50113d15ee95937\",\"html_url\":\"https://github.com/owner/repo/commit/cb2e8e6e165648920f696fe4c50113d15ee95937\"}]},\"_links\":{\"self\":\"https://api.github.com/repos/owner/repo/branches/master\",\"html\":\"https://github.com/owner/repo/tree/master\"},\"protected\":false,\"protection\":{\"enabled\":false,\"required_status_checks\":{\"enforcement_level\":\"off\",\"contexts\":[]}},\"protection_url\":\"https://api.github.com/repos/owner/repo/branches/master/protection\"}",
+    "response": "{\"name\":\"main\",\"commit\":{\"sha\":\"53145723604c528d6ce5f8d034b3e86234aa170a\",\"node_id\":\"MDY6Q29tbWl0Mjg2NzcxMTE2OjUzMTQ1NzIzNjA0YzUyOGQ2Y2U1ZjhkMDM0YjNlODYyMzRhYTE3MGE=\",\"commit\":{\"author\":{\"name\":\"owner\",\"email\":\"owner@users.noreply.github.com\",\"date\":\"2020-08-11T14:50:01Z\"},\"committer\":{\"name\":\"owner\",\"email\":\"owner@users.noreply.github.com\",\"date\":\"2020-08-11T14:50:01Z\"},\"message\":\"add .lfsconfig\",\"tree\":{\"sha\":\"9801bc49ad87a5f15cbe4e701e0a9899e7500038\",\"url\":\"https://api.github.com/repos/owner/repo/git/trees/9801bc49ad87a5f15cbe4e701e0a9899e7500038\"},\"url\":\"https://api.github.com/repos/owner/repo/git/commits/53145723604c528d6ce5f8d034b3e86234aa170a\",\"comment_count\":0,\"verification\":{\"verified\":false,\"reason\":\"unsigned\",\"signature\":null,\"payload\":null}},\"url\":\"https://api.github.com/repos/owner/repo/commits/53145723604c528d6ce5f8d034b3e86234aa170a\",\"html_url\":\"https://github.com/owner/repo/commit/53145723604c528d6ce5f8d034b3e86234aa170a\",\"comments_url\":\"https://api.github.com/repos/owner/repo/commits/53145723604c528d6ce5f8d034b3e86234aa170a/comments\",\"author\":{\"login\":\"owner\",\"id\":26760571,\"node_id\":\"MDQ6VXNlcjI2NzYwNTcx\",\"avatar_url\":\"https://avatars1.githubusercontent.com/u/7892489?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/owner\",\"html_url\":\"https://github.com/owner\",\"followers_url\":\"https://api.github.com/users/owner/followers\",\"following_url\":\"https://api.github.com/users/owner/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/owner/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/owner/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/owner/subscriptions\",\"organizations_url\":\"https://api.github.com/users/owner/orgs\",\"repos_url\":\"https://api.github.com/users/owner/repos\",\"events_url\":\"https://api.github.com/users/owner/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/owner/received_events\",\"type\":\"User\",\"site_admin\":false},\"committer\":{\"login\":\"owner\",\"id\":26760571,\"node_id\":\"MDQ6VXNlcjI2NzYwNTcx\",\"avatar_url\":\"https://avatars1.githubusercontent.com/u/7892489?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/owner\",\"html_url\":\"https://github.com/owner\",\"followers_url\":\"https://api.github.com/users/owner/followers\",\"following_url\":\"https://api.github.com/users/owner/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/owner/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/owner/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/owner/subscriptions\",\"organizations_url\":\"https://api.github.com/users/owner/orgs\",\"repos_url\":\"https://api.github.com/users/owner/repos\",\"events_url\":\"https://api.github.com/users/owner/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/owner/received_events\",\"type\":\"User\",\"site_admin\":false},\"parents\":[{\"sha\":\"cb2e8e6e165648920f696fe4c50113d15ee95937\",\"url\":\"https://api.github.com/repos/owner/repo/commits/cb2e8e6e165648920f696fe4c50113d15ee95937\",\"html_url\":\"https://github.com/owner/repo/commit/cb2e8e6e165648920f696fe4c50113d15ee95937\"}]},\"_links\":{\"self\":\"https://api.github.com/repos/owner/repo/branches/main\",\"html\":\"https://github.com/owner/repo/tree/main\"},\"protected\":false,\"protection\":{\"enabled\":false,\"required_status_checks\":{\"enforcement_level\":\"off\",\"contexts\":[]}},\"protection_url\":\"https://api.github.com/repos/owner/repo/branches/main/protection\"}",
     "status": 200
   },
   {
@@ -746,7 +746,7 @@
   {
     "body": "{\"sha\":\"e52276c185e1e6a2145167ade78b09068b05bc20\",\"force\":false}",
     "method": "PATCH",
-    "url": "/.netlify/git/github/git/refs/heads/master",
+    "url": "/.netlify/git/github/git/refs/heads/main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -771,12 +771,12 @@
       "Vary": "Origin,Accept,Authorization,Cookie,X-GitHub-OTP,Accept-Encoding,Accept,X-Requested-With",
       "content-length": "476"
     },
-    "response": "{\"ref\":\"refs/heads/master\",\"node_id\":\"MDM6UmVmMjg2NzcxMTE2OnJlZnMvaGVhZHMvbWFzdGVy\",\"url\":\"https://api.github.com/repos/owner/repo/git/refs/heads/master\",\"object\":{\"sha\":\"e52276c185e1e6a2145167ade78b09068b05bc20\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/owner/repo/git/commits/e52276c185e1e6a2145167ade78b09068b05bc20\"}}",
+    "response": "{\"ref\":\"refs/heads/main\",\"node_id\":\"MDM6UmVmMjg2NzcxMTE2OnJlZnMvaGVhZHMvbWFzdGVy\",\"url\":\"https://api.github.com/repos/owner/repo/git/refs/heads/main\",\"object\":{\"sha\":\"e52276c185e1e6a2145167ade78b09068b05bc20\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/owner/repo/git/commits/e52276c185e1e6a2145167ade78b09068b05bc20\"}}",
     "status": 200
   },
   {
     "method": "GET",
-    "url": "/.netlify/git/github/branches/master",
+    "url": "/.netlify/git/github/branches/main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -801,7 +801,7 @@
       "Vary": "Origin,Accept,Authorization,Cookie,X-GitHub-OTP,Accept-Encoding,Accept,X-Requested-With",
       "content-length": "2628"
     },
-    "response": "{\"name\":\"master\",\"commit\":{\"sha\":\"e52276c185e1e6a2145167ade78b09068b05bc20\",\"node_id\":\"MDY6Q29tbWl0Mjg2NzcxMTE2OmU1MjI3NmMxODVlMWU2YTIxNDUxNjdhZGU3OGIwOTA2OGIwNWJjMjA=\",\"commit\":{\"author\":{\"name\":\"static\",\"email\":\"static@p-m.si\",\"date\":\"1970-01-01T00:00:00Z\"},\"committer\":{\"name\":\"static\",\"email\":\"static@p-m.si\",\"date\":\"1970-01-01T00:00:00Z\"},\"message\":\"Upload “static/media/netlify.png”\",\"tree\":{\"sha\":\"4f7bf36ab5dcec18504ee0a215d39184cbcedd83\",\"url\":\"https://api.github.com/repos/owner/repo/git/trees/4f7bf36ab5dcec18504ee0a215d39184cbcedd83\"},\"url\":\"https://api.github.com/repos/owner/repo/git/commits/e52276c185e1e6a2145167ade78b09068b05bc20\",\"comment_count\":0,\"verification\":{\"verified\":false,\"reason\":\"unsigned\",\"signature\":null,\"payload\":null}},\"url\":\"https://api.github.com/repos/owner/repo/commits/e52276c185e1e6a2145167ade78b09068b05bc20\",\"html_url\":\"https://github.com/owner/repo/commit/e52276c185e1e6a2145167ade78b09068b05bc20\",\"comments_url\":\"https://api.github.com/repos/owner/repo/commits/e52276c185e1e6a2145167ade78b09068b05bc20/comments\",\"author\":null,\"committer\":null,\"parents\":[{\"sha\":\"53145723604c528d6ce5f8d034b3e86234aa170a\",\"url\":\"https://api.github.com/repos/owner/repo/commits/53145723604c528d6ce5f8d034b3e86234aa170a\",\"html_url\":\"https://github.com/owner/repo/commit/53145723604c528d6ce5f8d034b3e86234aa170a\"}]},\"_links\":{\"self\":\"https://api.github.com/repos/owner/repo/branches/master\",\"html\":\"https://github.com/owner/repo/tree/master\"},\"protected\":false,\"protection\":{\"enabled\":false,\"required_status_checks\":{\"enforcement_level\":\"off\",\"contexts\":[]}},\"protection_url\":\"https://api.github.com/repos/owner/repo/branches/master/protection\"}",
+    "response": "{\"name\":\"main\",\"commit\":{\"sha\":\"e52276c185e1e6a2145167ade78b09068b05bc20\",\"node_id\":\"MDY6Q29tbWl0Mjg2NzcxMTE2OmU1MjI3NmMxODVlMWU2YTIxNDUxNjdhZGU3OGIwOTA2OGIwNWJjMjA=\",\"commit\":{\"author\":{\"name\":\"static\",\"email\":\"static@p-m.si\",\"date\":\"1970-01-01T00:00:00Z\"},\"committer\":{\"name\":\"static\",\"email\":\"static@p-m.si\",\"date\":\"1970-01-01T00:00:00Z\"},\"message\":\"Upload “static/media/netlify.png”\",\"tree\":{\"sha\":\"4f7bf36ab5dcec18504ee0a215d39184cbcedd83\",\"url\":\"https://api.github.com/repos/owner/repo/git/trees/4f7bf36ab5dcec18504ee0a215d39184cbcedd83\"},\"url\":\"https://api.github.com/repos/owner/repo/git/commits/e52276c185e1e6a2145167ade78b09068b05bc20\",\"comment_count\":0,\"verification\":{\"verified\":false,\"reason\":\"unsigned\",\"signature\":null,\"payload\":null}},\"url\":\"https://api.github.com/repos/owner/repo/commits/e52276c185e1e6a2145167ade78b09068b05bc20\",\"html_url\":\"https://github.com/owner/repo/commit/e52276c185e1e6a2145167ade78b09068b05bc20\",\"comments_url\":\"https://api.github.com/repos/owner/repo/commits/e52276c185e1e6a2145167ade78b09068b05bc20/comments\",\"author\":null,\"committer\":null,\"parents\":[{\"sha\":\"53145723604c528d6ce5f8d034b3e86234aa170a\",\"url\":\"https://api.github.com/repos/owner/repo/commits/53145723604c528d6ce5f8d034b3e86234aa170a\",\"html_url\":\"https://github.com/owner/repo/commit/53145723604c528d6ce5f8d034b3e86234aa170a\"}]},\"_links\":{\"self\":\"https://api.github.com/repos/owner/repo/branches/main\",\"html\":\"https://github.com/owner/repo/tree/main\"},\"protected\":false,\"protection\":{\"enabled\":false,\"required_status_checks\":{\"enforcement_level\":\"off\",\"contexts\":[]}},\"protection_url\":\"https://api.github.com/repos/owner/repo/branches/main/protection\"}",
     "status": 200
   },
   {
@@ -871,7 +871,7 @@
   {
     "body": "{\"sha\":\"66200efd1d7c87d4fba2d7ed5385d3e81edd2bd6\",\"force\":false}",
     "method": "PATCH",
-    "url": "/.netlify/git/github/git/refs/heads/master",
+    "url": "/.netlify/git/github/git/refs/heads/main",
     "headers": {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -896,7 +896,7 @@
       "Vary": "Origin,Accept,Authorization,Cookie,X-GitHub-OTP,Accept-Encoding,Accept,X-Requested-With",
       "content-length": "476"
     },
-    "response": "{\"ref\":\"refs/heads/master\",\"node_id\":\"MDM6UmVmMjg2NzcxMTE2OnJlZnMvaGVhZHMvbWFzdGVy\",\"url\":\"https://api.github.com/repos/owner/repo/git/refs/heads/master\",\"object\":{\"sha\":\"66200efd1d7c87d4fba2d7ed5385d3e81edd2bd6\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/owner/repo/git/commits/66200efd1d7c87d4fba2d7ed5385d3e81edd2bd6\"}}",
+    "response": "{\"ref\":\"refs/heads/main\",\"node_id\":\"MDM6UmVmMjg2NzcxMTE2OnJlZnMvaGVhZHMvbWFzdGVy\",\"url\":\"https://api.github.com/repos/owner/repo/git/refs/heads/main\",\"object\":{\"sha\":\"66200efd1d7c87d4fba2d7ed5385d3e81edd2bd6\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/owner/repo/git/commits/66200efd1d7c87d4fba2d7ed5385d3e81edd2bd6\"}}",
     "status": 200
   }
 ]

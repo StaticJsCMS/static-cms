@@ -189,14 +189,14 @@ function publishAndCreateNewEntryInEditor() {
   selectDropdownItem("Publish", publishTypes.publishAndCreateNew);
   assertNotification(notifications.published);
   cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[id^="title-field"]').should("have.value", "");
+  cy.get('[data-testid="field-Title"]').should("have.value", "");
 }
 
 function publishAndDuplicateEntryInEditor(entry) {
   selectDropdownItem("Publish", publishTypes.publishAndDuplicate);
   assertNotification(notifications.published);
   cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[id^="title-field"]').should("have.value", entry.title);
+  cy.get('[data-testid="field-Title"]').should("have.value", entry.title);
 }
 
 function selectDropdownItem(label, item) {
@@ -221,11 +221,12 @@ function populateEntry(entry, onDone = flushClockAndSave) {
   const keys = Object.keys(entry);
   for (const key of keys) {
     const value = entry[key];
-    if (key === "body") {
+    if (key === "Body") {
       cy.getMarkdownEditor().first().click().clear({ force: true }).type(value, { force: true });
     } else {
-      cy.get(`[id^="${key}-field"]`).first().clear({ force: true });
-      cy.get(`[id^="${key}-field"]`).first().type(value, { force: true });
+      cy.get(`[data-testid="field-${key}"]`).click();
+      cy.focused().clear({ force: true });
+      cy.focused().type(value, { force: true });
     }
   }
 
@@ -287,7 +288,7 @@ function createPostPublishAndCreateNew(entry) {
   cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
   // TODO: fix this test
   // previous entry data is somehow not cleared from the editor when opening new post
-  // cy.get('[id^="title-field"]').should('have.value', '');
+  // cy.get('[data-testid="field-Title"]').should('have.value', '');
 
   exitEditor();
 }
@@ -296,7 +297,7 @@ function createPostPublishAndDuplicate(entry) {
   newPost();
   populateEntry(entry, () => publishEntry({ duplicate: true }));
   cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[id^="title-field"]').should("have.value", entry.title);
+  cy.get('[data-testid="field-Title"]').should("have.value", entry.title);
 
   exitEditor();
 }
@@ -321,7 +322,7 @@ function editPostPublishAndCreateNew(entry1, entry2) {
 
   populateEntry(entry2, () => publishEntry({ createNew: true }));
   cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[id^="title-field"]').should("have.value", "");
+  cy.get('[data-testid="field-Title"]').should("have.value", "");
 }
 
 function editPostPublishAndDuplicate(entry1, entry2) {
@@ -331,7 +332,7 @@ function editPostPublishAndDuplicate(entry1, entry2) {
 
   populateEntry(entry2, () => publishEntry({ duplicate: true }));
   cy.url().should("eq", `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[id^="title-field"]').should("have.value", entry2.title);
+  cy.get('[data-testid="field-Title"]').should("have.value", entry2.title);
 }
 
 function duplicatePostAndPublish(entry1) {

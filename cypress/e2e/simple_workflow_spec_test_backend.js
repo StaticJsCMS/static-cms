@@ -14,12 +14,12 @@ import {
 } from '../utils/steps';
 
 const entry1 = {
-  title: 'first title',
-  body: 'first body',
+  Title: 'first title',
+  Body: 'first body',
 };
 const entry2 = {
-  title: 'second title',
-  body: 'second body',
+  Title: 'second title',
+  Body: 'second body',
 };
 
 const backend = 'test';

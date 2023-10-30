@@ -30,8 +30,8 @@ describe(`I18N Test Backend Editorial Workflow`, () => {
   });
 
   const entry = {
-    title: 'first title',
-    body: 'first body',
+    Title: 'first title',
+    Body: 'first body',
   };
 
   fixture({ entry, getUser: () => taskResult.data.user });

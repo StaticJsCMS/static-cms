@@ -88,7 +88,7 @@ async function prepareTestGitHubRepo() {
     'origin',
     `https://${token}:x-oauth-basic@github.com/${owner}/${testRepoName}`,
   );
-  await git.push(['-u', 'origin', 'master']);
+  await git.push(['-u', 'origin', 'main']);
 
   return { owner, repo: testRepoName, tempDir };
 }
@@ -170,7 +170,7 @@ async function resetOriginRepo({ owner, repo, tempDir }) {
   });
 
   const { data: branches } = await client.repos.listBranches({ owner, repo });
-  const refs = branches.filter(b => b.name !== 'master').map(b => `heads/${b.name}`);
+  const refs = branches.filter(b => b.name !== 'main').map(b => `heads/${b.name}`);
 
   console.info('Deleting refs', refs);
 
@@ -182,9 +182,9 @@ async function resetOriginRepo({ owner, repo, tempDir }) {
     });
   });
 
-  console.info('Resetting master');
+  console.info('Resetting main');
   const git = getGitClient(tempDir);
-  await git.push(['--force', 'origin', 'master']);
+  await git.push(['--force', 'origin', 'main']);
   console.info('Done resetting origin repo:', `${owner}/${repo}`);
 }
 
@@ -196,7 +196,7 @@ async function resetForkedRepo({ repo }) {
   if (repos.some(r => r.name === repo)) {
     console.info('Resetting forked repo:', `${forkOwner}/${repo}`);
     const { data: branches } = await client.repos.listBranches({ owner: forkOwner, repo });
-    const refs = branches.filter(b => b.name !== 'master').map(b => `heads/${b.name}`);
+    const refs = branches.filter(b => b.name !== 'main').map(b => `heads/${b.name}`);
 
     console.info('Deleting refs', refs);
     await Promise.all(
@@ -219,7 +219,7 @@ async function resetRepositories({ owner, repo, tempDir }) {
 
 async function setupGitHub(options) {
   if (process.env.RECORD_FIXTURES) {
-    console.info('Running tests in "record" mode - live data with be used!');
+    console.info('Running tests in "record" mode - live data will be used!');
     const [user, forkUser, repoData] = await Promise.all([
       getUser(),
       getForkUser(),
@@ -236,7 +236,7 @@ async function setupGitHub(options) {
 
     return { ...repoData, user, forkUser, mockResponses: false };
   } else {
-    console.info('Running tests in "playback" mode - local data with be used');
+    console.info('Running tests in "playback" mode - local data will be used');
 
     await updateConfig(config => {
       merge(config, options, {
@@ -434,11 +434,11 @@ async function seedGitHubRepo(taskData) {
     const repo = taskData.repo;
 
     try {
-      console.info('Getting master branch');
-      const { data: master } = await client.repos.getBranch({
+      console.info('Getting main branch');
+      const { data: main } = await client.repos.getBranch({
         owner,
         repo,
-        branch: 'master',
+        branch: 'main',
       });
 
       const prCount = 120;
@@ -451,7 +451,7 @@ async function seedGitHubRepo(taskData) {
           owner,
           repo,
           ref: `refs/heads/${branch}`,
-          sha: master.commit.sha,
+          sha: main.commit.sha,
         });
 
         const path = `seed/file_${i}`;
@@ -470,7 +470,7 @@ async function seedGitHubRepo(taskData) {
         await client.pulls.create({
           owner,
           repo,
-          base: 'master',
+          base: 'main',
           head: branch,
           title,
         });
