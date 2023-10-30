@@ -1,6 +1,5 @@
 export const before = (taskResult, options, backend) => {
   Cypress.config('taskTimeout', 7 * 60 * 1000);
-  console.log('before!')
   cy.task('setupBackend', { backend, options }).then(data => {
     taskResult.data = data;
     Cypress.config('defaultCommandTimeout', data.mockResponses ? 5 * 1000 : 1 * 60 * 1000);

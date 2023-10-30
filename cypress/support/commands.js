@@ -60,10 +60,6 @@ const matchRoute = (route, fetchArgs) => {
     'ts=\\d{1,15}',
   );
 
-  if (url === 'https://api.bitbucket.org/2.0/repositories/owner/repo/refs/branches/main') {
-    console.log('matchingRoute', url, urlRegex, method, Boolean(method === route.method && bodyMatch && decodeURIComponent(url).match(new RegExp(`${urlRegex}`))))
-  }
-
   return (
     method === route.method && bodyMatch && decodeURIComponent(url).match(new RegExp(`${urlRegex}`))
   );
@@ -72,7 +68,6 @@ const matchRoute = (route, fetchArgs) => {
 const stubFetch = (win, routes) => {
   const fetch = win.fetch;
   cy.stub(win, 'fetch').callsFake((...args) => {
-    console.log('routes', routes, 'trying to find route', args[0])
     let routeIndex = routes.findIndex(r => matchRoute(r, args));
     if (routeIndex >= 0) {
       let route = routes.splice(routeIndex, 1)[0];
@@ -91,7 +86,6 @@ const stubFetch = (win, routes) => {
       } else {
         blob = new Blob([route.response || '']);
       }
-      console.log('route.headers', route.headers);
       const fetchResponse = {
         status: route.status,
         headers: new Headers(route.headers),
@@ -125,7 +119,6 @@ const stubFetch = (win, routes) => {
         json: () => Promise.resolve({}),
         ok: false,
       };
-      console.log('Returning 404 response', fetchResponse)
       return Promise.resolve(fetchResponse);
     } else {
       console.info(`No route match for fetch args: ${JSON.stringify(args)}`);
@@ -136,7 +129,6 @@ const stubFetch = (win, routes) => {
 
 Cypress.Commands.add('stubFetch', ({ fixture }) => {
   return cy.readFile(path.join('cypress', 'fixtures', fixture), { log: false }).then(routes => {
-    console.log('READ FIXTURES', fixture, routes)
     cy.on('window:before:load', win => stubFetch(win, routes));
   });
 });

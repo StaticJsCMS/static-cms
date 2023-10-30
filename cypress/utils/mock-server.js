@@ -9,7 +9,7 @@ const start = async () => {
     serverPort: PROXY_PORT,
   });
 
-  console.log("Mock server started!");
+  console.info("Mock server started!");
 };
 
 const stop = async () => {
@@ -17,7 +17,7 @@ const stop = async () => {
     serverPort: PROXY_PORT,
   });
 
-  console.log("Mock server stopped!");
+  console.info("Mock server stopped!");
 };
 
 const retrieveRecordedExpectations = async () => {
@@ -36,21 +36,19 @@ const retrieveRecordedExpectations = async () => {
   let recorded = await Promise.race([promise, timeoutPromise]);
   clearTimeout(timeout);
 
-  console.log("recorded", recorded);
-
   recorded = recorded.filter(({ httpRequest }) => {
-    const { Host = [] } = httpRequest.headers;
+    const { host = [] } = httpRequest.headers;
 
-    // Host is an array of strings
+    // host is an array of strings
     return (
-      Host.includes("api.github.com") ||
-      (Host.includes("gitlab.com") && httpRequest.path.includes("api/v4")) ||
-      Host.includes("api.bitbucket.org") ||
-      (Host.includes("bitbucket.org") && httpRequest.path.includes("info/lfs")) ||
-      Host.includes("api.media.atlassian.com") ||
-      Host.some((host) => host.includes("netlify.com")) ||
-      Host.some((host) => host.includes("netlify.app")) ||
-      Host.some((host) => host.includes("s3.amazonaws.com"))
+      host.includes("api.github.com") ||
+      (host.includes("gitlab.com") && httpRequest.path.includes("api/v4")) ||
+      host.includes("api.bitbucket.org") ||
+      (host.includes("bitbucket.org") && httpRequest.path.includes("info/lfs")) ||
+      host.includes("api.media.atlassian.com") ||
+      host.some((h) => h.includes("netlify.com")) ||
+      host.some((h) => h.includes("netlify.app")) ||
+      host.some((h) => h.includes("s3.amazonaws.com"))
     );
   });
 

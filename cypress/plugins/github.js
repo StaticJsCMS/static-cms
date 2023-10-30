@@ -361,7 +361,7 @@ const transformRecordedData = (expectation, toSanitize) => {
     if (
       responseBody &&
       httpRequest.path === '/user' &&
-      httpRequest.headers.Host.includes('api.github.com')
+      httpRequest.headers.host.includes('api.github.com')
     ) {
       const parsed = JSON.parse(responseBody);
       if (parsed.login === toSanitize.forkOwner) {

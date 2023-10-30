@@ -130,13 +130,11 @@ function assertWorkflowStatusInEditor(status) {
 function assertPublishedEntry(entry) {
   if (Array.isArray(entry)) {
     const entries = entry.reverse();
-    cy.get("a h2").then((els) => {
-      cy.wrap(els.slice(0, entries.length)).each((el, idx) => {
-        cy.wrap(el).contains(entries[idx].title);
-      });
+    cy.wrap(els.slice(0, entries.length)).each((el, idx) => {
+      cy.contains("a", entries[idx].title);
     });
   } else {
-    cy.get("a h2").first().contains(entry.title);
+    cy.contains("a", entry.title);
   }
 }
 
@@ -155,11 +153,11 @@ function assertEntryDeleted(entry) {
     if (entriesHeaders.length > 0) {
       if (Array.isArray(entry)) {
         const titles = entry.map((e) => e.title);
-        cy.get("a h2").each((el) => {
+        cy.get("a").each((el) => {
           expect(titles).not.to.include(el.text());
         });
       } else {
-        cy.get("a h2").each((el) => {
+        cy.get("a").each((el) => {
           expect(entry.title).not.to.equal(el.text());
         });
       }
@@ -212,9 +210,9 @@ function populateEntry(entry, onDone = flushClockAndSave) {
   const keys = Object.keys(entry);
   for (const key of keys) {
     const value = entry[key];
-    console.log("typing in key", key);
     if (key === "Body") {
       cy.getMarkdownEditor().click().clear({ force: true }).type(value, { force: true });
+      cy.getMarkdownEditor().first().click().clear({ force: true }).type(value, { force: true });
     } else {
       cy.get(`[data-testid="field-${key}"]`).click();
       cy.focused().clear({ force: true });
@@ -263,6 +261,8 @@ function publishEntry({ createNew = false, duplicate = false } = {}) {
   } else {
     selectDropdownItem("Publish", publishTypes.publishNow);
   }
+
+  assertNotification(notifications.saved);
 
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(500);
@@ -364,7 +364,7 @@ function duplicateEntry(entry) {
   updateWorkflowStatusInEditor(editorStatus.ready);
   publishEntryInEditor(publishTypes.publishNow);
   exitEditor();
-  cy.get("a h2").should(($h2s) => {
+  cy.get("a").should(($h2s) => {
     expect($h2s.eq(0)).to.contain(entry.title);
     expect($h2s.eq(1)).to.contain(entry.title);
   });

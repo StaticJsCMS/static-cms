@@ -38,14 +38,10 @@ async function getEnvs() {
   const params = new URLSearchParams();
   params.append("grant_type", "client_credentials");
 
-  console.log(`https://${consumerKey}:${consumerSecret}@bitbucket.org/site/oauth2/access_token`);
-
   const { access_token: token } = await fetch(
     `https://${consumerKey}:${consumerSecret}@bitbucket.org/site/oauth2/access_token`,
     { method: "POST", body: params }
   ).then((r) => r.json());
-
-  console.log('token', token)
 
   return { owner, repo, token };
 }
@@ -62,11 +58,6 @@ function get(token, path) {
 }
 
 function post(token, path, body) {
-  console.log("POST", `${API_URL}${path}`, body, {
-    "Content-Type": "application/json",
-    ...(body ? { "Content-Type": "application/json" } : {}),
-    Authorization: `Bearer ${token}`,
-  });
   return fetch(`${API_URL}${path}`, {
     method: "POST",
     ...(body ? { body } : {}),
@@ -291,16 +282,14 @@ const transformRecordedData = (expectation, toSanitize) => {
     }
 
     // replace recorded user with fake one
-    if (responseBody && httpRequest.path === "/2.0/user" && httpRequest.headers.Host.includes("api.bitbucket.org")) {
+    if (responseBody && httpRequest.path === "/2.0/user" && httpRequest.headers.host.includes("api.bitbucket.org")) {
       responseBody = JSON.stringify(FAKE_OWNER_USER);
     }
 
     return responseBody;
   };
 
-  const cypressRouteOptions = transformData(expectation, requestBodySanitizer, responseBodySanitizer);
-
-  return cypressRouteOptions;
+  return transformData(expectation, requestBodySanitizer, responseBodySanitizer);
 };
 
 async function teardownBitBucketTest(taskData) {

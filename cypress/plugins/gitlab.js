@@ -267,7 +267,7 @@ const transformRecordedData = (expectation, toSanitize) => {
     if (
       responseBody &&
       httpRequest.path === '/api/v4/user' &&
-      httpRequest.headers.Host.includes('gitlab.com')
+      httpRequest.headers.host.includes('gitlab.com')
     ) {
       responseBody = JSON.stringify(FAKE_OWNER_USER);
     }

@@ -67,13 +67,10 @@ module.exports = async (on, config) => {
           break;
       }
 
-      console.log('result', result)
-
       return result;
     },
     async teardownBackend(taskData) {
       const { backend } = taskData;
-      console.log('teardownBackend, taskData', taskData)
       console.info('Tearing down backend', backend);
 
       switch (backend) {
