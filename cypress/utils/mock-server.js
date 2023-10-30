@@ -1,13 +1,14 @@
-const { mockServerClient } = require('mockserver-client');
-const mockserver = require('mockserver-node');
+const { mockServerClient } = require("mockserver-client");
+const mockserver = require("mockserver-node");
 
 const PROXY_PORT = 1080;
-const PROXY_HOST = 'localhost';
+const PROXY_HOST = "localhost";
 
-const start = () =>
-  mockserver.start_mockserver({
+const start = () => {
+  return mockserver.start_mockserver({
     serverPort: PROXY_PORT,
   });
+};
 
 const stop = () =>
   mockserver.stop_mockserver({
@@ -16,15 +17,13 @@ const stop = () =>
 
 const retrieveRecordedExpectations = async () => {
   const promise = new Promise((resolve, reject) => {
-    mockServerClient(PROXY_HOST, PROXY_PORT)
-      .retrieveRecordedExpectations({})
-      .then(resolve, reject);
+    mockServerClient(PROXY_HOST, PROXY_PORT).retrieveRecordedExpectations({}).then(resolve, reject);
   });
 
   let timeout;
-  const timeoutPromise = new Promise(resolve => {
+  const timeoutPromise = new Promise((resolve) => {
     timeout = setTimeout(() => {
-      console.warn('retrieveRecordedExpectations timeout');
+      console.warn("retrieveRecordedExpectations timeout");
       resolve([]);
     }, 3000);
   });
@@ -32,19 +31,21 @@ const retrieveRecordedExpectations = async () => {
   let recorded = await Promise.race([promise, timeoutPromise]);
   clearTimeout(timeout);
 
+  console.log("recorded", recorded);
+
   recorded = recorded.filter(({ httpRequest }) => {
     const { Host = [] } = httpRequest.headers;
 
     // Host is an array of strings
     return (
-      Host.includes('api.github.com') ||
-      (Host.includes('gitlab.com') && httpRequest.path.includes('api/v4')) ||
-      Host.includes('api.bitbucket.org') ||
-      (Host.includes('bitbucket.org') && httpRequest.path.includes('info/lfs')) ||
-      Host.includes('api.media.atlassian.com') ||
-      Host.some(host => host.includes('netlify.com')) ||
-      Host.some(host => host.includes('netlify.app')) ||
-      Host.some(host => host.includes('s3.amazonaws.com'))
+      Host.includes("api.github.com") ||
+      (Host.includes("gitlab.com") && httpRequest.path.includes("api/v4")) ||
+      Host.includes("api.bitbucket.org") ||
+      (Host.includes("bitbucket.org") && httpRequest.path.includes("info/lfs")) ||
+      Host.includes("api.media.atlassian.com") ||
+      Host.some((host) => host.includes("netlify.com")) ||
+      Host.some((host) => host.includes("netlify.app")) ||
+      Host.some((host) => host.includes("s3.amazonaws.com"))
     );
   });
 
@@ -53,9 +54,7 @@ const retrieveRecordedExpectations = async () => {
 
 const resetMockServerState = async () => {
   const promise = new Promise((resolve, reject) => {
-    mockServerClient(PROXY_HOST, PROXY_PORT)
-      .reset()
-      .then(resolve, reject);
+    mockServerClient(PROXY_HOST, PROXY_PORT).reset().then(resolve, reject);
   });
 
   await promise;
