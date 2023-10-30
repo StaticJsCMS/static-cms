@@ -4,3 +4,4 @@
 .vscode
 cypress/screenshots
 cypress/downloads
+.env
