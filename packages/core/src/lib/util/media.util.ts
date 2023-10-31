@@ -254,6 +254,7 @@ export function selectMediaFolder<EF extends BaseField>(
         : joinUrlPath(
             collection && 'folder' in collection ? collection.folder : '',
             DRAFT_MEDIA_FILES,
+            folder,
           );
     }
   }
