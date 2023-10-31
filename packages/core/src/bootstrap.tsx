@@ -81,7 +81,9 @@ function bootstrap<F extends BaseField = UnknownField>(opts?: {
   /**
    * Log the version number.
    */
-  if (typeof STATIC_CMS_CORE_VERSION === 'string') {
+  if (typeof STATIC_CMS_APP_VERSION === 'string') {
+    console.info(`[StaticCMS] Using @staticcms/app ${STATIC_CMS_APP_VERSION}`);
+  } else if (typeof STATIC_CMS_CORE_VERSION === 'string') {
     console.info(`[StaticCMS] Using @staticcms/core ${STATIC_CMS_CORE_VERSION}`);
   }
 

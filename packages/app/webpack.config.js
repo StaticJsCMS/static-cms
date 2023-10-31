@@ -90,6 +90,9 @@ module.exports = {
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer'],
     }),
+    new webpack.DefinePlugin({
+      STATIC_CMS_APP_VERSION: JSON.stringify(`${pkg.version}${isProduction ? '' : '-dev'}`),
+    }),
   ].filter(Boolean),
   output: {
     path: path.resolve(__dirname, 'dist'),
