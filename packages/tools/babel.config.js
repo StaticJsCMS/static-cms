@@ -57,12 +57,6 @@ function plugins() {
     return [
       ...defaultPlugins,
       [
-        'transform-define',
-        {
-          STATIC_CMS_CORE_VERSION: `${coreVersion}`,
-        },
-      ],
-      [
         'inline-react-svg',
         {
           svgo,

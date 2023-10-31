@@ -51,8 +51,10 @@ ${config}
 
 function buildIssueTemplate(config?: Config) {
   let version = '';
-  if (typeof STATIC_CMS_CORE_VERSION === 'string') {
-    version = `static-cms@${STATIC_CMS_CORE_VERSION}`;
+  if (typeof STATIC_CMS_APP_VERSION === 'string') {
+    version = `@staticcms/app@${STATIC_CMS_APP_VERSION}`;
+  } else if (typeof STATIC_CMS_CORE_VERSION === 'string') {
+    version = `@staticcms/core@${STATIC_CMS_CORE_VERSION}`;
   }
   const template = getIssueTemplate(
     version,
