@@ -1,6 +1,6 @@
 const path = require('path');
 
-const coreVersion = require('./package.json').version;
+const appVersion = require('./package.json').version;
 const isProduction = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';
 const isESM = process.env.NODE_ENV === 'esm';
@@ -53,7 +53,7 @@ function plugins() {
       [
         'transform-define',
         {
-          STATIC_CMS_CORE_VERSION: `${coreVersion}`,
+          STATIC_CMS_APP_VERSION: `${appVersion}`,
         },
       ],
       [
