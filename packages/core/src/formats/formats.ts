@@ -26,6 +26,7 @@ export const extensionFormatters: Record<string, FileFormatter> = {
   toml: TomlFormatter,
   json: JsonFormatter,
   md: FrontmatterInfer,
+  mdx: FrontmatterInfer,
   markdown: FrontmatterInfer,
   html: FrontmatterInfer,
 };

@@ -17,3 +17,6 @@ quote_type = single
 
 [*.md]
 trim_trailing_whitespace = false
+
+[*.mdx]
+trim_trailing_whitespace = false

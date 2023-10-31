@@ -176,6 +176,45 @@ collections:
               - label: Description
                 name: description
                 widget: text
+
+      - name: navigation
+        label: Navigation
+        file: packages/core/dev-test/backends/proxy/_data/navigation.mdx
+        extension: mdx
+        format: yaml-frontmatter
+        fields:
+          - name: main_menu
+            label: Main Menu
+            widget: list
+            collapsed: true
+            fields:
+              - name: label
+                label: Label
+                widget: string
+              - name: href
+                label: Href
+                widget: string
+          - name: footer_menus
+            label: Footer Menus
+            widget: list
+            collapsed: true
+            reuired: false
+            fields:
+              - name: label
+                label: Label
+                widget: string
+              - name: links
+                label: Links
+                widget: list
+                collapsed: true
+                fields:
+                  - name: label
+                    label: Label
+                    widget: string
+                  - name: href
+                    label: Href
+                    widget: string
+
   - name: kitchenSink
     label: Kitchen Sink
     folder: packages/core/dev-test/backends/proxy/_sink
