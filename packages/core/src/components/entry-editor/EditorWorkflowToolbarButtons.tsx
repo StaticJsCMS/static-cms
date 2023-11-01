@@ -8,12 +8,14 @@ import Button from '../common/button/Button';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
+import Pill from '../common/pill/Pill';
 
 import type { FC } from 'react';
+import type { PillProps } from '../common/pill/Pill';
 
 import './EditorWorkflowToolbarButtons.css';
 
-const classes = generateClassNames('EditorWorkflowToolbarButtons', ['not-checked']);
+const classes = generateClassNames('EditorWorkflowToolbarButtons', ['not-checked', 'status-label']);
 
 export interface EditorWorkflowToolbarButtonsProps {
   hasChanged: boolean;
@@ -51,6 +53,15 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
     [t],
   );
 
+  const statusToPillColor: Record<WorkflowStatus, PillProps['color']> = useMemo(
+    () => ({
+      [WorkflowStatus.DRAFT]: 'info',
+      [WorkflowStatus.PENDING_REVIEW]: 'warning',
+      [WorkflowStatus.PENDING_PUBLISH]: 'success',
+    }),
+    [],
+  );
+
   const handleSave = useCallback(() => {
     if (!hasChanged) {
       return;
@@ -63,7 +74,20 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
     <>
       {currentStatus ? (
         useOpenAuthoring ? (
-          <div>{currentStatus}</div>
+          <>
+            <Pill className={classes['status-label']} color={statusToPillColor[currentStatus]}>
+              {statusToTranslation[currentStatus]}
+            </Pill>
+            {currentStatus === WorkflowStatus.DRAFT ? (
+              <Button
+                variant="outlined"
+                color="warning"
+                onClick={() => onChangeStatus(WorkflowStatus.PENDING_REVIEW)}
+              >
+                {t('workflow.openAuthoring.markReadyForReview')}
+              </Button>
+            ) : null}
+          </>
         ) : (
           <Menu
             label={

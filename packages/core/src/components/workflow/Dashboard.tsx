@@ -150,15 +150,17 @@ const Dashboard: FC = () => {
           sensors={sensors}
         >
           <div className={classNames(classes.board, 'CMS_Scrollbar_root')}>
-            {(Object.keys(boardSections) as WorkflowStatus[]).map(status => (
-              <WorkflowColumn
-                key={status}
-                entries={boardSections[status]}
-                status={status}
-                dragging={isDragging}
-                useOpenAuthoring={useOpenAuthoring}
-              />
-            ))}
+            {(Object.keys(boardSections) as WorkflowStatus[])
+              .filter(ws => !useOpenAuthoring || ws !== WorkflowStatus.PENDING_PUBLISH)
+              .map(status => (
+                <WorkflowColumn
+                  key={status}
+                  entries={boardSections[status]}
+                  status={status}
+                  dragging={isDragging}
+                  useOpenAuthoring={useOpenAuthoring}
+                />
+              ))}
           </div>
           <DragOverlay dropAnimation={defaultDropAnimation}>
             {activeEntry ? <ActiveWorkflowCard entry={activeEntry} /> : null}

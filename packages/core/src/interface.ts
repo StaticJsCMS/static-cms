@@ -121,6 +121,7 @@ export interface Entry<T = ObjectValue> {
   updatedOn: string;
   status?: WorkflowStatus;
   newRecord?: boolean;
+  openAuthoring?: boolean;
   isFetching?: boolean;
   isPersisting?: boolean;
   isDeleting?: boolean;
@@ -1391,6 +1392,7 @@ export interface UnpublishedEntry {
   status: WorkflowStatus;
   diffs: UnpublishedEntryDiff[];
   updatedAt: string;
+  openAuthoring: boolean;
 }
 
 export interface UnpublishedEntryDiff {

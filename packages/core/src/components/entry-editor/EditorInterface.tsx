@@ -164,6 +164,10 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       ),
     [entry.isDeleting, entry.isPersisting, isLoading, isPublishing, isUpdatingStatus],
   );
+  const editorDisabled = useMemo(
+    () => Boolean(disabled || entry.openAuthoring),
+    [disabled, entry.openAuthoring],
+  );
 
   const { locales, default_locale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
   const translatedLocales = useMemo(
@@ -325,7 +329,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
           canChangeLocale={i18nEnabled && !i18nActive}
           onLocaleChange={handleLocaleChange}
           slug={slug}
-          disabled={disabled}
+          disabled={editorDisabled}
         />
       </div>
     ),
@@ -342,7 +346,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       i18nEnabled,
       handleLocaleChange,
       slug,
-      disabled,
+      editorDisabled,
     ],
   );
 
@@ -370,7 +374,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
               canChangeLocale
               context={!isSmallScreen ? 'i18nSplit' : undefined}
               hideBorder
-              disabled={disabled}
+              disabled={editorDisabled}
             />
           </div>
         )),
@@ -385,7 +389,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       handleLocaleChange,
       isSmallScreen,
       submitted,
-      disabled,
+      editorDisabled,
     ],
   );
 

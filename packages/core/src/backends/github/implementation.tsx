@@ -32,6 +32,7 @@ import type {
   DisplayURL,
   ImplementationFile,
   PersistOptions,
+  UnpublishedEntry,
   UnpublishedEntryMediaFile,
   User,
 } from '@staticcms/core/interface';
@@ -295,6 +296,7 @@ export default class GitHub implements BackendClass {
       squashMerges: this.squashMerges,
       cmsLabelPrefix: this.cmsLabelPrefix,
       useOpenAuthoring: this.useOpenAuthoring,
+      openAuthoringEnabled: this.openAuthoringEnabled,
       initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
     const user = await this.api!.user();
@@ -572,14 +574,12 @@ export default class GitHub implements BackendClass {
     id?: string;
     collection?: string;
     slug?: string;
-  }) {
+  }): Promise<UnpublishedEntry> {
     if (id) {
-      const data = await this.api!.retrieveUnpublishedEntryData(id);
-      return data;
+      return this.api!.retrieveUnpublishedEntryData(id);
     } else if (collection && slug) {
       const entryId = this.api!.generateContentKey(collection, slug);
-      const data = await this.api!.retrieveUnpublishedEntryData(entryId);
-      return data;
+      return this.api!.retrieveUnpublishedEntryData(entryId);
     } else {
       throw new Error('Missing unpublished entry id or collection and slug');
     }

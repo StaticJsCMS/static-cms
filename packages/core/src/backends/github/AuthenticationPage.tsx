@@ -1,14 +1,24 @@
 import { Github as GithubIcon } from '@styled-icons/simple-icons/Github';
 import React, { useCallback, useState } from 'react';
 
+import Button from '@staticcms/core/components/common/button/Button';
 import Login from '@staticcms/core/components/login/Login';
 import { NetlifyAuthenticator } from '@staticcms/core/lib/auth';
 import useCurrentBackend from '@staticcms/core/lib/hooks/useCurrentBackend';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
+import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { AuthenticationPageProps, User } from '@staticcms/core/interface';
 import type { FC, MouseEvent } from 'react';
 import type GitHub from './implementation';
+
+import './AuthenticationPage.css';
+
+const classes = generateClassNames('Github_AuthenticationPage', [
+  'fork-approve-container',
+  'fork-text',
+  'fork-buttons',
+]);
 
 const GitHubAuthenticationPage: FC<AuthenticationPageProps> = ({
   inProgress = false,
@@ -25,24 +35,23 @@ const GitHubAuthenticationPage: FC<AuthenticationPageProps> = ({
     requestingFork?: boolean;
     findingFork?: boolean;
     approveFork?: () => void;
-    refuseFork?: () => void;
   }>();
 
-  const { requestingFork = false, findingFork = false } = forkState ?? {};
+  const { requestingFork = false, findingFork = false, approveFork } = forkState ?? {};
 
   const backend = useCurrentBackend();
 
   const getPermissionToFork = useCallback(() => {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>(resolve => {
       setForkState({
+        findingFork: true,
         requestingFork: true,
         approveFork: () => {
-          setForkState({ requestingFork: false });
+          setForkState({
+            findingFork: true,
+            requestingFork: false,
+          });
           resolve(true);
-        },
-        refuseFork: () => {
-          setForkState({ requestingFork: false });
-          reject();
         },
       });
     });
@@ -57,11 +66,15 @@ const GitHubAuthenticationPage: FC<AuthenticationPageProps> = ({
       const githubBackend = backend.implementation as GitHub;
 
       setForkState({ findingFork: true });
-      return githubBackend.authenticateWithFork({ userData, getPermissionToFork }).catch(err => {
-        setForkState({ findingFork: false });
-        console.error(err);
-        throw err;
-      });
+      return githubBackend
+        .authenticateWithFork({ userData, getPermissionToFork })
+        .then(() => {
+          setForkState({ findingFork: false });
+        })
+        .catch(() => {
+          setForkState({ findingFork: false });
+          console.error('Cannot create fork');
+        });
     },
     [backend?.backendName, backend?.implementation, getPermissionToFork],
   );
@@ -104,6 +117,16 @@ const GitHubAuthenticationPage: FC<AuthenticationPageProps> = ({
       icon={GithubIcon}
       inProgress={inProgress || findingFork || requestingFork}
       error={loginError}
+      buttonContent={
+        requestingFork ? (
+          <div className={classes['fork-approve-container']}>
+            <p className={classes['fork-text']}>{t('workflow.openAuthoring.forkRequired')}</p>
+            <div className={classes['fork-buttons']}>
+              <Button onClick={approveFork}>{t('workflow.openAuthoring.forkRepo')}</Button>
+            </div>
+          </div>
+        ) : null
+      }
     />
   );
 };

@@ -397,12 +397,10 @@ export function groupEntries<EF extends BaseField>(
     },
   );
 
-  const groupedEntries = Object.values(grouped).reduce((acc, values) => {
+  return Object.values(grouped).reduce((acc, values) => {
     const entryValue = mergeValues(collection, structure, default_locale, values);
     return [...acc, entryValue];
   }, [] as Entry[]);
-
-  return groupedEntries;
 }
 
 export function getI18nDataFiles(

@@ -15,6 +15,7 @@ import TopBarProgress from 'react-topbar-progress-indicator';
 import { loginUser as loginUserAction } from '@staticcms/core/actions/auth';
 import { discardDraft } from '@staticcms/core/actions/entries';
 import { currentBackend } from '@staticcms/core/backend';
+import { loadUnpublishedEntries } from '../actions/editorialWorkflow';
 import { changeTheme } from '../actions/globalUI';
 import useDefaultPath from '../lib/hooks/useDefaultPath';
 import useTranslate from '../lib/hooks/useTranslate';
@@ -161,6 +162,14 @@ const App: FC<AppProps> = ({
 
     dispatch(discardDraft());
   }, [dispatch, pathname, searchParams]);
+
+  useEffect(() => {
+    if (!user || !useWorkflow) {
+      return;
+    }
+
+    dispatch(loadUnpublishedEntries(collections));
+  }, [collections, dispatch, useWorkflow, user]);
 
   const [prevUser, setPrevUser] = useState(user);
   useEffect(() => {

@@ -20,6 +20,7 @@ interface Options {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [locale: string]: any;
   };
+  openAuthoring?: boolean;
 }
 
 export default function createEntry(
@@ -43,6 +44,7 @@ export default function createEntry(
     status: options.status || undefined,
     i18n: options.i18n || {},
     meta: options.meta || undefined,
+    openAuthoring: options.openAuthoring,
   };
 
   return returnObj;

@@ -10,6 +10,7 @@ import { Publish as PublishIcon } from '@styled-icons/material/Publish';
 import { Unpublished as UnpublishedIcon } from '@styled-icons/material/Unpublished';
 import React, { useCallback, useMemo } from 'react';
 
+import { loadUnpublishedEntry } from '@staticcms/core/actions/editorialWorkflow';
 import { deleteLocalBackup, loadEntry } from '@staticcms/core/actions/entries';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
@@ -155,10 +156,14 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
       })
     ) {
       await dispatch(deleteLocalBackup(collection, slug));
-      await dispatch(loadEntry(collection, slug));
+      if (useWorkflow) {
+        await dispatch(loadUnpublishedEntry(collection, slug));
+      } else {
+        await dispatch(loadEntry(collection, slug));
+      }
       onDiscardDraft();
     }
-  }, [collection, dispatch, onDiscardDraft, slug]);
+  }, [collection, dispatch, onDiscardDraft, slug, useWorkflow]);
 
   const handlePublishClick = useCallback(() => {
     if (useWorkflow) {

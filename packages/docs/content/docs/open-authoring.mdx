@@ -5,7 +5,7 @@ title: Open Authoring
 beta: true
 ---
 
-When using the [GitHub backend](/docs/github-backend), you can use Static CMS to accept contributions from GitHub users without giving them access to your repository. When they make changes in the CMS, the CMS forks your repository for them behind the scenes, and all the changes are made to the fork. When the contributor is ready to submit their changes, they can set their draft as ready for review in the CMS. This triggers a pull request to your repository, which you can merge using the GitHub UI.
+When using the [GitHub backend](/docs/github-backend), you can use Static CMS to accept contributions from GitHub users without giving them access to your repository. When they make changes in the CMS, the CMS forks your repository for them behind the scenes, and all the changes are made to the fork. When the contributor is ready to submit their changes, they can set their draft as ready for review in the CMS. This triggers a pull request to your repository, which makes it appear in the Dashboard for maintainers.
 
 At the same time, any contributors who _do_ have write access to the repository can continue to use Static CMS normally.
 
@@ -66,9 +66,9 @@ When a user logs into Static CMS who does not have write access to your repo, th
 
 On the editorial workflow screen, the normal three columns are replaced by two columns instead — `Draft` and `Ready to Review`.
 
-When they make changes to content in the CMS, the changes are made to a branch on their fork. In the editorial workflow screen, they see only their own pending changes. Once they are ready to submit their changes, they can move the card into the "Ready To Review" column to create a pull request. When the pull request is merged (by a repository maintainer via the GitHub UI), Static CMS deletes the branch and removes the card from the user's editorial workflow screen. Open Authoring users cannot publish entries through the CMS.
+When they make changes to content in the CMS, the changes are made to a branch on their fork. In the editorial workflow screen, they see only their own pending changes. Once they are ready to submit their changes, they can move the card into the "Ready To Review" column to create a pull request. When the entry is published (by a repository maintainer via their Static CMS UI), Static CMS deletes the branch, closes the PR and removes the card from the user's editorial workflow screen. Open Authoring users cannot publish entries through the CMS.
 
-Users who _do_ have write access to the original repository continue to use the CMS normally. Unpublished changes made by users via Open Authoring are not visible on the editorial workflow screen, and their unpublished changes must be merged through the GitHub UI.
+Users who _do_ have write access to the original repository continue to use the CMS normally.
 
 ## Alternative for external contributors with Git Gateway
 
@@ -76,7 +76,7 @@ Users who _do_ have write access to the original repository continue to use the 
 
 - Users do not need to know about GitHub or create a GitHub account. Instead, they use Netlify Identity accounts that are created on your site and managed by you.
 - The CMS applies users' changes directly to your repo, not to a fork. (If you use the editorial workflow, you can use features like [GitHub's protected branches](https://help.github.com/en/articles/about-protected-branches) or [Netlify's locked deploys](https://www.netlify.com/docs/locked-deploys/) to prevent users from publishing directly to your site from the CMS.)
-- There is no distinction between users with write access to the repo and users without — all editorial workflow entries are visible from within the CMS and can be published with the CMS. (Unpublished Open Authoring entries, on the other hand, are visible only to the author in the CMS UI or publicly as GitHub PRs.)
+- There is no distinction between users with write access to the repo and users without — all editorial workflow entries are visible from within the CMS and can be published with the CMS.
 
 ## Linking to specific entries in the CMS
 
