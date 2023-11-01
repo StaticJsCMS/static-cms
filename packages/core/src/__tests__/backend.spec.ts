@@ -490,6 +490,7 @@ describe('Backend', () => {
         mediaFiles: [{ id: '1', draft: true }],
         status: WorkflowStatus.DRAFT,
         updatedOn: '20230-02-09T00:00:00.000Z',
+        openAuthoring: false,
       });
     });
   });
