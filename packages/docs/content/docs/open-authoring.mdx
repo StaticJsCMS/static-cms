@@ -5,13 +5,17 @@ title: Open Authoring
 beta: true
 ---
 
+<Alert severity="warning">
+  Open Authoring only works with the [GitHub backend](/docs/github-backend) and must be used with the [Editorial Workflow](/docs/editorial-workflow).
+</Alert>
+
 When using the [GitHub backend](/docs/github-backend), you can use Static CMS to accept contributions from GitHub users without giving them access to your repository. When they make changes in the CMS, the CMS forks your repository for them behind the scenes, and all the changes are made to the fork. When the contributor is ready to submit their changes, they can set their draft as ready for review in the CMS. This triggers a pull request to your repository, which makes it appear in the Dashboard for maintainers.
 
 At the same time, any contributors who _do_ have write access to the repository can continue to use Static CMS normally.
 
 ## Requirements
 
-- You must use [the GitHub backend](/docs/github-backend).
+- You must use the [GitHub backend](/docs/github-backend).
 
   **Note that the [Git Gateway backend](/docs/git-gateway-backend) does _not_ support Open Authoring, even when the underlying repo is on GitHub.**
 
