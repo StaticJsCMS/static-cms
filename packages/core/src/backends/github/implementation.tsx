@@ -32,6 +32,7 @@ import type {
   DisplayURL,
   ImplementationFile,
   PersistOptions,
+  UnpublishedEntry,
   UnpublishedEntryMediaFile,
   User,
 } from '@staticcms/core/interface';
@@ -158,7 +159,35 @@ export default class GitHub implements BackendClass {
   }
 
   restoreUser(user: User) {
-    return this.authenticate(user);
+    return this.openAuthoringEnabled
+      ? this.authenticateWithFork({ userData: user, getPermissionToFork: () => true }).then(() =>
+          this.authenticate(user),
+        )
+      : this.authenticate(user);
+  }
+
+  async pollUntilForkExists({ repo, token }: { repo: string; token: string }) {
+    const pollDelay = 250; // milliseconds
+    let repoExists = false;
+    while (!repoExists) {
+      repoExists = await fetch(`${this.apiRoot}/repos/${repo}`, {
+        headers: { Authorization: `token ${token}` },
+      })
+        .then(() => true)
+        .catch(err => {
+          if (err && err.status === 404) {
+            console.info('This 404 was expected and handled appropriately.');
+            return false;
+          } else {
+            return Promise.reject(err);
+          }
+        });
+      // wait between polls
+      if (!repoExists) {
+        await new Promise(resolve => setTimeout(resolve, pollDelay));
+      }
+    }
+    return Promise.resolve();
   }
 
   async currentUser({ token }: { token: string }) {
@@ -196,6 +225,65 @@ export default class GitHub implements BackendClass {
     return this._userIsOriginMaintainerPromises[username];
   }
 
+  async forkExists({ token }: { token: string }) {
+    try {
+      const currentUser = await this.currentUser({ token });
+      const repoName = this.originRepo.split('/')[1];
+      const repo = await fetch(`${this.apiRoot}/repos/${currentUser.login}/${repoName}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `token ${token}`,
+        },
+      }).then(res => res.json());
+
+      // https://developer.github.com/v3/repos/#get
+      // The parent and source objects are present when the repository is a fork.
+      // parent is the repository this repository was forked from, source is the ultimate source for the network.
+      const forkExists =
+        repo.fork === true &&
+        repo.parent &&
+        repo.parent.full_name.toLowerCase() === this.originRepo.toLowerCase();
+      return forkExists;
+    } catch {
+      return false;
+    }
+  }
+
+  async authenticateWithFork({
+    userData,
+    getPermissionToFork,
+  }: {
+    userData: User;
+    getPermissionToFork: () => Promise<boolean> | boolean;
+  }) {
+    if (!this.openAuthoringEnabled) {
+      throw new Error('Cannot authenticate with fork; Open Authoring is turned off.');
+    }
+    const token = userData.token as string;
+
+    // Origin maintainers should be able to use the CMS normally. If alwaysFork
+    // is enabled we always fork (and avoid the origin maintainer check)
+    if (!this.alwaysForkEnabled && (await this.userIsOriginMaintainer({ token }))) {
+      this.repo = this.originRepo;
+      this.useOpenAuthoring = false;
+      return Promise.resolve();
+    }
+
+    if (!(await this.forkExists({ token }))) {
+      await getPermissionToFork();
+    }
+
+    const fork = await fetch(`${this.apiRoot}/repos/${this.originRepo}/forks`, {
+      method: 'POST',
+      headers: {
+        Authorization: `token ${token}`,
+      },
+    }).then(res => res.json());
+    this.useOpenAuthoring = true;
+    this.repo = fork.full_name;
+    return this.pollUntilForkExists({ repo: fork.full_name, token });
+  }
+
   async authenticate(state: Credentials) {
     this.token = state.token as string;
     const apiCtor = API;
@@ -208,6 +296,7 @@ export default class GitHub implements BackendClass {
       squashMerges: this.squashMerges,
       cmsLabelPrefix: this.cmsLabelPrefix,
       useOpenAuthoring: this.useOpenAuthoring,
+      openAuthoringEnabled: this.openAuthoringEnabled,
       initialWorkflowStatus: this.options.initialWorkflowStatus,
     });
     const user = await this.api!.user();
@@ -231,7 +320,7 @@ export default class GitHub implements BackendClass {
     }
 
     // Authorized user
-    return { ...user, token: state.token as string };
+    return { ...user, token: state.token as string, useOpenAuthoring: this.useOpenAuthoring };
   }
 
   logout() {
@@ -327,7 +416,7 @@ export default class GitHub implements BackendClass {
   }
 
   entriesByFiles(files: ImplementationFile[]) {
-    const repoURL = this.api!.repoURL;
+    const repoURL = this.useOpenAuthoring ? this.api!.originRepoURL : this.api!.repoURL;
 
     const readFile = (path: string, id: string | null | undefined) =>
       this.api!.readFile(path, id, { repoURL }).catch(() => '') as Promise<string>;
@@ -485,14 +574,12 @@ export default class GitHub implements BackendClass {
     id?: string;
     collection?: string;
     slug?: string;
-  }) {
+  }): Promise<UnpublishedEntry> {
     if (id) {
-      const data = await this.api!.retrieveUnpublishedEntryData(id);
-      return data;
+      return this.api!.retrieveUnpublishedEntryData(id);
     } else if (collection && slug) {
       const entryId = this.api!.generateContentKey(collection, slug);
-      const data = await this.api!.retrieveUnpublishedEntryData(entryId);
-      return data;
+      return this.api!.retrieveUnpublishedEntryData(entryId);
     } else {
       throw new Error('Missing unpublished entry id or collection and slug');
     }

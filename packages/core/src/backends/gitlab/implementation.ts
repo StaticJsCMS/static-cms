@@ -37,6 +37,7 @@ import type {
   DisplayURL,
   ImplementationFile,
   PersistOptions,
+  UnpublishedEntry,
   UnpublishedEntryMediaFile,
   User,
 } from '@staticcms/core/interface';
@@ -56,6 +57,7 @@ export default class GitLab implements BackendClass {
   };
   repo: string;
   branch: string;
+  useOpenAuthoring?: boolean;
   apiRoot: string;
   token: string | null;
   squashMerges: boolean;
@@ -352,14 +354,12 @@ export default class GitLab implements BackendClass {
     id?: string;
     collection?: string;
     slug?: string;
-  }) {
+  }): Promise<UnpublishedEntry> {
     if (id) {
-      const data = await this.api!.retrieveUnpublishedEntryData(id);
-      return data;
+      return this.api!.retrieveUnpublishedEntryData(id);
     } else if (collection && slug) {
       const entryId = generateContentKey(collection, slug);
-      const data = await this.api!.retrieveUnpublishedEntryData(entryId);
-      return data;
+      return this.api!.retrieveUnpublishedEntryData(entryId);
     } else {
       throw new Error('Missing unpublished entry id or collection and slug');
     }

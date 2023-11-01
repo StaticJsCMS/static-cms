@@ -2,6 +2,7 @@ import { currentBackend } from '../backend';
 import { AUTH_FAILURE, AUTH_REQUEST, AUTH_REQUEST_DONE, AUTH_SUCCESS, LOGOUT } from '../constants';
 import { invokeEvent } from '../lib/registry';
 import { addSnackbar } from '../store/slices/snackbars';
+import { useOpenAuthoring } from './globalUI';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
@@ -57,6 +58,9 @@ export function authenticateUser() {
     return Promise.resolve(backend.currentUser())
       .then(user => {
         if (user) {
+          if (user.useOpenAuthoring) {
+            dispatch(useOpenAuthoring());
+          }
           dispatch(authenticate(user));
         } else {
           dispatch(doneAuthenticating());
@@ -85,6 +89,9 @@ export function loginUser(credentials: Credentials) {
     return backend
       .authenticate(credentials)
       .then(user => {
+        if (user.useOpenAuthoring) {
+          dispatch(useOpenAuthoring());
+        }
         dispatch(authenticate(user));
       })
       .catch((error: unknown) => {

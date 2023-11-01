@@ -2,7 +2,9 @@ backend:
   name: github
   branch: main
   repo: staticjscms/static-cms-github
-
+  auth_scope: repo # this is needed to fork the private repo
+  open_authoring: true
+publish_mode: editorial_workflow
 media_folder: assets/upload
 public_folder: /assets/upload
 media_library:

@@ -147,9 +147,14 @@ const StyledNav = styled('nav')(
     align-self: flex-start;
     position: sticky;
     top: 0;
-    max-height: calc(100vh - 72px);
-    overflow-y: auto;
+    max-height: calc(100vh - 88px);
+    overflow-y: hidden;
     top: 16px;
+
+    &:hover {
+      overflow-y: auto;
+      padding-right: 0;
+    }
 
     ${theme.breakpoints.between('md', 'lg')} {
       top: 24px;

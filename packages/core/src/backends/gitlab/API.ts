@@ -31,7 +31,7 @@ import {
 } from '@staticcms/core/lib/util/APIUtils';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import type { DataFile, PersistOptions } from '@staticcms/core/interface';
+import type { DataFile, PersistOptions, UnpublishedEntry } from '@staticcms/core/interface';
 import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
@@ -667,7 +667,7 @@ export default class API {
     return mergeRequests[0];
   }
 
-  async retrieveUnpublishedEntryData(contentKey: string) {
+  async retrieveUnpublishedEntryData(contentKey: string): Promise<UnpublishedEntry> {
     const { collection, slug } = parseContentKey(contentKey);
     const branch = branchFromContentKey(contentKey);
     const mergeRequest = await this.getBranchMergeRequest(branch);
@@ -690,6 +690,7 @@ export default class API {
       diffs: diffsWithIds,
       updatedAt,
       pullRequestAuthor,
+      openAuthoring: false,
     };
   }
 

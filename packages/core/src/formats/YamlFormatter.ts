@@ -33,7 +33,7 @@ class YamlFormatter extends FileFormatter {
   }
 
   toFile(data: object, sortedKeys: string[] = [], comments: Record<string, string> = {}) {
-    const doc = new yaml.Document();
+    const doc = new yaml.Document({ aliasDuplicateObjects: false });
     const contents = doc.createNode(data) as YAMLMap<Node>;
 
     addComments(contents.items as Pair<Node>[], comments);

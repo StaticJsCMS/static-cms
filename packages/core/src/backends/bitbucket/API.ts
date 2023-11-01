@@ -32,7 +32,7 @@ import {
 } from '@staticcms/core/lib/util/APIUtils';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import type { DataFile, PersistOptions } from '@staticcms/core/interface';
+import type { DataFile, PersistOptions, UnpublishedEntry } from '@staticcms/core/interface';
 import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
@@ -646,7 +646,7 @@ export default class API {
     return pullRequests[0];
   }
 
-  async retrieveUnpublishedEntryData(contentKey: string) {
+  async retrieveUnpublishedEntryData(contentKey: string): Promise<UnpublishedEntry> {
     const { collection, slug } = parseContentKey(contentKey);
     const branch = branchFromContentKey(contentKey);
     const pullRequest = await this.getBranchPullRequest(branch);
@@ -665,6 +665,7 @@ export default class API {
         .map(d => ({ path: d.path, newFile: d.newFile, id: '' })),
       updatedAt,
       pullRequestAuthor,
+      openAuthoring: false,
     };
   }
 

@@ -1,0 +1,26 @@
+.CMS_Github_AuthenticationPage_fork-approve-container {
+  @apply flex
+    flex-col
+    flex-nowrap
+    justify-around
+    flex-grow-[0.2];
+}
+
+.CMS_Github_AuthenticationPage_fork-text {
+  @apply max-w-[600px]
+    w-full
+    px-2
+    my-2
+    justify-center
+    items-center
+    text-center;
+}
+
+.CMS_Github_AuthenticationPage_fork-buttons {
+  @apply flex
+    flex-col
+    flex-nowrap
+    justify-around
+    items-center
+    gap-2;
+}

@@ -25,7 +25,7 @@ _This setting is required._
 
 The `backend` option specifies how to access the content for your site, including authentication. Full details and code samples can be found in [Backends](/docs/backends-overview).
 
-**Note**: no matter where you access Static CMS — whether running locally, in a staging environment, or in your published site — it will always fetch and commit files in your hosted repository (for example, on GitHub), on the branch you configured in your Static CMS config file. This means that content fetched in the admin UI will match the content in the repository, which may be different from your locally running site. It also means that content saved using the admin UI will save directly to the hosted repository, even if you're running the UI locally or in staging. If you want to have your local CMS write to a local repository, [try the local_backend setting](/docs/local-backend).
+**Note**: no matter where you access Static CMS — whether running locally, in a staging environment, or in your published site — it will always fetch and commit files in your hosted repository (for example, on GitHub), on the branch you configured in your Static CMS config file. This means that content fetched in the admin UI will match the content in the repository, which may be different from your locally running site. It also means that content saved using the admin UI will save directly to the hosted repository, even if you are running the UI locally or in staging. If you want to have your local CMS write to a local repository, [try the local_backend setting](/docs/local-backend).
 
 ### Commit Message Templates
 
@@ -44,6 +44,7 @@ backend:
     delete: Delete {{collection}} "{{slug}}"
     uploadMedia: Upload "{{path}}"
     deleteMedia: Delete "{{path}}"
+    openAuthoring: "{{message}}"
 ```
 
 ```js
@@ -54,6 +55,7 @@ backend: {
     delete: 'Delete {{collection}} "{{slug}}"',
     uploadMedia: 'Upload "{{path}}"',
     deleteMedia: 'Delete "{{path}}"',
+    openAuthoring: '"{{message}}"'
   },
 },
 ```
@@ -86,28 +88,9 @@ Template tags produce the following output:
 
 By default, all entries created or edited in Static CMS are committed directly into the main repository branch.
 
-The `publish_mode` option allows you to enable "Editorial Workflow" mode for more control over the content publishing phases. All unpublished entries will be arranged in a board according to their status, and they can be further reviewed and edited before going live.
+The `publish_mode` option allows you to enable "Editorial Workflow" mode for more control over the content publishing phases. All unpublished entries will be arranged on a dashboard according to their status, and they can be further reviewed and edited before going live.
 
-You can enable the Editorial Workflow with the following line in your `config.yml` file:
-
-<CodeTabs>
-```yaml
-publish_mode: editorial_workflow
-```
-
-```js
-publish_mode: 'editorial_workflow';
-```
-
-</CodeTabs>
-
-From a technical perspective, the workflow translates editor UI actions into common Git commands:
-
-| Actions in Netlify UI     | Perform these Git actions                                                                                         |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Save draft                | Commits to a new branch (named according to the pattern `cms/collectionName/entrySlug`), and opens a pull request |
-| Edit draft                | Pushes another commit to the draft branch/pull request                                                            |
-| Approve and publish draft | Merges pull request and deletes branch                                                                            |
+See [Editorial Workflow](/docs/editorial-workflow) for more information.
 
 ## Media and Public Folders
 
@@ -149,16 +132,16 @@ Based on the settings above, if a user used an image widget field called `avatar
 
 This setting can be set to an absolute URL e.g. `https://netlify.com/media` should you wish, however in general this is not advisable as content should have relative paths to other content.
 
-## Media Library <BetaImage />
+## Media Library
 
 The `media_library` settings allows customization of the media library.
 
 ### Options
 
-| Name           | Type    | Default  | Description                                                                                          |
-| -------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| max_file_size  | number  | `512000` | _Optional_. <BetaImage /> The max size, in bytes, of files that can be uploaded to the media library |
-| folder_support | boolean | `false`  | _Optional_. <BetaImage /> Enables directory navigation and folder creation in your media library     |
+| Name           | Type    | Default  | Description                                                                            |
+| -------------- | ------- | -------- | -------------------------------------------------------------------------------------- |
+| max_file_size  | number  | `512000` | _Optional_. The max size, in bytes, of files that can be uploaded to the media library |
+| folder_support | boolean | `false`  | _Optional_. Enables directory navigation and folder creation in your media library     |
 
 ### Example
 

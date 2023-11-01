@@ -16,7 +16,10 @@ import {
 import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
-import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
+import {
+  selectIsFetching,
+  selectUseOpenAuthoring,
+} from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
 import EditorToolbar from './EditorToolbar';
@@ -149,6 +152,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
 }) => {
   const config = useAppSelector(selectConfig);
   const useWorkflow = useAppSelector(selectUseWorkflow);
+  const useOpenAuthoring = useAppSelector(selectUseOpenAuthoring);
 
   const isSmallScreen = useIsSmallScreen();
 
@@ -159,6 +163,10 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
         isLoading || entry.isPersisting || isPublishing || isUpdatingStatus || entry.isDeleting,
       ),
     [entry.isDeleting, entry.isPersisting, isLoading, isPublishing, isUpdatingStatus],
+  );
+  const editorDisabled = useMemo(
+    () => Boolean(disabled || entry.openAuthoring),
+    [disabled, entry.openAuthoring],
   );
 
   const { locales, default_locale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
@@ -321,7 +329,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
           canChangeLocale={i18nEnabled && !i18nActive}
           onLocaleChange={handleLocaleChange}
           slug={slug}
-          disabled={disabled}
+          disabled={editorDisabled}
         />
       </div>
     ),
@@ -338,7 +346,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       i18nEnabled,
       handleLocaleChange,
       slug,
-      disabled,
+      editorDisabled,
     ],
   );
 
@@ -366,7 +374,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
               canChangeLocale
               context={!isSmallScreen ? 'i18nSplit' : undefined}
               hideBorder
-              disabled={disabled}
+              disabled={editorDisabled}
             />
           </div>
         )),
@@ -381,7 +389,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       handleLocaleChange,
       isSmallScreen,
       submitted,
-      disabled,
+      editorDisabled,
     ],
   );
 
@@ -505,7 +513,6 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       navbarActions={
         <EditorToolbar
           isPersisting={isPersisting}
-          isDeleting={entry.isDeleting}
           onPersist={handleOnPersist}
           onPersistAndNew={() => handleOnPersist({ createNew: true })}
           onPersistAndDuplicate={() => handleOnPersist({ createNew: true, duplicate: true })}
@@ -553,6 +560,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
             disabled={disabled}
             onChangeStatus={onChangeStatus}
             isLoading={isLoading}
+            useOpenAuthoring={useOpenAuthoring}
             mobile
           />
         </div>

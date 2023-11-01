@@ -39,6 +39,7 @@ const entries: Entry[] = [
     raw: '---\ntitle: An Author\n---\nAuthor details go here!.\n',
     slug: 'authors/author-1/index',
     updatedOn: '',
+    openAuthoring: false,
   },
   {
     author: '',
@@ -54,6 +55,7 @@ const entries: Entry[] = [
     raw: '---\ntitle: Authors\n---\n',
     slug: 'authors/index',
     updatedOn: '',
+    openAuthoring: false,
   },
   {
     author: '',
@@ -72,6 +74,7 @@ const entries: Entry[] = [
     raw: '---\ntitle: Hello World\n---\nCoffee is a small tree or shrub that grows in the forest understory in its wild form, and traditionally was grown commercially under other trees that provided shade. The forest-like structure of shade coffee farms provides habitat for a great number of migratory and resident species.\n',
     slug: 'posts/hello-world/index',
     updatedOn: '',
+    openAuthoring: false,
   },
   {
     author: '',
@@ -87,6 +90,7 @@ const entries: Entry[] = [
     raw: '---\ntitle: Posts\n---\n',
     slug: 'posts/index',
     updatedOn: '',
+    openAuthoring: false,
   },
   {
     author: '',
@@ -105,6 +109,7 @@ const entries: Entry[] = [
     raw: '---\ntitle: Hello World News\n---\nCoffee is a small tree or shrub that grows in the forest understory in its wild form, and traditionally was grown commercially under other trees that provided shade. The forest-like structure of shade coffee farms provides habitat for a great number of migratory and resident species.\n',
     slug: 'posts/news/hello-world-news/index',
     updatedOn: '',
+    openAuthoring: false,
   },
   {
     author: '',
@@ -120,6 +125,7 @@ const entries: Entry[] = [
     raw: '---\ntitle: News Articles\n---\n',
     slug: 'posts/news/index',
     updatedOn: '',
+    openAuthoring: false,
   },
   {
     author: '',
@@ -135,6 +141,7 @@ const entries: Entry[] = [
     raw: '---\ntitle: Pages\n---\n',
     slug: 'index',
     updatedOn: '',
+    openAuthoring: false,
   },
 ];
 
