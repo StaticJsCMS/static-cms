@@ -407,6 +407,11 @@ const es: LocalePhrasesRoot = {
       pending_publish: 'Listo',
       currentEntries: '%{smart_count} entrada |||| %{smart_count} entradas',
     },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
+    },
   },
 };
 

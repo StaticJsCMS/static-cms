@@ -403,6 +403,11 @@ const hu: LocalePhrasesRoot = {
       pending_publish: 'Kész',
       currentEntries: '%{smart_count} bejegyzés |||| %{smart_count} bejegyzések',
     },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'undefined'
+      forkRepo: undefined, // English translation: 'undefined'
+      markReadyForReview: undefined, // English translation: 'undefined'
+    },
   },
 };
 

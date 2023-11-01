@@ -404,6 +404,11 @@ const th: LocalePhrasesRoot = {
       pending_publish: 'พร้อม',
       currentEntries: '%{smart_count} เนื้อหา',
     },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
+    },
   },
 };
 

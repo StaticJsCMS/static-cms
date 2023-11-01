@@ -408,6 +408,11 @@ const ko: LocalePhrasesRoot = {
       pending_publish: '준비됨',
       currentEntries: '%{smart_count}개 항목 |||| %{smart_count}개 항목',
     },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
+    },
   },
 };
 

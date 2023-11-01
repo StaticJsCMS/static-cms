@@ -405,6 +405,11 @@ const cs: LocalePhrasesRoot = {
       pending_publish: 'Připraveno',
       currentEntries: '%{smart_count} záznam |||| %{smart_count} záznamů',
     },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
+    },
   },
 };
 

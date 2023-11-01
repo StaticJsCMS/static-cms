@@ -406,6 +406,11 @@ const ro: LocalePhrasesRoot = {
       pending_publish: 'Gata',
       currentEntries: '%{smart_count} intrări |||| %{smart_count} intrări',
     },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
+    },
   },
 };
 

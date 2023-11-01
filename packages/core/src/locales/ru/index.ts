@@ -410,6 +410,11 @@ const ru: LocalePhrasesRoot = {
       pending_publish: 'Одобренные',
       currentEntries: '%{smart_count} entry |||| %{smart_count} entries',
     },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'undefined'
+      forkRepo: undefined, // English translation: 'undefined'
+      markReadyForReview: undefined, // English translation: 'undefined'
+    },
   },
 };
 

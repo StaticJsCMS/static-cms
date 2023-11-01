@@ -408,6 +408,11 @@ const bg: LocalePhrasesRoot = {
       pending_publish: 'Готов',
       currentEntries: '%{smart_count} запис |||| %{smart_count} записи',
     },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'undefined'
+      forkRepo: undefined, // English translation: 'undefined'
+      markReadyForReview: undefined, // English translation: 'undefined'
+    },
   },
 };
 
