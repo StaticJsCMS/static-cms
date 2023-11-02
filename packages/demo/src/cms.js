@@ -1,5 +1,9 @@
+import cms, { useMediaAsset } from "@staticcms/core";
+
+import "@staticcms/core/dist/main.css";
+
 // Register all the things
-CMS.init();
+cms.init();
 
 const PostPreview = ({ entry, widgetFor }) => {
   return h(
@@ -94,13 +98,13 @@ const CustomPage = () => {
   return h('div', {}, 'I am a custom page!');
 };
 
-CMS.registerPreviewTemplate('posts', PostPreview);
-CMS.registerFieldPreview('posts', 'date', PostDateFieldPreview);
-CMS.registerPreviewTemplate('general', GeneralPreview);
-CMS.registerPreviewTemplate('authors', AuthorsPreview);
+cms.registerPreviewTemplate('posts', PostPreview);
+cms.registerFieldPreview('posts', 'date', PostDateFieldPreview);
+cms.registerPreviewTemplate('general', GeneralPreview);
+cms.registerPreviewTemplate('authors', AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.
-CMS.registerWidget('relationKitchenSinkPost', 'relation');
-CMS.registerAdditionalLink({
+cms.registerWidget('relationKitchenSinkPost', 'relation');
+cms.registerAdditionalLink({
   id: 'example',
   title: 'Example.com',
   data: 'https://example.com',
@@ -108,7 +112,7 @@ CMS.registerAdditionalLink({
     icon: 'page',
   },
 });
-CMS.registerAdditionalLink({
+cms.registerAdditionalLink({
   id: 'custom-page',
   title: 'Custom Page',
   data: CustomPage,
@@ -117,7 +121,7 @@ CMS.registerAdditionalLink({
   },
 });
 
-CMS.registerTheme({
+cms.registerTheme({
   name: 'Custom Red Orange',
   extends: 'dark',
   primary: {
@@ -125,7 +129,7 @@ CMS.registerTheme({
   }
 });
 
-CMS.registerShortcode('youtube', {
+cms.registerShortcode('youtube', {
   label: 'YouTube',
   openTag: '[',
   closeTag: ']',
