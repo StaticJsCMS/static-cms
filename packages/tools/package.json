@@ -10,7 +10,7 @@
     "type-check": "tsc --watch"
   },
   "dependencies": {
-    "@staticcms/core": "^3.3.4",
+    "@staticcms/core": "^4.0.0-beta.0",
     "lodash": "4.17.21",
     "prettier": "3.0.3",
     "ts-node": "10.9.1",
