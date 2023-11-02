@@ -379,6 +379,7 @@ const vi: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Đang tải bài viết',
       workflowHeading: 'Quy trình biên tập',
       newPost: 'Bài mới',

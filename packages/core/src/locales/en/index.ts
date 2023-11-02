@@ -383,6 +383,7 @@ const en: BaseLocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: 'Dashboard',
       loading: 'Loading Editorial Workflow Entries',
       workflowHeading: 'Editorial Workflow',
       newPost: 'New Post',

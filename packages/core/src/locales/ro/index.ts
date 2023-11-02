@@ -380,6 +380,7 @@ const ro: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Se încarcă intrările din Workflow-ul Editorial',
       workflowHeading: 'Workflow Editorial',
       newPost: 'Postare nouă',

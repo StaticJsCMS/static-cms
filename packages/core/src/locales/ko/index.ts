@@ -382,6 +382,7 @@ const ko: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: '편집 워크플로우의 항목을 불러오는 중',
       workflowHeading: '편집 워크플로우',
       newPost: '새 게시물',

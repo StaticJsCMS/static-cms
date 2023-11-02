@@ -385,6 +385,7 @@ const tr: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'İş Akışı Girdileri Yükleniyor',
       workflowHeading: 'Editoryal İş Akışı',
       newPost: 'Yeni Mesaj',

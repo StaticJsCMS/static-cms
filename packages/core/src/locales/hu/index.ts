@@ -377,6 +377,7 @@ const hu: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'A szerkesztési munkafolyamat-bejegyzések betöltése',
       workflowHeading: 'Szerkesztői Folyamat',
       newPost: 'New Post',

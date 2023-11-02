@@ -118,7 +118,7 @@ const SidebarContent: FC = () => {
             to="/dashboard"
             icon={<DashboardIcon className={sidebarClasses['icon']} />}
           >
-            Dashboard
+            {t('workflow.workflow.dashboard')}
           </NavLink>
         ) : null}
         {collectionLinks}

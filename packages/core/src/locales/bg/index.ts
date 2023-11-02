@@ -382,6 +382,7 @@ const bg: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Зареждане на редакционни записи',
       workflowHeading: 'Редакционен работен процес',
       newPost: 'Нова публикация',

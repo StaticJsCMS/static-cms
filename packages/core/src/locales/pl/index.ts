@@ -381,6 +381,7 @@ const pl: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Ładowanie pozycji przebiegu redakcyjnego',
       workflowHeading: 'Przebieg redakcyjny',
       newPost: 'Nowa pozycja',

@@ -380,6 +380,7 @@ const it: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Caricando le voci del Flusso Editoriale',
       workflowHeading: 'Flusso Editoriale',
       newPost: 'Nuovo Post',

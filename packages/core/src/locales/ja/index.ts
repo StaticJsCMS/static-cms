@@ -380,6 +380,7 @@ const ja: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'ワークフロー内のエントリを読込中',
       workflowHeading: 'ワークフロー',
       newPost: '新規作成',
