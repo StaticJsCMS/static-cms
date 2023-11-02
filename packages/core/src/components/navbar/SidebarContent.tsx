@@ -8,7 +8,10 @@ import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getAdditionalLinks } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollections } from '@staticcms/core/reducers/selectors/collections';
-import { selectIsSearchEnabled } from '@staticcms/core/reducers/selectors/config';
+import {
+  selectIsSearchEnabled,
+  selectUseWorkflow,
+} from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import CollectionSearch from '../collections/CollectionSearch';
 import NestedCollection from '../collections/NestedCollection';
@@ -27,6 +30,7 @@ const SidebarContent: FC = () => {
   const navigate = useNavigate();
   const isSearchEnabled = useAppSelector(selectIsSearchEnabled);
   const collections = useAppSelector(selectCollections);
+  const useWorkflow = useAppSelector(selectUseWorkflow);
 
   const collection = useMemo(
     () => (name ? collections[name] : collections[0]) as CollectionWithDefaults | undefined,
@@ -108,13 +112,15 @@ const SidebarContent: FC = () => {
             onSubmit={(query: string, collection?: string) => searchCollections(query, collection)}
           />
         )}
-        <NavLink
-          key="Dashboard"
-          to="/dashboard"
-          icon={<DashboardIcon className={sidebarClasses['icon']} />}
-        >
-          Dashboard
-        </NavLink>
+        {useWorkflow ? (
+          <NavLink
+            key="Dashboard"
+            to="/dashboard"
+            icon={<DashboardIcon className={sidebarClasses['icon']} />}
+          >
+            Dashboard
+          </NavLink>
+        ) : null}
         {collectionLinks}
         {links}
         <NavLink key="Media" to="/media" icon={<PhotoIcon className={sidebarClasses['icon']} />}>
