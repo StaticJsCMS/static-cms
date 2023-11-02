@@ -251,7 +251,10 @@ const StyledFeatureText = styled('div')`
 const Home = ({ docsGroups, searchablePages }: DocsMenuProps) => {
   const theme = useTheme();
 
-  const majorMinorThemes = useMemo(() => releases.filter(r => r.type !== 'patch'), []);
+  const majorMinorThemes = useMemo(
+    () => releases.filter(r => ['major', 'minor'].includes(r.type)),
+    [],
+  );
 
   return (
     <Page url="/" docsGroups={docsGroups} searchablePages={searchablePages} fullWidth>
