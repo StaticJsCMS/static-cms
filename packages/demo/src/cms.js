@@ -1,6 +1,8 @@
-import cms, { useMediaAsset } from "@staticcms/core";
+import cms, { useMediaAsset } from '@staticcms/core';
 
-import "@staticcms/core/dist/main.css";
+import '@staticcms/core/dist/main.css';
+
+import './data';
 
 // Register all the things
 cms.init();
@@ -126,7 +128,7 @@ cms.registerTheme({
   extends: 'dark',
   primary: {
     main: '#ff4500',
-  }
+  },
 });
 
 cms.registerShortcode('youtube', {
