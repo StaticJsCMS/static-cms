@@ -385,6 +385,7 @@ const da: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Indlæser dokumenter i redaktionel arbejdsgang',
       workflowHeading: 'Redaktionel arbejdsgang',
       newPost: 'Nyt indlæg',

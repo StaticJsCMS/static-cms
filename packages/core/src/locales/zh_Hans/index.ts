@@ -375,6 +375,7 @@ const zh_Hans: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: '正在加载编辑工作流项目',
       workflowHeading: '编辑工作流',
       newPost: '新建帖子',

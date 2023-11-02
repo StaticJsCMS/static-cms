@@ -384,6 +384,7 @@ const lt: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Kraunamas turinys',
       workflowHeading: 'Redakcijos darbo eiga',
       newPost: 'Naujas įrašas',

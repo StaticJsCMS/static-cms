@@ -379,6 +379,7 @@ const th: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'กำลังโหลดเนื้อหาขั้นตอนการทำงานของบรรณาธิการ',
       workflowHeading: 'ขั้นตอนการทำงานของบรรณาธิการ',
       newPost: 'สร้างโพสต์ใหม่',

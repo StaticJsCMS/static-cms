@@ -380,6 +380,7 @@ const he: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'טעינת אייטמים',
       workflowHeading: 'ניהול אייטמים לפני הפרסום',
       newPost: 'אייטם חדש',

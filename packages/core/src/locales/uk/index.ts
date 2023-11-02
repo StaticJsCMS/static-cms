@@ -378,6 +378,7 @@ const uk: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Завантаження редакційних матеріалів',
       workflowHeading: 'Редакція',
       newPost: 'Новий запис',

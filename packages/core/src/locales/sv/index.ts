@@ -382,6 +382,7 @@ const sv: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Hämtar inlägg för redaktionellt arbetsflöde',
       workflowHeading: 'Redaktionellt arbetsflöde',
       newPost: 'Nytt inlägg',

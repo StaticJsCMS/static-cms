@@ -381,6 +381,7 @@ const nl: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Redactionele Workflow items laden',
       workflowHeading: 'Redactionele Workflow',
       newPost: 'Nieuw bericht',

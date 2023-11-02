@@ -382,6 +382,7 @@ const gr: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Φόρτωση καταχωρήσεων ροής εργασίας σύνταξης',
       workflowHeading: 'Ροή εργασιών',
       newPost: 'Νέα δημοσίευση',

@@ -380,6 +380,7 @@ const hr: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Učitavanje unosa uredničkog tijeka rada',
       workflowHeading: 'Urednički tijek rada',
       newPost: 'Nova objava',

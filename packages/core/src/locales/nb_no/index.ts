@@ -378,6 +378,7 @@ const nb_no: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Laster innlegg for redaksjonell arbeidsflyt',
       workflowHeading: 'Redaksjonell arbeidsflyt',
       newPost: 'Nytt innlegg',

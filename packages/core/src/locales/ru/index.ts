@@ -384,6 +384,7 @@ const ru: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Загрузка записей в рабочей области',
       workflowHeading: 'Рабочая область',
       newPost: 'Новая запись',

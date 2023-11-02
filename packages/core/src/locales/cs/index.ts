@@ -379,6 +379,7 @@ const cs: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Načítání workflow záznamů',
       workflowHeading: 'Schvalovací Workflow',
       newPost: 'Nový post',

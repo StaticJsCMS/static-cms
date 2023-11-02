@@ -381,6 +381,7 @@ const ca: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Carregant Entradas del Flux Editorial',
       workflowHeading: 'Flux Editorial',
       newPost: 'Nou article',

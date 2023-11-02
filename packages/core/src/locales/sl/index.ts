@@ -381,6 +381,7 @@ const sl: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Nalaganje uredniških vnosov',
       workflowHeading: 'Uredniški potek dela',
       newPost: 'Nov vnos',
