@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Link from 'next/link';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import releases from '../../lib/releases';
 import Logo from './Logo';
@@ -55,7 +55,7 @@ const StyledGithubLink = styled('a')(
     display: flex;
     align-items: center;
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down(1300)} {
       display: none;
     }
   `,
@@ -104,6 +104,13 @@ const StyledDesktopLink = styled(Button)(
   `,
 ) as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
 
+const DEFAULT_DEMO_SITE = 'demo.staticcms.org';
+const DEMO_DOMAIN_REGEX = /demo\.staticcms\.org$/g;
+
+function createDemoUrl(subdomain?: string): string {
+  return `https://${subdomain ? subdomain : ''}${DEFAULT_DEMO_SITE}/`;
+}
+
 interface HeaderProps {
   mode: PaletteMode;
   docsGroups: DocsGroup[];
@@ -114,6 +121,14 @@ interface HeaderProps {
 const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderProps) => {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const [demoUrl, setDemoUrl] = useState(createDemoUrl());
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.location.host.endsWith(DEFAULT_DEMO_SITE)) {
+      return;
+    }
+    setDemoUrl(createDemoUrl(window.location.host.replace(DEMO_DOMAIN_REGEX, '')));
+  }, []);
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
@@ -143,11 +158,15 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
         url: '/docs/examples',
       },
       {
+        title: 'Demo',
+        url: demoUrl,
+      },
+      {
         title: 'Community',
         url: '/community',
       },
     ],
-    [docsGroups],
+    [demoUrl, docsGroups],
   );
 
   return (
