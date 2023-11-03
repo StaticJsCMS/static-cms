@@ -31,9 +31,6 @@ collections:
       and editing guidelines that are specific to a collection.
     folder: packages/core/dev-test/backends/proxy/_posts
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
-    media_folder: ""
-    public_folder: ""
-    path: "{{year}}-{{month}}-{{day}}-{{slug}}/index"
     summary_fields:
       - title
       - date
@@ -83,7 +80,7 @@ collections:
       - label: Body
         name: body
         widget: markdown
-        hint: Main content goes here.
+        hint: '*Main* __content__ __*goes*__ [here](example.com).'
       - label: Tags
         name: tags
         widget: list
@@ -805,16 +802,16 @@ collections:
           - name: prefix
             label: With Prefix
             widget: number
-            prefix: "$"
+            prefix: '$'
           - name: suffix
             label: With Suffix
             widget: number
-            suffix: "%"
+            suffix: '%'
           - name: prefix_and_suffix
             label: With Prefix and Suffix
             widget: number
-            prefix: "$"
-            suffix: "%"
+            prefix: '$'
+            suffix: '%'
       - name: object
         label: Object
         file: packages/core/dev-test/backends/proxy/_widgets/object.json
@@ -1095,16 +1092,16 @@ collections:
           - name: prefix
             label: With Prefix
             widget: string
-            prefix: "$"
+            prefix: '$'
           - name: suffix
             label: With Suffix
             widget: string
-            suffix: "%"
+            suffix: '%'
           - name: prefix_and_suffix
             label: With Prefix and Suffix
             widget: string
-            prefix: "$"
-            suffix: "%"
+            prefix: '$'
+            suffix: '%'
       - name: text
         label: Text
         file: packages/core/dev-test/backends/proxy/_widgets/text.json
@@ -1215,45 +1212,6 @@ collections:
                       - name: hotel_name
                         label: Hotel Name
                         widget: string
-
-      - name: navigation
-        label: Navigation
-        file: packages/core/dev-test/backends/proxy/_data/navigation.mdx
-        extension: mdx
-        format: yaml-frontmatter
-        fields:
-          - name: main_menu
-            label: Main Menu
-            widget: list
-            collapsed: true
-            fields:
-              - name: label
-                label: Label
-                widget: string
-              - name: href
-                label: Href
-                widget: string
-          - name: footer_menus
-            label: Footer Menus
-            widget: list
-            collapsed: true
-            reuired: false
-            fields:
-              - name: label
-                label: Label
-                widget: string
-              - name: links
-                label: Links
-                widget: list
-                collapsed: true
-                fields:
-                  - name: label
-                    label: Label
-                    widget: string
-                  - name: href
-                    label: Href
-                    widget: string
-
   - name: kitchenSink
     label: Kitchen Sink
     folder: packages/core/dev-test/backends/proxy/_sink

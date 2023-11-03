@@ -5,7 +5,6 @@ media_folder: assets/uploads
 media_library:
   folder_support: true
 locale: en
-publish_mode: editorial_workflow
 i18n:
   # Required and can be one of multiple_folders, multiple_files or single_file
   # multiple_folders - persists files in `<folder>/<locale>/<slug>.<extension>`
@@ -78,6 +77,9 @@ collections:
         name: body
         widget: markdown
         hint: '*Main* __content__ __*goes*__ [here](example.com).'
+      - label: Tags
+        name: tags
+        widget: list
   - name: faq
     label: FAQ
     folder: _faqs

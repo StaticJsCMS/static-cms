@@ -77,7 +77,7 @@ collections:
       - label: Body
         name: body
         widget: markdown
-        hint: Main content goes here.
+        hint: '*Main* __content__ __*goes*__ [here](example.com).'
       - label: Tags
         name: tags
         widget: list
@@ -799,16 +799,16 @@ collections:
           - name: prefix
             label: With Prefix
             widget: number
-            prefix: "$"
+            prefix: '$'
           - name: suffix
             label: With Suffix
             widget: number
-            suffix: "%"
+            suffix: '%'
           - name: prefix_and_suffix
             label: With Prefix and Suffix
             widget: number
-            prefix: "$"
-            suffix: "%"
+            prefix: '$'
+            suffix: '%'
       - name: object
         label: Object
         file: _widgets/object.json
@@ -1089,16 +1089,16 @@ collections:
           - name: prefix
             label: With Prefix
             widget: string
-            prefix: "$"
+            prefix: '$'
           - name: suffix
             label: With Suffix
             widget: string
-            suffix: "%"
+            suffix: '%'
           - name: prefix_and_suffix
             label: With Prefix and Suffix
             widget: string
-            prefix: "$"
-            suffix: "%"
+            prefix: '$'
+            suffix: '%'
       - name: text
         label: Text
         file: _widgets/text.json
