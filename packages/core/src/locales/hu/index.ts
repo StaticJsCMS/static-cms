@@ -377,6 +377,7 @@ const hu: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'A szerkesztési munkafolyamat-bejegyzések betöltése',
       workflowHeading: 'Szerkesztői Folyamat',
       newPost: 'New Post',
@@ -402,6 +403,11 @@ const hu: LocalePhrasesRoot = {
       pending_review: 'Vizsgálat alatt',
       pending_publish: 'Kész',
       currentEntries: '%{smart_count} bejegyzés |||| %{smart_count} bejegyzések',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'undefined'
+      forkRepo: undefined, // English translation: 'undefined'
+      markReadyForReview: undefined, // English translation: 'undefined'
     },
   },
 };

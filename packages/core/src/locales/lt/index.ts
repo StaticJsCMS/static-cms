@@ -384,6 +384,7 @@ const lt: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Kraunamas turinys',
       workflowHeading: 'Redakcijos darbo eiga',
       newPost: 'Naujas įrašas',
@@ -409,6 +410,11 @@ const lt: LocalePhrasesRoot = {
       pending_review: 'Peržiūrima redakcijoje',
       pending_publish: 'Paruošta',
       currentEntries: '%{smart_count} įrašas |||| %{smart_count} įrašai',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

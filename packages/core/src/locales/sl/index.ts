@@ -381,6 +381,7 @@ const sl: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Nalaganje uredniških vnosov',
       workflowHeading: 'Uredniški potek dela',
       newPost: 'Nov vnos',
@@ -406,6 +407,11 @@ const sl: LocalePhrasesRoot = {
       pending_review: 'V pregledu',
       pending_publish: 'Pripravljen',
       currentEntries: '%{smart_count} vnos |||| %{smart_count} vnosov',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

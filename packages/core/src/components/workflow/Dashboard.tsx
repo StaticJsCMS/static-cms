@@ -14,7 +14,8 @@ import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { PointerSensor } from '@staticcms/core/lib/util/dnd.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
-import { useAppDispatch } from '@staticcms/core/store/hooks';
+import { selectUseOpenAuthoring } from '@staticcms/core/reducers/selectors/globalUI';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
 import ActiveWorkflowCard from './ActiveWorkflowCard';
 import WorkflowColumn from './WorkflowColumn';
@@ -44,6 +45,8 @@ const Dashboard: FC = () => {
   const t = useTranslate();
 
   const dispatch = useAppDispatch();
+
+  const useOpenAuthoring = useAppSelector(selectUseOpenAuthoring);
 
   const { boardSections, entriesById, setBoardSections } = useWorkflowBoardSections();
 
@@ -147,14 +150,17 @@ const Dashboard: FC = () => {
           sensors={sensors}
         >
           <div className={classNames(classes.board, 'CMS_Scrollbar_root')}>
-            {(Object.keys(boardSections) as WorkflowStatus[]).map(status => (
-              <WorkflowColumn
-                key={status}
-                entries={boardSections[status]}
-                status={status}
-                dragging={isDragging}
-              />
-            ))}
+            {(Object.keys(boardSections) as WorkflowStatus[])
+              .filter(ws => !useOpenAuthoring || ws !== WorkflowStatus.PENDING_PUBLISH)
+              .map(status => (
+                <WorkflowColumn
+                  key={status}
+                  entries={boardSections[status]}
+                  status={status}
+                  dragging={isDragging}
+                  useOpenAuthoring={useOpenAuthoring}
+                />
+              ))}
           </div>
           <DragOverlay dropAnimation={defaultDropAnimation}>
             {activeEntry ? <ActiveWorkflowCard entry={activeEntry} /> : null}

@@ -382,6 +382,7 @@ const ko: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: '편집 워크플로우의 항목을 불러오는 중',
       workflowHeading: '편집 워크플로우',
       newPost: '새 게시물',
@@ -407,6 +408,11 @@ const ko: LocalePhrasesRoot = {
       pending_review: '검토 진행중',
       pending_publish: '준비됨',
       currentEntries: '%{smart_count}개 항목 |||| %{smart_count}개 항목',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

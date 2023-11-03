@@ -375,6 +375,7 @@ const zh_Hant: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: '正在載入編輯流程的內容',
       workflowHeading: '編輯作業流程',
       newPost: '建立新的內容',
@@ -400,6 +401,11 @@ const zh_Hant: LocalePhrasesRoot = {
       pending_review: '正在預覽',
       pending_publish: '準備完成',
       currentEntries: '%{smart_count} 篇內容 |||| %{smart_count} 篇內容',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

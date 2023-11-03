@@ -122,6 +122,7 @@ export const WAIT_UNTIL_ACTION = 'WAIT_UNTIL_ACTION';
 
 // Global UI
 export const THEME_CHANGE = 'THEME_CHANGE';
+export const USE_OPEN_AUTHORING = 'USE_OPEN_AUTHORING';
 
 /*
  * Editorial Workflow

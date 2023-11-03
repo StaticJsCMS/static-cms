@@ -29,6 +29,7 @@ export interface LoginProps {
   label?: string;
   error?: ReactNode;
   disabled?: boolean;
+  buttonContent?: ReactNode;
 }
 
 const Login: FC<LoginProps> = ({
@@ -38,6 +39,7 @@ const Login: FC<LoginProps> = ({
   label,
   error,
   disabled = false,
+  buttonContent,
 }) => {
   const t = useTranslate();
 
@@ -72,15 +74,19 @@ const Login: FC<LoginProps> = ({
           <div>{error}</div>
         </div>
       ) : null}
-      <Button
-        disabled={inProgress || disabled}
-        onClick={login}
-        className={classes.button}
-        startIcon={icon}
-        data-testid="login-button"
-      >
-        {inProgress ? t('auth.loggingIn') : label ?? t('auth.login')}
-      </Button>
+      {buttonContent ? (
+        buttonContent
+      ) : (
+        <Button
+          disabled={inProgress || disabled}
+          onClick={login}
+          className={classes.button}
+          startIcon={icon}
+          data-testid="login-button"
+        >
+          {inProgress ? t('auth.loggingIn') : label ?? t('auth.login')}
+        </Button>
+      )}
       {config?.site_url && <GoBackButton href={config.site_url} />}
     </div>
   );

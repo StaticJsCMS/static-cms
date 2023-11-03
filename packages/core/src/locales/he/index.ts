@@ -380,6 +380,7 @@ const he: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'טעינת אייטמים',
       workflowHeading: 'ניהול אייטמים לפני הפרסום',
       newPost: 'אייטם חדש',
@@ -405,6 +406,11 @@ const he: LocalePhrasesRoot = {
       pending_review: 'ממתין לאישור',
       pending_publish: 'מוכן לפרסום',
       currentEntries: 'אייטם %{smart_count} |||| %{smart_count} אייטמים',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

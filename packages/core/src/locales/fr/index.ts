@@ -383,6 +383,7 @@ const fr: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Chargement des entrées du flux éditorial',
       workflowHeading: 'Flux éditorial',
       newPost: 'Nouvel article',
@@ -408,6 +409,11 @@ const fr: LocalePhrasesRoot = {
       pending_review: 'En cours de révision',
       pending_publish: 'Prêt',
       currentEntries: '%{smart_count} entrée |||| %{smart_count} entrées',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

@@ -378,6 +378,7 @@ const nn_no: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Lastar innlegg for redaksjonell arbeidsflyt',
       workflowHeading: 'Redaksjonell arbeidsflyt',
       newPost: 'Nytt innlegg',
@@ -403,6 +404,11 @@ const nn_no: LocalePhrasesRoot = {
       pending_review: 'Gjennomgås',
       pending_publish: 'Klar',
       currentEntries: '%{smart_count} innlegg |||| %{smart_count} innlegg',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

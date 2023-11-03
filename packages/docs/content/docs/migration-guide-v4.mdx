@@ -1,0 +1,267 @@
+---
+group: Migration
+title: How to Upgrade to v4
+weight: 101
+---
+
+<Alert severity="warning">
+  This page is a work in progress! It will likely change before v4.0.0 goes live.
+</Alert>
+
+Static CMS v4 introduces:
+
+- [Custom themes](/docs/custom-theme)
+- [Editorial Workflow](/docs/editorial-workflow) <BetaImage />
+- [Open Authoring](/docs/open-authoring) (Github backend only) <BetaImage />
+
+In this guide, we will walk you through the steps for upgrading to Static CMS v4.
+
+Please [report any issues](https://github.com/StaticJsCMS/static-cms/issues/new) you encounter while upgrading to Static CMS v4.
+
+## Installing
+
+To install the latest version of Static CMS:
+
+```bash
+npm install @staticcms/core@^4.0.0-beta.0
+```
+
+Or if you are using yarn:
+
+```bash
+yarn add @staticcms/core@^4.0.0-beta.0
+```
+
+If you are using a CDN to load Static CMS, simply change your URLs:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@staticcms/app@^4.0.0-beta.0/dist/main.css" />
+```
+
+```html
+<script src="https://unpkg.com/@staticcms/app@^4.0.0-beta.0/dist/static-cms-app.js"></script>
+```
+
+## View Filters
+
+The `view_filters` configuration option has been slightly changed, as we now allow a [default filter option](/docs/collection-overview#view-filters). Also each filter now requires a unique name.
+
+**Old setup**
+
+<CodeTabs>
+```yaml
+view_filters:
+  - label: "Alice's and Bob's Posts"
+    field: author
+    pattern: 'Alice|Bob'
+  - label: 'Posts published in 2020'
+    field: date
+    pattern: '2020'
+  - label: Drafts
+    field: draft
+    pattern: true
+```
+
+```js
+view_filters: [
+  {
+    label: "Alice's and Bob's Posts",
+    field: 'author',
+    pattern: 'Alice|Bob',
+  },
+  {
+    label: 'Posts published in 2020',
+    field: 'date',
+    pattern: '2020',
+  },
+  {
+    label: 'Drafts',
+    field: 'draft',
+    pattern: true,
+  },
+];
+```
+
+</CodeTabs>
+
+**New setup**
+
+<CodeTabs>
+```yaml
+view_filters:
+  fields:
+    - name: alice-and-bob
+      label: "Alice's and Bob's Posts"
+      field: author
+      pattern: 'Alice|Bob'
+    - name: posts-2020
+      label: 'Posts published in 2020'
+      field: date
+      pattern: '2020'
+    - name: drafts
+      label: Drafts
+      field: draft
+      pattern: true
+```
+
+```js
+view_filters: {
+  fields: [
+    {
+      name: 'alice-and-bob',
+      label: "Alice's and Bob's Posts",
+      field: 'author',
+      pattern: 'Alice|Bob',
+    },
+    {
+      name: 'posts-2020',
+      label: 'Posts published in 2020',
+      field: 'date',
+      pattern: '2020',
+    },
+    {
+      name: 'drafts',
+      label: 'Drafts',
+      field: 'draft',
+      pattern: true,
+    },
+  ];
+}
+```
+
+</CodeTabs>
+
+## View Groups
+
+The `view_groups` configuration option has been slightly changed, as we now allow a [default grouping option](/docs/collection-overview#view-groups). Also each group now requires a unique name.
+
+**Old setup**
+
+<CodeTabs>
+```yaml
+view_groups:
+  - label: Year
+    field: date
+    # groups items based on the value matched by the pattern
+    pattern: \d{4}
+  - label: Drafts
+    field: draft
+```
+
+```js
+view_groups: [
+  {
+    label: "Year",
+    field: "date",
+    pattern: "\\d{4}
+  },
+  {
+    label: "Drafts",
+    field: "draft"
+  }
+]
+```
+
+</CodeTabs>
+
+**New setup**
+
+<CodeTabs>
+```yaml
+view_groups:
+  groups:
+    - name: by-year
+      label: Year
+      field: date
+      # groups items based on the value matched by the pattern
+      pattern: \d{4}
+    - name: drafts
+      label: Drafts
+      field: draft
+```
+
+```js
+view_groups: {
+  groups: [
+    {
+      name: "by-year",
+      label: "Year",
+      field: "date",
+      pattern: "\\d{4}
+    },
+    {
+      name: "drafts",
+      label: "Drafts",
+      field: "draft"
+    }
+  ]
+}
+```
+
+</CodeTabs>
+
+## Theme
+
+The `theme` prop has been removed from:
+
+- Custom widget [control components](/docs/custom-widgets#control-component) and [preview components](/docs/custom-widgets#preview-component)
+- [Custom previews](/docs/custom-previews#editor-preview)
+- [Custom collection card previews](/docs/custom-previews#collection-card-preview)
+- [Custom collection field previews](/docs/custom-previews#collection-field-preview)
+- [Shortcode control components](/docs/widget-markdown#shortcodes)
+
+The new [useTheme hook](/docs/custom-theme#usetheme-hook) should be instead to get the colors of the current theme.
+
+## Date Template Transformation
+
+The date template transformation now uses [date-fns tokens](https://date-fns.org/docs/format) instead of momentjs.
+
+## List / Object Filter Rules
+
+Previously, when using [Filtered Folder Collections](/docs/collection-types#filtered-folder-collections), specifying a `list` field, Static CMS would search the values of the list to find a match. Now the default behavior is to match the JSON formatted version of the list's value. To match values inside the list, simply add `.*` to the end of your filter field.
+
+Object fields are also now matched against the JSON formatted version of their values.
+
+**Old setup**
+
+<CodeTabs>
+```yaml
+filter:
+  field: list_field
+  value: some_value
+```
+
+```js
+filter: {
+  field: 'list_field',
+  value: 'some_value'
+}
+```
+
+</CodeTabs>
+
+**New setup**
+
+<CodeTabs>
+```yaml
+filter:
+  field: list_field.*
+  value: some_value
+```
+
+```js
+filter: {
+  field: 'list_field.*',
+  value: 'some_value'
+}
+```
+
+</CodeTabs>
+
+## i18n Config
+
+For i18n, the setting `defaultLocale` has been renamed to `default_locale`.
+
+## Type Changes (TypeScript)
+
+The `StringOrTextField` type has been split into `StringField` and `TextField`.

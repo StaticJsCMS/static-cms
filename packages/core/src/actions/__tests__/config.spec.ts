@@ -889,7 +889,7 @@ describe('config', () => {
         ).toThrow("i18n locales 'en, de' are missing the default locale fr");
       });
 
-      it('should throw is default locale is missing from collection i18n config', () => {
+      it('should throw if default locale is missing from collection i18n config', () => {
         expect(() =>
           applyDefaults(
             createMockConfig({

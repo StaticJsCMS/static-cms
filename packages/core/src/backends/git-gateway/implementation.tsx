@@ -36,6 +36,7 @@ import type {
   DisplayURLObject,
   ImplementationFile,
   PersistOptions,
+  UnpublishedEntry,
   User,
 } from '@staticcms/core/interface';
 import type { ApiRequest, Cursor } from '@staticcms/core/lib/util';
@@ -563,7 +564,15 @@ export default class GitGateway implements BackendClass {
     return this.backend!.unpublishedEntries();
   }
 
-  unpublishedEntry({ id, collection, slug }: { id?: string; collection?: string; slug?: string }) {
+  unpublishedEntry({
+    id,
+    collection,
+    slug,
+  }: {
+    id?: string;
+    collection?: string;
+    slug?: string;
+  }): Promise<UnpublishedEntry> {
     return this.backend!.unpublishedEntry({ id, collection, slug });
   }
 

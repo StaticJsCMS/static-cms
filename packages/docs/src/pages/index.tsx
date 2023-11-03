@@ -251,7 +251,10 @@ const StyledFeatureText = styled('div')`
 const Home = ({ docsGroups, searchablePages }: DocsMenuProps) => {
   const theme = useTheme();
 
-  const majorMinorThemes = useMemo(() => releases.filter(r => r.type !== 'patch'), []);
+  const majorMinorReleases = useMemo(
+    () => releases.filter(r => ['major', 'minor'].includes(r.type)),
+    [],
+  );
 
   return (
     <Page url="/" docsGroups={docsGroups} searchablePages={searchablePages} fullWidth>
@@ -328,11 +331,11 @@ const Home = ({ docsGroups, searchablePages }: DocsMenuProps) => {
           <Container>
             <StyledReleasesSectionContent>
               {[...Array(3)].map((_, index) => {
-                if (index >= majorMinorThemes.length) {
+                if (index >= majorMinorReleases.length) {
                   return null;
                 }
 
-                const release = majorMinorThemes[index];
+                const release = majorMinorReleases[index];
                 return (
                   <CardActionArea
                     key={release.version}

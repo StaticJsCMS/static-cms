@@ -384,6 +384,7 @@ const ru: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Загрузка записей в рабочей области',
       workflowHeading: 'Рабочая область',
       newPost: 'Новая запись',
@@ -409,6 +410,11 @@ const ru: LocalePhrasesRoot = {
       pending_review: 'На рассмотрении',
       pending_publish: 'Одобренные',
       currentEntries: '%{smart_count} entry |||| %{smart_count} entries',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'undefined'
+      forkRepo: undefined, // English translation: 'undefined'
+      markReadyForReview: undefined, // English translation: 'undefined'
     },
   },
 };

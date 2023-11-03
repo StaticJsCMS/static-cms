@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Link from 'next/link';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import releases from '../../lib/releases';
 import Logo from './Logo';
@@ -19,7 +19,7 @@ import SponsorButton from './SponsorButton';
 import type { PaletteMode } from '@mui/material';
 import type { ButtonTypeMap } from '@mui/material/Button';
 import type { ExtendButtonBase } from '@mui/material/ButtonBase';
-import type { DocsGroup, MenuItem, SearchablePage } from '../../interface';
+import type { DocsGroup, MenuItem, MenuLink, SearchablePage } from '../../interface';
 
 const StyledAppBar = styled(AppBar)(
   ({ theme }) => `
@@ -55,7 +55,7 @@ const StyledGithubLink = styled('a')(
     display: flex;
     align-items: center;
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down(1300)} {
       display: none;
     }
   `,
@@ -104,6 +104,14 @@ const StyledDesktopLink = styled(Button)(
   `,
 ) as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
 
+const STATIC_CMS_DOMAIN = 'staticcms.org';
+const DEFAULT_DEMO_SITE = 'demo.staticcms.org';
+const STATIC_CMS_DOMAIN_REGEX = /staticcms\.org$/g;
+
+function createDemoUrl(subdomain?: string): string {
+  return `https://${subdomain ? subdomain : ''}${DEFAULT_DEMO_SITE}/`;
+}
+
 interface HeaderProps {
   mode: PaletteMode;
   docsGroups: DocsGroup[];
@@ -114,6 +122,18 @@ interface HeaderProps {
 const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderProps) => {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const [demoUrl, setDemoUrl] = useState(createDemoUrl());
+  useEffect(() => {
+    if (
+      typeof window === 'undefined' ||
+      !window.location.host.endsWith(STATIC_CMS_DOMAIN) ||
+      window.location.host === `www.${STATIC_CMS_DOMAIN}`
+    ) {
+      return;
+    }
+    setDemoUrl(createDemoUrl(window.location.host.replace(STATIC_CMS_DOMAIN_REGEX, '')));
+  }, []);
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
@@ -143,11 +163,16 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
         url: '/docs/examples',
       },
       {
+        title: 'Demo',
+        url: demoUrl,
+        target: '_blank',
+      },
+      {
         title: 'Community',
         url: '/community',
       },
     ],
-    [docsGroups],
+    [demoUrl, docsGroups],
   );
 
   return (
@@ -198,14 +223,21 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
           </StyledIconsWrapper>
           {items.map(item => {
             let url = '#';
+            let target: MenuLink['target'];
             if ('url' in item) {
               url = item.url;
+              target = item.target;
             } else if (item.groups.length > 0 && item.groups[0].links.length > 0) {
               url = item.groups[0].links[0].url;
             }
 
             return (
-              <StyledDesktopLink key={`desktop-${item.title}-${url}`} component={Link} href={url}>
+              <StyledDesktopLink
+                key={`desktop-${item.title}-${url}`}
+                component={Link}
+                href={url}
+                target={target}
+              >
                 {item.title}
               </StyledDesktopLink>
             );

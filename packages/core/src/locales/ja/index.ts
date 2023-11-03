@@ -380,6 +380,7 @@ const ja: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'ワークフロー内のエントリを読込中',
       workflowHeading: 'ワークフロー',
       newPost: '新規作成',
@@ -404,6 +405,11 @@ const ja: LocalePhrasesRoot = {
       pending_review: 'レビュー中',
       pending_publish: '準備完了',
       currentEntries: '%{smart_count}件のエントリ',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

@@ -381,6 +381,7 @@ const ca: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Carregant Entradas del Flux Editorial',
       workflowHeading: 'Flux Editorial',
       newPost: 'Nou article',
@@ -406,6 +407,11 @@ const ca: LocalePhrasesRoot = {
       pending_review: 'En revisió',
       pending_publish: 'Llest',
       currentEntries: '%{smart_count} entrada |||| %{smart_count} entrades',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

@@ -43,6 +43,7 @@ import type {
   DisplayURL,
   ImplementationFile,
   PersistOptions,
+  UnpublishedEntry,
   User,
 } from '@staticcms/core/interface';
 import type { ApiRequest, AsyncLock, Cursor, FetchError } from '@staticcms/core/lib/util';
@@ -572,7 +573,7 @@ export default class BitbucketBackend implements BackendClass {
     id?: string;
     collection?: string;
     slug?: string;
-  }) {
+  }): Promise<UnpublishedEntry> {
     if (id) {
       const data = await this.api!.retrieveUnpublishedEntryData(id);
       return data;

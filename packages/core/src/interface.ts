@@ -127,6 +127,7 @@ export interface Entry<T = ObjectValue> {
   updatedOn: string;
   status?: WorkflowStatus;
   newRecord?: boolean;
+  openAuthoring?: boolean;
   isFetching?: boolean;
   isPersisting?: boolean;
   isDeleting?: boolean;
@@ -548,6 +549,7 @@ export type User = Credentials & {
   login?: string;
   name?: string;
   avatar_url?: string;
+  useOpenAuthoring?: boolean;
 };
 
 export interface ImplementationFile {
@@ -999,6 +1001,7 @@ export interface Backend {
     delete?: string;
     uploadMedia?: string;
     deleteMedia?: string;
+    openAuthoring?: string;
   };
   use_large_media_transforms_in_media_library?: boolean;
 
@@ -1395,6 +1398,7 @@ export interface UnpublishedEntry {
   status: WorkflowStatus;
   diffs: UnpublishedEntryDiff[];
   updatedAt: string;
+  openAuthoring: boolean;
 }
 
 export interface UnpublishedEntryDiff {

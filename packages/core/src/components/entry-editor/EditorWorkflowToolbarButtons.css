@@ -1,3 +1,8 @@
 .CMS_EditorWorkflowToolbarButtons_not-checked {
   @apply ms-7;
 }
+
+.CMS_EditorWorkflowToolbarButtons_status-label {
+  @apply flex
+    items-center;
+}

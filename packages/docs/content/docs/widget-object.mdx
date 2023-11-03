@@ -14,11 +14,11 @@ The object widget allows you to group multiple widgets together, nested under a 
 
 For common options, see [Common widget options](/docs/widgets#common-widget-options).
 
-| Name      | Type    | Default | Description                                                  |
-| --------- | ------- | ------- | ------------------------------------------------------------ |
-| fields    | boolean | `false` | A nested list of widget fields to include in your widget     |
-| collapsed | boolean | `false` | _Optional_. Collapse the widget's content by default         |
-| summary   | string  | `value` | _Optional_. The label displayed when the object is collapsed |
+| Name      | Type    | Default | Description                                                                                                                                          |
+| --------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| fields    | boolean | `false` | A nested list of widget fields to include in your widget                                                                                             |
+| collapsed | boolean | `false` | _Optional_. Collapse the widget's content by default                                                                                                 |
+| summary   | string  | `value` | _Optional_. The label displayed when the object is collapsed. Can use [Template Transformations](/docs/collection-overview#template-transformations) |
 
 _Please note:_ A default value cannot be set directly on an object widget. Instead you can set defaults within each sub-field's configuration
 
@@ -42,7 +42,7 @@ fields:
     label: 'Birthdate'
     widget: 'date'
     default: ''
-    format: 'MM/DD/YYYY'
+    format: 'MM/dd/yyyy'
   - name: 'address'
     label: 'Address'
     widget: 'object'
@@ -81,7 +81,7 @@ fields: [
     label: 'Birthdate',
     widget: 'date',
     default: '',
-    format: 'MM/DD/YYYY'
+    format: 'MM/dd/yyyy'
   },
   {
     name: 'address',

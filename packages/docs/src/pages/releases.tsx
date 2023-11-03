@@ -95,12 +95,32 @@ const StyledLink = styled(Link)(
   `,
 );
 
+function getVersionNumber(version: string): number {
+  return +version.replace('v', '');
+}
+
+function isNextVersion(latestMajorVersionNumber: number, version: string): boolean {
+  if (getVersionNumber(version) > latestMajorVersionNumber) {
+    return true;
+  }
+
+  return false;
+}
+
 function getMajorVersion(version: string): string {
   return version.split('.')[0];
 }
 
 const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
-  const latestMajorVersion = useMemo(() => getMajorVersion(releaseData[0].version), []);
+  const latestMajorVersion = useMemo(
+    () => getMajorVersion((releaseData.find(r => r.type === 'major') ?? releaseData[0]).version),
+    [],
+  );
+
+  const latestMajorVersionNumber = useMemo(
+    () => getVersionNumber(latestMajorVersion),
+    [latestMajorVersion],
+  );
 
   return (
     <Page url="/releases" docsGroups={docsGroups} searchablePages={searchablePages} fullWidth>
@@ -134,6 +154,7 @@ const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
             <StyledReleaseLinksContent>
               {releaseData.map(release => {
                 const majorVersion = getMajorVersion(release.version);
+                const isNext = isNextVersion(latestMajorVersionNumber, majorVersion);
 
                 return (
                   <StyledReleaseSection key={release.version}>
@@ -160,7 +181,11 @@ const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
                         </StyledLink>
                         <StyledLink
                           href={`https://${
-                            majorVersion !== latestMajorVersion ? majorVersion : 'www'
+                            isNext
+                              ? 'next'
+                              : majorVersion !== latestMajorVersion
+                              ? majorVersion
+                              : 'www'
                           }.staticcms.org/docs`}
                           target={majorVersion !== latestMajorVersion ? '_blank' : undefined}
                         >

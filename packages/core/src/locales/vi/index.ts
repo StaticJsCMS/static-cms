@@ -379,6 +379,7 @@ const vi: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Đang tải bài viết',
       workflowHeading: 'Quy trình biên tập',
       newPost: 'Bài mới',
@@ -404,6 +405,11 @@ const vi: LocalePhrasesRoot = {
       pending_review: 'Đang xét duyệt',
       pending_publish: 'Sẵn sàng',
       currentEntries: '%{smart_count} bài |||| %{smart_count} bài',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

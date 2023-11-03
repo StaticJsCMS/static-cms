@@ -26,6 +26,7 @@ import type {
   ImplementationFile,
   ImplementationMediaFile,
   PersistOptions,
+  UnpublishedEntry,
   User,
 } from '@staticcms/core/interface';
 
@@ -379,7 +380,15 @@ export default class TestBackend implements BackendClass {
     return Promise.resolve(Object.keys(window.repoFilesUnpublished));
   }
 
-  unpublishedEntry({ id, collection, slug }: { id?: string; collection?: string; slug?: string }) {
+  unpublishedEntry({
+    id,
+    collection,
+    slug,
+  }: {
+    id?: string;
+    collection?: string;
+    slug?: string;
+  }): Promise<UnpublishedEntry> {
     if (id) {
       const parts = id.split('/');
       collection = parts[0];
@@ -392,7 +401,10 @@ export default class TestBackend implements BackendClass {
       );
     }
 
-    return Promise.resolve(entry);
+    return Promise.resolve({
+      ...entry,
+      openAuthoring: false,
+    });
   }
 
   async unpublishedEntryDataFile(collection: string, slug: string, path: string) {

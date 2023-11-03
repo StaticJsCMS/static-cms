@@ -1,10 +1,11 @@
 backend:
   name: test-repo
-site_url: 'https://staticcms.org/'
+site_url: 'https://example.com'
 media_folder: assets/uploads
 media_library:
   folder_support: true
 locale: en
+publish_mode: editorial_workflow
 i18n:
   # Required and can be one of multiple_folders, multiple_files or single_file
   # multiple_folders - persists files in `<folder>/<locale>/<slug>.<extension>`
@@ -70,7 +71,7 @@ collections:
       - label: Body
         name: body
         widget: markdown
-        hint: Main content goes here.
+        hint: '*Main* __content__ __*goes*__ [here](example.com).'
   - name: faq
     label: FAQ
     folder: _faqs
@@ -578,6 +579,7 @@ collections:
               - label: Type 2 Object
                 name: type_2_object
                 widget: object
+                summary: "{{datetime | date('yyyy-MM-dd')}}"
                 fields:
                   - label: Number
                     name: number
@@ -788,16 +790,16 @@ collections:
           - name: prefix
             label: With Prefix
             widget: number
-            prefix: "$"
+            prefix: '$'
           - name: suffix
             label: With Suffix
             widget: number
-            suffix: "%"
+            suffix: '%'
           - name: prefix_and_suffix
             label: With Prefix and Suffix
             widget: number
-            prefix: "$"
-            suffix: "%"
+            prefix: '$'
+            suffix: '%'
       - name: object
         label: Object
         file: _widgets/object.json
@@ -1078,16 +1080,16 @@ collections:
           - name: prefix
             label: With Prefix
             widget: string
-            prefix: "$"
+            prefix: '$'
           - name: suffix
             label: With Suffix
             widget: string
-            suffix: "%"
+            suffix: '%'
           - name: prefix_and_suffix
             label: With Prefix and Suffix
             widget: string
-            prefix: "$"
-            suffix: "%"
+            prefix: '$'
+            suffix: '%'
       - name: text
         label: Text
         file: _widgets/text.json
@@ -1132,6 +1134,11 @@ collections:
         file: _data/settings.json
         description: General Site Settings
         fields:
+          - label: Number of posts on frontpage
+            name: front_limit
+            widget: number
+            min: 1
+            max: 10
           - label: Global title
             name: site_title
             widget: string

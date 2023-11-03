@@ -378,6 +378,7 @@ const uk: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
       loading: 'Завантаження редакційних матеріалів',
       workflowHeading: 'Редакція',
       newPost: 'Новий запис',
@@ -402,6 +403,11 @@ const uk: LocalePhrasesRoot = {
       pending_review: 'На розгляді',
       pending_publish: 'Готово',
       currentEntries: '%{smart_count} запис |||| %{smart_count} записів',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

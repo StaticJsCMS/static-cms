@@ -383,6 +383,7 @@ const en: BaseLocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
+      dashboard: 'Dashboard',
       loading: 'Loading Editorial Workflow Entries',
       workflowHeading: 'Editorial Workflow',
       newPost: 'New Post',
@@ -408,6 +409,12 @@ const en: BaseLocalePhrasesRoot = {
       pending_review: 'In Review',
       pending_publish: 'Ready',
       currentEntries: '%{smart_count} entry |||| %{smart_count} entries',
+    },
+    openAuthoring: {
+      forkRequired:
+        "Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)",
+      forkRepo: 'Fork the repo',
+      markReadyForReview: 'Mark Ready for Review',
     },
   },
 };

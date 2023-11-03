@@ -2,7 +2,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 
-import {} from '../actions/editorialWorkflow';
 import {
   ADD_DRAFT_ENTRY_MEDIA_FILE,
   DRAFT_CHANGE_FIELD,

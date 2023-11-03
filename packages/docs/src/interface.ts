@@ -66,7 +66,7 @@ export interface HomepageData {
 export interface Release {
   readonly date: string;
   readonly version: string;
-  readonly type: 'major' | 'minor' | 'patch';
+  readonly type: 'major' | 'minor' | 'patch' | 'pre';
   readonly description?: string;
 }
 
@@ -136,6 +136,7 @@ export interface MenuLink {
   readonly url: string;
   readonly beta?: boolean;
   readonly deprecated?: boolean;
+  readonly target?: '_blank';
 }
 
 export interface MenuLinkSubGroup {

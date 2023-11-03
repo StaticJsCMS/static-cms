@@ -15,6 +15,7 @@ export const createMockEntry = (
   mediaFiles: [],
   author: 'Some Person',
   updatedOn: '20230-02-09T00:00:00.000Z',
+  openAuthoring: false,
   ...options,
 });
 
@@ -31,6 +32,7 @@ export const createMockExpandedEntry = (
   mediaFiles: [],
   author: 'Some Person',
   updatedOn: '20230-02-09T00:00:00.000Z',
+  openAuthoring: false,
   ...options,
 });
 
@@ -45,5 +47,6 @@ export const createMockUnpublishedEntry = (
     { id: 'netlify.png', path: 'netlify.png', newFile: true },
   ],
   updatedAt: '20230-02-09T00:00:00.000Z',
+  openAuthoring: false,
   ...options,
 });

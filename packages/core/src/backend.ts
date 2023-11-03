@@ -1024,13 +1024,18 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     }
 
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter(newEntry ? 'create' : 'update', config, {
-      collection,
-      slug,
-      path,
-      authorLogin: user.login,
-      authorName: user.name,
-    });
+    const commitMessage = commitMessageFormatter(
+      newEntry ? 'create' : 'update',
+      config,
+      {
+        collection,
+        slug,
+        path,
+        authorLogin: user.login,
+        authorName: user.name,
+      },
+      user.useOpenAuthoring,
+    );
 
     const collectionName = collection.name;
 
@@ -1092,11 +1097,16 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   async persistMedia(config: ConfigWithDefaults, file: AssetProxy) {
     const user = (await this.currentUser()) as User;
     const options = {
-      commitMessage: commitMessageFormatter('uploadMedia', config, {
-        path: file.path,
-        authorLogin: user.login,
-        authorName: user.name,
-      }),
+      commitMessage: commitMessageFormatter(
+        'uploadMedia',
+        config,
+        {
+          path: file.path,
+          authorLogin: user.login,
+          authorName: user.name,
+        },
+        user.useOpenAuthoring,
+      ),
     };
     return this.implementation.persistMedia(file, options);
   }
@@ -1119,13 +1129,18 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     }
 
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter('delete', configState.config, {
-      collection,
-      slug,
-      path,
-      authorLogin: user.login,
-      authorName: user.name,
-    });
+    const commitMessage = commitMessageFormatter(
+      'delete',
+      configState.config,
+      {
+        collection,
+        slug,
+        path,
+        authorLogin: user.login,
+        authorName: user.name,
+      },
+      user.useOpenAuthoring,
+    );
 
     let paths = [path];
     if (hasI18n(collection)) {
@@ -1136,11 +1151,16 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   async deleteMedia(config: ConfigWithDefaults, path: string) {
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter('deleteMedia', config, {
-      path,
-      authorLogin: user.login,
-      authorName: user.name,
-    });
+    const commitMessage = commitMessageFormatter(
+      'deleteMedia',
+      config,
+      {
+        path,
+        authorLogin: user.login,
+        authorName: user.name,
+      },
+      user.useOpenAuthoring,
+    );
     return this.implementation.deleteFiles([path], commitMessage);
   }
 
@@ -1177,7 +1197,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     entryData: UnpublishedEntry,
     withMediaFiles: boolean,
   ) {
-    const { slug } = entryData;
+    const { slug, openAuthoring } = entryData;
     let extension: string;
     if ('files' in collection) {
       const file = collection.files.find(f => f?.name === slug);
@@ -1210,10 +1230,10 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         author: entryData.pullRequestAuthor,
         status: workflowStatusFromString(entryData.status),
         meta: { path: prepareMetaPath(path, collection) },
+        openAuthoring,
       });
 
-      const entryWithFormat = this.entryWithFormat(collection)(entry);
-      return entryWithFormat;
+      return this.entryWithFormat(collection)(entry);
     };
 
     const readAndFormatDataFile = async (dataFile: UnpublishedEntryDiff) => {
@@ -1223,8 +1243,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         dataFile.path,
         dataFile.id,
       );
-      const entryWithFormat = formatData(data, dataFile.path, dataFile.newFile);
-      return entryWithFormat;
+
+      return formatData(data, dataFile.path, dataFile.newFile);
     };
 
     // if the unpublished entry has no diffs, return the original
@@ -1244,8 +1264,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       const grouped = await groupEntries(collection, extension, entries as Entry[]);
       return grouped[0];
     } else {
-      const entryWithFormat = await readAndFormatDataFile(dataFiles[0]);
-      return entryWithFormat;
+      return readAndFormatDataFile(dataFiles[0]);
     }
   }
 
@@ -1261,8 +1280,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
             console.warn(`Missing collection '${collectionName}' for unpublished entry '${id}'`);
             return null;
           }
-          const entry = await this.processUnpublishedEntry(collection, entryData, false);
-          return entry;
+
+          return this.processUnpublishedEntry(collection, entryData, false);
         }),
       )
     ).filter(Boolean) as Entry[];
