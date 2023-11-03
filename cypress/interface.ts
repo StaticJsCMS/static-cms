@@ -16,7 +16,7 @@ export interface User {
 }
 
 export type SetupBackendResponse = null | {
-  user: User;
+  user?: User;
 };
 
 export interface SetupBackendTestProps {

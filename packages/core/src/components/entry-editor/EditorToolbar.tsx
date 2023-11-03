@@ -197,7 +197,12 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
 
     if ((!useWorkflow && !isPublished) || (useWorkflow && hasUnpublishedChanges)) {
       items.push(
-        <MenuItemButton key="publishNow" onClick={handlePublishClick} startIcon={PublishIcon}>
+        <MenuItemButton
+          key="publishNow"
+          onClick={handlePublishClick}
+          startIcon={PublishIcon}
+          data-testid="publish-now-button"
+        >
           {t('editor.editorToolbar.publishNow')}
         </MenuItemButton>,
       );
@@ -208,6 +213,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
             key="publishAndCreateNew"
             onClick={handlePublishAndNew}
             startIcon={DocumentAddIcon}
+            data-testid="publish-and-create-new-button"
           >
             {t('editor.editorToolbar.publishAndCreateNew')}
           </MenuItemButton>,
@@ -215,6 +221,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
             key="publishAndDuplicate"
             onClick={handlePublishAndDuplicate}
             startIcon={DocumentDuplicateIcon}
+            data-testid="publish-and-duplicate-button"
           >
             {t('editor.editorToolbar.publishAndDuplicate')}
           </MenuItemButton>,
@@ -222,7 +229,12 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
       }
     } else if (canCreate) {
       items.push(
-        <MenuItemButton key="duplicate" onClick={onDuplicate} startIcon={DocumentDuplicateIcon}>
+        <MenuItemButton
+          key="duplicate"
+          onClick={onDuplicate}
+          startIcon={DocumentDuplicateIcon}
+          data-testid="duplicate-button"
+        >
           {t('editor.editorToolbar.duplicate')}
         </MenuItemButton>,
       );
@@ -237,6 +249,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
           onClick={onUnPublish}
           startIcon={UnpublishedIcon}
           color="warning"
+          data-testid="unpublish-button"
         >
           {t('editor.editorToolbar.unpublish')}
         </MenuItemButton>,
@@ -386,6 +399,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                 }
                 startIcon={TrashIcon}
                 color="error"
+                data-testid="delete-button"
               >
                 {useWorkflow ? t(workflowDeleteLabel!) : t('editor.editorToolbar.deleteEntry')}
               </MenuItemButton>
@@ -444,6 +458,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
           labelClassName={classes['publish-button-label']}
           hideDropdownIconOnMobile
           aria-label="publish options dropdown"
+          data-testid="publish-dropdown"
         >
           {menuItems.map((group, index) => (
             <MenuGroup key={`menu-group-${index}`}>{group}</MenuGroup>

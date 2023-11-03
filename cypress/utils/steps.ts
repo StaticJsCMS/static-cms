@@ -1,13 +1,15 @@
+import format from 'date-fns/format';
+
 import { editorStatus, notifications, publishTypes, workflowStatus } from './constants';
 
 import type { Author, Post, User } from '../interface';
 
 export interface LoginProps {
-  user: User;
+  user?: User;
   editorialWorkflow?: boolean;
 }
 
-export function login(options: LoginProps) {
+export function login(options?: LoginProps) {
   const { user, editorialWorkflow = false } = options ?? {};
 
   cy.viewport(1200, 1200);
@@ -56,10 +58,6 @@ function goToWorkflow() {
   cy.contains('a', 'Workflow').click();
 }
 
-function goToCollections() {
-  cy.contains('a', 'Content').click();
-}
-
 export function goToMediaLibrary() {
   cy.contains('button', 'Media').click();
 }
@@ -76,9 +74,8 @@ export function assertUnpublishedChangesInEditor() {
   cy.contains('button', 'Delete unpublished changes');
 }
 
-function goToEntry(entry: any) {
-  goToCollections();
-  cy.get('a').first().contains(entry.title).click();
+function goToEntry(entry: Post) {
+  cy.contains('a', entry.Title).click();
 }
 
 export function updateWorkflowStatus(
@@ -267,9 +264,8 @@ export function createPostPublishAndCreateNew(entry: Post) {
   newPost();
   populateEntry(entry, () => publishEntry({ createNew: true }));
   cy.url().should('eq', `http://localhost:8080/#/collections/posts/new`);
-  // TODO: fix this test
-  // previous entry data is somehow not cleared from the editor when opening new post
-  // cy.get('[data-testid="field-Title"]').should('have.value', '');
+
+  cy.get('[data-testid="field-Title"] input').should('have.value', '');
 
   exitEditor();
 }
@@ -277,75 +273,78 @@ export function createPostPublishAndCreateNew(entry: Post) {
 export function createPostPublishAndDuplicate(entry: Post) {
   newPost();
   populateEntry(entry, () => publishEntry({ duplicate: true }));
-  cy.url().should('eq', `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[data-testid="field-Title"]').should('have.value', entry.Title);
+  cy.url().should('eq', `http://localhost:8080/#/collections/posts/new?duplicate=true`);
+  cy.get('[data-testid="field-Title"] input').should('have.value', entry.Title);
 
   exitEditor();
 }
 
 export function editPostAndPublish(entry1: Post, entry2: Post) {
   goToEntry(entry1);
-  cy.contains('button', 'Delete entry');
-  cy.contains('span', 'Published');
+  cy.get('[data-testid="editor-extra-menu"]').click();
+  cy.get('[data-testid="delete-button"]');
+  cy.contains('[data-testid="publish-dropdown"]', 'Published');
 
   populateEntry(entry2, publishEntry);
   // existing entry slug should remain the same after save
   cy.url().should(
     'eq',
-    `http://localhost:8080/#/collections/posts/entries/1970-01-01-${entry1.Title.toLowerCase().replace(
-      /\s/,
-      '-',
-    )}`,
+    `http://localhost:8080/#/collections/posts/entries/${format(
+      new Date(),
+      'yyyy-MM-dd',
+    )}-${entry1.Title.toLowerCase().replace(/\s/, '-')}`,
   );
 }
 
 export function editPostPublishAndCreateNew(entry1: Post, entry2: Post) {
   goToEntry(entry1);
-  cy.contains('button', 'Delete entry');
-  cy.contains('span', 'Published');
+  cy.get('[data-testid="editor-extra-menu"]').click();
+  cy.get('[data-testid="delete-button"]');
+  cy.contains('[data-testid="publish-dropdown"]', 'Published');
 
   populateEntry(entry2, () => publishEntry({ createNew: true }));
   cy.url().should('eq', `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[data-testid="field-Title"]').should('have.value', '');
+  cy.get('[data-testid="field-Title"] input').should('have.value', '');
 }
 
 export function editPostPublishAndDuplicate(entry1: Post, entry2: Post) {
   goToEntry(entry1);
-  cy.contains('button', 'Delete entry');
-  cy.contains('span', 'Published');
+  cy.get('[data-testid="editor-extra-menu"]').click();
+  cy.get('[data-testid="delete-button"]');
+  cy.contains('[data-testid="publish-dropdown"]', 'Published');
 
   populateEntry(entry2, () => publishEntry({ duplicate: true }));
-  cy.url().should('eq', `http://localhost:8080/#/collections/posts/new`);
-  cy.get('[data-testid="field-Title"]').should('have.value', entry2.Title);
+  cy.url().should('eq', `http://localhost:8080/#/collections/posts/new?duplicate=true`);
+  cy.get('[data-testid="field-Title"] input').should('have.value', entry2.Title);
 }
 
 export function duplicatePostAndPublish(entry1: Post) {
   goToEntry(entry1);
-  cy.contains('button', 'Delete entry');
+  cy.get('[data-testid="editor-extra-menu"]').click();
+  cy.get('[data-testid="delete-button"]');
   selectDropdownItem('Published', 'Duplicate');
   publishEntry();
 
   cy.url().should(
     'eq',
-    `http://localhost:8080/#/collections/posts/entries/1970-01-01-${entry1.Title.toLowerCase().replace(
-      /\s/,
-      '-',
-    )}-1`,
+    `http://localhost:8080/#/collections/posts/entries/${format(
+      new Date(),
+      'yyyy-MM-dd',
+    )}-${entry1.Title.toLowerCase().replace(/\s/, '-')}-1`,
   );
 }
 
 export function updateExistingPostAndExit(fromEntry: Post, toEntry: Post) {
   goToWorkflow();
-  cy.contains('h2', fromEntry.Title).parent().click({ force: true });
+  cy.contains('a', fromEntry.Title).click({ force: true });
   populateEntry(toEntry);
   exitEditor();
   goToWorkflow();
-  cy.contains('h2', toEntry.Title);
+  cy.contains('a', toEntry.Title);
 }
 
 export function unpublishEntry(entry: Post) {
-  goToCollections();
-  cy.contains('h2', entry.Title).parent().click({ force: true });
+  cy.contains('a', entry.Title).click({ force: true });
   selectDropdownItem('Published', 'Unpublish');
   assertNotification(notifications.unpublished);
   goToWorkflow();
@@ -354,7 +353,7 @@ export function unpublishEntry(entry: Post) {
 
 export function duplicateEntry(entry: Post) {
   selectDropdownItem('Published', 'Duplicate');
-  cy.url().should('contain', '/#/collections/posts/new');
+  cy.url().should('contain', '/#/collections/posts/new?duplicate=true');
   flushClockAndSave();
   updateWorkflowStatusInEditor(editorStatus.ready);
   publishEntryInEditor(publishTypes.publishNow);

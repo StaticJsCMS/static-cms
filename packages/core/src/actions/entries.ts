@@ -54,7 +54,6 @@ import { createAssetProxy } from '../valueObjects/AssetProxy';
 import createEntry from '../valueObjects/createEntry';
 import { addAssets, getAsset } from './media';
 import { loadMedia } from './mediaLibrary';
-import { waitUntil } from './waitUntil';
 
 import type { NavigateFunction } from 'react-router-dom';
 import type { AnyAction } from 'redux';
@@ -458,16 +457,6 @@ export function createDraftFromEntry(collection: CollectionWithDefaults, entry: 
   } as const;
 }
 
-export function draftDuplicateEntry(entry: Entry) {
-  return {
-    type: DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
-    payload: createEntry(entry.collection, '', '', {
-      data: entry.data,
-      mediaFiles: entry.mediaFiles,
-    }),
-  } as const;
-}
-
 export function discardDraft() {
   return { type: DRAFT_DISCARD } as const;
 }
@@ -574,14 +563,13 @@ export function persistLocalBackup(entry: Entry, collection: CollectionWithDefau
 }
 
 export function createDraftDuplicateFromEntry(entry: Entry) {
-  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
-    dispatch(
-      waitUntil({
-        predicate: ({ type }) => type === DRAFT_CREATE_EMPTY,
-        run: () => dispatch(draftDuplicateEntry(entry)),
-      }),
-    );
-  };
+  return {
+    type: DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
+    payload: createEntry(entry.collection, '', '', {
+      data: entry.data,
+      mediaFiles: entry.mediaFiles,
+    }),
+  } as const;
 }
 
 export function retrieveLocalBackup(collection: CollectionWithDefaults, slug: string) {
@@ -1113,7 +1101,7 @@ export type EntriesAction = ReturnType<
   | typeof entryDeleteFail
   | typeof emptyDraftCreated
   | typeof createDraftFromEntry
-  | typeof draftDuplicateEntry
+  | typeof createDraftDuplicateFromEntry
   | typeof discardDraft
   | typeof updateDraft
   | typeof changeDraftField

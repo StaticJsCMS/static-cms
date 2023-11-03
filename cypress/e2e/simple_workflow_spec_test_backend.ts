@@ -1,28 +1,27 @@
+import { TaskResult } from '../interface';
 import fixture from './common/simple_workflow';
 import * as specUtils from './common/spec_utils';
 
 const backend = 'test';
 
 describe('Test Backend Simple Workflow', () => {
-  let taskResult = { data: {} };
+  const taskResult: TaskResult = { data: {} };
 
   before(() => {
     specUtils.before(taskResult, { publish_mode: 'simple' }, backend);
   });
 
   after(() => {
-    specUtils.after(taskResult, backend);
+    specUtils.after(backend);
   });
 
   beforeEach(() => {
-    specUtils.beforeEach(taskResult, backend);
+    specUtils.beforeEach(backend);
   });
 
   afterEach(() => {
-    specUtils.afterEach(taskResult, backend);
+    specUtils.afterEach(backend);
   });
 
-  fixture({
-    getUser: () => taskResult.data.user,
-  });
+  fixture();
 });

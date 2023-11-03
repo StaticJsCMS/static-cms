@@ -1,7 +1,7 @@
 import { createHashHistory } from 'history';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   createDraftDuplicateFromEntry,
@@ -61,6 +61,7 @@ export interface EditorProps {
 
 const Editor: FC<EditorProps> = ({ name: collectionName, slug, newRecord }) => {
   const t = useTranslate();
+  const [searchParams] = useSearchParams();
 
   const [version, setVersion] = useState(0);
 
@@ -157,15 +158,15 @@ const Editor: FC<EditorProps> = ({ name: collectionName, slug, newRecord }) => {
 
           if (createNew) {
             if (duplicate && entryDraft.entry) {
+              navigate(`/collections/${collection.name}/new?duplicate=true`, { replace: true });
               dispatch(createDraftDuplicateFromEntry(entryDraft.entry));
-              navigate(`/collections/${collection.name}/new`, { replace: true });
             } else {
               setSubmitted(false);
               setTimeout(async () => {
                 await dispatch(loadMedia());
-                dispatch(createEmptyDraft(collection, location.search));
-                setVersion(version + 1);
-                navigate(`/collections/${collection.name}/new`, { replace: true });
+                navigate(`/collections/${collection.name}/new`, {
+                  replace: true,
+                });
               }, 100);
             }
           }
@@ -465,7 +466,14 @@ const Editor: FC<EditorProps> = ({ name: collectionName, slug, newRecord }) => {
     if (newRecord && slug !== prevSlug) {
       setTimeout(async () => {
         await dispatch(loadMedia());
-        await dispatch(createEmptyDraft(collection, location.search));
+
+        if (
+          !searchParams.has('duplicate') ||
+          searchParams.get('duplicate') !== 'true' ||
+          entryDraft.entry === undefined
+        ) {
+          await dispatch(createEmptyDraft(collection, location.search));
+        }
       });
     } else if (!newRecord && slug && (prevCollection !== collection || prevSlug !== slug)) {
       setTimeout(async () => {
@@ -501,6 +509,7 @@ const Editor: FC<EditorProps> = ({ name: collectionName, slug, newRecord }) => {
     useWorkflow,
     submitted,
     version,
+    searchParams,
   ]);
 
   const leaveMessage = useMemo(() => t('editor.editor.onLeavePage'), [t]);
@@ -571,6 +580,13 @@ const Editor: FC<EditorProps> = ({ name: collectionName, slug, newRecord }) => {
   const handleDiscardDraft = useCallback(() => {
     setVersion(version => version + 1);
   }, []);
+
+  console.log(
+    !collection,
+    entryDraft == null,
+    entryDraft.entry === undefined,
+    entry && entry.isFetching,
+  );
 
   if (entry && entry.error) {
     return (
