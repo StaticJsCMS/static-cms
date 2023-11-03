@@ -104,8 +104,9 @@ const StyledDesktopLink = styled(Button)(
   `,
 ) as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
 
+const STATIC_CMS_DOMAIN = 'staticcms.org';
 const DEFAULT_DEMO_SITE = 'demo.staticcms.org';
-const DEMO_DOMAIN_REGEX = /demo\.staticcms\.org$/g;
+const STATIC_CMS_DOMAIN_REGEX = /staticcms\.org$/g;
 
 function createDemoUrl(subdomain?: string): string {
   return `https://${subdomain ? subdomain : ''}${DEFAULT_DEMO_SITE}/`;
@@ -124,10 +125,14 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
 
   const [demoUrl, setDemoUrl] = useState(createDemoUrl());
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.location.host.endsWith(DEFAULT_DEMO_SITE)) {
+    if (
+      typeof window === 'undefined' ||
+      !window.location.host.endsWith(STATIC_CMS_DOMAIN) ||
+      window.location.host === `www.${STATIC_CMS_DOMAIN}`
+    ) {
       return;
     }
-    setDemoUrl(createDemoUrl(window.location.host.replace(DEMO_DOMAIN_REGEX, '')));
+    setDemoUrl(createDemoUrl(window.location.host.replace(STATIC_CMS_DOMAIN_REGEX, '')));
   }, []);
 
   const handleDrawerToggle = useCallback(() => {
