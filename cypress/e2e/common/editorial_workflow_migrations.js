@@ -11,7 +11,7 @@ import { workflowStatus } from '../../utils/constants';
 
 const versions = ['2.9.7', '2.10.24'];
 
-export default function({ entries, getUser }) {
+export default function ({ entries, getUser }) {
   versions.forEach(version => {
     it(`migrate from ${version} to latest`, () => {
       cy.task('switchToVersion', {

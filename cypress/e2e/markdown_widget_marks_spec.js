@@ -3,7 +3,6 @@ describe('Markdown widget', () => {
     before(() => {
       Cypress.config('defaultCommandTimeout', 4000);
       cy.task('setupBackend', { backend: 'test' });
-
     });
 
     beforeEach(() => {
@@ -17,10 +16,7 @@ describe('Markdown widget', () => {
 
     describe('toolbar button', () => {
       it('can combine code mark with other marks', () => {
-        cy.clickItalicButton()
-          .type('foo')
-          .setSelection('oo')
-          .clickCodeButton()
+        cy.clickItalicButton().type('foo').setSelection('oo').clickCodeButton()
           .confirmMarkdownEditorContent(`
             <p>
               <em>f</em>

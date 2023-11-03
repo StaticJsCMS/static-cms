@@ -1,11 +1,13 @@
-const fs = require('fs-extra');
-const path = require('path');
-const yaml = require('js-yaml');
+import fs from 'fs-extra';
+import path from 'path';
+import yaml from 'js-yaml';
+
+import type { Config } from '@staticcms/core/interface';
 
 const devTestDirectory = path.join(__dirname, '..', '..', 'packages', 'core', 'dev-test');
 const backendsDirectory = path.join(devTestDirectory, 'backends');
 
-async function copyBackendFiles(backend) {
+export async function copyBackendFiles(backend: string) {
   await Promise.all(
     ['config.yml', 'index.html'].map(file => {
       return fs.copyFile(
@@ -16,15 +18,15 @@ async function copyBackendFiles(backend) {
   );
 }
 
-async function updateConfig(configModifier) {
+export async function updateConfig(configModifier: (config: Config) => void) {
   const configFile = path.join(devTestDirectory, 'config.yml');
-  const configContent = await fs.readFile(configFile);
-  const config = yaml.load(configContent);
+  const configContent = await fs.readFile(configFile, 'utf-8');
+  const config = yaml.load(configContent) as Config;
   await configModifier(config);
   await fs.writeFileSync(configFile, yaml.dump(config));
 }
 
-async function switchVersion(version) {
+export async function switchVersion(version: string) {
   const htmlFile = path.join(devTestDirectory, 'index.html');
   const content = await fs.readFile(htmlFile);
 
@@ -38,5 +40,3 @@ async function switchVersion(version) {
     content.toString().replace(/<script src=".+?static-cms.+?"><\/script>/, replaceString),
   );
 }
-
-module.exports = { copyBackendFiles, updateConfig, switchVersion };

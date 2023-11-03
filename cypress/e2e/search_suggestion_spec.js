@@ -13,7 +13,7 @@ const assertSearchHeading = title => {
 };
 
 const assertSearchResult = (text, collection) => {
-  cy.get('[class*=ListCardLink] h2').contains(collection ?? text)
+  cy.get('[class*=ListCardLink] h2').contains(collection ?? text);
 };
 
 const assertNotInSearch = text => {

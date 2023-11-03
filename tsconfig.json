@@ -53,9 +53,11 @@
       "@staticcms/test": ["./packages/core/test"],
       "@staticcms/test/*": ["./packages/core/test/*"],
       "@staticcms/core": ["./packages/core/src"],
-      "@staticcms/core/*": ["./packages/core/src/*"]
+      "@staticcms/core/*": ["./packages/core/src/*"],
+      "@staticcms/cypress": ["./cypress"],
+      "@staticcms/cypress/*": ["./cypress/*"]
     },
-    "types": ["@types/jest", "@testing-library/jest-dom", "cypress"]
+    "types": ["@types/jest", "@testing-library/jest-dom", "cypress", "node", "mocha"]
   },
   "include": ["cypress/**/*.*"]
 }

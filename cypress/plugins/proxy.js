@@ -60,9 +60,7 @@ const startServer = async (repoDir, mode) => {
 let serverProcess;
 
 async function setupProxy(options) {
-  const postfix = Math.random()
-    .toString(32)
-    .slice(2);
+  const postfix = Math.random().toString(32).slice(2);
 
   const testRepoName = `proxy-test-repo-${Date.now()}-${postfix}`;
   const tempDir = path.join('.temp', testRepoName);

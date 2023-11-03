@@ -35,7 +35,7 @@ const transformRecordedData = (expectation, requestBodySanitizer, responseBodySa
   const { httpRequest, httpResponse } = expectation;
 
   const responseHeaders = {
-    "Content-Type": "application/json; charset=utf-8"
+    'Content-Type': 'application/json; charset=utf-8',
   };
 
   Object.keys(httpResponse.headers)

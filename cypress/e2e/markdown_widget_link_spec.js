@@ -51,11 +51,7 @@ describe('Markdown widget link', () => {
       });
 
       const text = 'Static CMS';
-      cy.focused()
-        .getMarkdownEditor()
-        .type(text)
-        .setSelection(text)
-        .clickLinkButton();
+      cy.focused().getMarkdownEditor().type(text).setSelection(text).clickLinkButton();
 
       cy.confirmMarkdownEditorContent(`<p><a>${text}</a></p>`);
       // eslint-disable-next-line cypress/no-unnecessary-waiting

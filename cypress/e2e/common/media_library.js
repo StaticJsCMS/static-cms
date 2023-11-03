@@ -27,9 +27,7 @@ function assertImagesInLibrary() {
 }
 
 function assertNoImagesInLibrary() {
-  cy.get('h1')
-    .contains('Loading...')
-    .should('not.exist');
+  cy.get('h1').contains('Loading...').should('not.exist');
   cy.get('img[class*="CardImage"]').should('not.exist');
 }
 
@@ -86,9 +84,7 @@ function closeMediaLibrary() {
 
 function switchToGridView() {
   cy.get('div[class*="ViewControls"]').within(() => {
-    cy.get('button')
-      .last()
-      .click();
+    cy.get('button').last().click();
   });
 }
 
@@ -98,7 +94,7 @@ function assertGridEntryImage(entry) {
   });
 }
 
-export default function({ entries, getUser }) {
+export default function ({ entries, getUser }) {
   beforeEach(() => {
     login(getUser && getUser());
   });

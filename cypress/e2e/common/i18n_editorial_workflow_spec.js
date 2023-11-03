@@ -14,7 +14,7 @@ import {
 import { createEntryTranslateAndSave, assertTranslation, updateTranslation } from './i18n';
 import { workflowStatus, editorStatus, publishTypes } from '../../utils/constants';
 
-export default function({ entry, getUser }) {
+export default function ({ entry, getUser }) {
   const structures = ['multiple_folders', 'multiple_files', 'single_file'];
   structures.forEach(structure => {
     it(`can create and publish entry with translation in ${structure} mode`, () => {

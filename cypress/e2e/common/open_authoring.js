@@ -9,7 +9,7 @@ import {
 } from '../../utils/steps';
 import { workflowStatus } from '../../utils/constants';
 
-export default function({ entries, getUser, getForkUser }) {
+export default function ({ entries, getUser, getForkUser }) {
   it('successfully loads', () => {
     login({ user: getUser() });
   });

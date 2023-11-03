@@ -1,10 +1,9 @@
 import fixture from './common/simple_workflow';
 import * as specUtils from './common/spec_utils';
-import { entry1, entry2, entry3 } from './common/entries';
 
-const backend = 'bitbucket';
+const backend = 'test';
 
-describe('BitBucket Backend Simple Workflow', () => {
+describe('Test Backend Simple Workflow', () => {
   let taskResult = { data: {} };
 
   before(() => {
@@ -24,7 +23,6 @@ describe('BitBucket Backend Simple Workflow', () => {
   });
 
   fixture({
-    entries: [entry1, entry2, entry3],
     getUser: () => taskResult.data.user,
   });
 });

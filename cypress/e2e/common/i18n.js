@@ -1,12 +1,8 @@
 import { newPost, populateEntry, publishEntry, flushClockAndSave } from '../../utils/steps';
 
 const enterTranslation = str => {
-  cy.get('[data-testid="field-Title"]')
-    .first()
-    .clear({ force: true });
-  cy.get('[data-testid="field-Title"]')
-    .first()
-    .type(str, { force: true });
+  cy.get('[data-testid="field-Title"]').first().clear({ force: true });
+  cy.get('[data-testid="field-Title"]').first().type(str, { force: true });
 };
 
 const createAndTranslate = entry => {

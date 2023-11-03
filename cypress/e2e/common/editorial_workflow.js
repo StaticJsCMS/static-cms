@@ -18,7 +18,7 @@ import {
 } from '../../utils/steps';
 import { workflowStatus, editorStatus } from '../../utils/constants';
 
-export default function({ entries, getUser }) {
+export default function ({ entries, getUser }) {
   it('successfully loads', () => {
     login({ user: getUser() });
   });
