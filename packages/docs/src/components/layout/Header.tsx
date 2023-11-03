@@ -19,7 +19,7 @@ import SponsorButton from './SponsorButton';
 import type { PaletteMode } from '@mui/material';
 import type { ButtonTypeMap } from '@mui/material/Button';
 import type { ExtendButtonBase } from '@mui/material/ButtonBase';
-import type { DocsGroup, MenuItem, SearchablePage } from '../../interface';
+import type { DocsGroup, MenuItem, MenuLink, SearchablePage } from '../../interface';
 
 const StyledAppBar = styled(AppBar)(
   ({ theme }) => `
@@ -165,6 +165,7 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
       {
         title: 'Demo',
         url: demoUrl,
+        target: '_blank',
       },
       {
         title: 'Community',
@@ -222,14 +223,21 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
           </StyledIconsWrapper>
           {items.map(item => {
             let url = '#';
+            let target: MenuLink['target'];
             if ('url' in item) {
               url = item.url;
+              target = item.target;
             } else if (item.groups.length > 0 && item.groups[0].links.length > 0) {
               url = item.groups[0].links[0].url;
             }
 
             return (
-              <StyledDesktopLink key={`desktop-${item.title}-${url}`} component={Link} href={url}>
+              <StyledDesktopLink
+                key={`desktop-${item.title}-${url}`}
+                component={Link}
+                href={url}
+                target={target}
+              >
                 {item.title}
               </StyledDesktopLink>
             );

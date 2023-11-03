@@ -136,6 +136,7 @@ export interface MenuLink {
   readonly url: string;
   readonly beta?: boolean;
   readonly deprecated?: boolean;
+  readonly target?: '_blank';
 }
 
 export interface MenuLinkSubGroup {
