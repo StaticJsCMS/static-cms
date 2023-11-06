@@ -1,5 +1,7 @@
 backend:
-  name: test-repo
+  name: bitbucket
+  branch: main
+  repo: staticcms/static-cms-bitbucket
 site_url: 'https://example.com'
 media_folder: assets/uploads
 media_library:

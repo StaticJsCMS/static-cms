@@ -25,7 +25,7 @@ import {
 import type { User } from '@staticcms/cypress/interface';
 
 export interface SimpleWorkflowProps {
-  getUser?: () => User;
+  getUser?: () => User | undefined;
 }
 
 export default function ({ getUser }: SimpleWorkflowProps = {}) {

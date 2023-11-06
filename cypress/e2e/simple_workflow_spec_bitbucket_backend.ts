@@ -1,10 +1,12 @@
 import fixture from './common/simple_workflow';
 import * as specUtils from './common/spec_utils';
 
+import type { TaskResult } from '../interface';
+
 const backend = 'bitbucket';
 
 describe('BitBucket Backend Simple Workflow', () => {
-  let taskResult = { data: {} };
+  let taskResult: TaskResult = { data: {} };
 
   before(() => {
     specUtils.before(taskResult, { publish_mode: 'simple' }, backend);
@@ -23,6 +25,6 @@ describe('BitBucket Backend Simple Workflow', () => {
   });
 
   fixture({
-    getUser: () => taskResult.data.user,
+    getUser: () => taskResult.data?.user,
   });
 });

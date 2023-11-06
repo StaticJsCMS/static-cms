@@ -1,6 +1,7 @@
-import { TaskResult } from '../interface';
 import fixture from './common/simple_workflow';
 import * as specUtils from './common/spec_utils';
+
+import type { TaskResult } from '../interface';
 
 const backend = 'test';
 

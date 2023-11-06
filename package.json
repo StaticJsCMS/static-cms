@@ -21,7 +21,7 @@
     "sync-locales": "lerna run sync-locales --scope @staticcms/tools",
     "test": "lerna run test",
     "test:ci": "lerna run test:ci",
-    "test:e2e": "cypress run --browser chrome --headed --spec cypress/e2e/simple_workflow_spec_test_backend.ts",
+    "test:e2e": "cypress run --browser chrome --headed --spec cypress/e2e/simple_workflow_spec_bitbucket_backend.ts",
     "test:e2e:headless": "cypress run --browser chrome --headless",
     "test:integration:ci": "lerna run test:integration:ci",
     "test:integration": "lerna run test:integration",
