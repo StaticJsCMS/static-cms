@@ -14,6 +14,6 @@ export default defineConfig({
     // You may want to clean this up later by importing these.
     setupNodeEvents,
     baseUrl: "http://localhost:8080",
-    specPattern: "cypress/e2e/*spec*.ts",
+    specPattern: "cypress/e2e/*.spec.ts",
   },
 });

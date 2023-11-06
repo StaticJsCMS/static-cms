@@ -102,7 +102,13 @@ const SidebarContent: FC = () => {
   );
 
   return (
-    <div className={classNames(sidebarClasses.content, 'CMS_Scrollbar_root')}>
+    <div
+      className={classNames(
+        sidebarClasses.content,
+        'CMS_Scrollbar_root',
+        'CMS_Scrollbar_secondary',
+      )}
+    >
       <ul className={sidebarClasses.items}>
         {isSearchEnabled && (
           <CollectionSearch

@@ -44,7 +44,6 @@ function catchFormatErrors<T extends keyof typeof formatters>(
 const responseFormatters = {
   json: catchFormatErrors('json', async (res: Response) => {
     const contentType = res.headers.get('Content-Type') || '';
-    console.log('contentType', contentType);
     if (!contentType.startsWith('application/json') && !contentType.startsWith('text/json')) {
       throw new Error(`${contentType} is not a valid JSON Content-Type`);
     }
@@ -66,7 +65,6 @@ export async function parseResponse<T extends keyof typeof responseFormatters = 
 ): Promise<Awaited<ReturnType<(typeof responseFormatters)[T]>>> {
   let body: Awaited<ReturnType<(typeof responseFormatters)[T]>>;
 
-  console.log('response', res);
   try {
     const formatter = responseFormatters[format] ?? false;
     if (!formatter) {

@@ -20,15 +20,15 @@ window.repoFiles = {
   _posts: {
     '2015-02-14-this-is-a-post.md': {
       content:
-        '---\ntitle: This is a YAML front matter post\nimage: /assets/uploads/moby-dick.jpg\ndate: 2015-02-13T00:00:00.000Z\ndescription: YAML front matter post\ncategory: yaml\ntags:\n  - yaml---\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
+        '---\ntitle: This is a YAML front matter post\nimage: /assets/uploads/moby-dick.jpg\ndate: 2015-02-13T00:00:00.000Z\ndescription: YAML front matter post\ncategory: yaml\ntags:\n  - yaml\n---\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
     },
     '2015-02-15-this-is-a-json-frontmatter-post.md': {
       content:
-        '{\n"title": "This is a JSON front matter post",\n"image": "/assets/uploads/moby-dick.jpg",\n"date": "2015-02-14T00:00:00.000Z",\n"description": "JSON front matter post",\n"category": "toml",\n"tags": ["toml"]\n}\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
+        '{\n"title": "This is a JSON front matter post",\n"image": "/assets/uploads/moby-dick.jpg",\n"date": "2015-02-14T00:00:00.000Z",\n"description": "JSON front matter post",\n"category": "json",\n"tags": ["json"]\n}\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
     },
     '2015-02-15-this-is-a-toml-frontmatter-post.md': {
       content:
-        '+++\ntitle = "This is a TOML front matter post"\nimage = "/assets/uploads/moby-dick.jpg"\ndate = "2015-02-15T00:00:00.000Z"\ndescription = TOML front matter post\ncategory = toml\ntags = ["toml"]\n+++\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
+        '+++\ntitle = "This is a TOML front matter post"\nimage = "/assets/uploads/moby-dick.jpg"\ndate = "2015-02-15T00:00:00.000Z"\ndescription = "TOML front matter post"\ncategory = "toml"\ntags = ["toml"]\n+++\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
     },
     '2015-02-14-this-is-a-post-with-a-different-extension.other': {
       content:
@@ -180,6 +180,7 @@ for (var i = 1; i <= 20; i++) {
     content: `---
 title: "This is post # ${i}"
 image: /assets/uploads/lobby.jpg
+draft: ${i % 2 === 0}
 date: ${dateString}T00:00:00.000Z
 description: "Post # ${i}"
 category: news

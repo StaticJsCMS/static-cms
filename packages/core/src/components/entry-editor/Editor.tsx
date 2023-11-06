@@ -581,13 +581,6 @@ const Editor: FC<EditorProps> = ({ name: collectionName, slug, newRecord }) => {
     setVersion(version => version + 1);
   }, []);
 
-  console.log(
-    !collection,
-    entryDraft == null,
-    entryDraft.entry === undefined,
-    entry && entry.isFetching,
-  );
-
   if (entry && entry.error) {
     return (
       <div>

@@ -355,8 +355,6 @@ export default class API {
       return [];
     });
 
-    console.log('response', response);
-
     return response?.values?.some(v => v.hash === sha);
   }
 

@@ -85,6 +85,7 @@ const FilterControl: FC<FilterControlProps> = ({
       variant={anyActive ? 'contained' : 'outlined'}
       rootClassName={classes.root}
       aria-label="filter options dropdown"
+      data-testid="filter-by"
     >
       <MenuGroup>
         {viewFilters.map(viewFilter => {
@@ -95,6 +96,7 @@ const FilterControl: FC<FilterControlProps> = ({
               key={viewFilter.id}
               onClick={handleFilterClick(viewFilter)}
               rootClassName={classes.filter}
+              data-testid={`filter-by-option-${viewFilter.label}`}
             >
               <Checkbox
                 key={`${labelId}-${checked}`}

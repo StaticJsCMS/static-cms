@@ -253,7 +253,7 @@ const CollectionView: FC<CollectionViewProps> = ({
             {collection ? <CollectionHeader collection={collection} /> : null}
             <CollectionControls
               viewStyle={viewStyle}
-              onChangeViewStyle={changeViewStyle}
+              onChangeViewStyle={onChangeViewStyle}
               sortableFields={sortableFields}
               onSortClick={onSortClick}
               sort={sort}

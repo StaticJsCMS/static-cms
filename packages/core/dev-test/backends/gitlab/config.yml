@@ -51,16 +51,27 @@ collections:
           label: Posts Without Index
           field: title
           pattern: front matter post
+        - name: draft
+          label: Drafts
+          field: draft
+          pattern: true
     view_groups:
       groups:
         - name: by-year
           label: Year
           field: date
           pattern: '\d{4}'
+        - name: draft
+          label: Drafts
+          field: draft
     fields:
       - label: Title
         name: title
         widget: string
+      - label: 'Draft'
+        name: 'draft'
+        widget: 'boolean'
+        default: false
       - label: Publish Date
         name: date
         widget: datetime
