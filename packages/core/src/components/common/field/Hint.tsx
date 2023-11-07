@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
@@ -6,7 +6,7 @@ import useCursor from '@staticcms/core/lib/hooks/useCursor';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { FC } from 'react';
+import type { FC, MouseEvent } from 'react';
 
 import './Hint.css';
 
@@ -40,6 +40,10 @@ const Hint: FC<HintProps> = ({
 }) => {
   const finalCursor = useCursor(cursor, disabled);
 
+  const handleOnClick = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+  }, []);
+
   return (
     <div
       data-testid="hint"
@@ -53,6 +57,7 @@ const Hint: FC<HintProps> = ({
         variant === 'inline' && classes.inline,
         className,
       )}
+      onClick={handleOnClick}
     >
       <ReactMarkdown
         remarkPlugins={[gfm]}
