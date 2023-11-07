@@ -67,7 +67,7 @@ export const mockMarkdownField: MarkdownField = {
   label: 'Body',
   name: 'body',
   widget: 'markdown',
-  hint: 'Main content goes here.',
+  hint: '*Main* __content__ __*goes*__ [here](https://example.com/).',
 };
 
 export const mockNumberField: NumberField = {

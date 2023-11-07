@@ -87,7 +87,7 @@ collections:
       - label: Body
         name: body
         widget: markdown
-        hint: '*Main* __content__ __*goes*__ [here](example.com).'
+        hint: '*Main* __content__ __*goes*__ [here](https://example.com/).'
       - label: Tags
         name: tags
         widget: list

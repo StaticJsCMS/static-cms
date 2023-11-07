@@ -1127,33 +1127,46 @@ export interface EventData {
 
 export interface PrePublishEventListener {
   name: 'prePublish';
-  collection: string;
-  file?: string;
-  handler: (event: { data: EventData; collection: string }) => void | Promise<void>;
-}
-
-export interface PostPublishEventListener {
-  name: 'postPublish';
-  collection: string;
-  file?: string;
-  handler: (event: { data: EventData; collection: string }) => void | Promise<void>;
-}
-
-export interface PreSaveEventListener {
-  name: 'preSave';
-  collection: string;
+  collection?: string;
   file?: string;
   handler: (event: {
     data: EventData;
     collection: string;
+    file: string | undefined;
+  }) => void | Promise<void>;
+}
+
+export interface PostPublishEventListener {
+  name: 'postPublish';
+  collection?: string;
+  file?: string;
+  handler: (event: {
+    data: EventData;
+    collection: string;
+    file: string | undefined;
+  }) => void | Promise<void>;
+}
+
+export interface PreSaveEventListener {
+  name: 'preSave';
+  collection?: string;
+  file?: string;
+  handler: (event: {
+    data: EventData;
+    collection: string;
+    file: string | undefined;
   }) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
 }
 
 export interface PostSaveEventListener {
   name: 'postSave';
-  collection: string;
+  collection?: string;
   file?: string;
-  handler: (event: { data: EventData; collection: string }) => void | Promise<void>;
+  handler: (event: {
+    data: EventData;
+    collection: string;
+    file: string | undefined;
+  }) => void | Promise<void>;
 }
 
 export interface MountedEventListener {
@@ -1163,9 +1176,7 @@ export interface MountedEventListener {
 
 export interface LoginEventListener {
   name: 'login';
-  handler: (event: {
-    author: AuthorData;
-  }) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
+  handler: (event: { author: AuthorData }) => void | Promise<void>;
 }
 
 export interface LogoutEventListener {
@@ -1175,17 +1186,20 @@ export interface LogoutEventListener {
 
 export interface ChangeEventListener {
   name: 'change';
-  collection: string;
+  collection?: string;
   file?: string;
-  field: string;
+  field?: string;
   handler: (event: {
     data: EntryData;
     collection: string;
+    file: string | undefined;
     field: string;
   }) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
 }
 
 export type EventListener =
+  | PrePublishEventListener
+  | PostPublishEventListener
   | PreSaveEventListener
   | PostSaveEventListener
   | ChangeEventListener

@@ -8,16 +8,16 @@ You can execute a function when a specific event occurs within Static CMSD.
 
 Supported events are:
 
-| Name        | Description                                                                                                             |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------- |
-| mounted     | Event fires once Static CMS is fully loaded                                                                             |
-| login       | Event fires when a user logs into Static CMS                                                                            |
-| logout      | Event fires when a user logs out of Static CMS                                                                          |
-| change      | Event fires when a user changes the value of a field in the editor                                                      |
-| preSave     | Event fires before the changes have been saved to your git backend                                                      |
-| postSave    | Event fires after the changes have been saved to your git backend                                                       |
-| prePublish  | _**Editorial Workflow ONLY**_. Event fires before the entry is "published", before the PR is merged into default branch |
-| postPublish | _**Editorial Workflow ONLY**_. Event fires after the entry is "published", after the PR is merged into default branch   |
+| Name                               | Description                                                                                                             |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| [mounted](#mounted-event)          | Event fires once Static CMS is fully loaded                                                                             |
+| [login](#login-event)              | Event fires when a user logs into Static CMS                                                                            |
+| [logout](#logout-event)            | Event fires when a user logs out of Static CMS                                                                          |
+| [change](#change-event)            | Event fires when a user changes the value of a field in the editor                                                      |
+| [preSave](#pre-save-event)         | Event fires before the changes have been saved to your git backend                                                      |
+| [postSave](#post-save-event)       | Event fires after the changes have been saved to your git backend                                                       |
+| [prePublish](#pre-publish-event)   | _**Editorial Workflow ONLY**_. Event fires before the entry is "published", before the PR is merged into default branch |
+| [postPublish](#post-publish-event) | _**Editorial Workflow ONLY**_. Event fires after the entry is "published", after the PR is merged into default branch   |
 
 ## Mounted Event
 
@@ -60,12 +60,52 @@ CMS.registerEventListener({
 
 ## Change Event
 
-The `change` event handler fires when a user changes the value of a field in the editor. Event listeners for `change` must provide a field name, and can be used to modify the entry data like so:
+The `change` event handler fires when a user changes the value of a field in the editor. Event listeners for `change` can optionally provide collection, file and field names. They can also be used to modify the entry data.
 
 ```javascript
+// Listen for ALL change events
+CMS.registerEventListener({
+  name: 'change',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all change events in a specific collection
 CMS.registerEventListener({
   name: 'change',
   collection: 'posts',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all change events in a specific file in a collection
+CMS.registerEventListener({
+  name: 'change',
+  collection: 'settings',
+  file: 'global',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all change events in a specific field in a collection
+CMS.registerEventListener({
+  name: 'change',
+  collection: 'posts',
+  // file: 'global', // You can specify a file if in a file collection
+  field: 'path.to.my.field',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Alter the entry data when a specific field changes
+CMS.registerEventListener({
+  name: 'change',
+  collection: 'posts',
+  // file: 'global', // You can specify a file if in a file collection
   field: 'path.to.my.field',
   handler: ({ data, collection, field }) => {
     const currentValue = data.path.to.my.field;
@@ -89,16 +129,56 @@ CMS.registerEventListener({
 
 ## Pre Save Event
 
-The `preSave` event handler fires before the changes have been saved to your git backend, and can be used to modify the entry data like so:
+The `preSave` event handler fires before the changes have been saved to your git backend, and can be used to modify the entry data.
 
 ```javascript
+// Listen for ALL preSave events
+CMS.registerEventListener({
+  name: 'preSave',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all preSave events in a specific collection
 CMS.registerEventListener({
   name: 'preSave',
   collection: 'posts',
-  handler: ({ data: { entry } }) => {
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all preSave events in a specific file in a collection
+CMS.registerEventListener({
+  name: 'preSave',
+  collection: 'settings',
+  file: 'global',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Alter the entry data
+CMS.registerEventListener({
+  name: 'preSave',
+  collection: 'posts',
+  // file: 'global', // You can specify a file if in a file collection
+  handler: ({ data, collection, field }) => {
+    const currentValue = data.path.to.my.field;
+
     return {
-      ...entry.data,
-      title: 'new title',
+      ...data,
+      path: {
+        ...data.path,
+        to: {
+          ...data.path.to,
+          my: {
+            ...data.path.to.my,
+            field: `new${currentValue}`,
+          },
+        },
+      },
     };
   },
 });
@@ -109,11 +189,100 @@ CMS.registerEventListener({
 The `postSave` event handler fires after the changes have been saved to your git backend.
 
 ```javascript
+// Listen for ALL postSave events
+CMS.registerEventListener({
+  name: 'postSave',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all postSave events in a specific collection
 CMS.registerEventListener({
   name: 'postSave',
   collection: 'posts',
-  handler: ({ data: { entry } }) => {
-    // your code here
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all postSave events in a specific file in a collection
+CMS.registerEventListener({
+  name: 'postSave',
+  collection: 'settings',
+  file: 'global',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+```
+
+## Pre Publish Event
+
+<Alert severity="info">Editorial Workflow ONLY</Alert>
+
+The `prePublish` event handler fires before the entry is "published", before the PR is merged into default branch.
+
+```javascript
+// Listen for ALL prePublish events
+CMS.registerEventListener({
+  name: 'prePublish',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all prePublish events in a specific collection
+CMS.registerEventListener({
+  name: 'prePublish',
+  collection: 'posts',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all prePublish events in a specific file in a collection
+CMS.registerEventListener({
+  name: 'prePublish',
+  collection: 'settings',
+  file: 'global',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+```
+
+## Post Publish Event
+
+<Alert severity="info">Editorial Workflow ONLY</Alert>
+
+The `postPublish` event handler fires after the entry is "published", after the PR is merged into default branch.
+
+```javascript
+// Listen for ALL postPublish events
+CMS.registerEventListener({
+  name: 'postPublish',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all postPublish events in a specific collection
+CMS.registerEventListener({
+  name: 'postPublish',
+  collection: 'posts',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
+  },
+});
+
+// Listen for all postPublish events in a specific file in a collection
+CMS.registerEventListener({
+  name: 'postPublish',
+  collection: 'settings',
+  file: 'global',
+  handler: ({ data, collection, field }) => {
+    // Your handler code
   },
 });
 ```
