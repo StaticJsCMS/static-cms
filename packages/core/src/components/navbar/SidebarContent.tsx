@@ -21,7 +21,11 @@ import sidebarClasses from './Sidebar.classes';
 import type { CollectionWithDefaults } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
-const SidebarContent: FC = () => {
+export interface SidebarContentProps {
+  isMobile: boolean;
+}
+
+const SidebarContent: FC<SidebarContentProps> = ({ isMobile }) => {
   const t = useTranslate();
 
   const { name, searchTerm, ...params } = useParams();
@@ -57,12 +61,19 @@ const SidebarContent: FC = () => {
           }
 
           return (
-            <NavLink key={collectionName} to={`/collections/${collectionName}`} icon={icon}>
+            <NavLink
+              key={collectionName}
+              to={`/collections/${collectionName}`}
+              icon={icon}
+              data-testid={`${isMobile ? 'mobile-collection-nav' : 'sidebar-collection-nav'}-${
+                collection.label
+              }`}
+            >
               {collection.label}
             </NavLink>
           );
         }),
-    [collections, filterTerm],
+    [collections, filterTerm, isMobile],
   );
 
   const additionalLinks = useMemo(() => getAdditionalLinks(), []);
@@ -73,17 +84,27 @@ const SidebarContent: FC = () => {
           const icon = getIcon(iconName);
 
           return typeof data === 'string' ? (
-            <NavLink key={title} href={data} icon={icon}>
+            <NavLink
+              key={title}
+              href={data}
+              icon={icon}
+              data-testid={`${isMobile ? 'mobile-external-nav' : 'sidebar-external-nav'}-${title}`}
+            >
               {title}
             </NavLink>
           ) : (
-            <NavLink key={title} to={`/page/${id}`} icon={icon}>
+            <NavLink
+              key={title}
+              to={`/page/${id}`}
+              icon={icon}
+              data-testid={`${isMobile ? 'mobile-page-nav' : 'sidebar-page-nav'}-${title}`}
+            >
               {title}
             </NavLink>
           );
         },
       ),
-    [additionalLinks],
+    [additionalLinks, isMobile],
   );
 
   const searchCollections = useCallback(
@@ -123,13 +144,19 @@ const SidebarContent: FC = () => {
             key="Dashboard"
             to="/dashboard"
             icon={<DashboardIcon className={sidebarClasses['icon']} />}
+            data-testid={`${isMobile ? 'mobile-nav' : 'sidebar-nav'}-Dashboard`}
           >
             {t('workflow.workflow.dashboard')}
           </NavLink>
         ) : null}
         {collectionLinks}
         {links}
-        <NavLink key="Media" to="/media" icon={<PhotoIcon className={sidebarClasses['icon']} />}>
+        <NavLink
+          key="Media"
+          to="/media"
+          icon={<PhotoIcon className={sidebarClasses['icon']} />}
+          data-testid={`${isMobile ? 'mobile-nav' : 'sidebar-nav'}-Media`}
+        >
           {t('app.header.media')}
         </NavLink>
       </ul>

@@ -60,13 +60,13 @@ declare global {
 window.repoFiles = window.repoFiles || {};
 window.repoFilesUnpublished = window.repoFilesUnpublished || [];
 
-function getFile(path: string, tree: RepoTree) {
+function getFile(path: string, tree: RepoTree): RepoFile | undefined {
   const segments = path.split('/');
   let obj: RepoTree = tree;
   while (obj && segments.length) {
     obj = obj[segments.shift() as string] as RepoTree;
   }
-  return (obj as unknown as RepoFile) || {};
+  return (obj as unknown as RepoFile) || undefined;
 }
 
 function writeFile(path: string, content: string | AssetProxy, tree: RepoTree) {
@@ -234,7 +234,7 @@ export default class TestBackend implements BackendClass {
     return Promise.all(
       files.map(file => ({
         file,
-        data: getFile(file.path, window.repoFiles).content as string,
+        data: (getFile(file.path, window.repoFiles)?.content ?? '') as string,
       })),
     );
   }
@@ -242,7 +242,7 @@ export default class TestBackend implements BackendClass {
   getEntry(path: string) {
     return Promise.resolve({
       file: { path, id: null },
-      data: getFile(path, window.repoFiles).content as string,
+      data: (getFile(path, window.repoFiles)?.content ?? '') as string,
     });
   }
 
@@ -437,6 +437,7 @@ export default class TestBackend implements BackendClass {
       const { path, newPath, raw } = dataFile;
       const currentDataFile = window.repoFilesUnpublished[key]?.diffs.find(d => d.path === path);
       const originalPath = currentDataFile ? currentDataFile.originalPath : path;
+      console.log(originalPath, getFile(originalPath as string, window.repoFiles));
       diffs.push({
         originalPath,
         id: newPath || path,

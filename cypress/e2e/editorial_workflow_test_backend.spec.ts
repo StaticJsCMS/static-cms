@@ -1,10 +1,11 @@
+import format from 'date-fns/format';
+
 import {
   login,
   createPost,
   createPostAndExit,
   exitEditor,
   goToWorkflow,
-  goToCollections,
   updateWorkflowStatus,
   publishWorkflowEntry,
   assertWorkflowStatusInEditor,
@@ -23,21 +24,25 @@ import {
   publishAndDuplicateEntryInEditor,
   assertNotification,
   assertFieldValidationError,
-} from '../../utils/steps';
-import { workflowStatus, editorStatus, publishTypes, notifications } from '../../utils/constants';
-
-const entry1 = {
-  Title: 'first title',
-  Body: 'first body',
-};
-const entry2 = {
-  Title: 'second title',
-  Body: 'second body',
-};
-const entry3 = {
-  Title: 'third title',
-  Body: 'third body',
-};
+} from '../utils/steps';
+import { workflowStatus, editorStatus, publishTypes, notifications } from '../utils/constants';
+import {
+  entry1,
+  entry10,
+  entry11,
+  entry12,
+  entry13,
+  entry14,
+  entry15,
+  entry2,
+  entry3,
+  entry4,
+  entry5,
+  entry6,
+  entry7,
+  entry8,
+  entry9,
+} from './common/entries';
 
 describe('Test Backend Editorial Workflow', () => {
   after(() => {
@@ -50,95 +55,121 @@ describe('Test Backend Editorial Workflow', () => {
   });
 
   beforeEach(() => {
-    cy.task('updateConfig', { collections: [{ publish: true }] });
+    cy.task('updateConfig', {
+      collections: [{ publish: true }],
+      publish_mode: 'editorial_workflow',
+    });
   });
 
   it('successfully loads', () => {
-    login();
+    login({ editorialWorkflow: true });
   });
 
   it('can create an entry', () => {
-    login();
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+
     createPost(entry1);
 
     // new entry should show 'Delete unpublished entry'
-    cy.contains('button', 'Delete unpublished entry');
+    cy.get('[data-testid="editor-extra-menu"]').click();
+    cy.contains('[data-testid="delete-button"]', 'Delete unpublished entry');
     cy.url().should(
       'eq',
-      `http://localhost:8080/#/collections/posts/entries/1970-01-01-${entry1.title
-        .toLowerCase()
-        .replace(/\s/, '-')}`,
+      `http://localhost:8080/#/collections/posts/entries/${format(
+        new Date(),
+        'yyyy-MM-dd',
+      )}-${entry1.Title.toLowerCase().replace(/\s/, '-')}`,
     );
     exitEditor();
   });
 
-  it('can publish an editorial workflow entry', () => {
-    login();
-    createPostAndExit(entry1);
+  it.only('can publish an editorial workflow entry', () => {
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+
+    createPostAndExit(entry2);
     goToWorkflow();
-    updateWorkflowStatus(entry1, workflowStatus.draft, workflowStatus.ready);
-    publishWorkflowEntry(entry1);
+    updateWorkflowStatus(entry2, workflowStatus.draft, workflowStatus.ready);
+    publishWorkflowEntry(entry2);
   });
 
   it('can update an entry', () => {
-    login();
-    createPostAndExit(entry1);
-    goToWorkflow();
-    updateWorkflowStatus(entry1, workflowStatus.draft, workflowStatus.ready);
-    publishWorkflowEntry(entry1);
+    login({ editorialWorkflow: true });
 
-    goToEntry(entry1);
-    populateEntry(entry2);
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+    
+    createPostAndExit(entry3);
+    goToWorkflow();
+    updateWorkflowStatus(entry3, workflowStatus.draft, workflowStatus.ready);
+    publishWorkflowEntry(entry3);
+
+    goToEntry(entry3);
+    populateEntry(entry4);
     // existing entry should show 'Delete unpublished changes'
     cy.contains('button', 'Delete unpublished changes');
     // existing entry slug should remain the same after save'
     cy.url().should(
       'eq',
-      `http://localhost:8080/#/collections/posts/entries/1970-01-01-${entry1.title
-        .toLowerCase()
-        .replace(/\s/, '-')}`,
+      `http://localhost:8080/#/collections/posts/entries/${format(
+        new Date(),
+        'yyyy-MM-dd',
+      )}-${entry3.Title.toLowerCase().replace(/\s/, '-')}`,
     );
     exitEditor();
   });
 
   it('can change workflow status', () => {
-    login();
-    createPostAndExit(entry1);
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+    
+    createPostAndExit(entry5);
     goToWorkflow();
-    updateWorkflowStatus(entry1, workflowStatus.draft, workflowStatus.review);
-    updateWorkflowStatus(entry1, workflowStatus.review, workflowStatus.ready);
-    updateWorkflowStatus(entry1, workflowStatus.ready, workflowStatus.review);
-    updateWorkflowStatus(entry1, workflowStatus.review, workflowStatus.draft);
-    updateWorkflowStatus(entry1, workflowStatus.draft, workflowStatus.ready);
+    updateWorkflowStatus(entry5, workflowStatus.draft, workflowStatus.review);
+    updateWorkflowStatus(entry5, workflowStatus.review, workflowStatus.ready);
+    updateWorkflowStatus(entry5, workflowStatus.ready, workflowStatus.review);
+    updateWorkflowStatus(entry5, workflowStatus.review, workflowStatus.draft);
+    updateWorkflowStatus(entry5, workflowStatus.draft, workflowStatus.ready);
   });
 
   it('can change status on and publish multiple entries', () => {
-    login();
-    createPostAndExit(entry1);
-    createPostAndExit(entry2);
-    createPostAndExit(entry3);
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+    
+    createPostAndExit(entry6);
+    createPostAndExit(entry7);
+    createPostAndExit(entry8);
     goToWorkflow();
-    updateWorkflowStatus(entry3, workflowStatus.draft, workflowStatus.ready);
-    updateWorkflowStatus(entry2, workflowStatus.draft, workflowStatus.ready);
-    updateWorkflowStatus(entry1, workflowStatus.draft, workflowStatus.ready);
-    publishWorkflowEntry(entry3);
-    publishWorkflowEntry(entry2);
-    publishWorkflowEntry(entry1);
-    goToCollections();
-    assertPublishedEntry([entry3, entry2, entry1]);
+    updateWorkflowStatus(entry8, workflowStatus.draft, workflowStatus.ready);
+    updateWorkflowStatus(entry7, workflowStatus.draft, workflowStatus.ready);
+    updateWorkflowStatus(entry6, workflowStatus.draft, workflowStatus.ready);
+    publishWorkflowEntry(entry8);
+    publishWorkflowEntry(entry7);
+    publishWorkflowEntry(entry6);
+    assertPublishedEntry([entry8, entry7, entry6]);
   });
 
   it('can delete an entry', () => {
-    login();
-    createPost(entry1);
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+    
+    createPost(entry9);
     deleteEntryInEditor();
     assertOnCollectionsPage();
-    assertEntryDeleted(entry1);
+    assertEntryDeleted(entry9);
   });
 
   it('can update workflow status from within the editor', () => {
-    login();
-    createPost(entry1);
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+    
+    createPost(entry10);
     assertWorkflowStatusInEditor(editorStatus.draft);
     updateWorkflowStatusInEditor(editorStatus.review);
     assertWorkflowStatusInEditor(editorStatus.review);
@@ -146,59 +177,74 @@ describe('Test Backend Editorial Workflow', () => {
     assertWorkflowStatusInEditor(editorStatus.ready);
     exitEditor();
     goToWorkflow();
-    assertWorkflowStatus(entry1, workflowStatus.ready);
+    assertWorkflowStatus(entry10, workflowStatus.ready);
   });
 
   it('can unpublish an existing entry', () => {
     // first publish an entry
-    login();
-    createPostAndExit(entry1);
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+    
+    createPostAndExit(entry11);
     goToWorkflow();
-    updateWorkflowStatus(entry1, workflowStatus.draft, workflowStatus.ready);
-    publishWorkflowEntry(entry1);
+    updateWorkflowStatus(entry11, workflowStatus.draft, workflowStatus.ready);
+    publishWorkflowEntry(entry11);
     // then unpublish it
-    unpublishEntry(entry1);
+    unpublishEntry(entry11);
   });
 
   it('can duplicate an existing entry', () => {
-    login();
-    createPost(entry1);
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+    
+    createPost(entry12);
     updateWorkflowStatusInEditor(editorStatus.ready);
     publishEntryInEditor(publishTypes.publishNow);
-    duplicateEntry(entry1);
+    duplicateEntry(entry12);
   });
 
   it('cannot publish when "publish" is false', () => {
     cy.task('updateConfig', { collections: [{ publish: false }] });
-    login();
-    createPost(entry1);
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+    
+    createPost(entry13);
     cy.contains('span', 'Publish').should('not.exist');
     exitEditor();
     goToWorkflow();
-    updateWorkflowStatus(entry1, workflowStatus.draft, workflowStatus.ready);
+    updateWorkflowStatus(entry13, workflowStatus.draft, workflowStatus.ready);
     cy.contains('button', 'Publish new entry').should('not.exist');
   });
 
   it('can create a new entry, publish and create new', () => {
-    login();
-    createPost(entry1);
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+    
+    createPost(entry14);
     updateWorkflowStatusInEditor(editorStatus.ready);
 
-    publishAndCreateNewEntryInEditor(entry1);
+    publishAndCreateNewEntryInEditor();
   });
 
   it('can create a new entry, publish and duplicate', () => {
-    login();
-    createPost(entry1);
+    login({ editorialWorkflow: true });
+
+    cy.get('[data-testid="sidebar-collection-nav-Posts').click();
+    
+    createPost(entry15);
     updateWorkflowStatusInEditor(editorStatus.ready);
-    publishAndDuplicateEntryInEditor(entry1);
+    publishAndDuplicateEntryInEditor(entry15);
   });
 
-  const inSidebar = func => {
+  const inSidebar = (func: (currentSubject: JQuery<HTMLElement>) => void) => {
     cy.get('[class*=SidebarNavList]').within(func);
   };
 
-  const inGrid = func => {
+  const inGrid = (func: (currentSubject: JQuery<HTMLElement>) => void) => {
     cy.get('[class*=CardsGrid]').within(func);
   };
 

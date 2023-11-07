@@ -1221,6 +1221,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     dataFiles.sort((a, b) => a.path.length - b.path.length);
 
     const formatData = (data: string, path: string, newFile: boolean) => {
+      console.log('newFile', newFile);
       const entry = createEntry(collection.name, slug, path, {
         raw: data,
         isModification: !newFile,

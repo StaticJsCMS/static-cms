@@ -41,7 +41,7 @@ export function login(options?: LoginProps) {
   }
 }
 
-function assertNotification(message: string) {
+export function assertNotification(message: string) {
   cy.get('[data-testid="toast-messages"]', { timeout: 10000 })
     .should('be.visible')
     .within(() => {
@@ -50,16 +50,16 @@ function assertNotification(message: string) {
     });
 }
 
-function exitEditor() {
+export function exitEditor() {
   cy.get('[data-testid="breadcrumb-link"]').first().click();
 }
 
-function goToWorkflow() {
-  cy.contains('a', 'Workflow').click();
+export function goToWorkflow() {
+  cy.get('[data-testid="sidebar-nav-Dashboard]').click();
 }
 
 export function goToMediaLibrary() {
-  cy.contains('button', 'Media').click();
+  cy.get('[data-testid="sidebar-nav-Media]').click();
 }
 
 export function assertUnpublishedEntryInEditor() {
@@ -74,7 +74,7 @@ export function assertUnpublishedChangesInEditor() {
   cy.contains('button', 'Delete unpublished changes');
 }
 
-function goToEntry(entry: Post) {
+export function goToEntry(entry: Post) {
   cy.contains('a', entry.Title).click();
 }
 
@@ -91,7 +91,7 @@ export function updateWorkflowStatus(
   assertNotification(notifications.updated);
 }
 
-export function publishWorkflowEntry({ Title }: Post, timeout: number) {
+export function publishWorkflowEntry({ Title }: Post, timeout = 3000) {
   cy.contains('h2', workflowStatus.ready, { timeout })
     .parent()
     .within(() => {
@@ -165,16 +165,16 @@ export function assertEntryDeleted(entry: Post) {
   });
 }
 
-function assertWorkflowStatus({ Title }: Post, status: string) {
+export function assertWorkflowStatus({ Title }: Post, status: string) {
   cy.contains('h2', status).parent().contains('a', Title);
 }
 
-function updateWorkflowStatusInEditor(newStatus: string) {
+export function updateWorkflowStatusInEditor(newStatus: string) {
   selectDropdownItem(STATUS_BUTTON_TEXT, newStatus);
   assertNotification(notifications.updated);
 }
 
-function publishEntryInEditor(publishType: string) {
+export function publishEntryInEditor(publishType: string) {
   selectDropdownItem('Publish', publishType);
   assertNotification(notifications.published);
 }
@@ -203,10 +203,10 @@ function flushClockAndSave() {
 
   cy.contains('button', 'Save').should('not.be.disabled').click();
 
-  cy.wait(260);
+  assertNotification(notifications.saved);
 }
 
-function populateEntry(entry: Post, onDone = flushClockAndSave) {
+export function populateEntry(entry: Post, onDone = flushClockAndSave) {
   const keys = Object.keys(entry) as (keyof Post)[];
   for (const key of keys) {
     const value = entry[key];
@@ -227,7 +227,7 @@ function newPost() {
   cy.contains('a', 'New Post').click();
 }
 
-function createPost(entry: Post) {
+export function createPost(entry: Post) {
   newPost();
   populateEntry(entry);
 }
@@ -531,7 +531,7 @@ export interface AssertFieldValidationErrorProps {
   fieldLabel: string;
 }
 
-function assertFieldValidationError({ message, fieldLabel }: AssertFieldValidationErrorProps) {
+export function assertFieldValidationError({ message, fieldLabel }: AssertFieldValidationErrorProps) {
   cy.contains('label', fieldLabel).siblings('[data-testid="error"]').contains(message);
   cy.get(`[data-testid="field-${fieldLabel}"]`).should('have.class', 'CMS_Field_error');
 }

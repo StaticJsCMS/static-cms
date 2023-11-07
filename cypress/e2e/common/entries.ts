@@ -79,3 +79,43 @@ export const entry10: Post = {
   Category: 'tenth category',
   Tags: 'tag10',
 };
+
+export const entry11: Post = {
+  Title: 'eleventh title',
+  Body: 'eleventh body',
+  Description: 'eleventh description',
+  Category: 'eleventh category',
+  Tags: 'tag11',
+};
+
+export const entry12: Post = {
+  Title: 'twelveth title',
+  Body: 'twelveth body',
+  Description: 'twelveth description',
+  Category: 'twelveth category',
+  Tags: 'tag12',
+};
+
+export const entry13: Post = {
+  Title: 'thirteenth title',
+  Body: 'thirteenth body',
+  Description: 'thirteenth description',
+  Category: 'thirteenth category',
+  Tags: 'tag13',
+};
+
+export const entry14: Post = {
+  Title: 'fourteenth title',
+  Body: 'fourteenth body',
+  Description: 'fourteenth description',
+  Category: 'fourteenth category',
+  Tags: 'tag14',
+};
+
+export const entry15: Post = {
+  Title: 'fifteenth title',
+  Body: 'fifteenth body',
+  Description: 'fifteenth description',
+  Category: 'fifteenth category',
+  Tags: 'tag15',
+};
