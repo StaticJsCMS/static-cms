@@ -53,33 +53,26 @@ export const allowedEvents = [
 ] as const;
 export type AllowedEvent = (typeof allowedEvents)[number];
 
-type EventHandlerRegistry = {
-  prePublish: Record<
-    string,
-    PrePublishEventListener['handler'][] | Record<string, PrePublishEventListener['handler'][]>
-  >;
-  postPublish: Record<
-    string,
-    PostPublishEventListener['handler'][] | Record<string, PostPublishEventListener['handler'][]>
-  >;
-  preSave: Record<
-    string,
-    PreSaveEventListener['handler'][] | Record<string, PreSaveEventListener['handler'][]>
-  >;
-  postSave: Record<
-    string,
-    PostSaveEventListener['handler'][] | Record<string, PostSaveEventListener['handler'][]>
-  >;
+export interface CollectionListener<T> {
+  all: T[];
+  collections: Record<string, T[]>;
+  files: Record<string, Record<string, T[]>>;
+}
+
+export interface ChangeListener extends CollectionListener<ChangeEventListener['handler']> {
+  collectionField: Record<string, Record<string, ChangeEventListener['handler'][]>>;
+  fileField: Record<string, Record<string, Record<string, ChangeEventListener['handler'][]>>>;
+}
+
+export type EventHandlerRegistry = {
+  prePublish: CollectionListener<PrePublishEventListener['handler']>;
+  postPublish: CollectionListener<PostPublishEventListener['handler']>;
+  preSave: CollectionListener<PreSaveEventListener['handler']>;
+  postSave: CollectionListener<PostSaveEventListener['handler']>;
   mounted: MountedEventListener['handler'][];
   login: LoginEventListener['handler'][];
   logout: LogoutEventListener['handler'][];
-  change: Record<
-    string,
-    Record<
-      string,
-      ChangeEventListener['handler'][] | Record<string, ChangeEventListener['handler'][]>
-    >
-  >;
+  change: ChangeListener;
 };
 
 const eventHandlers = allowedEvents.reduce((acc, e) => {
@@ -88,8 +81,20 @@ const eventHandlers = allowedEvents.reduce((acc, e) => {
     case 'postPublish':
     case 'preSave':
     case 'postSave':
+      acc[e] = {
+        all: [],
+        collections: {},
+        files: {},
+      };
+      break;
     case 'change':
-      acc[e] = {};
+      acc[e] = {
+        all: [],
+        collections: {},
+        files: {},
+        collectionField: {},
+        fileField: {},
+      };
       break;
     default:
       acc[e] = [];
@@ -405,21 +410,47 @@ function validateEventName(name: AllowedEvent) {
   }
 }
 
-export function getEventListeners(options: {
+export function getEventListeners<T extends EventListener['handler']>(options: {
   name: AllowedEvent;
   collection?: string;
+  file?: string;
   field?: string;
-}) {
-  const { name } = options;
+}): T[] {
+  const { name, collection, file, field } = options;
 
   validateEventName(name);
 
+  const handlers: T[] = [];
+
   if (name === 'change') {
-    if (!options.field || !options.collection) {
-      return [];
+    handlers.push(...(registry.eventHandlers[name].all as T[]));
+    if (!collection) {
+      return handlers;
     }
 
-    return (registry.eventHandlers[name][options.collection] ?? {})[options.field] ?? [];
+    handlers.push(...((registry.eventHandlers[name].collections[collection] ?? []) as T[]));
+    if (!file && !field) {
+      return handlers;
+    }
+
+    if (field) {
+      handlers.push(
+        ...((registry.eventHandlers[name].collectionField[collection]?.[field] ?? []) as T[]),
+      );
+    }
+    if (!file) {
+      return handlers;
+    }
+
+    handlers.push(...((registry.eventHandlers[name].files[collection]?.[file] ?? []) as T[]));
+    if (!field) {
+      return handlers;
+    }
+
+    handlers.push(
+      ...((registry.eventHandlers[name].fileField[collection]?.[file]?.[field] ?? []) as T[]),
+    );
+    return handlers;
   }
 
   if (
@@ -428,14 +459,21 @@ export function getEventListeners(options: {
     name === 'preSave' ||
     name === 'postSave'
   ) {
-    if (!options.collection) {
-      return [];
+    handlers.push(...(registry.eventHandlers[name].all as T[]));
+    if (!collection) {
+      return handlers;
     }
 
-    return registry.eventHandlers[name][options.collection] ?? [];
+    handlers.push(...((registry.eventHandlers[name].collections[collection] ?? []) as T[]));
+    if (!file) {
+      return handlers;
+    }
+
+    handlers.push(...((registry.eventHandlers[name].files[collection]?.[file] ?? []) as T[]));
+    return handlers;
   }
 
-  return [...registry.eventHandlers[name]];
+  return [...registry.eventHandlers[name]] as T[];
 }
 
 export function registerEventListener(listener: EventListener) {
@@ -447,81 +485,113 @@ export function registerEventListener(listener: EventListener) {
     const file = listener.file;
     const field = listener.field;
 
-    if (!(collection in registry.eventHandlers[name])) {
-      registry.eventHandlers[name][collection] = {};
+    if (!collection) {
+      registry.eventHandlers[name].all.push(handler);
+      return;
     }
 
-    if (file) {
-      if (!(file in registry.eventHandlers[name][collection])) {
-        registry.eventHandlers[name][collection][file] = {};
-      }
+    if (!(collection in registry.eventHandlers[name])) {
+      registry.eventHandlers[name].collections[collection] = [];
+      registry.eventHandlers[name].collectionField[collection] = {};
+      registry.eventHandlers[name].files[collection] = {};
+      registry.eventHandlers[name].fileField[collection] = {};
+    }
 
-      if (Array.isArray(registry.eventHandlers[name][collection][file])) {
+    if (!file) {
+      if (!field) {
+        registry.eventHandlers[name].collections[collection].push(handler);
         return;
       }
 
-      if (!(field in registry.eventHandlers[name][collection][file])) {
-        (
-          registry.eventHandlers[name][collection][file] as Record<
-            string,
-            ChangeEventListener['handler'][]
-          >
-        )[field] = [];
+      if (!(field in registry.eventHandlers[name].collectionField[collection])) {
+        registry.eventHandlers[name].collectionField[collection][field] = [];
       }
 
-      (
-        registry.eventHandlers[name][collection][file] as Record<
-          string,
-          ChangeEventListener['handler'][]
-        >
-      )[field].push(handler);
+      registry.eventHandlers[name].collectionField[collection][field].push(handler);
       return;
     }
 
-    if (!(field in registry.eventHandlers[name][collection])) {
-      registry.eventHandlers[name][collection][field] = [];
-    }
+    if (!field) {
+      if (!(file in registry.eventHandlers[name].files[collection])) {
+        registry.eventHandlers[name].files[collection][file] = [];
+      }
 
-    if (!Array.isArray(registry.eventHandlers[name][collection][field])) {
+      registry.eventHandlers[name].files[collection][file].push(handler);
       return;
     }
 
-    (registry.eventHandlers[name][collection][field] as ChangeEventListener['handler'][]).push(
-      handler,
-    );
+    if (!(file in registry.eventHandlers[name].fileField[collection])) {
+      registry.eventHandlers[name].fileField[collection][file] = {};
+    }
+
+    if (!(field in registry.eventHandlers[name].fileField[collection][file])) {
+      registry.eventHandlers[name].fileField[collection][file][field] = [];
+    }
+
+    registry.eventHandlers[name].fileField[collection][file][field].push(handler);
     return;
   }
 
-  if (name === 'preSave' || name === 'postSave') {
+  if (name === 'preSave') {
     const collection = listener.collection;
     const file = listener.file;
 
-    if (file) {
-      if (!(collection in registry.eventHandlers[name])) {
-        registry.eventHandlers[name][collection] = {};
-      }
-
-      if (!(file in registry.eventHandlers[name][collection])) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (registry.eventHandlers[name][collection] as Record<string, any[]>)[file] = [];
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (registry.eventHandlers[name][collection] as Record<string, any[]>)[file].push(handler);
+    if (!collection) {
+      registry.eventHandlers[name].all.push(handler);
       return;
     }
 
     if (!(collection in registry.eventHandlers[name])) {
-      registry.eventHandlers[name][collection] = [];
+      registry.eventHandlers[name].collections[collection] = [];
+      registry.eventHandlers[name].files[collection] = {};
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (registry.eventHandlers[name][collection] as any[]).push(handler);
+    if (!file) {
+      registry.eventHandlers[name].collections[collection].push(handler);
+      return;
+    }
+
+    if (!(file in registry.eventHandlers[name].files[collection])) {
+      registry.eventHandlers[name].files[collection][file] = [];
+    }
+
+    registry.eventHandlers[name].files[collection][file].push(handler);
     return;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registry.eventHandlers[name].push(handler as any);
+  if (name === 'postSave' || name === 'prePublish' || name === 'postPublish') {
+    const collection = listener.collection;
+    const file = listener.file;
+
+    if (!collection) {
+      registry.eventHandlers[name].all.push(handler);
+      return;
+    }
+
+    if (!(collection in registry.eventHandlers[name])) {
+      registry.eventHandlers[name].collections[collection] = [];
+      registry.eventHandlers[name].files[collection] = {};
+    }
+
+    if (!file) {
+      registry.eventHandlers[name].collections[collection].push(handler);
+      return;
+    }
+
+    if (!(file in registry.eventHandlers[name].files[collection])) {
+      registry.eventHandlers[name].files[collection][file] = [];
+    }
+
+    registry.eventHandlers[name].files[collection][file].push(handler);
+    return;
+  }
+
+  if (name === 'login') {
+    registry.eventHandlers[name].push(handler);
+    return;
+  }
+
+  registry.eventHandlers[name].push(handler);
 }
 
 export async function invokeEvent(event: { name: 'login'; data: AuthorData }): Promise<void>;
@@ -556,17 +626,18 @@ export async function invokeEvent(event: {
   data: EntryData | undefined;
   collection: string;
   file?: string;
+  fieldName: string;
   field: string;
-  fieldPath: string;
 }): Promise<EntryData>;
 export async function invokeEvent(event: {
   name: AllowedEvent;
   data?: EventData | EntryData | AuthorData;
   collection?: string;
   file?: string;
+  fieldName?: string;
   field?: string;
 }): Promise<void | EntryData> {
-  const { name, data, collection, field } = event;
+  const { name, data, collection, file, fieldName, field } = event;
 
   validateEventName(name);
 
@@ -590,36 +661,26 @@ export async function invokeEvent(event: {
     return;
   }
 
-  if (name === 'postSave') {
+  if (name === 'postSave' || name === 'prePublish' || name === 'postPublish') {
     if (!collection) {
       return;
     }
 
+    const handlers = getEventListeners<
+      | PrePublishEventListener['handler']
+      | PostPublishEventListener['handler']
+      | PostSaveEventListener['handler']
+    >({ name, collection, file });
+
     console.info(
       `[StaticCMS] Firing post save event for${
-        event.file ? ` "${event.file}" file in` : ''
+        file ? ` "${file}" file in` : ''
       } "${collection}" collection`,
       data,
     );
-    const handlers = registry.eventHandlers[name][collection];
 
-    let finalHandlers: PostSaveEventListener['handler'][];
-    if (event.file && !Array.isArray(handlers)) {
-      finalHandlers =
-        (
-          registry.eventHandlers[name][collection] as Record<
-            string,
-            PostSaveEventListener['handler'][]
-          >
-        )[event.file] ?? [];
-    } else if (Array.isArray(handlers)) {
-      finalHandlers = handlers ?? [];
-    } else {
-      finalHandlers = [];
-    }
-
-    for (const handler of finalHandlers) {
-      handler({ data: data as EventData, collection });
+    for (const handler of handlers) {
+      handler({ data: data as EventData, collection, file });
     }
 
     return;
@@ -630,34 +691,22 @@ export async function invokeEvent(event: {
       return;
     }
 
+    const handlers = getEventListeners<ChangeEventListener['handler']>({
+      name,
+      collection,
+      file,
+      field,
+    });
+
     let _data = cloneDeep(data as EntryData);
     console.info(
-      `[StaticCMS] Firing change event for field "${field}" for${
+      `[StaticCMS] Firing change event for field "${fieldName ?? field}" for${
         event.file ? ` "${event.file}" file in` : ''
       } "${collection}" collection`,
     );
-    const collectionHandlers = registry.eventHandlers[name][collection] ?? {};
-
-    let finalHandlers: Record<string, ChangeEventListener['handler'][]>;
-    if (
-      event.file &&
-      event.file in collectionHandlers &&
-      !Array.isArray(collectionHandlers[event.file])
-    ) {
-      finalHandlers =
-        (collectionHandlers as Record<string, Record<string, ChangeEventListener['handler'][]>>)[
-          event.file
-        ] ?? {};
-    } else if (Array.isArray(collectionHandlers[field])) {
-      finalHandlers = collectionHandlers as Record<string, ChangeEventListener['handler'][]>;
-    } else {
-      finalHandlers = {};
-    }
-
-    const handlers = finalHandlers[field] ?? [];
 
     for (const handler of handlers) {
-      const result = await handler({ data: _data, collection, field });
+      const result = await handler({ data: _data, collection, file, field });
       if (_data !== undefined && result) {
         _data = result;
       }
@@ -677,25 +726,11 @@ export async function invokeEvent(event: {
     } "${collection}" collection`,
     data,
   );
-  const handlers = registry.eventHandlers[name][collection] ?? [];
 
-  let finalHandlers: PreSaveEventListener['handler'][];
-  if (event.file && !Array.isArray(handlers)) {
-    finalHandlers =
-      (
-        registry.eventHandlers[name][collection] as Record<
-          string,
-          PreSaveEventListener['handler'][]
-        >
-      )[event.file] ?? [];
-  } else if (Array.isArray(handlers)) {
-    finalHandlers = handlers ?? [];
-  } else {
-    finalHandlers = [];
-  }
+  const handlers = getEventListeners<PreSaveEventListener['handler']>({ name, collection, file });
 
-  for (const handler of finalHandlers) {
-    const result = await handler({ data: _data, collection });
+  for (const handler of handlers) {
+    const result = await handler({ data: _data, collection, file });
     if (_data !== undefined && result !== undefined) {
       const entry = {
         ..._data.entry,
@@ -708,91 +743,162 @@ export async function invokeEvent(event: {
   return _data.entry.data;
 }
 
+function filterEventListeners<T extends EventListener['handler']>(
+  handlers: T[],
+  handlerToRemove: T,
+): T[] {
+  return handlers.filter(item => item !== handlerToRemove);
+}
+
 export function removeEventListener(listener: EventListener) {
   const { name, handler } = listener;
-
   validateEventName(name);
+
   if (name === 'change') {
     const collection = listener.collection;
     const file = listener.file;
     const field = listener.field;
 
-    if (!(collection in registry.eventHandlers[name])) {
-      registry.eventHandlers[name][collection] = {};
-    }
-
-    if (file) {
-      if (!(file in registry.eventHandlers[name][collection])) {
-        registry.eventHandlers[name][collection][file] = {};
-      }
-
-      if (!(field in registry.eventHandlers[name][collection][file])) {
-        (
-          registry.eventHandlers[name][collection][file] as Record<
-            string,
-            ChangeEventListener['handler'][]
-          >
-        )[field] = [];
-      }
-
-      (
-        registry.eventHandlers[name][collection][file] as Record<
-          string,
-          ChangeEventListener['handler'][]
-        >
-      )[field].filter(item => item !== handler);
-
-      return;
-    }
-
-    if (!(field in registry.eventHandlers[name][collection])) {
-      registry.eventHandlers[name][collection][field] = [];
-    }
-
-    if (!Array.isArray(registry.eventHandlers[name][collection][field])) {
-      return;
-    }
-
-    (registry.eventHandlers[name][collection][field] as ChangeEventListener['handler'][]).filter(
-      item => item !== handler,
-    );
-    return;
-  }
-
-  if (name === 'preSave' || name === 'postSave') {
-    const collection = listener.collection;
-    const file = listener.file;
-
-    if (file) {
-      if (!(collection in registry.eventHandlers[name])) {
-        registry.eventHandlers[name][collection] = {};
-      }
-
-      if (!(file in registry.eventHandlers[name][collection])) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (registry.eventHandlers[name][collection] as Record<string, any[]>)[file] = [];
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (registry.eventHandlers[name][collection] as Record<string, any[]>)[file].filter(
-        item => item !== handler,
+    if (!collection) {
+      registry.eventHandlers[name].all = filterEventListeners(
+        registry.eventHandlers[name].all,
+        handler,
       );
       return;
     }
 
     if (!(collection in registry.eventHandlers[name])) {
-      registry.eventHandlers[name][collection] = [];
+      registry.eventHandlers[name].collections[collection] = [];
+      registry.eventHandlers[name].collectionField[collection] = {};
+      registry.eventHandlers[name].files[collection] = {};
+      registry.eventHandlers[name].fileField[collection] = {};
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (registry.eventHandlers[name][collection] as any[]).filter(item => item !== handler);
+    if (!file) {
+      if (!field) {
+        registry.eventHandlers[name].collections[collection] = filterEventListeners(
+          registry.eventHandlers[name].collections[collection],
+          handler,
+        );
+        return;
+      }
+
+      if (!(field in registry.eventHandlers[name].collectionField[collection])) {
+        registry.eventHandlers[name].collectionField[collection][field] = [];
+      }
+
+      registry.eventHandlers[name].collectionField[collection][field] = filterEventListeners(
+        registry.eventHandlers[name].collectionField[collection][field],
+        handler,
+      );
+      return;
+    }
+
+    if (!field) {
+      if (!(file in registry.eventHandlers[name].files[collection])) {
+        registry.eventHandlers[name].files[collection][file] = [];
+      }
+
+      registry.eventHandlers[name].files[collection][file] = filterEventListeners(
+        registry.eventHandlers[name].files[collection][file],
+        handler,
+      );
+      return;
+    }
+
+    if (!(file in registry.eventHandlers[name].fileField[collection])) {
+      registry.eventHandlers[name].fileField[collection][file] = {};
+    }
+
+    if (!(field in registry.eventHandlers[name].fileField[collection][file])) {
+      registry.eventHandlers[name].fileField[collection][file][field] = [];
+    }
+
+    registry.eventHandlers[name].fileField[collection][file][field] = filterEventListeners(
+      registry.eventHandlers[name].fileField[collection][file][field],
+      handler,
+    );
     return;
   }
 
-  registry.eventHandlers[name] = registry.eventHandlers[name].filter(
-    item => item !== handler,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) as any;
+  if (name === 'preSave') {
+    const collection = listener.collection;
+    const file = listener.file;
+
+    if (!collection) {
+      registry.eventHandlers[name].all = filterEventListeners(
+        registry.eventHandlers[name].all,
+        handler,
+      );
+      return;
+    }
+
+    if (!(collection in registry.eventHandlers[name])) {
+      registry.eventHandlers[name].collections[collection] = [];
+      registry.eventHandlers[name].files[collection] = {};
+    }
+
+    if (!file) {
+      registry.eventHandlers[name].collections[collection] = filterEventListeners(
+        registry.eventHandlers[name].collections[collection],
+        handler,
+      );
+      return;
+    }
+
+    if (!(file in registry.eventHandlers[name].files[collection])) {
+      registry.eventHandlers[name].files[collection][file] = [];
+    }
+
+    registry.eventHandlers[name].files[collection][file] = filterEventListeners(
+      registry.eventHandlers[name].files[collection][file],
+      handler,
+    );
+    return;
+  }
+
+  if (name === 'postSave' || name === 'prePublish' || name === 'postPublish') {
+    const collection = listener.collection;
+    const file = listener.file;
+
+    if (!collection) {
+      registry.eventHandlers[name].all = filterEventListeners(
+        registry.eventHandlers[name].all,
+        handler,
+      );
+      return;
+    }
+
+    if (!(collection in registry.eventHandlers[name])) {
+      registry.eventHandlers[name].collections[collection] = [];
+      registry.eventHandlers[name].files[collection] = {};
+    }
+
+    if (!file) {
+      registry.eventHandlers[name].collections[collection] = filterEventListeners(
+        registry.eventHandlers[name].collections[collection],
+        handler,
+      );
+      return;
+    }
+
+    if (!(file in registry.eventHandlers[name].files[collection])) {
+      registry.eventHandlers[name].files[collection][file] = [];
+    }
+
+    registry.eventHandlers[name].files[collection][file] = filterEventListeners(
+      registry.eventHandlers[name].files[collection][file],
+      handler,
+    );
+    return;
+  }
+
+  if (name === 'login') {
+    registry.eventHandlers[name] = filterEventListeners(registry.eventHandlers[name], handler);
+    return;
+  }
+
+  registry.eventHandlers[name] = filterEventListeners(registry.eventHandlers[name], handler);
 }
 
 /**
