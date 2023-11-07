@@ -32,8 +32,8 @@ async function handleChange(
     newEntry = await invokeEvent({
       name: 'change',
       collection,
-      field: field.name,
-      fieldPath,
+      fieldName: field.name,
+      field: fieldPath,
       data: newEntry,
     });
 
