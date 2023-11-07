@@ -61,7 +61,7 @@ collections:
       - label: Body
         name: body
         widget: markdown
-        hint: Main content goes here.
+        hint: "*Main* __content__ __*goes*__ [here](https://example.com/)."
   - name: faq
     label: FAQ
     folder: _faqs
