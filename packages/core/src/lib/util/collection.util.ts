@@ -146,9 +146,13 @@ export function selectTemplateName<EF extends BaseField>(
 }
 
 export function selectEntryCollectionTitle<EF extends BaseField>(
-  collection: CollectionWithDefaults<EF>,
+  collection: CollectionWithDefaults<EF> | undefined,
   entry: Entry,
 ): string {
+  if (!collection) {
+    return '';
+  }
+
   // prefer formatted summary over everything else
   const summaryTemplate = collection.summary;
   if (summaryTemplate) {

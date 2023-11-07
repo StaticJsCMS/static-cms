@@ -15,7 +15,11 @@ import {
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getPreviewCard } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import { selectTemplateName, useInferredFields } from '@staticcms/core/lib/util/collection.util';
+import {
+  selectEntryCollectionTitle,
+  selectTemplateName,
+  useInferredFields,
+} from '@staticcms/core/lib/util/collection.util';
 import { isNotNullish, isNullish } from '@staticcms/core/lib/util/null.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectCollection } from '@staticcms/core/reducers/selectors/collections';
@@ -131,6 +135,8 @@ const WorkflowCard: FC<WorkflowCardProps> = ({ entry, useOpenAuthoring }) => {
     [dispatch, entry.collection, entry.slug, entry.status],
   );
 
+  const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
+
   return collection ? (
     <div
       ref={setNodeRef}
@@ -139,6 +145,7 @@ const WorkflowCard: FC<WorkflowCardProps> = ({ entry, useOpenAuthoring }) => {
         height,
         opacity: isDragging ? 0 : undefined,
       }}
+      data-testid={`drag-handle-${summary}`}
       {...listeners}
     >
       <EntryCard

@@ -3,6 +3,7 @@ import format from 'date-fns/format';
 import { editorStatus, notifications, publishTypes, workflowStatus } from './constants';
 
 import type { Author, Post, User } from '../interface';
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 
 export interface LoginProps {
   user?: User;
@@ -55,7 +56,7 @@ export function exitEditor() {
 }
 
 export function goToWorkflow() {
-  cy.get('[data-testid="sidebar-nav-Dashboard]').click();
+  cy.get('[data-testid="sidebar-nav-Dashboard"]').click();
 }
 
 export function goToMediaLibrary() {
@@ -80,19 +81,24 @@ export function goToEntry(entry: Post) {
 
 export function updateWorkflowStatus(
   { Title }: Post,
-  fromColumnHeading: string,
-  toColumnHeading: string,
+  fromColumnHeading: WorkflowStatus,
+  toColumnHeading: WorkflowStatus,
 ) {
-  cy.contains('h2', fromColumnHeading).parent().contains('a', Title).drag();
-  cy.contains('h2', toColumnHeading).parent().drop();
+  cy.get(`[data-testid="drop-zone-${fromColumnHeading}"]`).within(() => {
+    cy.get(`[data-testid="drag-handle-${Title}"]`).drag();
+  });
 
-  cy.wait(500);
+  cy.wait(5000);
+
+  cy.get(`[data-testid="drop-zone-${toColumnHeading}"]`).drop();
+
+  cy.wait(5000);
 
   assertNotification(notifications.updated);
 }
 
 export function publishWorkflowEntry({ Title }: Post, timeout = 3000) {
-  cy.contains('h2', workflowStatus.ready, { timeout })
+  cy.contains('.CMS_WorkflowColumn_header', workflowStatus.ready, { timeout })
     .parent()
     .within(() => {
       cy.contains('a', Title)
@@ -531,7 +537,10 @@ export interface AssertFieldValidationErrorProps {
   fieldLabel: string;
 }
 
-export function assertFieldValidationError({ message, fieldLabel }: AssertFieldValidationErrorProps) {
+export function assertFieldValidationError({
+  message,
+  fieldLabel,
+}: AssertFieldValidationErrorProps) {
   cy.contains('label', fieldLabel).siblings('[data-testid="error"]').contains(message);
   cy.get(`[data-testid="field-${fieldLabel}"]`).should('have.class', 'CMS_Field_error');
 }

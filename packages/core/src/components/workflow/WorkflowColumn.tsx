@@ -48,6 +48,7 @@ const WorkflowColumn: FC<WorkflowColumnProps> = ({
       ref={setNodeRef}
       className={classNames(classes.root, dragging && classes.dragging, isOver && classes.over)}
       aria-label="droppable region draft"
+      data-testid={`drop-zone-${status}`}
     >
       <div className={classNames(classes.header, classes[status])}>
         {t(`workflow.workflowList.${status}`)}

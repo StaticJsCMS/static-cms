@@ -98,7 +98,7 @@ const EntryCard: FC<EntryCardProps> = ({
     let i = imageFieldName ? (entryData?.[imageFieldName] as string | undefined) : undefined;
 
     if (i) {
-      i = encodeURI(i.trim());
+      i = i.trim();
     }
 
     return i;
@@ -110,7 +110,7 @@ const EntryCard: FC<EntryCardProps> = ({
       : undefined;
 
     if (d) {
-      d = encodeURI(d.trim());
+      d = d.trim();
     }
 
     return d;

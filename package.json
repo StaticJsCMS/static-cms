@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/mocha": "10.0.3",
     "all-contributors-cli": "6.26.1",
-    "cypress": "12.17.4",
+    "cypress": "13.4.0",
     "@simonsmith/cypress-image-snapshot": "9.0.1",
     "cypress-plugin-tab": "1.0.5",
     "execa": "5.1.1",

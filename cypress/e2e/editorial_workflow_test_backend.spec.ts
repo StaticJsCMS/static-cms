@@ -25,7 +25,7 @@ import {
   assertNotification,
   assertFieldValidationError,
 } from '../utils/steps';
-import { workflowStatus, editorStatus, publishTypes, notifications } from '../utils/constants';
+import { editorStatus, publishTypes, notifications } from '../utils/constants';
 import {
   entry1,
   entry10,
@@ -43,6 +43,7 @@ import {
   entry8,
   entry9,
 } from './common/entries';
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 
 describe('Test Backend Editorial Workflow', () => {
   after(() => {
@@ -92,7 +93,7 @@ describe('Test Backend Editorial Workflow', () => {
 
     createPostAndExit(entry2);
     goToWorkflow();
-    updateWorkflowStatus(entry2, workflowStatus.draft, workflowStatus.ready);
+    updateWorkflowStatus(entry2, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
     publishWorkflowEntry(entry2);
   });
 
@@ -103,7 +104,7 @@ describe('Test Backend Editorial Workflow', () => {
     
     createPostAndExit(entry3);
     goToWorkflow();
-    updateWorkflowStatus(entry3, workflowStatus.draft, workflowStatus.ready);
+    updateWorkflowStatus(entry3,  WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
     publishWorkflowEntry(entry3);
 
     goToEntry(entry3);
@@ -128,11 +129,11 @@ describe('Test Backend Editorial Workflow', () => {
     
     createPostAndExit(entry5);
     goToWorkflow();
-    updateWorkflowStatus(entry5, workflowStatus.draft, workflowStatus.review);
-    updateWorkflowStatus(entry5, workflowStatus.review, workflowStatus.ready);
-    updateWorkflowStatus(entry5, workflowStatus.ready, workflowStatus.review);
-    updateWorkflowStatus(entry5, workflowStatus.review, workflowStatus.draft);
-    updateWorkflowStatus(entry5, workflowStatus.draft, workflowStatus.ready);
+    updateWorkflowStatus(entry5, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_REVIEW);
+    updateWorkflowStatus(entry5, WorkflowStatus.PENDING_REVIEW, WorkflowStatus.PENDING_PUBLISH);
+    updateWorkflowStatus(entry5, WorkflowStatus.PENDING_PUBLISH, WorkflowStatus.PENDING_REVIEW);
+    updateWorkflowStatus(entry5, WorkflowStatus.PENDING_REVIEW, WorkflowStatus.DRAFT);
+    updateWorkflowStatus(entry5, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
   });
 
   it('can change status on and publish multiple entries', () => {
@@ -144,9 +145,9 @@ describe('Test Backend Editorial Workflow', () => {
     createPostAndExit(entry7);
     createPostAndExit(entry8);
     goToWorkflow();
-    updateWorkflowStatus(entry8, workflowStatus.draft, workflowStatus.ready);
-    updateWorkflowStatus(entry7, workflowStatus.draft, workflowStatus.ready);
-    updateWorkflowStatus(entry6, workflowStatus.draft, workflowStatus.ready);
+    updateWorkflowStatus(entry8, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
+    updateWorkflowStatus(entry7, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
+    updateWorkflowStatus(entry6, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
     publishWorkflowEntry(entry8);
     publishWorkflowEntry(entry7);
     publishWorkflowEntry(entry6);
@@ -177,7 +178,7 @@ describe('Test Backend Editorial Workflow', () => {
     assertWorkflowStatusInEditor(editorStatus.ready);
     exitEditor();
     goToWorkflow();
-    assertWorkflowStatus(entry10, workflowStatus.ready);
+    assertWorkflowStatus(entry10, WorkflowStatus.PENDING_PUBLISH);
   });
 
   it('can unpublish an existing entry', () => {
@@ -188,7 +189,7 @@ describe('Test Backend Editorial Workflow', () => {
     
     createPostAndExit(entry11);
     goToWorkflow();
-    updateWorkflowStatus(entry11, workflowStatus.draft, workflowStatus.ready);
+    updateWorkflowStatus(entry11, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
     publishWorkflowEntry(entry11);
     // then unpublish it
     unpublishEntry(entry11);
@@ -215,7 +216,7 @@ describe('Test Backend Editorial Workflow', () => {
     cy.contains('span', 'Publish').should('not.exist');
     exitEditor();
     goToWorkflow();
-    updateWorkflowStatus(entry13, workflowStatus.draft, workflowStatus.ready);
+    updateWorkflowStatus(entry13, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
     cy.contains('button', 'Publish new entry').should('not.exist');
   });
 

@@ -164,17 +164,25 @@ Cypress.Commands.add('loginAndNewPost', () => {
 });
 
 Cypress.Commands.add('drag', { prevSubject: true }, subject => {
-  return cy.wrap(subject).trigger('dragstart', {
-    dataTransfer: {},
+  const dataTransfer = new DataTransfer();
+
+  return cy.wrap(subject).trigger('pointerdown', {
     force: true,
   });
 });
 
 Cypress.Commands.add('drop', { prevSubject: true }, subject => {
-  return cy.wrap(subject).trigger('drop', {
-    dataTransfer: {},
-    force: true,
-  });
+  const dataTransfer = new DataTransfer();
+
+  return cy
+    .wrap(subject)
+    .trigger('pointermove', {
+      force: true,
+    })
+    .trigger('pointerup', {
+      dataTransfer,
+      force: true,
+    });
 });
 
 Cypress.Commands.add('clickToolbarButton', (title, { times } = {}) => {
