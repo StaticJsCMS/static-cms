@@ -317,3 +317,20 @@ The YAML format parsing and stringifing can be customized via the `yaml` setting
 | createNodeOptions | https://eemeli.org/yaml/#createnode-options |
 | toJsOptions       | https://eemeli.org/yaml/#tojs-options       |
 | toStringOptions   | https://eemeli.org/yaml/#tostring-options   |
+
+**Example**
+
+<CodeTabs>
+```yaml
+yaml:
+  toStringOptions:
+    indentSeq: false
+```
+
+```js
+yaml: {
+  toStringOptions: { indentSeq: false },
+},
+```
+
+</CodeTabs>
