@@ -5,6 +5,8 @@ import TomlFormatter from './TomlFormatter';
 import JsonFormatter from './JsonFormatter';
 import FileFormatter from './FileFormatter';
 
+import type { ConfigWithDefaults } from '../interface';
+
 const Languages = {
   YAML: 'yaml',
   TOML: 'toml',
@@ -16,7 +18,7 @@ type Language = (typeof Languages)[keyof typeof Languages];
 export type Delimiter = string | [string, string];
 type Format = { language: Language; delimiters: Delimiter };
 
-const parsers = {
+const parsers = (config: ConfigWithDefaults) => ({
   toml: {
     parse: (input: string) => TomlFormatter.fromFile(input),
     stringify: (metadata: object) => {
@@ -42,16 +44,16 @@ const parsers = {
     },
   },
   yaml: {
-    parse: (input: string) => YamlFormatter.fromFile(input),
+    parse: (input: string) => YamlFormatter.fromFile(input, config),
     stringify: (
       metadata: object,
       opts?: { sortedKeys?: string[]; comments?: Record<string, string> },
     ) => {
       const { sortedKeys, comments } = opts || {};
-      return YamlFormatter.toFile(metadata, sortedKeys, comments);
+      return YamlFormatter.toFile(metadata, config, sortedKeys, comments);
     },
   },
-};
+});
 
 function inferFrontmatterFormat(str: string) {
   const lineEnd = str.indexOf('\n');
@@ -99,9 +101,9 @@ export class FrontmatterFormatter extends FileFormatter {
     this.format = getFormatOpts(format, customDelimiter);
   }
 
-  fromFile(content: string) {
+  fromFile(content: string, config: ConfigWithDefaults) {
     const format = this.format || inferFrontmatterFormat(content);
-    const result = matter(content, { engines: parsers, ...format });
+    const result = matter(content, { engines: parsers(config), ...format });
     // in the absent of a body when serializing an entry we use an empty one
     // when calling `toFile`, so we don't want to add it when parsing.
     return {
@@ -112,6 +114,7 @@ export class FrontmatterFormatter extends FileFormatter {
 
   toFile(
     data: { body?: string } & Record<string, unknown>,
+    config: ConfigWithDefaults,
     sortedKeys?: string[],
     comments?: Record<string, string>,
   ) {
@@ -125,7 +128,7 @@ export class FrontmatterFormatter extends FileFormatter {
     // https://github.com/jonschlinkert/gray-matter/issues/96
     const trimLastLineBreak = body.slice(-1) !== '\n';
     const file = matter.stringify(body, meta, {
-      engines: parsers,
+      engines: parsers(config),
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore `sortedKeys` is not recognized by gray-matter, so it gets passed through to the parser
       sortedKeys,

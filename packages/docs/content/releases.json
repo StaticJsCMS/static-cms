@@ -1,6 +1,11 @@
 {
   "releases": [
     {
+      "date": "2023-11-08T10:00:00.000Z",
+      "version": "v4.0.0-beta.3",
+      "type": "pre"
+    },
+    {
       "date": "2023-11-07T10:00:00.000Z",
       "version": "v4.0.0-beta.2",
       "type": "pre"

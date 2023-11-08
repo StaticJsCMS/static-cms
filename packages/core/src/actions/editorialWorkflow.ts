@@ -377,7 +377,7 @@ export function persistUnpublishedEntry(
     let serializedEntry = getSerializedEntry(collection, entry);
     serializedEntry = {
       ...serializedEntry,
-      raw: backend.entryToRaw(collection, serializedEntry),
+      raw: backend.entryToRaw(collection, serializedEntry, state.config.config),
     };
     const serializedEntryDraft: EntryDraft = {
       ...(entryDraft as EntryDraft),
