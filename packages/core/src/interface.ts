@@ -1050,10 +1050,12 @@ export interface Config<EF extends BaseField = UnknownField> {
   search?: boolean;
   theme?: Themes;
   yaml?: {
-    toStringOptions?: ToStringOptions;
-    documentOptions?: DocumentOptions & SchemaOptions & ParseOptions;
+    documentOptions?: DocumentOptions;
+    schemaOptions?: SchemaOptions;
     createNodeOptions?: CreateNodeOptions;
-    parseOptions?: ParseOptions & DocumentOptions & SchemaOptions & ToJSOptions;
+    parseOptions?: ParseOptions;
+    toJsOptions?: ToJSOptions;
+    toStringOptions?: ToStringOptions;
   };
 }
 

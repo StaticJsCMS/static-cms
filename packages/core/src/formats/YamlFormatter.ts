@@ -30,7 +30,12 @@ class YamlFormatter extends FileFormatter {
     if (content && content.trim().endsWith('---')) {
       content = content.trim().slice(0, -3);
     }
-    return yaml.parse(content, config.yaml?.parseOptions);
+    return yaml.parse(content, {
+      ...(config.yaml?.parseOptions ?? {}),
+      ...(config.yaml?.documentOptions ?? {}),
+      ...(config.yaml?.schemaOptions ?? {}),
+      ...(config.yaml?.toJsOptions ?? {}),
+    });
   }
 
   toFile(
@@ -42,6 +47,8 @@ class YamlFormatter extends FileFormatter {
     const doc = new yaml.Document({
       aliasDuplicateObjects: false,
       ...(config.yaml?.documentOptions ?? {}),
+      ...(config.yaml?.schemaOptions ?? {}),
+      ...(config.yaml?.parseOptions ?? {}),
       ...(config.yaml?.createNodeOptions ?? {}),
     });
     const contents = doc.createNode(data, {
