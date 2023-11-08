@@ -285,6 +285,8 @@ export function createPostPublishAndDuplicate(entry: Post) {
 
 export function editPostAndPublish(entry1: Post, entry2: Post) {
   goToEntry(entry1);
+  cy.wait(1000);
+  cy.get('[data-testid="editor-extra-menu"]', { timeout: 5000 }).should('be.enabled');
   cy.get('[data-testid="editor-extra-menu"]').click();
   cy.get('[data-testid="delete-button"]');
   cy.contains('[data-testid="publish-dropdown"]', 'Published');
@@ -302,6 +304,8 @@ export function editPostAndPublish(entry1: Post, entry2: Post) {
 
 export function editPostPublishAndCreateNew(entry1: Post, entry2: Post) {
   goToEntry(entry1);
+  cy.wait(1000);
+  cy.get('[data-testid="editor-extra-menu"]', { timeout: 5000 }).should('be.enabled');
   cy.get('[data-testid="editor-extra-menu"]').click();
   cy.get('[data-testid="delete-button"]');
   cy.contains('[data-testid="publish-dropdown"]', 'Published');
@@ -313,6 +317,8 @@ export function editPostPublishAndCreateNew(entry1: Post, entry2: Post) {
 
 export function editPostPublishAndDuplicate(entry1: Post, entry2: Post) {
   goToEntry(entry1);
+  cy.wait(1000);
+  cy.get('[data-testid="editor-extra-menu"]', { timeout: 5000 }).should('be.enabled');
   cy.get('[data-testid="editor-extra-menu"]').click();
   cy.get('[data-testid="delete-button"]');
   cy.contains('[data-testid="publish-dropdown"]', 'Published');
@@ -324,6 +330,8 @@ export function editPostPublishAndDuplicate(entry1: Post, entry2: Post) {
 
 export function duplicatePostAndPublish(entry1: Post) {
   goToEntry(entry1);
+  cy.wait(1000);
+  cy.get('[data-testid="editor-extra-menu"]', { timeout: 5000 }).should('be.enabled');
   cy.get('[data-testid="editor-extra-menu"]').click();
   cy.get('[data-testid="delete-button"]');
   selectDropdownItem('Published', 'Duplicate');
@@ -544,10 +552,12 @@ export function assertFieldValidationError({
 }
 
 function discardDraft() {
-  cy.get('[data-testid="editor-extra-menu"]')
+  cy.get('[data-testid="editor-extra-menu"]', { timeout: 5000 })
     .should(_ => {})
     .then($el => {
       if ($el.length) {
+        cy.wait(1000);
+        cy.get('[data-testid="editor-extra-menu"]', { timeout: 5000 }).should('be.enabled');
         cy.get('[data-testid="editor-extra-menu"]').click();
         cy.get('[data-testid="discard-button"]')
           .should(_ => {})

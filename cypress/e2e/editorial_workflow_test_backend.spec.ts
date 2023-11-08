@@ -74,6 +74,8 @@ describe('Test Backend Editorial Workflow', () => {
     createPost(entry1);
 
     // new entry should show 'Delete unpublished entry'
+    cy.wait(1000);
+    cy.get('[data-testid="editor-extra-menu"]', { timeout: 5000 }).should('be.enabled');
     cy.get('[data-testid="editor-extra-menu"]').click();
     cy.contains('[data-testid="delete-button"]', 'Delete unpublished entry');
     cy.url().should(
