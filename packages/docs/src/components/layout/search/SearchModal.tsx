@@ -72,6 +72,10 @@ const StyledSuggestionSection = styled('div')`
   gap: 4px;
 `;
 
+function escapeRegExp(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 interface SearchModalProps {
   open: boolean;
   onClose: () => void;
@@ -102,106 +106,104 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
 
   const searchResults = useSearchScores(search, searchablePages);
 
-  const renderedResults = useMemo(
-    () =>
-      searchResults?.length > 0 ? (
-        [...Array<unknown>(SEARCH_RESULTS_TO_SHOW)].map((_, index) => {
-          if (searchResults.length <= index) {
-            return;
-          }
+  const renderedResults = useMemo(() => {
+    const escapedSearch = escapeRegExp(search);
 
-          const result = searchResults[index];
-          const { entry } = result;
-          let summary = entry.textContent;
+    return searchResults?.length > 0 ? (
+      [...Array<unknown>(SEARCH_RESULTS_TO_SHOW)].map((_, index) => {
+        if (searchResults.length <= index) {
+          return;
+        }
 
-          if (!result.isExactTitleMatch) {
+        const result = searchResults[index];
+        const { entry } = result;
+        let summary = entry.textContent;
+
+        if (!result.isExactTitleMatch) {
+          const match = new RegExp(
+            `(?:[\\s]+[^\\s]+){0,10}[\\s]*${escapeRegExp(
+              escapedSearch,
+            )}(?![^<>]*(([/"']|]]|\\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
+            'ig',
+          ).exec(entry.textContent);
+          if (match && match.length >= 1) {
+            summary = `...${match[0].trim()}...`;
+          } else {
             const match = new RegExp(
-              `(?:[\\s]+[^\\s]+){0,10}[\\s]*${search}(?![^<>]*(([/"']|]]|\\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
+              `(?:[\\s]+[^\\s]+){0,10}[\\s]*(${escapedSearch
+                .split(' ')
+                .join('|')})(?![^<>]*(([/"']|]]|\\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
               'ig',
             ).exec(entry.textContent);
             if (match && match.length >= 1) {
               summary = `...${match[0].trim()}...`;
-            } else {
-              const match = new RegExp(
-                `(?:[\\s]+[^\\s]+){0,10}[\\s]*(${search
-                  .split(' ')
-                  .join('|')})(?![^<>]*(([/"']|]]|\\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
-                'ig',
-              ).exec(entry.textContent);
-              if (match && match.length >= 1) {
-                summary = `...${match[0].trim()}...`;
-              }
             }
           }
+        }
 
-          summary = summary?.replace(
-            new RegExp(`(${search.split(' ').join('|')})(?![^<>]*(([/"']|]]|\\b)>))`, 'ig'),
-            `<strong style="color: ${theme.palette.primary.main}">$1</strong>`,
-          );
+        summary = summary?.replace(
+          new RegExp(`(${escapedSearch.split(' ').join('|')})(?![^<>]*(([/"']|]]|\\b)>))`, 'ig'),
+          `<strong style="color: ${theme.palette.primary.main}">$1</strong>`,
+        );
 
-          return (
-            <SearchResult
-              key={`result-${entry.url}`}
-              entry={entry}
-              summary={summary}
-              onClick={handleClose}
-            />
-          );
-        })
-      ) : isNotEmpty(search) ? (
-        <Typography
-          variant="h3"
-          component="div"
-          key="no-results"
-          sx={{ width: '100%', textAlign: 'center', marginTop: '16px' }}
-        >
-          No results found
-        </Typography>
-      ) : (
-        <StyledSuggestions>
-          <StyledSuggestionSection>
-            <Typography variant="h3" sx={{ marginBottom: '4px' }}>
-              Getting Started
-            </Typography>
-            <SuggestionLink href="/docs/start-with-a-template">
-              Start With a Template
-            </SuggestionLink>
-            <SuggestionLink href="/docs/add-to-your-site">Add to Your Site</SuggestionLink>
-            <SuggestionLink href="/docs/configuration-options">
-              Configuration Options
-            </SuggestionLink>
-            <SuggestionLink href="/docs/collection-overview">Collections</SuggestionLink>
-          </StyledSuggestionSection>
-          <StyledSuggestionSection>
-            <Typography variant="h3" sx={{ marginBottom: '4px' }}>
-              Backends
-            </Typography>
-            <SuggestionLink href="/docs/github-backend">GitHub</SuggestionLink>
-            <SuggestionLink href="/docs/bitbucket-backend">Bitbucket</SuggestionLink>
-            <SuggestionLink href="/docs/gitlab-backend">GitLab</SuggestionLink>
-          </StyledSuggestionSection>
-          <StyledSuggestionSection>
-            <Typography variant="h3" sx={{ marginBottom: '4px' }}>
-              Customize Your CMS
-            </Typography>
-            <SuggestionLink href="/docs/custom-previews">Custom Previews</SuggestionLink>
-            <SuggestionLink href="/docs/custom-widgets">Custom Widgets</SuggestionLink>
-            <SuggestionLink href="/docs/custom-icons">Custom Icons</SuggestionLink>
-            <SuggestionLink href="/docs/additional-links">Custom Pages / Links</SuggestionLink>
-          </StyledSuggestionSection>
-          <StyledSuggestionSection>
-            <Typography variant="h3" sx={{ marginBottom: '4px' }}>
-              Widgets
-            </Typography>
-            <SuggestionLink href="/docs/widget-string">String</SuggestionLink>
-            <SuggestionLink href="/docs/widget-image">Image</SuggestionLink>
-            <SuggestionLink href="/docs/widget-datetime">Datetime</SuggestionLink>
-            <SuggestionLink href="/docs/widget-markdown">Markdown</SuggestionLink>
-          </StyledSuggestionSection>
-        </StyledSuggestions>
-      ),
-    [handleClose, search, searchResults, theme.palette.primary.main],
-  );
+        return (
+          <SearchResult
+            key={`result-${entry.url}`}
+            entry={entry}
+            summary={summary}
+            onClick={handleClose}
+          />
+        );
+      })
+    ) : isNotEmpty(escapedSearch) ? (
+      <Typography
+        variant="h3"
+        component="div"
+        key="no-results"
+        sx={{ width: '100%', textAlign: 'center', marginTop: '16px' }}
+      >
+        No results found
+      </Typography>
+    ) : (
+      <StyledSuggestions>
+        <StyledSuggestionSection>
+          <Typography variant="h3" sx={{ marginBottom: '4px' }}>
+            Getting Started
+          </Typography>
+          <SuggestionLink href="/docs/start-with-a-template">Start With a Template</SuggestionLink>
+          <SuggestionLink href="/docs/add-to-your-site">Add to Your Site</SuggestionLink>
+          <SuggestionLink href="/docs/configuration-options">Configuration Options</SuggestionLink>
+          <SuggestionLink href="/docs/collection-overview">Collections</SuggestionLink>
+        </StyledSuggestionSection>
+        <StyledSuggestionSection>
+          <Typography variant="h3" sx={{ marginBottom: '4px' }}>
+            Backends
+          </Typography>
+          <SuggestionLink href="/docs/github-backend">GitHub</SuggestionLink>
+          <SuggestionLink href="/docs/bitbucket-backend">Bitbucket</SuggestionLink>
+          <SuggestionLink href="/docs/gitlab-backend">GitLab</SuggestionLink>
+        </StyledSuggestionSection>
+        <StyledSuggestionSection>
+          <Typography variant="h3" sx={{ marginBottom: '4px' }}>
+            Customize Your CMS
+          </Typography>
+          <SuggestionLink href="/docs/custom-previews">Custom Previews</SuggestionLink>
+          <SuggestionLink href="/docs/custom-widgets">Custom Widgets</SuggestionLink>
+          <SuggestionLink href="/docs/custom-icons">Custom Icons</SuggestionLink>
+          <SuggestionLink href="/docs/additional-links">Custom Pages / Links</SuggestionLink>
+        </StyledSuggestionSection>
+        <StyledSuggestionSection>
+          <Typography variant="h3" sx={{ marginBottom: '4px' }}>
+            Widgets
+          </Typography>
+          <SuggestionLink href="/docs/widget-string">String</SuggestionLink>
+          <SuggestionLink href="/docs/widget-image">Image</SuggestionLink>
+          <SuggestionLink href="/docs/widget-datetime">Datetime</SuggestionLink>
+          <SuggestionLink href="/docs/widget-markdown">Markdown</SuggestionLink>
+        </StyledSuggestionSection>
+      </StyledSuggestions>
+    );
+  }, [handleClose, search, searchResults, theme.palette.primary.main]);
 
   return (
     <StyledDialog open={open} onClose={handleClose} fullScreen={fullScreen} fullWidth>

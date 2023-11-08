@@ -32,4 +32,4 @@ jobs:
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v6
         with:
-          start: yarn dev
+          build: yarn dev
