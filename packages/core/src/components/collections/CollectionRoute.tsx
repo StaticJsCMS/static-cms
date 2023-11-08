@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 
 import useDefaultPath from '@staticcms/core/lib/hooks/useDefaultPath';
@@ -21,8 +21,7 @@ const CollectionRoute: FC<CollectionRouteProps> = ({ isSearchResults, isSingleSe
   const [searchParams] = useSearchParams();
   const noRedirect = searchParams.has('noredirect');
 
-  const collectionSelector = useMemo(() => selectCollection(name), [name]);
-  const collection = useAppSelector(collectionSelector);
+  const collection = useAppSelector(state => selectCollection(state, name));
   const collections = useAppSelector(selectCollections);
 
   const defaultPath = useDefaultPath(collections);

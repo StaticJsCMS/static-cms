@@ -239,7 +239,10 @@ export function loadUnpublishedEntry(collection: CollectionWithDefaults, slug: s
     //run possible unpublishedEntries migration
     if (!entriesLoaded) {
       try {
-        const { entries, pagination } = await backend.unpublishedEntries(state.collections);
+        const { entries, pagination } = await backend.unpublishedEntries(
+          state.collections,
+          state.config.config,
+        );
         dispatch(unpublishedEntriesLoaded(entries, pagination));
         // eslint-disable-next-line no-empty
       } catch (e) {}
@@ -248,7 +251,7 @@ export function loadUnpublishedEntry(collection: CollectionWithDefaults, slug: s
     dispatch(unpublishedEntryLoading(collection, slug));
 
     try {
-      const entry = await backend.unpublishedEntry(state, collection, slug);
+      const entry = await backend.unpublishedEntry(state, collection, state.config.config, slug);
       const assetProxies = await Promise.all(
         entry.mediaFiles
           .filter(file => file.draft)
@@ -300,7 +303,7 @@ export function loadUnpublishedEntries(collections: CollectionsWithDefaults) {
 
     dispatch(unpublishedEntriesLoading());
     backend
-      .unpublishedEntries(collections)
+      .unpublishedEntries(collections, state.config.config)
       .then(response => dispatch(unpublishedEntriesLoaded(response.entries, response.pagination)))
       .catch((error: Error) => {
         console.error(error);
@@ -336,7 +339,7 @@ export function persistUnpublishedEntry(
     const entryDraft = state.entryDraft;
     const fieldsErrors = entryDraft.fieldsErrors;
     const unpublishedSlugs = selectUnpublishedSlugs(state, collection.name);
-    const publishedSlugs = selectPublishedSlugs(collection.name)(state);
+    const publishedSlugs = selectPublishedSlugs(state, collection.name);
     const usedSlugs = publishedSlugs.concat(unpublishedSlugs);
     const entriesLoaded = state.editorialWorkflow.ids;
 

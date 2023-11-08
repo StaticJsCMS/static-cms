@@ -33,7 +33,7 @@ describe(SelectControl.name, () => {
     });
 
     await act(async () => {
-      const field = getByTestId('field');
+      const field = getByTestId('field-Mock Widget');
       await userEvent.click(field);
     });
 
@@ -43,7 +43,7 @@ describe(SelectControl.name, () => {
     });
 
     await act(async () => {
-      const field = getByTestId('field');
+      const field = getByTestId('field-Mock Widget');
       await userEvent.click(field);
     });
 

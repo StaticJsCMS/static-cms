@@ -14,7 +14,7 @@ export interface WorkflowCardProps {
 }
 
 const WorkflowCard: FC<WorkflowCardProps> = ({ entry }) => {
-  const collection = useAppSelector(selectCollection(entry.collection));
+  const collection = useAppSelector(state => selectCollection(state, entry.collection));
   const inferredFields = useInferredFields(collection);
 
   const dateField = useMemo(

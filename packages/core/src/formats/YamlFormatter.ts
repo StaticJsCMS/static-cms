@@ -30,6 +30,7 @@ class YamlFormatter extends FileFormatter {
     if (content && content.trim().endsWith('---')) {
       content = content.trim().slice(0, -3);
     }
+
     return yaml.parse(content, {
       ...(config.yaml?.parseOptions ?? {}),
       ...(config.yaml?.documentOptions ?? {}),

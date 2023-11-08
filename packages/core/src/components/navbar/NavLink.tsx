@@ -25,6 +25,7 @@ export interface BaseNavLinkProps {
   icon?: ReactNode;
   children: ReactNode;
   className?: string;
+  'data-testid'?: string;
   onClick?: MouseEventHandler;
 }
 
@@ -38,7 +39,14 @@ export interface NavInternalLinkProps extends BaseNavLinkProps {
 
 export type NavLinkProps = NavExternalLinkProps | NavInternalLinkProps;
 
-const NavLink: FC<NavLinkProps> = ({ icon, children, className, onClick, ...otherProps }) => {
+const NavLink: FC<NavLinkProps> = ({
+  icon,
+  children,
+  className,
+  'data-testid': dataTestId,
+  onClick,
+  ...otherProps
+}) => {
   const content = useMemo(
     () => (
       <div className={classes.content}>
@@ -59,6 +67,7 @@ const NavLink: FC<NavLinkProps> = ({ icon, children, className, onClick, ...othe
           target="_blank"
           rel="noreferrer"
           className={classNames(buttonClasses.root, buttonClasses['text-secondary'], classes.link)}
+          data-testid={dataTestId}
           onClick={onClick}
         >
           <div className={classes.external}>
@@ -81,6 +90,7 @@ const NavLink: FC<NavLinkProps> = ({ icon, children, className, onClick, ...othe
             : buttonClasses['text-secondary'],
           classes.link,
         )}
+        data-testid={dataTestId}
         onClick={onClick}
       >
         {content}

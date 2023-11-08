@@ -74,7 +74,9 @@ const SnackbarAlert = forwardRef<HTMLDivElement, SnackbarAlertProps>(({ data, on
       ref={ref}
     >
       <div className={classes['icon-wrapper']}>{icon}</div>
-      <div className={classes.message}>{renderedMessage}</div>
+      <div className={classes.message} data-testid="toast-messages">
+        {renderedMessage}
+      </div>
       <IconButton
         icon={CloseIcon}
         variant="text"

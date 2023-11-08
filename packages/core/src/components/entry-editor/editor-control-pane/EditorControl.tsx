@@ -89,11 +89,7 @@ const EditorControl: FC<EditorControlProps> = ({
     !isEmpty(widget.getValidValue(internalValue, field as UnknownField)),
   );
 
-  const fieldErrorsSelector = useMemo(
-    () => selectFieldErrors(path, i18n, isMeta),
-    [i18n, isMeta, path],
-  );
-  const errors = useAppSelector(fieldErrorsSelector);
+  const errors = useAppSelector(state => selectFieldErrors(state, path, i18n, isMeta));
 
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
 
@@ -124,7 +120,12 @@ const EditorControl: FC<EditorControlProps> = ({
       return;
     }
 
-    if ((!dirty && !submitted) || disabled || i18nDisabled) {
+    if (
+      (!dirty && !submitted) ||
+      disabled ||
+      i18nDisabled ||
+      (forList && field.widget === 'object' && field.fields.length === 1)
+    ) {
       return;
     }
 
@@ -148,6 +149,8 @@ const EditorControl: FC<EditorControlProps> = ({
     disabled,
     isMeta,
     i18nDisabled,
+    forList,
+    forSingleList,
   ]);
 
   const clearChildValidation = useCallback(() => {

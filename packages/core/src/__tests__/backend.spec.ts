@@ -1,11 +1,10 @@
 import { createMockFolderCollectionWithDefaults } from '@staticcms/test/data/collections.mock';
-import { createMockConfig, createMockConfigWithDefaults } from '@staticcms/test/data/config.mock';
+import { createMockConfig } from '@staticcms/test/data/config.mock';
 import {
   createMockEntry,
   createMockExpandedEntry,
   createMockUnpublishedEntry,
 } from '@staticcms/test/data/entry.mock';
-import { applyDefaults } from '../actions/config';
 import {
   Backend,
   expandSearchEntries,
@@ -36,6 +35,7 @@ jest.mock('../lib/urlHelper');
 describe('Backend', () => {
   describe('filterEntries', () => {
     let backend: Backend;
+    let config: ConfigWithDefaults;
     let collection: CollectionWithDefaults;
 
     beforeEach(() => {
@@ -45,14 +45,14 @@ describe('Backend', () => {
 
       collection = createMockFolderCollectionWithDefaults();
 
-      backend = resolveBackend(
-        createMockConfig({
-          backend: {
-            name: 'git-gateway',
-          },
-          collections: [collection],
-        }),
-      );
+      config = createMockConfig({
+        backend: {
+          name: 'git-gateway',
+        },
+        collections: [collection],
+      });
+
+      backend = resolveBackend(config);
     });
 
     it('filters string values', () => {
@@ -164,8 +164,15 @@ describe('Backend', () => {
         name: 'posts',
       }) as CollectionWithDefaults;
 
+      const config = createMockConfig({
+        backend: {
+          name: 'github',
+        },
+        collections: [collection],
+      });
+
       const backend = new Backend(initializer, {
-        config: createMockConfig({ collections: [collection] }),
+        config,
         backendName: 'github',
       });
 
@@ -173,7 +180,7 @@ describe('Backend', () => {
 
       (localForage.getItem as jest.Mock).mockReturnValue(null);
 
-      const result = await backend.getLocalDraftBackup(collection, slug);
+      const result = await backend.getLocalDraftBackup(collection, config, slug);
 
       expect(result).toEqual({ entry: null });
       expect(localForage.getItem).toHaveBeenCalledTimes(1);
@@ -193,8 +200,15 @@ describe('Backend', () => {
         name: 'posts',
       }) as CollectionWithDefaults;
 
+      const config = createMockConfig({
+        backend: {
+          name: 'github',
+        },
+        collections: [collection],
+      });
+
       const backend = new Backend(initializer, {
-        config: createMockConfig({ collections: [collection] }),
+        config,
         backendName: 'github',
       });
 
@@ -202,7 +216,7 @@ describe('Backend', () => {
 
       (localForage.getItem as jest.Mock).mockReturnValue({ raw: '' });
 
-      const result = await backend.getLocalDraftBackup(collection, slug);
+      const result = await backend.getLocalDraftBackup(collection, config, slug);
 
       expect(result).toEqual({ entry: null });
       expect(localForage.getItem).toHaveBeenCalledTimes(1);
@@ -223,8 +237,15 @@ describe('Backend', () => {
         format: 'json-frontmatter',
       }) as CollectionWithDefaults;
 
+      const config = createMockConfig({
+        backend: {
+          name: 'github',
+        },
+        collections: [collection],
+      });
+
       const backend = new Backend(initializer, {
-        config: createMockConfig({ collections: [collection] }),
+        config,
         backendName: 'github',
       });
 
@@ -234,7 +255,7 @@ describe('Backend', () => {
         raw: '{\n"title": "Hello World"\n}\n',
       });
 
-      const result = await backend.getLocalDraftBackup(collection, slug);
+      const result = await backend.getLocalDraftBackup(collection, config, slug);
 
       expect(result).toEqual({
         entry: {
@@ -272,8 +293,15 @@ describe('Backend', () => {
         format: 'json-frontmatter',
       }) as CollectionWithDefaults;
 
+      const config = createMockConfig({
+        backend: {
+          name: 'github',
+        },
+        collections: [collection],
+      });
+
       const backend = new Backend(initializer, {
-        config: createMockConfig({ collections: [collection] }),
+        config,
         backendName: 'github',
       });
 
@@ -284,7 +312,7 @@ describe('Backend', () => {
         mediaFiles: [{ id: '1' }],
       });
 
-      const result = await backend.getLocalDraftBackup(collection, slug);
+      const result = await backend.getLocalDraftBackup(collection, config, slug);
 
       expect(result).toEqual({
         entry: {
@@ -328,7 +356,7 @@ describe('Backend', () => {
         format: 'json-frontmatter',
       }) as CollectionWithDefaults;
 
-      const config = applyDefaults(createMockConfig({ collections: [collection] }));
+      const config = createMockConfig({ collections: [collection] });
 
       const backend = new Backend(initializer, {
         config,
@@ -367,7 +395,7 @@ describe('Backend', () => {
         format: 'json-frontmatter',
       }) as CollectionWithDefaults;
 
-      const config = applyDefaults(createMockConfig({ collections: [collection] }));
+      const config = createMockConfig({ collections: [collection] });
 
       const backend = new Backend(initializer, {
         config,
@@ -468,7 +496,6 @@ describe('Backend', () => {
         media_folder: 'static/images',
         collections: [collection],
       });
-
       const backend = new Backend(initializer, { config, backendName: 'github' });
 
       const state = {
@@ -479,7 +506,7 @@ describe('Backend', () => {
 
       const slug = 'slug';
 
-      const result = await backend.unpublishedEntry(state, collection, slug);
+      const result = await backend.unpublishedEntry(state, collection, config, slug);
       expect(result).toEqual({
         author: '',
         collection: 'posts',
@@ -713,7 +740,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      config = createMockConfigWithDefaults({ collections });
+      config = createMockConfig({ collections });
 
       backend = new Backend(initializer, { config, backendName: 'github' });
       (backend.listAllEntries as jest.Mock) = jest.fn(collection => {
@@ -731,7 +758,7 @@ describe('Backend', () => {
     });
 
     it('should search collections by title', async () => {
-      const results = await backend.search(collections, 'find me by title');
+      const results = await backend.search(collections, 'find me by title', config);
 
       expect(results).toEqual({
         entries: [posts[0], pages[0]],
@@ -740,7 +767,7 @@ describe('Backend', () => {
     });
 
     it('should search collections by short title', async () => {
-      const results = await backend.search(collections, 'find me by short title');
+      const results = await backend.search(collections, 'find me by short title', config);
 
       expect(results).toEqual({
         entries: [posts[0], pages[0]],
@@ -749,7 +776,7 @@ describe('Backend', () => {
     });
 
     it('should search collections by author', async () => {
-      const results = await backend.search(collections, 'find me by author');
+      const results = await backend.search(collections, 'find me by author', config);
 
       expect(results).toEqual({
         entries: [posts[0], pages[0]],
@@ -761,6 +788,7 @@ describe('Backend', () => {
       const results = await backend.search(
         collections.map(c => ({ ...c, summary: '{{description}}' })),
         'find me by description',
+        config,
       );
 
       expect(results).toEqual({
@@ -790,18 +818,18 @@ describe('Backend', () => {
         }),
       ] as unknown as CollectionWithDefaults[];
 
-      expect(await backend.search(collections, 'find me by author')).toEqual({
+      expect(await backend.search(collections, 'find me by author', config)).toEqual({
         entries: [files[0]],
         pagination: 1,
       });
-      expect(await backend.search(collections, 'find me by other')).toEqual({
+      expect(await backend.search(collections, 'find me by other', config)).toEqual({
         entries: [files[1]],
         pagination: 1,
       });
     });
 
     it('should query collections by title', async () => {
-      const results = await backend.query(collections[0], ['title'], 'find me by title');
+      const results = await backend.query(collections[0], config, ['title'], 'find me by title');
 
       expect(results).toEqual({
         hits: [posts[0]],
@@ -810,7 +838,7 @@ describe('Backend', () => {
     });
 
     it('should query collections by slug', async () => {
-      const results = await backend.query(collections[0], ['slug'], 'find-me');
+      const results = await backend.query(collections[0], config, ['slug'], 'find-me');
 
       expect(results).toEqual({
         hits: [posts[0]],
@@ -819,7 +847,7 @@ describe('Backend', () => {
     });
 
     it('should query collections by path', async () => {
-      const results = await backend.query(collections[0], ['path'], 'posts/find-me.md');
+      const results = await backend.query(collections[0], config, ['path'], 'posts/find-me.md');
 
       expect(results).toEqual({
         hits: [posts[0]],
@@ -830,6 +858,7 @@ describe('Backend', () => {
     it('should query collections by nested field', async () => {
       const results = await backend.query(
         collections[0],
+        config,
         ['nested.title'],
         'find me by nested title',
       );

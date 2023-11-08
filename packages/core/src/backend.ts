@@ -509,7 +509,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     let i = 1;
     let uniqueSlug = slug;
 
-    // Check for duplicate slug in loaded entities store first before repo
+    // Check for duplicate slug in loaded entries store first before repo
     while (
       usedSlugs.includes(uniqueSlug) ||
       (await this.entryExist(
@@ -527,6 +527,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   processEntries<EF extends BaseField>(
     loadedEntries: ImplementationEntry[],
     collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
   ): Entry[] {
     const entries = loadedEntries.map(loadedEntry =>
       createEntry(
@@ -541,7 +542,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         },
       ),
     );
-    const formattedEntries = entries.map(this.entryWithFormat(collection));
+    const formattedEntries = entries.map(this.entryWithFormat(collection, config));
     // If this collection has a "filter" property, filter entries accordingly
     const collectionFilter = collection.filter;
     const filteredEntries = collectionFilter
@@ -557,7 +558,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return filteredEntries;
   }
 
-  async listEntries(collection: CollectionWithDefaults) {
+  async listEntries(collection: CollectionWithDefaults, config: ConfigWithDefaults) {
     const extension = selectFolderEntryExtension(collection);
     let listMethod: () => Promise<ImplementationEntry[]>;
     if ('folder' in collection) {
@@ -585,7 +586,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       collection,
     });
     return {
-      entries: this.processEntries(loadedEntries, collection),
+      entries: this.processEntries(loadedEntries, collection, config),
       pagination: cursor.meta?.page,
       cursor,
     };
@@ -596,7 +597,10 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   // repeats the process. Once there is no available "next" action, it
   // returns all the collected entries. Used to retrieve all entries
   // for local searches and queries.
-  async listAllEntries<EF extends BaseField>(collection: CollectionWithDefaults<EF>) {
+  async listAllEntries<EF extends BaseField>(
+    collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
+  ) {
     if ('folder' in collection && collection.folder && this.implementation.allEntriesByFolder) {
       const depth = collectionDepth(collection);
       const extension = selectFolderEntryExtension(collection);
@@ -607,14 +611,21 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
           depth,
           collectionRegex(collection),
         )
-        .then(entries => this.processEntries(entries, collection));
+        .then(entries => this.processEntries(entries, collection, config));
     }
 
-    const response = await this.listEntries(collection as CollectionWithDefaults);
+    const response = await this.listEntries(
+      collection as CollectionWithDefaults,
+      config as ConfigWithDefaults,
+    );
     const { entries } = response;
     let { cursor } = response;
     while (cursor && cursor.actions?.has('next')) {
-      const { entries: newEntries, cursor: newCursor } = await this.traverseCursor(cursor, 'next');
+      const { entries: newEntries, cursor: newCursor } = await this.traverseCursor(
+        cursor,
+        'next',
+        config as ConfigWithDefaults,
+      );
       entries.push(...newEntries);
       cursor = newCursor;
     }
@@ -625,7 +636,11 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return `\n\n${error.stack}`;
   }
 
-  async search(collections: CollectionWithDefaults[], searchTerm: string): Promise<SearchResponse> {
+  async search(
+    collections: CollectionWithDefaults[],
+    searchTerm: string,
+    config: ConfigWithDefaults,
+  ): Promise<SearchResponse> {
     // Perform a local search by requesting all entries. For each
     // collection, load it, search, and call onCollectionResults with
     // its results.
@@ -657,7 +672,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
           ];
         }
         const filteredSearchFields = searchFields.filter(Boolean) as string[];
-        const collectionEntries = await this.listAllEntries(collection);
+        const collectionEntries = await this.listAllEntries(collection, config);
         return fuzzy.filter(searchTerm, collectionEntries, {
           extract: extractSearchFields(uniq(filteredSearchFields)),
         });
@@ -686,12 +701,16 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   async query<EF extends BaseField>(
     collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
     searchFields: string[],
     searchTerm: string,
     file?: string,
     limit?: number,
   ): Promise<SearchQueryResponse> {
-    const entries = await this.listAllEntries(collection as CollectionWithDefaults);
+    const entries = await this.listAllEntries(
+      collection as CollectionWithDefaults,
+      config as ConfigWithDefaults,
+    );
     if (file) {
       let hits = fileSearch(
         entries.find(e => e.slug === file),
@@ -724,13 +743,17 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return { query: searchTerm, hits: merged };
   }
 
-  traverseCursor(cursor: Cursor, action: string): Promise<{ entries: Entry[]; cursor: Cursor }> {
+  traverseCursor(
+    cursor: Cursor,
+    action: string,
+    config: ConfigWithDefaults,
+  ): Promise<{ entries: Entry[]; cursor: Cursor }> {
     const [data, unwrappedCursor] = cursor.unwrapData();
     // TODO: stop assuming all cursors are for collections
     const collection = data.collection as CollectionWithDefaults;
     return this.implementation.traverseCursor!(unwrappedCursor, action).then(
       async ({ entries, cursor: newCursor }) => ({
-        entries: this.processEntries(entries, collection),
+        entries: this.processEntries(entries, collection, config),
         cursor: Cursor.create(newCursor).wrapData({
           cursorType: 'collectionEntries',
           collection,
@@ -741,6 +764,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   async getLocalDraftBackup(
     collection: CollectionWithDefaults,
+    config: ConfigWithDefaults,
     slug: string,
   ): Promise<{ entry: Entry | null }> {
     const key = getEntryBackupKey(collection.name, slug);
@@ -762,7 +786,10 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     const label = selectFileEntryLabel(collection, slug);
 
     const formatRawData = (raw: string) => {
-      return this.entryWithFormat(collection)(
+      return this.entryWithFormat(
+        collection,
+        config,
+      )(
         createEntry(collection.name, slug, path, {
           raw,
           label,
@@ -851,6 +878,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   async getEntry<EF extends BaseField>(
     state: RootState<EF>,
     collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
     slug: string,
   ) {
     const path = selectEntryPath(collection, slug) as string;
@@ -865,7 +893,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         mediaFiles: [],
       });
 
-      entry = this.entryWithFormat(collection)(entry);
+      entry = this.entryWithFormat(collection, config)(entry);
       entry = await this.processEntry(state, collection, entry);
 
       return entry;
@@ -900,11 +928,17 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return Promise.reject(err);
   }
 
-  entryWithFormat<EF extends BaseField>(collection: CollectionWithDefaults<EF>) {
+  entryWithFormat<EF extends BaseField>(
+    collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
+  ) {
     return (entry: Entry): Entry => {
       const format = resolveFormat(collection, entry);
       if (entry && entry.raw !== undefined) {
-        const data = (format && attempt(format.fromFile.bind(format, entry.raw))) || {};
+        const data =
+          (format &&
+            attempt(format.fromFile.bind(format, entry.raw, config as ConfigWithDefaults))) ||
+          {};
         if (isError(data)) {
           console.error(data);
         }
@@ -1200,6 +1234,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
    */
   async processUnpublishedEntry(
     collection: CollectionWithDefaults,
+    config: ConfigWithDefaults,
     entryData: UnpublishedEntry,
     withMediaFiles: boolean,
   ) {
@@ -1239,7 +1274,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         openAuthoring,
       });
 
-      return this.entryWithFormat(collection)(entry);
+      return this.entryWithFormat(collection, config)(entry);
     };
 
     const readAndFormatDataFile = async (dataFile: UnpublishedEntryDiff) => {
@@ -1274,7 +1309,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     }
   }
 
-  async unpublishedEntries(collections: CollectionsWithDefaults) {
+  async unpublishedEntries(collections: CollectionsWithDefaults, config: ConfigWithDefaults) {
     const ids = await this.implementation.unpublishedEntries();
     const entries = (
       await Promise.all(
@@ -1287,7 +1322,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
             return null;
           }
 
-          return this.processUnpublishedEntry(collection, entryData, false);
+          return this.processUnpublishedEntry(collection, config, entryData, false);
         }),
       )
     ).filter(Boolean) as Entry[];
@@ -1295,13 +1330,18 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return { pagination: 0, entries };
   }
 
-  async unpublishedEntry(state: RootState, collection: CollectionWithDefaults, slug: string) {
+  async unpublishedEntry(
+    state: RootState,
+    collection: CollectionWithDefaults,
+    config: ConfigWithDefaults,
+    slug: string,
+  ) {
     const entryData = await this.implementation.unpublishedEntry({
       collection: collection.name,
       slug,
     });
 
-    let entry = await this.processUnpublishedEntry(collection, entryData, true);
+    let entry = await this.processUnpublishedEntry(collection, config, entryData, true);
     entry = await this.processEntry(state, collection, entry);
     return entry;
   }

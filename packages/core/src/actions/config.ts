@@ -159,6 +159,7 @@ function applyFolderCollectionDefaults(
   }
 
   collection.folder = trim(collection.folder, '/');
+  collection.publish = collection.publish ?? true;
 
   return collection;
 }
@@ -301,6 +302,14 @@ export function applyDefaults<EF extends BaseField = UnknownField>(
 ): ConfigWithDefaults<EF> {
   const clonedConfig = cloneDeep(originConfig) as Config;
 
+  const i18n = clonedConfig.i18n;
+
+  if (i18n) {
+    i18n.default_locale = i18n.default_locale ?? i18n.locales[0];
+  }
+
+  throwOnMissingDefaultLocale(i18n);
+
   const config: ConfigWithDefaults = {
     ...clonedConfig,
     collections: (clonedConfig.collections ?? []).map(c =>
@@ -335,14 +344,6 @@ export function applyDefaults<EF extends BaseField = UnknownField>(
   if (!('sanitize_replacement' in config.slug)) {
     config.slug.sanitize_replacement = '-';
   }
-
-  const i18n = config.i18n;
-
-  if (i18n) {
-    i18n.default_locale = i18n.default_locale ?? i18n.locales[0];
-  }
-
-  throwOnMissingDefaultLocale(i18n);
 
   return config as ConfigWithDefaults<EF>;
 }

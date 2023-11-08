@@ -1166,13 +1166,6 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
           },
           fields: [
             {
-              label: 'Number of posts on frontpage',
-              name: 'front_limit',
-              widget: 'number',
-              min: 1,
-              max: 10,
-            },
-            {
               label: 'Global title',
               name: 'site_title',
               widget: 'string',

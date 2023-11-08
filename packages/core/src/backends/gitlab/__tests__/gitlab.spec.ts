@@ -8,7 +8,7 @@ import {
   createMockFilesCollectionWithDefaults,
   createMockFolderCollectionWithDefaults,
 } from '@staticcms/test/data/collections.mock';
-import { createMockConfig, createMockConfigWithDefaults } from '@staticcms/test/data/config.mock';
+import { createMockConfig } from '@staticcms/test/data/config.mock';
 import mockFetch from '@staticcms/test/mockFetch';
 import AuthenticationPage from '../AuthenticationPage';
 import GitLab from '../implementation';
@@ -199,7 +199,7 @@ describe('gitlab backend', () => {
     ],
   }) as unknown as FilesCollectionWithDefaults;
 
-  const defaultConfig = createMockConfigWithDefaults({
+  const defaultConfig = createMockConfig({
     backend: {
       name: 'gitlab',
       repo,
@@ -475,16 +475,19 @@ describe('gitlab backend', () => {
       interceptFiles(entryTree.path);
       interceptCollection(collectionContentConfig);
 
+      const config = createMockConfig({ collections: [createMockFolderCollectionWithDefaults()] });
+
       const entry = await backend.getEntry(
         {
           config: {
-            config: createMockConfig({ collections: [createMockFolderCollectionWithDefaults()] }),
+            config,
           },
           integrations: [],
           entryDraft: {},
           mediaLibrary: {},
         } as unknown as RootState,
         collectionContentConfig,
+        config,
         slug,
       );
 
@@ -500,7 +503,7 @@ describe('gitlab backend', () => {
       tree.forEach(file => interceptFiles(file.path));
 
       interceptCollection(collectionContentConfig);
-      const entries = await backend.listEntries(collectionContentConfig);
+      const entries = await backend.listEntries(collectionContentConfig, defaultConfig);
 
       expect(entries).toEqual({
         cursor: expect.any(Cursor),
@@ -520,7 +523,7 @@ describe('gitlab backend', () => {
       tree.forEach(file => interceptFiles(file.path));
 
       interceptCollection(collectionManyEntriesConfig, { repeat: 5 });
-      const entries = await backend.listAllEntries(collectionManyEntriesConfig);
+      const entries = await backend.listAllEntries(collectionManyEntriesConfig, defaultConfig);
 
       expect(entries).toEqual(
         expect.arrayContaining(tree.map(file => expect.objectContaining({ path: file.path }))),
@@ -533,7 +536,7 @@ describe('gitlab backend', () => {
 
       const { files } = collectionFilesConfig;
       files.forEach(file => interceptFiles(file.file));
-      const entries = await backend.listEntries(collectionFilesConfig);
+      const entries = await backend.listEntries(collectionFilesConfig, defaultConfig);
 
       expect(entries).toEqual({
         cursor: expect.any(Cursor),
@@ -551,7 +554,7 @@ describe('gitlab backend', () => {
       const pageTree = tree.slice(0, 20);
       pageTree.forEach(file => interceptFiles(file.path));
       interceptCollection(collectionManyEntriesConfig, { page: '1' });
-      const entries = await backend.listEntries(collectionManyEntriesConfig);
+      const entries = await backend.listEntries(collectionManyEntriesConfig, defaultConfig);
 
       expect(entries.entries).toEqual(
         expect.arrayContaining(pageTree.map(file => expect.objectContaining({ path: file.path }))),
@@ -567,12 +570,12 @@ describe('gitlab backend', () => {
       const tree = mockRepo.tree[collectionManyEntriesConfig.folder];
       tree.slice(0, 20).forEach(file => interceptFiles(file.path));
       interceptCollection(collectionManyEntriesConfig, { page: '1' });
-      const entries = await backend.listEntries(collectionManyEntriesConfig);
+      const entries = await backend.listEntries(collectionManyEntriesConfig, defaultConfig);
 
       const nextPageTree = tree.slice(20, 40);
       nextPageTree.forEach(file => interceptFiles(file.path));
       interceptCollection(collectionManyEntriesConfig, { page: '2' });
-      const nextPage = await backend.traverseCursor(entries.cursor, 'next');
+      const nextPage = await backend.traverseCursor(entries.cursor, 'next', defaultConfig);
 
       expect(nextPage.entries).toEqual(
         expect.arrayContaining(
@@ -584,7 +587,7 @@ describe('gitlab backend', () => {
       const lastPageTree = tree.slice(-20);
       lastPageTree.forEach(file => interceptFiles(file.path));
       interceptCollection(collectionManyEntriesConfig, { page: '25' });
-      const lastPage = await backend.traverseCursor(nextPage.cursor, 'last');
+      const lastPage = await backend.traverseCursor(nextPage.cursor, 'last', defaultConfig);
       expect(lastPage.entries).toEqual(
         expect.arrayContaining(
           lastPageTree.map(file => expect.objectContaining({ path: file.path })),

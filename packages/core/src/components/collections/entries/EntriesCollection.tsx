@@ -140,6 +140,7 @@ const EntriesCollection: FC<EntriesCollectionProps> = ({
                     onClick={handleGroupClick(index)}
                     className={entriesClasses['group-button']}
                     aria-label={`group by ${title}`}
+                    data-testid={`group-by-${title}`}
                   >
                     {title}
                   </Button>

@@ -65,7 +65,7 @@ async function handleChange(
 
 interface EntryCallbackProps {
   hasLivePreview: boolean;
-  collection: CollectionWithDefaults;
+  collection: CollectionWithDefaults | undefined;
   slug: string | undefined;
   callback: () => void;
 }
@@ -84,7 +84,11 @@ export default function useEntryCallback({
   const [lastEntryData, setLastEntryData] = useState<EntryData>(cloneDeep(entry?.data));
 
   const runUpdateCheck = useCallback(async () => {
-    if ((hasLivePreview && !livePreviewLoaded) || isEqual(lastEntryData, entry?.data)) {
+    if (
+      !collection ||
+      (hasLivePreview && !livePreviewLoaded) ||
+      isEqual(lastEntryData, entry?.data)
+    ) {
       return;
     }
 

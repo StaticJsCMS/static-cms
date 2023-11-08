@@ -1,0 +1,44 @@
+name: Cypress Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main', 'next']
+  pull_request:
+    branches: ['main', 'next']
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          cache-dependency-path: |
+            yarn.lock
+            packages/app/yarn.lock
+            packages/core/yarn.lock
+            packages/docs/yarn.lock
+          node-version: 18
+
+      - name: Install
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Run Cypress Tests
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn dev
+          wait-on: 'http://localhost:8080'
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress results
+          path: |
+            cypress/videos
+            cypress/screenshots

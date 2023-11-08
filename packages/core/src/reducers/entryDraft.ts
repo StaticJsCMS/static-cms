@@ -149,6 +149,7 @@ function entryDraftReducer(
         original: cloneDeep(entry),
         fieldsErrors: {},
         hasChanged: true,
+        key: uuid(),
       };
     }
     case DRAFT_DISCARD:

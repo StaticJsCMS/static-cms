@@ -3,7 +3,7 @@ import orderBy from 'lodash/orderBy';
 import { useMemo } from 'react';
 
 import { SORT_DIRECTION_ASCENDING } from '@staticcms/core/constants';
-import { selectEntriesSortField } from '@staticcms/core/reducers/selectors/entries';
+import { selectEntriesSelectedSort } from '@staticcms/core/reducers/selectors/entries';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import { selectSortDataPath } from '../util/sort.util';
 import useFilters from './useFilters';
@@ -21,11 +21,7 @@ export default function useEntries(collection: CollectionWithDefaults) {
     [publishedEntries, unpublishedEntries],
   );
 
-  const entriesSortFieldSelector = useMemo(
-    () => selectEntriesSortField(collection.name),
-    [collection.name],
-  );
-  const sortField = useAppSelector(entriesSortFieldSelector);
+  const sortField = useAppSelector(state => selectEntriesSelectedSort(state, collection.name));
 
   const filters = useFilters(collection.name);
 

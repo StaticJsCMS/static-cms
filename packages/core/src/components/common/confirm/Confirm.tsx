@@ -109,6 +109,7 @@ const ConfirmDialog: FC = () => {
           variant="text"
           color="secondary"
           className={classes['cancel-button']}
+          data-testid="cancel-button"
         >
           {cancel}
         </Button>
@@ -117,6 +118,7 @@ const ConfirmDialog: FC = () => {
           variant="contained"
           color={color}
           className={classes['confirm-button']}
+          data-testid="confirm-button"
         >
           {confirm}
         </Button>

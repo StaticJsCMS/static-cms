@@ -1,8 +1,7 @@
 import { createHashHistory } from 'history';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { connect } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   createDraftDuplicateFromEntry,
@@ -22,11 +21,14 @@ import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
 import useEntryCallback from '@staticcms/core/lib/hooks/useEntryCallback';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
-import { getFileFromSlug, selectFields } from '@staticcms/core/lib/util/collection.util';
+import { getFields, getFileFromSlug } from '@staticcms/core/lib/util/collection.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
+import { selectCollection } from '@staticcms/core/reducers/selectors/collections';
 import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { selectUnpublishedEntry } from '@staticcms/core/reducers/selectors/editorialWorkflow';
 import { selectEntry } from '@staticcms/core/reducers/selectors/entries';
+import { selectEntryDraft } from '@staticcms/core/reducers/selectors/entryDraft';
+import { selectIsScrolling } from '@staticcms/core/reducers/selectors/scroll';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import { addSnackbar } from '@staticcms/core/store/slices/snackbars';
 import {
@@ -48,29 +50,18 @@ import type {
   EditorPersistOptions,
   Entry,
 } from '@staticcms/core/interface';
-import type { RootState } from '@staticcms/core/store';
 import type { Blocker } from 'history';
 import type { FC } from 'react';
-import type { ConnectedProps } from 'react-redux';
 
-const Editor: FC<EditorProps> = ({
-  entry,
-  entryDraft,
-  fields,
-  collection,
-  hasChanged,
-  isModification,
-  draftKey,
-  slug,
-  scrollSyncActive,
-  newRecord,
-  currentStatus,
-  hasUnpublishedEntry,
-  useWorkflow,
-  isUpdatingStatus,
-  isPublishing,
-}) => {
+export interface EditorProps {
+  name: string;
+  slug?: string;
+  newRecord: boolean;
+}
+
+const Editor: FC<EditorProps> = ({ name: collectionName, slug, newRecord }) => {
   const t = useTranslate();
+  const [searchParams] = useSearchParams();
 
   const [version, setVersion] = useState(0);
 
@@ -80,6 +71,41 @@ const Editor: FC<EditorProps> = ({
   const navigate = useNavigate();
 
   const config = useAppSelector(selectConfig);
+  const entryDraft = useAppSelector(selectEntryDraft);
+
+  const collection = useAppSelector(state => selectCollection(state, collectionName));
+
+  const useWorkflow = useAppSelector(selectUseWorkflow);
+
+  const unPublishedEntry = useAppSelector(state =>
+    selectUnpublishedEntry(state, collectionName, slug),
+  );
+  const hasUnpublishedEntry = useMemo(
+    () => Boolean(useWorkflow && unPublishedEntry),
+    [unPublishedEntry, useWorkflow],
+  );
+  const currentStatus = useMemo(
+    () => unPublishedEntry && unPublishedEntry.status,
+    [unPublishedEntry],
+  );
+  const isModification = useMemo(
+    () => entryDraft.entry?.isModification ?? false,
+    [entryDraft.entry?.isModification],
+  );
+  const hasChanged = useMemo(() => entryDraft.hasChanged, [entryDraft.hasChanged]);
+  const isUpdatingStatus = useMemo(
+    () => Boolean(entryDraft.entry?.isUpdatingStatus),
+    [entryDraft.entry?.isUpdatingStatus],
+  );
+  const isPublishing = useMemo(
+    () => Boolean(entryDraft.entry?.isPublishing),
+    [entryDraft.entry?.isPublishing],
+  );
+
+  const entry = useAppSelector(state => selectEntry(state, collectionName, slug));
+  const fields = useMemo(() => getFields(collection, slug), [collection, slug]);
+
+  const scrollSyncActive = useAppSelector(selectIsScrolling);
 
   const createBackup = useMemo(
     () =>
@@ -95,7 +121,7 @@ const Editor: FC<EditorProps> = ({
   );
 
   const deleteBackup = useCallback(() => {
-    if (config?.disable_local_backup) {
+    if (!collection || config?.disable_local_backup) {
       return;
     }
 
@@ -111,7 +137,7 @@ const Editor: FC<EditorProps> = ({
     (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;
 
-      if (!entryDraft.entry) {
+      if (!collection || !entryDraft.entry) {
         return;
       }
 
@@ -132,15 +158,15 @@ const Editor: FC<EditorProps> = ({
 
           if (createNew) {
             if (duplicate && entryDraft.entry) {
+              navigate(`/collections/${collection.name}/new?duplicate=true`, { replace: true });
               dispatch(createDraftDuplicateFromEntry(entryDraft.entry));
-              navigate(`/collections/${collection.name}/new`, { replace: true });
             } else {
               setSubmitted(false);
               setTimeout(async () => {
                 await dispatch(loadMedia());
-                dispatch(createEmptyDraft(collection, location.search));
-                setVersion(version + 1);
-                navigate(`/collections/${collection.name}/new`, { replace: true });
+                navigate(`/collections/${collection.name}/new`, {
+                  replace: true,
+                });
               }, 100);
             }
           }
@@ -165,7 +191,7 @@ const Editor: FC<EditorProps> = ({
 
   const handleChangeStatus = useCallback(
     (newStatus: WorkflowStatus) => {
-      if (!slug || !currentStatus) {
+      if (!collection || !slug || !currentStatus) {
         return;
       }
 
@@ -180,12 +206,12 @@ const Editor: FC<EditorProps> = ({
       }
       dispatch(updateUnpublishedEntryStatus(collection.name, slug, currentStatus, newStatus));
     },
-    [collection.name, currentStatus, dispatch, entryDraft.hasChanged, slug],
+    [collection, currentStatus, dispatch, entryDraft.hasChanged, slug],
   );
 
   const handlePublishEntry = useCallback(
     async (opts: { createNew?: boolean; duplicate?: boolean } = {}) => {
-      if (!slug || !entryDraft.entry) {
+      if (!collection || !slug || !entryDraft.entry) {
         return;
       }
 
@@ -236,7 +262,7 @@ const Editor: FC<EditorProps> = ({
       }
     },
     [
-      collection.name,
+      collection,
       currentStatus,
       deleteBackup,
       dispatch,
@@ -248,7 +274,7 @@ const Editor: FC<EditorProps> = ({
   );
 
   const handleUnpublishEntry = useCallback(async () => {
-    if (!slug) {
+    if (!collection || !slug) {
       return;
     }
 
@@ -268,15 +294,19 @@ const Editor: FC<EditorProps> = ({
   }, [collection, dispatch, navigate, slug]);
 
   const handleDuplicateEntry = useCallback(() => {
-    if (!entryDraft.entry) {
+    if (!collection || !entryDraft.entry) {
       return;
     }
 
     dispatch(createDraftDuplicateFromEntry(entryDraft.entry));
     navigate(`/collections/${collection.name}/new?duplicate=true`, { replace: true });
-  }, [collection.name, dispatch, entryDraft.entry, navigate]);
+  }, [collection, dispatch, entryDraft.entry, navigate]);
 
   const handleDeleteEntry = useCallback(async () => {
+    if (!collection) {
+      return;
+    }
+
     if (entryDraft.hasChanged) {
       if (
         !(await confirm({
@@ -326,6 +356,10 @@ const Editor: FC<EditorProps> = ({
   ]);
 
   const handleDeleteUnpublishedChanges = useCallback(async () => {
+    if (!collection) {
+      return;
+    }
+
     if (entryDraft.hasChanged) {
       if (
         entryDraft.hasChanged &&
@@ -380,7 +414,7 @@ const Editor: FC<EditorProps> = ({
   ]);
 
   useEffect(() => {
-    if (submitted) {
+    if (!collection || submitted) {
       return;
     }
 
@@ -394,6 +428,10 @@ const Editor: FC<EditorProps> = ({
   }, [collection, createBackup, entryDraft.entry, hasChanged, submitted]);
 
   const hasLivePreview = useMemo(() => {
+    if (!collection) {
+      return false;
+    }
+
     let livePreview = typeof collection.editor?.live_preview === 'string';
 
     if ('files' in collection) {
@@ -421,10 +459,21 @@ const Editor: FC<EditorProps> = ({
   const [prevCollection, setPrevCollection] = useState<CollectionWithDefaults | null>(null);
   const [prevSlug, setPrevSlug] = useState<string | undefined | null>(null);
   useEffect(() => {
+    if (!collection) {
+      return;
+    }
+
     if (newRecord && slug !== prevSlug) {
       setTimeout(async () => {
         await dispatch(loadMedia());
-        await dispatch(createEmptyDraft(collection, location.search));
+
+        if (
+          !searchParams.has('duplicate') ||
+          searchParams.get('duplicate') !== 'true' ||
+          entryDraft.entry === undefined
+        ) {
+          await dispatch(createEmptyDraft(collection, location.search));
+        }
       });
     } else if (!newRecord && slug && (prevCollection !== collection || prevSlug !== slug)) {
       setTimeout(async () => {
@@ -460,6 +509,7 @@ const Editor: FC<EditorProps> = ({
     useWorkflow,
     submitted,
     version,
+    searchParams,
   ]);
 
   const leaveMessage = useMemo(() => t('editor.editor.onLeavePage'), [t]);
@@ -479,6 +529,10 @@ const Editor: FC<EditorProps> = ({
 
   const navigationBlocker: Blocker = useCallback(
     ({ location, action }) => {
+      if (!collection) {
+        return;
+      }
+
       /**
        * New entry being saved and redirected to it's new slug based url.
        */
@@ -499,7 +553,7 @@ const Editor: FC<EditorProps> = ({
       }
     },
     [
-      collection.name,
+      collection,
       entryDraft.entry?.isPersisting,
       entryDraft.entry?.newRecord,
       hasChanged,
@@ -513,7 +567,7 @@ const Editor: FC<EditorProps> = ({
     return () => {
       unblock();
     };
-  }, [collection.name, history, navigationBlocker]);
+  }, [collection?.name, history, navigationBlocker]);
 
   const handleToggleScroll = useCallback(async () => {
     await dispatch(toggleScroll());
@@ -533,7 +587,12 @@ const Editor: FC<EditorProps> = ({
         <h3>{entry.error}</h3>
       </div>
     );
-  } else if (entryDraft == null || entryDraft.entry === undefined || (entry && entry.isFetching)) {
+  } else if (
+    !collection ||
+    entryDraft == null ||
+    entryDraft.entry === undefined ||
+    (entry && entry.isFetching)
+  ) {
     return <Loader>{t('editor.editor.loadingEntry')}</Loader>;
   }
 
@@ -541,7 +600,7 @@ const Editor: FC<EditorProps> = ({
     <>
       <EditorInterface
         key={`editor-${version}`}
-        draftKey={draftKey}
+        draftKey={entryDraft.key}
         entry={entryDraft.entry}
         collection={collection}
         fields={fields}
@@ -572,55 +631,4 @@ const Editor: FC<EditorProps> = ({
   );
 };
 
-interface CollectionViewOwnProps {
-  name: string;
-  slug?: string;
-  newRecord: boolean;
-}
-
-function mapStateToProps(state: RootState, ownProps: CollectionViewOwnProps) {
-  const { collections, entryDraft, entries, scroll } = state;
-  const { name, slug } = ownProps;
-  const collection = collections[name];
-  const collectionName = collection.name;
-  const fields = selectFields(collection, slug);
-  const hasChanged = entryDraft.hasChanged;
-  const isModification = entryDraft.entry?.isModification ?? false;
-  const collectionEntriesLoaded = Boolean(entries.pages[collectionName]);
-
-  const entry = !slug ? null : selectEntry(state, collectionName, slug);
-
-  const useWorkflow = selectUseWorkflow(state);
-  const unPublishedEntry = selectUnpublishedEntry(state, collectionName, slug);
-  const publishedEntry = selectEntry(state, collectionName, slug);
-
-  const hasUnpublishedEntry = Boolean(useWorkflow && unPublishedEntry);
-  const currentStatus = unPublishedEntry && unPublishedEntry.status;
-  const localBackup = entryDraft.localBackup;
-  const draftKey = entryDraft.key;
-  return {
-    ...ownProps,
-    collection,
-    collections,
-    entryDraft,
-    fields,
-    entry,
-    hasChanged,
-    isModification,
-    collectionEntriesLoaded,
-    localBackup,
-    draftKey,
-    scrollSyncActive: scroll.isScrolling,
-    publishedEntry,
-    hasUnpublishedEntry,
-    currentStatus,
-    useWorkflow,
-    isUpdatingStatus: Boolean(entryDraft.entry?.isUpdatingStatus),
-    isPublishing: Boolean(entryDraft.entry?.isPublishing),
-  };
-}
-
-const connector = connect(mapStateToProps);
-export type EditorProps = ConnectedProps<typeof connector>;
-
-export default connector(Editor);
+export default Editor;

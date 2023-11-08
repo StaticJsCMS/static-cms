@@ -13,7 +13,7 @@ import {
 } from '@staticcms/core/actions/mediaLibrary';
 import { store } from '@staticcms/core/store';
 import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
-import { createMockConfig } from '@staticcms/test/data/config.mock';
+import { createNoDefaultsMockConfig } from '@staticcms/test/data/config.mock';
 import { mockFileField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import withFileControl from '../withFileControl';
@@ -62,7 +62,7 @@ jest.mock('@staticcms/core/lib/hooks/useMediaAsset', () => (url: string) => url)
 describe('File Control', () => {
   const FileControl = withFileControl();
   const collection = createMockFolderCollection({}, mockFileField);
-  const originalConfig = createMockConfig({
+  const originalConfig = createNoDefaultsMockConfig({
     collections: [collection],
   });
 

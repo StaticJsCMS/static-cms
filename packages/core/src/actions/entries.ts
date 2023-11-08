@@ -41,11 +41,11 @@ import ValidationErrorTypes from '../constants/validationErrorTypes';
 import { hasI18n, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
 import { Cursor } from '../lib/util';
-import { selectFields, updateFieldByKey } from '../lib/util/collection.util';
+import { getFields, updateFieldByKey } from '../lib/util/collection.util';
 import { createEmptyDraftData, createEmptyDraftI18nData } from '../lib/util/entry.util';
 import { selectCollectionEntriesCursor } from '../reducers/selectors/cursors';
 import {
-  selectEntriesSortField,
+  selectEntriesSelectedSort,
   selectIsFetching,
   selectPublishedSlugs,
 } from '../reducers/selectors/entries';
@@ -54,7 +54,6 @@ import { createAssetProxy } from '../valueObjects/AssetProxy';
 import createEntry from '../valueObjects/createEntry';
 import { addAssets, getAsset } from './media';
 import { loadMedia } from './mediaLibrary';
-import { waitUntil } from './waitUntil';
 
 import type { NavigateFunction } from 'react-router-dom';
 import type { AnyAction } from 'redux';
@@ -63,6 +62,7 @@ import type { Backend } from '../backend';
 import type { ViewStyle } from '../constants/views';
 import type {
   CollectionWithDefaults,
+  ConfigWithDefaults,
   Entry,
   EntryData,
   EntryDraft,
@@ -288,7 +288,7 @@ async function getAllEntries(state: RootState, collection: CollectionWithDefault
   }
 
   const backend = currentBackend(configState.config);
-  return backend.listAllEntries(collection);
+  return backend.listAllEntries(collection, configState.config);
 }
 
 export function sortByField(
@@ -458,16 +458,6 @@ export function createDraftFromEntry(collection: CollectionWithDefaults, entry: 
   } as const;
 }
 
-export function draftDuplicateEntry(entry: Entry) {
-  return {
-    type: DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
-    payload: createEntry(entry.collection, '', '', {
-      data: entry.data,
-      mediaFiles: entry.mediaFiles,
-    }),
-  } as const;
-}
-
 export function discardDraft() {
   return { type: DRAFT_DISCARD } as const;
 }
@@ -574,14 +564,13 @@ export function persistLocalBackup(entry: Entry, collection: CollectionWithDefau
 }
 
 export function createDraftDuplicateFromEntry(entry: Entry) {
-  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
-    dispatch(
-      waitUntil({
-        predicate: ({ type }) => type === DRAFT_CREATE_EMPTY,
-        run: () => dispatch(draftDuplicateEntry(entry)),
-      }),
-    );
-  };
+  return {
+    type: DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
+    payload: createEntry(entry.collection, '', '', {
+      data: entry.data,
+      mediaFiles: entry.mediaFiles,
+    }),
+  } as const;
 }
 
 export function retrieveLocalBackup(collection: CollectionWithDefaults, slug: string) {
@@ -593,7 +582,7 @@ export function retrieveLocalBackup(collection: CollectionWithDefaults, slug: st
     }
 
     const backend = currentBackend(configState.config);
-    const { entry } = await backend.getLocalDraftBackup(collection, slug);
+    const { entry } = await backend.getLocalDraftBackup(collection, configState.config, slug);
 
     if (entry) {
       // load assets from backup
@@ -680,7 +669,7 @@ export async function tryLoadEntry(
   }
 
   const backend = currentBackend(configState.config);
-  return backend.getEntry(state, collection, slug);
+  return backend.getEntry(state, collection, configState.config, slug);
 }
 
 interface AppendAction {
@@ -710,7 +699,7 @@ export function loadEntries(collection: CollectionWithDefaults, page = 0) {
       return;
     }
     const state = getState();
-    const sortField = selectEntriesSortField(collection.name)(state);
+    const sortField = selectEntriesSelectedSort(state, collection.name);
     if (sortField) {
       return dispatch(sortByField(collection, sortField.key, sortField.direction));
     }
@@ -733,8 +722,10 @@ export function loadEntries(collection: CollectionWithDefaults, page = 0) {
         entries: Entry[];
       } = await (loadAllEntries
         ? // nested collections require all entries to construct the tree
-          backend.listAllEntries(collection).then((entries: Entry[]) => ({ entries }))
-        : backend.listEntries(collection));
+          backend
+            .listAllEntries(collection, configState.config)
+            .then((entries: Entry[]) => ({ entries }))
+        : backend.listEntries(collection, configState.config));
 
       const cleanResponse = {
         ...response,
@@ -780,11 +771,16 @@ export function loadEntries(collection: CollectionWithDefaults, page = 0) {
   };
 }
 
-function traverseCursor(backend: Backend, cursor: Cursor, action: string) {
+function traverseCursor(
+  backend: Backend,
+  cursor: Cursor,
+  action: string,
+  config: ConfigWithDefaults,
+) {
   if (!cursor.actions!.has(action)) {
     throw new Error(`The current cursor does not support the pagination action "${action}".`);
   }
-  return backend.traverseCursor(cursor, action);
+  return backend.traverseCursor(cursor, action, config);
 }
 
 export function traverseCollectionCursor(collection: CollectionWithDefaults, action: string) {
@@ -818,7 +814,12 @@ export function traverseCollectionCursor(collection: CollectionWithDefaults, act
 
     try {
       dispatch(entriesLoading(collection));
-      const { entries, cursor: newCursor } = await traverseCursor(backend, cursor, realAction);
+      const { entries, cursor: newCursor } = await traverseCursor(
+        backend,
+        cursor,
+        realAction,
+        configState.config,
+      );
 
       const pagination = newCursor.meta?.page as number | null;
       return dispatch(
@@ -926,7 +927,7 @@ export function getSerializedEntry(collection: CollectionWithDefaults, entry: En
    * Serialize the values of any fields with registered serializers, and
    * update the entry and entryDraft with the serialized values.
    */
-  const fields = selectFields(collection, entry.slug);
+  const fields = getFields(collection, entry.slug);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function serializeData(data: any) {
@@ -954,7 +955,7 @@ export function persistEntry(
     const state = getState();
     const entryDraft = state.entryDraft;
     const fieldsErrors = entryDraft.fieldsErrors;
-    const usedSlugs = selectPublishedSlugs(collection.name)(state);
+    const usedSlugs = selectPublishedSlugs(state, collection.name);
 
     // Early return if draft contains validation errors
     if (Object.keys(fieldsErrors).length > 0) {
@@ -1113,7 +1114,7 @@ export type EntriesAction = ReturnType<
   | typeof entryDeleteFail
   | typeof emptyDraftCreated
   | typeof createDraftFromEntry
-  | typeof draftDuplicateEntry
+  | typeof createDraftDuplicateFromEntry
   | typeof discardDraft
   | typeof updateDraft
   | typeof changeDraftField

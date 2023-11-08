@@ -1,74 +1,129 @@
+import { createSelector } from '@reduxjs/toolkit';
 import get from 'lodash/get';
 
 import { SORT_DIRECTION_NONE } from '@staticcms/core/constants';
 import { filterNullish } from '@staticcms/core/lib/util/null.util';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
-import type { Entry, Group, GroupMap, Sort } from '@staticcms/core/interface';
+import type {
+  Entries,
+  Entry,
+  GroupMap,
+  ObjectValue,
+  Page,
+  SortMap,
+  SortObject,
+} from '@staticcms/core/interface';
 import type { RootState } from '@staticcms/core/store';
 
-export function selectEntriesSort(entries: RootState, collection?: string) {
-  if (!collection) {
-    return undefined;
-  }
-
-  const sort = entries.entries.sort as Sort | undefined;
-  return sort?.[collection];
-}
-
-export const selectEntriesFilter = (collectionName?: string) => (entries: RootState) => {
-  if (!collectionName) {
-    return {};
-  }
-
-  return entries.entries.filter?.[collectionName] ?? {};
+export const selectEntriesFilters = (entries: RootState) => {
+  return entries.entries.filter;
 };
 
-export function selectEntriesGroup(entries: RootState, collection?: string) {
-  if (!collection) {
-    return {};
-  }
+export const selectEntriesFilter = createSelector(
+  [selectEntriesFilters, (_state: RootState, collectionName?: string) => collectionName],
+  (filters, collectionName) => {
+    if (!collectionName) {
+      return {};
+    }
 
-  const group = entries.entries.group as Group | undefined;
-  return group?.[collection] || {};
-}
+    return filters?.[collectionName] ?? {};
+  },
+);
 
-export const selectEntriesGroupField = (collection: string) => (entries: RootState) => {
-  const groups = selectEntriesGroup(entries, collection);
-  return Object.values(groups ?? {}).find(v => v?.active === true);
+export const selectEntriesGroups = (entries: RootState) => {
+  return entries.entries.group;
 };
 
-export const selectEntriesSortField = (collectionName: string) => (entries: RootState) => {
-  const sort = selectEntriesSort(entries, collectionName);
-  return Object.values(sort ?? {}).find(v => v?.direction !== SORT_DIRECTION_NONE);
+export const selectEntriesGroup = createSelector(
+  [selectEntriesGroups, (_state: RootState, collectionName?: string) => collectionName],
+  (group, collectionName): Record<string, GroupMap> => {
+    if (!collectionName) {
+      return {};
+    }
+
+    return group?.[collectionName] ?? {};
+  },
+);
+
+export const selectEntriesSelectedGroup = createSelector(
+  [selectEntriesGroup],
+  (groupLookup): GroupMap | undefined => {
+    return Object.values(groupLookup).find(v => v?.active === true);
+  },
+);
+
+export const selectEntriesSorts = (entries: RootState) => {
+  return entries.entries.sort;
 };
+
+export const selectEntriesSort = createSelector(
+  [selectEntriesSorts, (_state: RootState, collectionName?: string) => collectionName],
+  (sort, collectionName): SortMap => {
+    if (!collectionName) {
+      return {};
+    }
+
+    return sort[collectionName] ?? {};
+  },
+);
+
+export const selectEntriesSelectedSort = createSelector(
+  [selectEntriesSort],
+  (sortLookup): SortObject | undefined => {
+    return Object.values(sortLookup).find(v => v?.direction !== SORT_DIRECTION_NONE);
+  },
+);
 
 export function selectViewStyle(entries: RootState): ViewStyle {
   return entries.entries.viewStyle;
 }
 
 export function selectEntriesBySlugs(state: RootState) {
-  return state.entries.entities;
+  return state.entries.entries;
 }
 
-export function selectEntry(state: RootState, collection: string, slug: string | undefined) {
-  if (!slug) {
-    return null;
-  }
-
-  return state.entries.entities[`${collection}.${slug}`];
+function getEntry(entries: Entries, collectionName: string, slug: string) {
+  return entries[`${collectionName}.${slug}`];
 }
 
-export const selectPublishedSlugs = (collection: string) => (state: RootState) => {
-  return state.entries.pages[collection]?.ids ?? [];
+export const selectEntry = createSelector(
+  [
+    selectEntriesBySlugs,
+    (_state: RootState, collectionName: string) => collectionName,
+    (_state: RootState, _collectionName: string, slug: string | undefined) => slug,
+  ],
+  (entries, collectionName, slug): Entry<ObjectValue> | null => {
+    if (!slug) {
+      return null;
+    }
+
+    return getEntry(entries, collectionName, slug);
+  },
+);
+
+export const selectEntryPages = (state: RootState) => {
+  return state.entries.pages;
 };
 
-export const selectPublishedEntries = (collectionName: string) => (state: RootState) => {
-  const slugs = selectPublishedSlugs(collectionName)(state);
-  return (
-    slugs && (slugs.map(slug => selectEntry(state, collectionName, slug as string)) as Entry[])
-  );
+export const selectEntryPage = (state: RootState, collectionName: string) => {
+  return state.entries.pages[collectionName];
 };
+
+export const selectPublishedSlugs = createSelector([selectEntryPage], (page: Page): string[] => {
+  return page?.ids ?? [];
+});
+
+export const selectPublishedEntries = createSelector(
+  [
+    selectEntriesBySlugs,
+    (_state: RootState, collectionName: string) => collectionName,
+    selectPublishedSlugs,
+  ],
+  (entries, collectionName, slugs): Entry<ObjectValue>[] => {
+    return slugs.map(slug => getEntry(entries, collectionName, slug));
+  },
+);
 
 export function getGroup(entry: Entry, selectedGroup: GroupMap) {
   const label = selectedGroup.label;
@@ -110,27 +165,42 @@ export function getGroup(entry: Entry, selectedGroup: GroupMap) {
   };
 }
 
-export function selectEntryByPath(state: RootState, collection: string, path: string) {
-  const slugs = selectPublishedSlugs(collection)(state);
-  const entries =
-    slugs && (slugs.map(slug => selectEntry(state, collection, slug as string)) as Entry[]);
+export const selectEntryByPath = createSelector(
+  [
+    selectPublishedSlugs,
+    (_state: RootState, collectionName: string) => collectionName,
+    (_state: RootState, _collectionName: string, path: string) => path,
+    selectEntriesBySlugs,
+  ],
+  (slugs, collectionName, path, entries): Entry<ObjectValue> | undefined => {
+    return slugs.map(slug => getEntry(entries, collectionName, slug)).find(e => e?.path === path);
+  },
+);
 
-  return entries && entries.find(e => e?.path === path);
+export const selectEntriesLoaded = createSelector([selectEntryPage], (page): boolean => {
+  return Boolean(page);
+});
+
+export const selectIsFetching = createSelector([selectEntryPage], (page): boolean => {
+  return page?.isFetching ?? false;
+});
+
+export function selectSearchEntryIds(state: RootState) {
+  return state.search.entryIds;
 }
 
-export function selectEntriesLoaded(state: RootState, collection: string) {
-  return !!state.entries.pages[collection];
-}
-
-export function selectIsFetching(state: RootState, collection: string) {
-  return state.entries.pages[collection]?.isFetching ?? false;
-}
-
-export function selectSearchedEntries(state: RootState, availableCollections: string[]): Entry[] {
-  // only return search results for actually available collections
-  return filterNullish(
-    state.search.entryIds
-      .filter(entryId => availableCollections.indexOf(entryId!.collection) !== -1)
-      .map(entryId => selectEntry(state, entryId!.collection, entryId!.slug)),
-  );
-}
+export const selectSearchedEntries = createSelector(
+  [
+    selectSearchEntryIds,
+    selectEntriesBySlugs,
+    (_state: RootState, availableCollections: string[]) => availableCollections,
+  ],
+  (entryIds, entries, availableCollections): Entry<ObjectValue>[] => {
+    // only return search results for actually available collections
+    return filterNullish(
+      entryIds
+        .filter(entryId => availableCollections.indexOf(entryId!.collection) !== -1)
+        .map(entryId => getEntry(entries, entryId.collection, entryId.slug)),
+    );
+  },
+);

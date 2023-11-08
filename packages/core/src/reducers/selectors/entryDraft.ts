@@ -1,3 +1,5 @@
+import { createSelector } from '@reduxjs/toolkit';
+
 import { getDataPath } from '@staticcms/core/lib/i18n';
 
 import type { I18nSettings } from '@staticcms/core/interface';
@@ -9,15 +11,30 @@ export const getEntryDataPath = (i18n: I18nSettings | undefined, isMeta: boolean
     : (i18n && getDataPath(i18n.currentLocale, i18n.defaultLocale)) || ['data'];
 };
 
-export const selectFieldErrors =
-  (path: string, i18n: I18nSettings | undefined, isMeta: boolean | undefined) =>
-  (state: RootState) => {
+export const selectAllFieldErrors = (state: RootState) => state.entryDraft.fieldsErrors;
+
+export const selectFieldErrors = createSelector(
+  [
+    selectAllFieldErrors,
+    (_state: RootState, path: string) => path,
+    (_state: RootState, _path: string, i18n: I18nSettings | undefined) => i18n,
+    (
+      _state: RootState,
+      _path: string,
+      _i18n: I18nSettings | undefined,
+      isMeta: boolean | undefined,
+    ) => isMeta,
+  ],
+  (fieldsErrors, path, i18n, isMeta) => {
     const dataPath = getEntryDataPath(i18n, isMeta);
     const fullPath = `${dataPath.join('.')}.${path}`;
-    return state.entryDraft.fieldsErrors[fullPath] ?? [];
-  };
+    return fieldsErrors[fullPath] ?? [];
+  },
+);
 
-export const selectAllFieldErrors = (state: RootState) => state.entryDraft.fieldsErrors ?? {};
+export function selectEntryDraft(state: RootState) {
+  return state.entryDraft;
+}
 
 export function selectEditingDraft(state: RootState) {
   return state.entryDraft.entry;

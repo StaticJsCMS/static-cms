@@ -45,18 +45,6 @@ export function fileForEntry<EF extends BaseField>(
   return files && files.filter(f => f?.name === slug)?.[0];
 }
 
-export function selectFields<EF extends BaseField>(
-  collection: CollectionWithDefaults<EF>,
-  slug?: string,
-): Field<EF>[] {
-  if ('fields' in collection) {
-    return collection.fields;
-  }
-
-  const file = fileForEntry(collection, slug);
-  return file ? file.fields : [];
-}
-
 export function selectFolderEntryExtension<EF extends BaseField>(
   collection: CollectionWithDefaults<EF>,
 ) {
@@ -158,9 +146,13 @@ export function selectTemplateName<EF extends BaseField>(
 }
 
 export function selectEntryCollectionTitle<EF extends BaseField>(
-  collection: CollectionWithDefaults<EF>,
+  collection: CollectionWithDefaults<EF> | undefined,
   entry: Entry,
 ): string {
+  if (!collection) {
+    return '';
+  }
+
   // prefer formatted summary over everything else
   const summaryTemplate = collection.summary;
   if (summaryTemplate) {
@@ -211,7 +203,7 @@ export function selectDefaultSortableFields<EF extends BaseField>(
   return defaultSortable as string[];
 }
 
-export function selectSortableFields(
+export function getSortableFields(
   collection: CollectionWithDefaults | undefined,
   t: (key: string) => string,
 ): SortableField[] {
@@ -237,11 +229,11 @@ export function selectSortableFields(
   return fields;
 }
 
-export function selectViewFilters<EF extends BaseField>(collection?: CollectionWithDefaults<EF>) {
+export function getViewFilters<EF extends BaseField>(collection?: CollectionWithDefaults<EF>) {
   return collection?.view_filters;
 }
 
-export function selectViewGroups<EF extends BaseField>(collection?: CollectionWithDefaults<EF>) {
+export function getViewGroups<EF extends BaseField>(collection?: CollectionWithDefaults<EF>) {
   return collection?.view_groups;
 }
 
@@ -554,21 +546,21 @@ export function getDefaultPath(collections: CollectionsWithDefaults, useWorkflow
 export function getFields<EF extends BaseField>(
   collection: CollectionWithDefaults<EF> | undefined,
   slug?: string,
-): Field[] | undefined {
+): Field<EF>[] {
   if (!collection) {
-    return undefined;
+    return [];
   }
 
   if ('fields' in collection) {
-    return collection.fields as Field[];
+    return collection.fields;
   }
 
   if (slug) {
     const file = getFileFromSlug(collection, slug);
     if (file) {
-      return file.fields as Field[];
+      return file.fields;
     }
   }
 
-  return undefined;
+  return [];
 }

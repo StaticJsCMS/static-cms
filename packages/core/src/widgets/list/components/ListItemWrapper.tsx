@@ -30,6 +30,7 @@ const classes = generateClassNames('WidgetList_ListItem', [
   'button-icon',
   'not-open-placeholder',
   'content',
+  'content-fields',
   'single-field-controls',
   'drag-handle',
   'drag-handle-icon',
@@ -108,7 +109,7 @@ const ListItemWrapper: FC<ListItemWrapperProps> = ({
   if (isSingleField) {
     return (
       <div
-        data-testid="list-item-field"
+        data-testid={`list-item-field-${label?.trim()}`}
         className={classNames(
           classes['single-field-root'],
           hasErrors && classes.error,
@@ -116,7 +117,7 @@ const ListItemWrapper: FC<ListItemWrapperProps> = ({
         )}
       >
         <div data-testid="list-item-objects" className={classes.content}>
-          {children}
+          <div className={classes['content-fields']}>{children}</div>
           <div className={classes['single-field-controls']}>{renderedControls}</div>
         </div>
       </div>
@@ -125,7 +126,7 @@ const ListItemWrapper: FC<ListItemWrapperProps> = ({
 
   return (
     <div
-      data-testid="list-item-field"
+      data-testid={`list-item-field-${label?.trim()}`}
       className={classNames(
         classes.root,
         hasErrors && classes.error,
@@ -151,7 +152,7 @@ const ListItemWrapper: FC<ListItemWrapperProps> = ({
               data-testid="item-label"
               disabled={disabled}
             >
-              {label}
+              {label.trim()}
             </Label>
             {!open ? <span data-testid="item-summary">{summary}</span> : null}
           </div>
@@ -160,7 +161,9 @@ const ListItemWrapper: FC<ListItemWrapperProps> = ({
       </div>
       {!open ? <div className={classes['not-open-placeholder']}></div> : null}
       <Collapse in={open} appear={false}>
-        <div className={classes.content}>{children}</div>
+        <div className={classes.content}>
+          <div className={classes['content-fields']}>{children}</div>
+        </div>
       </Collapse>
     </div>
   );

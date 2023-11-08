@@ -1,25 +1,26 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { connect } from 'react-redux';
 
 import {
-  changeViewStyle as changeViewStyleAction,
-  filterByField as filterByFieldAction,
-  groupByField as groupByFieldAction,
-  sortByField as sortByFieldAction,
+  changeViewStyle,
+  filterByField,
+  groupByField,
+  sortByField,
 } from '@staticcms/core/actions/entries';
 import { SORT_DIRECTION_ASCENDING } from '@staticcms/core/constants';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import {
-  selectSortableFields,
-  selectViewFilters,
-  selectViewGroups,
+  getSortableFields,
+  getViewFilters,
+  getViewGroups,
 } from '@staticcms/core/lib/util/collection.util';
+import { selectCollections } from '@staticcms/core/reducers/selectors/collections';
 import {
   selectEntriesFilter,
   selectEntriesGroup,
   selectEntriesSort,
   selectViewStyle,
 } from '@staticcms/core/reducers/selectors/entries';
+import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 import Card from '../common/card/Card';
 import collectionClasses from './Collection.classes';
 import CollectionControls from './CollectionControls';
@@ -27,39 +28,52 @@ import CollectionHeader from './CollectionHeader';
 import EntriesCollection from './entries/EntriesCollection';
 import EntriesSearch from './entries/EntriesSearch';
 
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type {
   CollectionWithDefaults,
   SortDirection,
-  TranslatedProps,
   ViewFilter,
   ViewGroup,
 } from '@staticcms/core/interface';
-import type { RootState } from '@staticcms/core/store';
 import type { FC } from 'react';
-import type { ConnectedProps } from 'react-redux';
 
 import './Collection.css';
 
+export interface CollectionViewProps {
+  isSearchResults?: boolean;
+  isSingleSearchResult?: boolean;
+  name?: string;
+  searchTerm?: string;
+  filterTerm?: string;
+}
+
 const CollectionView: FC<CollectionViewProps> = ({
-  collection,
-  collections,
+  name: collectionName,
   isSearchResults,
   isSingleSearchResult,
-  searchTerm,
-  sortableFields,
-  sortByField,
-  sort,
-  viewFilters,
-  viewGroups,
-  filterTerm,
-  filterByField,
-  groupByField,
-  filter,
-  group,
-  changeViewStyle,
-  viewStyle,
+  searchTerm = '',
+  filterTerm = '',
 }) => {
   const t = useTranslate();
+  const dispatch = useAppDispatch();
+
+  const collections = useAppSelector(selectCollections);
+  const collection = useMemo(
+    () =>
+      (collectionName ? collections[collectionName] : collections[0]) as
+        | CollectionWithDefaults
+        | undefined,
+    [collectionName, collections],
+  );
+
+  const viewStyle = useAppSelector(selectViewStyle);
+  const sort = useAppSelector(state => selectEntriesSort(state, collectionName));
+  const viewFilters = useMemo(() => getViewFilters(collection), [collection]);
+  const viewGroups = useMemo(() => getViewGroups(collection), [collection]);
+
+  const sortableFields = useMemo(() => getSortableFields(collection, t), [collection, t]);
+  const filter = useAppSelector(state => selectEntriesFilter(state, collection?.name));
+  const group = useAppSelector(state => selectEntriesGroup(state, collection?.name));
 
   const [readyToLoad, setReadyToLoad] = useState(false);
   const [prevCollection, setPrevCollection] = useState<CollectionWithDefaults | null>();
@@ -122,23 +136,30 @@ const CollectionView: FC<CollectionViewProps> = ({
 
   const onSortClick = useCallback(
     async (key: string, direction?: SortDirection) => {
-      collection && (await sortByField(collection, key, direction));
+      collection && (await dispatch(sortByField(collection, key, direction)));
     },
-    [collection, sortByField],
+    [collection, dispatch],
   );
 
   const onFilterClick = useCallback(
     async (filter: ViewFilter) => {
-      collection && (await filterByField(collection, filter));
+      collection && (await dispatch(filterByField(collection, filter)));
     },
-    [collection, filterByField],
+    [collection, dispatch],
   );
 
   const onGroupClick = useCallback(
     async (group: ViewGroup) => {
-      collection && (await groupByField(collection, group));
+      collection && (await dispatch(groupByField(collection, group)));
     },
-    [collection, groupByField],
+    [collection, dispatch],
+  );
+
+  const onChangeViewStyle = useCallback(
+    (viewStyle: ViewStyle) => {
+      dispatch(changeViewStyle(viewStyle));
+    },
+    [dispatch],
   );
 
   useEffect(() => {
@@ -225,14 +246,14 @@ const CollectionView: FC<CollectionViewProps> = ({
             <div className={collectionClasses['search-query']}>
               <div>{t(searchResultKey, { searchTerm, collection: collection?.label })}</div>
             </div>
-            <CollectionControls viewStyle={viewStyle} onChangeViewStyle={changeViewStyle} />
+            <CollectionControls viewStyle={viewStyle} onChangeViewStyle={onChangeViewStyle} />
           </>
         ) : (
           <>
             {collection ? <CollectionHeader collection={collection} /> : null}
             <CollectionControls
               viewStyle={viewStyle}
-              onChangeViewStyle={changeViewStyle}
+              onChangeViewStyle={onChangeViewStyle}
               sortableFields={sortableFields}
               onSortClick={onSortClick}
               sort={sort}
@@ -256,61 +277,4 @@ const CollectionView: FC<CollectionViewProps> = ({
   );
 };
 
-interface CollectionViewOwnProps {
-  isSearchResults?: boolean;
-  isSingleSearchResult?: boolean;
-  name?: string;
-  searchTerm?: string;
-  filterTerm?: string;
-}
-
-function mapStateToProps(state: RootState, ownProps: TranslatedProps<CollectionViewOwnProps>) {
-  const { collections } = state;
-  const {
-    isSearchResults,
-    isSingleSearchResult,
-    name,
-    searchTerm = '',
-    filterTerm = '',
-    t,
-  } = ownProps;
-  const collection = (name ? collections[name] : collections[0]) as
-    | CollectionWithDefaults
-    | undefined;
-  const sort = selectEntriesSort(state, collection?.name);
-  const sortableFields = selectSortableFields(collection, t);
-  const viewFilters = selectViewFilters(collection);
-  const viewGroups = selectViewGroups(collection);
-  const filter = selectEntriesFilter(collection?.name)(state);
-  const group = selectEntriesGroup(state, collection?.name);
-  const viewStyle = selectViewStyle(state);
-
-  return {
-    isSearchResults,
-    isSingleSearchResult,
-    name,
-    searchTerm,
-    filterTerm,
-    collection,
-    collections,
-    sort,
-    sortableFields,
-    viewFilters,
-    viewGroups,
-    filter,
-    group,
-    viewStyle,
-  };
-}
-
-const mapDispatchToProps = {
-  sortByField: sortByFieldAction,
-  filterByField: filterByFieldAction,
-  changeViewStyle: changeViewStyleAction,
-  groupByField: groupByFieldAction,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-export type CollectionViewProps = ConnectedProps<typeof connector>;
-
-export default connector(CollectionView);
+export default CollectionView;

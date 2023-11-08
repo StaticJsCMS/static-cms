@@ -81,6 +81,7 @@ const GroupControl: FC<GroupControlProps> = ({
       variant={activeGroup ? 'contained' : 'outlined'}
       rootClassName={classes.root}
       aria-label="group by options dropdown"
+      data-testid="group-by"
     >
       <MenuGroup>
         {viewGroups.map(viewGroup => (
@@ -89,6 +90,7 @@ const GroupControl: FC<GroupControlProps> = ({
             onClick={() => onGroupClick?.(viewGroup)}
             endIcon={viewGroup.id === activeGroup?.id ? CheckIcon : undefined}
             rootClassName={classes.option}
+            data-testid={`group-by-option-${viewGroup.label}`}
           >
             {viewGroup.label}
           </MenuItemButton>

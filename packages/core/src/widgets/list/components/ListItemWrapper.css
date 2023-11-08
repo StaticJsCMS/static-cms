@@ -4,8 +4,14 @@
     flex-col;
 
   &.CMS_WidgetList_ListItem_error {
-    & .CMS_WidgetList_ListItem_content {
-      border-color: var(--error-main);
+    & > .MuiCollapse-root {
+      & > .MuiCollapse-wrapper {
+        & > .MuiCollapse-wrapperInner {
+          & > .CMS_WidgetList_ListItem_content {
+            border-color: var(--error-main);
+          }
+        }
+      }
     }
   }
 
@@ -24,8 +30,14 @@
           color: var(--primary-main);
         }
 
-        & .CMS_WidgetList_ListItem_content {
-          border-color: var(--primary-main);
+        & > .MuiCollapse-root {
+          & > .MuiCollapse-wrapper {
+            & > .MuiCollapse-wrapperInner {
+              & > .CMS_WidgetList_ListItem_content {
+                border-color: var(--primary-main);
+              }
+            }
+          }
         }
       }
     }
@@ -51,7 +63,7 @@
     flex-col;
 
   &.CMS_WidgetList_ListItem_error {
-    & .CMS_WidgetList_ListItem_content {
+    & > .CMS_WidgetList_ListItem_content {
       border-color: var(--error-main);
     }
   }
@@ -59,7 +71,7 @@
   &:not(.CMS_WidgetList_ListItem_error) {
     &:not(.CMS_WidgetList_ListItem_disabled) {
       &:focus-within {
-        & .CMS_WidgetList_ListItem_content {
+        & > .CMS_WidgetList_ListItem_content {
           border-color: var(--primary-main);
         }
       }
@@ -130,18 +142,19 @@
     ml-4
     text-sm
     border-l-2
-    border-solid;
+    border-solid
+    flex
+    gap-2;
+}
+
+.CMS_WidgetList_ListItem_content-fields {
+  @apply relative
+    flex-grow;
 }
 
 .CMS_WidgetList_ListItem_single-field-controls {
-  @apply absolute
-    right-3
-    top-0
-    h-full
-    flex
-    items-center
-    justify-end
-    z-10;
+  @apply flex
+    flex-shrink-0;
 }
 
 .CMS_WidgetList_ListItem_drag-handle {

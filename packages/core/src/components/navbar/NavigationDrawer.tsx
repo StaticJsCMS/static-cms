@@ -49,7 +49,7 @@ const NavigationDrawer: FC<NavigationDrawerProps> = ({ mobileOpen, onMobileOpenT
       }}
     >
       <div onClick={onMobileOpenToggle} className={classes.content}>
-        <SidebarContent />
+        <SidebarContent isMobile />
       </div>
     </Drawer>
   );
