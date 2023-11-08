@@ -4,6 +4,8 @@ import set from '../util/set.util';
 
 import type { EventListener } from '@staticcms/core/interface';
 
+jest.spyOn(console, 'info').mockImplementation(() => {});
+
 describe('registry', () => {
   let listener: EventListener | undefined;
 

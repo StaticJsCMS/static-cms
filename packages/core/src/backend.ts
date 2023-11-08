@@ -780,11 +780,15 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return { entry };
   }
 
-  async persistLocalDraftBackup(entry: Entry, collection: CollectionWithDefaults) {
+  async persistLocalDraftBackup(
+    entry: Entry,
+    collection: CollectionWithDefaults,
+    config: ConfigWithDefaults,
+  ) {
     try {
       await this.backupSync.acquire();
       const key = getEntryBackupKey(collection.name, entry.slug);
-      const raw = this.entryToRaw(collection, entry);
+      const raw = this.entryToRaw(collection, entry, config);
 
       if (!raw.trim()) {
         return;
@@ -803,7 +807,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
       let i18n;
       if (hasI18n(collection)) {
-        i18n = getI18nBackup(collection, entry, entry => this.entryToRaw(collection, entry));
+        i18n = getI18nBackup(collection, entry, entry =>
+          this.entryToRaw(collection, entry, config),
+        );
       }
 
       await localForage.setItem<BackupEntry>(key, {
@@ -994,7 +1000,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       dataFile = {
         path,
         slug,
-        raw: this.entryToRaw(collection, entryDraft.entry),
+        raw: this.entryToRaw(collection, entryDraft.entry, config),
       };
     } else {
       const slug = entryDraft.entry.slug;
@@ -1002,7 +1008,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         path: entryDraft.entry.path,
         // for workflow entries we refresh the slug on publish
         slug: customPath && !useWorkflow ? slugFromCustomPath(collection, customPath) : slug,
-        raw: this.entryToRaw(collection, entryDraft.entry),
+        raw: this.entryToRaw(collection, entryDraft.entry, config),
         newPath: customPath,
       };
     }
@@ -1016,7 +1022,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         collection,
         extension,
         entryDraft.entry,
-        (draftData: Entry) => this.entryToRaw(collection, draftData),
+        (draftData: Entry) => this.entryToRaw(collection, draftData, config),
         path,
         slug,
         newPath,
@@ -1164,11 +1170,11 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return this.implementation.deleteFiles([path], commitMessage);
   }
 
-  entryToRaw(collection: CollectionWithDefaults, entry: Entry): string {
+  entryToRaw(collection: CollectionWithDefaults, entry: Entry, config: ConfigWithDefaults): string {
     const format = resolveFormat(collection, entry);
     const fieldsOrder = this.fieldsOrder(collection, entry);
     const fieldsComments = selectFieldsComments(collection, entry);
-    return format ? format.toFile(entry.data ?? {}, fieldsOrder, fieldsComments) : '';
+    return format ? format.toFile(entry.data ?? {}, config, fieldsOrder, fieldsComments) : '';
   }
 
   fieldsOrder(collection: CollectionWithDefaults, entry: Entry) {

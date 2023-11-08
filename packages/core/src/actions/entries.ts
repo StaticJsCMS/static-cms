@@ -569,7 +569,7 @@ export function persistLocalBackup(entry: Entry, collection: CollectionWithDefau
 
     const backend = currentBackend(configState.config);
 
-    return backend.persistLocalDraftBackup(entry, collection);
+    return backend.persistLocalDraftBackup(entry, collection, configState.config);
   };
 }
 
