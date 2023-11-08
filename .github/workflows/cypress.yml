@@ -39,9 +39,7 @@ jobs:
         with:
           start: yarn dev
           wait-on: 'http://localhost:8080'
-          # Records to Cypress Cloud
-          # https://docs.cypress.io/guides/cloud/projects#Set-up-a-project-to-record
-          record: true
+          record: true # Records to Cypress Cloud
           parallel: true # Runs test in parallel using settings above
         env:
           # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
