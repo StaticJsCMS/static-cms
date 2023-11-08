@@ -3,9 +3,9 @@ name: Cypress Tests
 on:
   workflow_dispatch:
   push:
-    branches: ["main", "next"]
+    branches: ['main', 'next']
   pull_request:
-    branches: ["main", "next"]
+    branches: ['main', 'next']
 
 jobs:
   cypress-run:
@@ -32,4 +32,5 @@ jobs:
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v6
         with:
-          build: yarn dev
+          start: yarn dev
+          wait-on: 'http://localhost:8080'
