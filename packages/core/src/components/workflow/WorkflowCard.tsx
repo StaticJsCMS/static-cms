@@ -168,6 +168,7 @@ const WorkflowCard: FC<WorkflowCardProps> = ({ entry, useOpenAuthoring }) => {
             onClick={handleDeleteChanges}
             title={t('workflow.workflowCard.deleteChanges')}
             aria-label="delete unpublished changes"
+            data-testid="workflow-dashboard-delete"
           />
           {entry.status === WorkflowStatus.PENDING_PUBLISH ? (
             <IconButton
@@ -178,6 +179,7 @@ const WorkflowCard: FC<WorkflowCardProps> = ({ entry, useOpenAuthoring }) => {
               onClick={handlePublishEntry}
               title={t('workflow.workflowCard.publishChanges')}
               aria-label="publish changes"
+              data-testid="workflow-dashboard-publish"
             />
           ) : null}
         </div>

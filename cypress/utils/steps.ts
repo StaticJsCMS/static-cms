@@ -1,9 +1,10 @@
 import format from 'date-fns/format';
+import 'cypress-real-events';
 
 import { editorStatus, notifications, publishTypes, workflowStatus } from './constants';
 
-import type { Author, Post, User } from '../interface';
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
+import type { Author, Post, User } from '../interface';
 
 export interface LoginProps {
   user?: User;
@@ -85,29 +86,26 @@ export function updateWorkflowStatus(
   toColumnHeading: WorkflowStatus,
 ) {
   cy.get(`[data-testid="drop-zone-${fromColumnHeading}"]`).within(() => {
-    cy.get(`[data-testid="drag-handle-${Title}"]`).drag();
+    cy.get(`[data-testid="drag-handle-${Title}"]`).dragTo(
+      `[data-testid="drop-zone-${toColumnHeading}"]`,
+    );
   });
-
-  cy.wait(5000);
-
-  cy.get(`[data-testid="drop-zone-${toColumnHeading}"]`).drop();
-
-  cy.wait(5000);
 
   assertNotification(notifications.updated);
 }
 
 export function publishWorkflowEntry({ Title }: Post, timeout = 3000) {
-  cy.contains('.CMS_WorkflowColumn_header', workflowStatus.ready, { timeout })
-    .parent()
-    .within(() => {
-      cy.contains('a', Title)
-        .parent()
-        .within(() => {
-          cy.contains('button', 'Publish new entry').click({ force: true });
-        });
-    });
-  // assertNotification(notifications.published);
+  cy.get(`[data-testid="drop-zone-${WorkflowStatus.PENDING_PUBLISH}"]`).within(() => {
+    cy.get(`[data-testid="drag-handle-${Title}"]`, { timeout })
+      .realHover()
+      .within(() => {
+        cy.get('[data-testid="workflow-dashboard-publish"]').click();
+      });
+  });
+
+  cy.get('[data-testid="confirm-button"]').click();
+
+  assertNotification(notifications.published);
 }
 
 export function deleteWorkflowEntry({ Title }: Post) {

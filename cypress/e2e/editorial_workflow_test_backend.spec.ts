@@ -101,10 +101,10 @@ describe('Test Backend Editorial Workflow', () => {
     login({ editorialWorkflow: true });
 
     cy.get('[data-testid="sidebar-collection-nav-Posts').click();
-    
+
     createPostAndExit(entry3);
     goToWorkflow();
-    updateWorkflowStatus(entry3,  WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
+    updateWorkflowStatus(entry3, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
     publishWorkflowEntry(entry3);
 
     goToEntry(entry3);
@@ -126,7 +126,7 @@ describe('Test Backend Editorial Workflow', () => {
     login({ editorialWorkflow: true });
 
     cy.get('[data-testid="sidebar-collection-nav-Posts').click();
-    
+
     createPostAndExit(entry5);
     goToWorkflow();
     updateWorkflowStatus(entry5, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_REVIEW);
@@ -140,7 +140,7 @@ describe('Test Backend Editorial Workflow', () => {
     login({ editorialWorkflow: true });
 
     cy.get('[data-testid="sidebar-collection-nav-Posts').click();
-    
+
     createPostAndExit(entry6);
     createPostAndExit(entry7);
     createPostAndExit(entry8);
@@ -158,7 +158,7 @@ describe('Test Backend Editorial Workflow', () => {
     login({ editorialWorkflow: true });
 
     cy.get('[data-testid="sidebar-collection-nav-Posts').click();
-    
+
     createPost(entry9);
     deleteEntryInEditor();
     assertOnCollectionsPage();
@@ -169,7 +169,7 @@ describe('Test Backend Editorial Workflow', () => {
     login({ editorialWorkflow: true });
 
     cy.get('[data-testid="sidebar-collection-nav-Posts').click();
-    
+
     createPost(entry10);
     assertWorkflowStatusInEditor(editorStatus.draft);
     updateWorkflowStatusInEditor(editorStatus.review);
@@ -186,7 +186,7 @@ describe('Test Backend Editorial Workflow', () => {
     login({ editorialWorkflow: true });
 
     cy.get('[data-testid="sidebar-collection-nav-Posts').click();
-    
+
     createPostAndExit(entry11);
     goToWorkflow();
     updateWorkflowStatus(entry11, WorkflowStatus.DRAFT, WorkflowStatus.PENDING_PUBLISH);
@@ -199,7 +199,7 @@ describe('Test Backend Editorial Workflow', () => {
     login({ editorialWorkflow: true });
 
     cy.get('[data-testid="sidebar-collection-nav-Posts').click();
-    
+
     createPost(entry12);
     updateWorkflowStatusInEditor(editorStatus.ready);
     publishEntryInEditor(publishTypes.publishNow);
@@ -211,7 +211,7 @@ describe('Test Backend Editorial Workflow', () => {
     login({ editorialWorkflow: true });
 
     cy.get('[data-testid="sidebar-collection-nav-Posts').click();
-    
+
     createPost(entry13);
     cy.contains('span', 'Publish').should('not.exist');
     exitEditor();
@@ -224,7 +224,7 @@ describe('Test Backend Editorial Workflow', () => {
     login({ editorialWorkflow: true });
 
     cy.get('[data-testid="sidebar-collection-nav-Posts').click();
-    
+
     createPost(entry14);
     updateWorkflowStatusInEditor(editorStatus.ready);
 
@@ -235,7 +235,7 @@ describe('Test Backend Editorial Workflow', () => {
     login({ editorialWorkflow: true });
 
     cy.get('[data-testid="sidebar-collection-nav-Posts').click();
-    
+
     createPost(entry15);
     updateWorkflowStatusInEditor(editorStatus.ready);
     publishAndDuplicateEntryInEditor(entry15);

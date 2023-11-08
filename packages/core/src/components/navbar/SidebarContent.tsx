@@ -22,10 +22,10 @@ import type { CollectionWithDefaults } from '@staticcms/core/interface';
 import type { FC } from 'react';
 
 export interface SidebarContentProps {
-  isMobile: boolean;
+  isMobile?: boolean;
 }
 
-const SidebarContent: FC<SidebarContentProps> = ({ isMobile }) => {
+const SidebarContent: FC<SidebarContentProps> = ({ isMobile = false }) => {
   const t = useTranslate();
 
   const { name, searchTerm, ...params } = useParams();

@@ -57,7 +57,7 @@
       "@staticcms/cypress": ["./cypress"],
       "@staticcms/cypress/*": ["./cypress/*"]
     },
-    "types": ["@types/jest", "@testing-library/jest-dom", "cypress", "node", "mocha"]
+    "types": ["@types/jest", "@testing-library/jest-dom", "cypress", "node", "mocha", "cypress-real-events"]
   },
   "include": ["cypress/**/*.*"]
 }

@@ -62,6 +62,7 @@ import type { Backend } from '../backend';
 import type { ViewStyle } from '../constants/views';
 import type {
   CollectionWithDefaults,
+  ConfigWithDefaults,
   Entry,
   EntryData,
   EntryDraft,
@@ -287,7 +288,7 @@ async function getAllEntries(state: RootState, collection: CollectionWithDefault
   }
 
   const backend = currentBackend(configState.config);
-  return backend.listAllEntries(collection);
+  return backend.listAllEntries(collection, configState.config);
 }
 
 export function sortByField(
@@ -581,7 +582,7 @@ export function retrieveLocalBackup(collection: CollectionWithDefaults, slug: st
     }
 
     const backend = currentBackend(configState.config);
-    const { entry } = await backend.getLocalDraftBackup(collection, slug);
+    const { entry } = await backend.getLocalDraftBackup(collection, configState.config, slug);
 
     if (entry) {
       // load assets from backup
@@ -668,7 +669,7 @@ export async function tryLoadEntry(
   }
 
   const backend = currentBackend(configState.config);
-  return backend.getEntry(state, collection, slug);
+  return backend.getEntry(state, collection, configState.config, slug);
 }
 
 interface AppendAction {
@@ -721,8 +722,10 @@ export function loadEntries(collection: CollectionWithDefaults, page = 0) {
         entries: Entry[];
       } = await (loadAllEntries
         ? // nested collections require all entries to construct the tree
-          backend.listAllEntries(collection).then((entries: Entry[]) => ({ entries }))
-        : backend.listEntries(collection));
+          backend
+            .listAllEntries(collection, configState.config)
+            .then((entries: Entry[]) => ({ entries }))
+        : backend.listEntries(collection, configState.config));
 
       const cleanResponse = {
         ...response,
@@ -768,11 +771,16 @@ export function loadEntries(collection: CollectionWithDefaults, page = 0) {
   };
 }
 
-function traverseCursor(backend: Backend, cursor: Cursor, action: string) {
+function traverseCursor(
+  backend: Backend,
+  cursor: Cursor,
+  action: string,
+  config: ConfigWithDefaults,
+) {
   if (!cursor.actions!.has(action)) {
     throw new Error(`The current cursor does not support the pagination action "${action}".`);
   }
-  return backend.traverseCursor(cursor, action);
+  return backend.traverseCursor(cursor, action, config);
 }
 
 export function traverseCollectionCursor(collection: CollectionWithDefaults, action: string) {
@@ -806,7 +814,12 @@ export function traverseCollectionCursor(collection: CollectionWithDefaults, act
 
     try {
       dispatch(entriesLoading(collection));
-      const { entries, cursor: newCursor } = await traverseCursor(backend, cursor, realAction);
+      const { entries, cursor: newCursor } = await traverseCursor(
+        backend,
+        cursor,
+        realAction,
+        configState.config,
+      );
 
       const pagination = newCursor.meta?.page as number | null;
       return dispatch(

@@ -29,6 +29,7 @@ import { selectCollection } from '@staticcms/core/reducers/selectors/collections
 import { useAppSelector } from '@staticcms/core/store/hooks';
 
 import type {
+  ConfigWithDefaults,
   Entry,
   EntryData,
   ObjectValue,
@@ -252,7 +253,10 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
     const getOptions = async () => {
       const backend = currentBackend(config);
 
-      const options = await backend.listAllEntries(searchCollection);
+      const options = await backend.listAllEntries(
+        searchCollection,
+        config as unknown as ConfigWithDefaults,
+      );
 
       if (alive) {
         setEntries(options);
