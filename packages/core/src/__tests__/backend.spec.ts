@@ -5,6 +5,7 @@ import {
   createMockExpandedEntry,
   createMockUnpublishedEntry,
 } from '@staticcms/test/data/entry.mock';
+import { applyDefaults } from '../actions/config';
 import {
   Backend,
   expandSearchEntries,
@@ -31,6 +32,12 @@ jest.mock('../lib/registry');
 jest.mock('../lib/util/localForage');
 jest.mock('../lib/util/asyncLock');
 jest.mock('../lib/urlHelper');
+// jest.mock('../backend', () => {
+//   return {
+//     resolveBackend: jest.fn(() => ({ isGitBackend: jest.fn(() => true) })),
+//   };
+// });
+jest.mock('../constants/configSchema');
 
 describe('Backend', () => {
   describe('filterEntries', () => {
@@ -327,8 +334,10 @@ describe('Backend', () => {
         format: 'json-frontmatter',
       }) as CollectionWithDefaults;
 
+      const config = applyDefaults(createMockConfig({ collections: [collection] }));
+
       const backend = new Backend(initializer, {
-        config: createMockConfig({ collections: [collection] }),
+        config,
         backendName: 'github',
       });
 
@@ -343,10 +352,10 @@ describe('Backend', () => {
         },
       });
 
-      await backend.persistLocalDraftBackup(entry, collection);
+      await backend.persistLocalDraftBackup(entry, collection, config);
 
       expect(backend.entryToRaw).toHaveBeenCalledTimes(1);
-      expect(backend.entryToRaw).toHaveBeenCalledWith(collection, entry);
+      expect(backend.entryToRaw).toHaveBeenCalledWith(collection, entry, config);
       expect(localForage.setItem).toHaveBeenCalledTimes(0);
     });
 
@@ -364,8 +373,10 @@ describe('Backend', () => {
         format: 'json-frontmatter',
       }) as CollectionWithDefaults;
 
+      const config = applyDefaults(createMockConfig({ collections: [collection] }));
+
       const backend = new Backend(initializer, {
-        config: createMockConfig({ collections: [collection] }),
+        config,
         backendName: 'github',
       });
 
@@ -382,10 +393,10 @@ describe('Backend', () => {
         },
       });
 
-      await backend.persistLocalDraftBackup(entry, collection);
+      await backend.persistLocalDraftBackup(entry, collection, config);
 
       expect(backend.entryToRaw).toHaveBeenCalledTimes(1);
-      expect(backend.entryToRaw).toHaveBeenCalledWith(collection, entry);
+      expect(backend.entryToRaw).toHaveBeenCalledWith(collection, entry, config);
       expect(localForage.setItem).toHaveBeenCalledTimes(2);
       expect(localForage.setItem).toHaveBeenCalledWith('backup.posts.slug', {
         mediaFiles: [{ id: '1', name: 'file.png', path: '/path/to/file.png' }],

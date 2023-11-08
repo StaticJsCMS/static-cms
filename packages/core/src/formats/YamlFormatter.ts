@@ -1,10 +1,11 @@
-import yaml, { isNode, isMap } from 'yaml';
+import yaml, { isMap, isNode } from 'yaml';
 
-import { sortKeys } from './helpers';
-import FileFormatter from './FileFormatter';
 import { isNotNullish } from '../lib/util/null.util';
+import FileFormatter from './FileFormatter';
+import { sortKeys } from './helpers';
 
-import type { Pair, YAMLMap, Node } from 'yaml';
+import type { Node, Pair, YAMLMap } from 'yaml';
+import type { ConfigWithDefaults } from '../interface';
 
 function addComments(items: Array<Pair>, comments: Record<string, string>, prefix = '') {
   items.forEach(item => {
@@ -25,23 +26,35 @@ function addComments(items: Array<Pair>, comments: Record<string, string>, prefi
 class YamlFormatter extends FileFormatter {
   name = 'yaml';
 
-  fromFile(content: string) {
+  fromFile(content: string, config: ConfigWithDefaults) {
     if (content && content.trim().endsWith('---')) {
       content = content.trim().slice(0, -3);
     }
-    return yaml.parse(content);
+    return yaml.parse(content, config.yaml?.parseOptions);
   }
 
-  toFile(data: object, sortedKeys: string[] = [], comments: Record<string, string> = {}) {
-    const doc = new yaml.Document({ aliasDuplicateObjects: false });
-    const contents = doc.createNode(data) as YAMLMap<Node>;
+  toFile(
+    data: object,
+    config: ConfigWithDefaults,
+    sortedKeys: string[] = [],
+    comments: Record<string, string> = {},
+  ) {
+    const doc = new yaml.Document({
+      aliasDuplicateObjects: false,
+      ...(config.yaml?.documentOptions ?? {}),
+      ...(config.yaml?.createNodeOptions ?? {}),
+    });
+    const contents = doc.createNode(data, {
+      aliasDuplicateObjects: false,
+      ...(config.yaml?.createNodeOptions ?? {}),
+    }) as YAMLMap<Node>;
 
     addComments(contents.items as Pair<Node>[], comments);
 
     contents.items.sort(sortKeys(sortedKeys, item => item.key?.toString()));
     doc.contents = contents;
 
-    return doc.toString();
+    return doc.toString(config.yaml?.toStringOptions);
   }
 }
 

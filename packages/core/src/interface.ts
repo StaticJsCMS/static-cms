@@ -9,6 +9,14 @@ import type {
   ReactNode,
 } from 'react';
 import type { TranslateProps as ReactPolyglotTranslateProps, t } from 'react-polyglot';
+import type {
+  CreateNodeOptions,
+  DocumentOptions,
+  ParseOptions,
+  SchemaOptions,
+  ToJSOptions,
+  ToStringOptions,
+} from 'yaml';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/entry-editor/editor-control-pane/EditorControl';
 import type {
@@ -1041,6 +1049,12 @@ export interface Config<EF extends BaseField = UnknownField> {
   editor?: EditorConfig;
   search?: boolean;
   theme?: Themes;
+  yaml?: {
+    toStringOptions?: ToStringOptions;
+    documentOptions?: DocumentOptions & SchemaOptions & ParseOptions;
+    createNodeOptions?: CreateNodeOptions;
+    parseOptions?: ParseOptions & DocumentOptions & SchemaOptions & ToJSOptions;
+  };
 }
 
 export interface ConfigWithDefaults<EF extends BaseField = UnknownField>
