@@ -111,13 +111,6 @@ const flowStyleYaml = `{
 }
 `;
 
-jest.mock('../../backend', () => {
-  return {
-    resolveBackend: jest.fn(() => ({ isGitBackend: jest.fn(() => true) })),
-  };
-});
-jest.mock('../../constants/configSchema');
-
 describe('YamlFormatter', () => {
   const config = applyDefaults(createMockConfig({ collections: [] })) as ConfigWithDefaults;
 

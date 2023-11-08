@@ -32,12 +32,6 @@ jest.mock('../lib/registry');
 jest.mock('../lib/util/localForage');
 jest.mock('../lib/util/asyncLock');
 jest.mock('../lib/urlHelper');
-// jest.mock('../backend', () => {
-//   return {
-//     resolveBackend: jest.fn(() => ({ isGitBackend: jest.fn(() => true) })),
-//   };
-// });
-jest.mock('../constants/configSchema');
 
 describe('Backend', () => {
   describe('filterEntries', () => {
