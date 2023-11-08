@@ -224,7 +224,7 @@ describe(DateTimeControl.name, () => {
       expect(input).not.toHaveFocus();
 
       await act(async () => {
-        const field = getByTestId('field');
+        const field = getByTestId('field-Mock Widget');
         await userEventActions.click(field);
       });
 
@@ -518,7 +518,7 @@ describe(DateTimeControl.name, () => {
       expect(input).not.toHaveFocus();
 
       await act(async () => {
-        const field = getByTestId('field');
+        const field = getByTestId('field-Mock Widget');
         await userEventActions.click(field);
       });
 
@@ -744,7 +744,7 @@ describe(DateTimeControl.name, () => {
       expect(input).not.toHaveFocus();
 
       await act(async () => {
-        const field = getByTestId('field');
+        const field = getByTestId('field-Mock Widget');
         await userEventActions.click(field);
       });
 

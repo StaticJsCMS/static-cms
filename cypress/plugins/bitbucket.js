@@ -234,7 +234,6 @@ const transformRecordedData = (expectation, toSanitize) => {
     let body;
     if (httpRequest.body && httpRequest.body.type === 'JSON' && httpRequest.body.json) {
       const bodyObject = JSON.parse(httpRequest.body.json);
-      console.log('bodyObject.encoding', bodyObject.encoding);
       if (bodyObject.encoding === 'base64') {
         // sanitize encoded data
         const decodedBody = Buffer.from(bodyObject.content, 'base64').toString('binary');

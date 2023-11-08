@@ -1,11 +1,10 @@
 import { createMockFolderCollectionWithDefaults } from '@staticcms/test/data/collections.mock';
-import { createMockConfig, createMockConfigWithDefaults } from '@staticcms/test/data/config.mock';
+import { createMockConfig } from '@staticcms/test/data/config.mock';
 import {
   createMockEntry,
   createMockExpandedEntry,
   createMockUnpublishedEntry,
 } from '@staticcms/test/data/entry.mock';
-import { applyDefaults } from '../actions/config';
 import {
   Backend,
   expandSearchEntries,
@@ -46,14 +45,12 @@ describe('Backend', () => {
 
       collection = createMockFolderCollectionWithDefaults();
 
-      config = applyDefaults(
-        createMockConfig({
-          backend: {
-            name: 'git-gateway',
-          },
-          collections: [collection],
-        }),
-      );
+      config = createMockConfig({
+        backend: {
+          name: 'git-gateway',
+        },
+        collections: [collection],
+      });
 
       backend = resolveBackend(config);
     });
@@ -167,14 +164,12 @@ describe('Backend', () => {
         name: 'posts',
       }) as CollectionWithDefaults;
 
-      const config = applyDefaults(
-        createMockConfig({
-          backend: {
-            name: 'github',
-          },
-          collections: [collection],
-        }),
-      );
+      const config = createMockConfig({
+        backend: {
+          name: 'github',
+        },
+        collections: [collection],
+      });
 
       const backend = new Backend(initializer, {
         config,
@@ -205,14 +200,12 @@ describe('Backend', () => {
         name: 'posts',
       }) as CollectionWithDefaults;
 
-      const config = applyDefaults(
-        createMockConfig({
-          backend: {
-            name: 'github',
-          },
-          collections: [collection],
-        }),
-      );
+      const config = createMockConfig({
+        backend: {
+          name: 'github',
+        },
+        collections: [collection],
+      });
 
       const backend = new Backend(initializer, {
         config,
@@ -244,14 +237,12 @@ describe('Backend', () => {
         format: 'json-frontmatter',
       }) as CollectionWithDefaults;
 
-      const config = applyDefaults(
-        createMockConfig({
-          backend: {
-            name: 'github',
-          },
-          collections: [collection],
-        }),
-      );
+      const config = createMockConfig({
+        backend: {
+          name: 'github',
+        },
+        collections: [collection],
+      });
 
       const backend = new Backend(initializer, {
         config,
@@ -302,14 +293,12 @@ describe('Backend', () => {
         format: 'json-frontmatter',
       }) as CollectionWithDefaults;
 
-      const config = applyDefaults(
-        createMockConfig({
-          backend: {
-            name: 'github',
-          },
-          collections: [collection],
-        }),
-      );
+      const config = createMockConfig({
+        backend: {
+          name: 'github',
+        },
+        collections: [collection],
+      });
 
       const backend = new Backend(initializer, {
         config,
@@ -367,7 +356,7 @@ describe('Backend', () => {
         format: 'json-frontmatter',
       }) as CollectionWithDefaults;
 
-      const config = applyDefaults(createMockConfig({ collections: [collection] }));
+      const config = createMockConfig({ collections: [collection] });
 
       const backend = new Backend(initializer, {
         config,
@@ -406,7 +395,7 @@ describe('Backend', () => {
         format: 'json-frontmatter',
       }) as CollectionWithDefaults;
 
-      const config = applyDefaults(createMockConfig({ collections: [collection] }));
+      const config = createMockConfig({ collections: [collection] });
 
       const backend = new Backend(initializer, {
         config,
@@ -503,13 +492,10 @@ describe('Backend', () => {
         fields: [],
       }) as CollectionWithDefaults;
 
-      const config = applyDefaults(
-        createMockConfig({
-          media_folder: 'static/images',
-          collections: [collection],
-        }),
-      );
-
+      const config = createMockConfig({
+        media_folder: 'static/images',
+        collections: [collection],
+      });
       const backend = new Backend(initializer, { config, backendName: 'github' });
 
       const state = {
@@ -754,7 +740,7 @@ describe('Backend', () => {
 
       (getBackend as jest.Mock).mockReturnValue(initializer);
 
-      config = createMockConfigWithDefaults({ collections });
+      config = createMockConfig({ collections });
 
       backend = new Backend(initializer, { config, backendName: 'github' });
       (backend.listAllEntries as jest.Mock) = jest.fn(collection => {

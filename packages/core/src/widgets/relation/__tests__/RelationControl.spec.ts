@@ -10,7 +10,7 @@ import * as backend from '@staticcms/core/backend';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { store } from '@staticcms/core/store';
 import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
-import { createMockConfig } from '@staticcms/test/data/config.mock';
+import { createNoDefaultsMockConfig } from '@staticcms/test/data/config.mock';
 import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import { mockRelationField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
@@ -77,7 +77,7 @@ const bodyField: TextField = {
   name: 'body',
 };
 
-const originalConfig = createMockConfig({
+const originalConfig = createNoDefaultsMockConfig({
   collections: [
     createMockFolderCollection(
       {
@@ -250,7 +250,7 @@ describe(RelationControl.name, () => {
     const response = renderControl(options);
 
     expect(currentBackendSpy).toHaveBeenCalledWith(config);
-    expect(mockListAllEntries).toHaveBeenCalledWith(searchCollection);
+    expect(mockListAllEntries).toHaveBeenCalledWith(searchCollection, config);
 
     const { expectedValue = '', expectedText } = relationOptions ?? {};
 
@@ -352,7 +352,7 @@ describe(RelationControl.name, () => {
     const input = getByTestId('autocomplete-input');
     expect(input).not.toHaveFocus();
 
-    const field = getByTestId('field');
+    const field = getByTestId('field-Mock Widget');
 
     await act(async () => {
       await userEvent.click(field);

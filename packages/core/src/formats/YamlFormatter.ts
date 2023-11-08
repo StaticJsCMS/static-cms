@@ -31,20 +31,6 @@ class YamlFormatter extends FileFormatter {
       content = content.trim().slice(0, -3);
     }
 
-    console.log(
-      'content',
-      content,
-      'normal',
-      yaml.parse(content),
-      'with options',
-      yaml.parse(content, {
-        ...(config.yaml?.parseOptions ?? {}),
-        ...(config.yaml?.documentOptions ?? {}),
-        ...(config.yaml?.schemaOptions ?? {}),
-        ...(config.yaml?.toJsOptions ?? {}),
-      }),
-    );
-
     return yaml.parse(content, {
       ...(config.yaml?.parseOptions ?? {}),
       ...(config.yaml?.documentOptions ?? {}),

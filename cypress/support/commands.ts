@@ -151,8 +151,6 @@ Cypress.Commands.add(
           const x = Math.floor(target.x + target.width / 2);
           const y = target.y + 200;
 
-          console.log('going to', x, y, target);
-
           cy.wrap(subject)
             .trigger('pointerdown', { force: true })
             .wait(options?.delay || 100, { log: Boolean(options?.delay) });

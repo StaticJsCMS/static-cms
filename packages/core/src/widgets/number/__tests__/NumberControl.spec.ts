@@ -81,7 +81,7 @@ describe(NumberControl.name, () => {
     const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).not.toHaveFocus();
 
-    const field = getByTestId('field');
+    const field = getByTestId('field-Mock Widget');
 
     await act(async () => {
       await userEvent.click(field);

@@ -23,7 +23,7 @@ import { useFocused } from 'slate-react';
 import { applyDefaults, configLoaded } from '@staticcms/core/actions/config';
 import { store } from '@staticcms/core/store';
 import { createMockFolderCollectionWithDefaults } from '@staticcms/test/data/collections.mock';
-import { createMockConfig } from '@staticcms/test/data/config.mock';
+import { createNoDefaultsMockConfig } from '@staticcms/test/data/config.mock';
 import { mockMarkdownField } from '@staticcms/test/data/fields.mock';
 import { renderWithProviders } from '@staticcms/test/test-utils';
 import BalloonToolbar from '../BalloonToolbar';
@@ -56,7 +56,7 @@ const BalloonToolbarWrapper: FC<BalloonToolbarWrapperProps> = ({ useMdx = false 
   );
 };
 
-const originalConfig = createMockConfig({
+const originalConfig = createNoDefaultsMockConfig({
   collections: [],
 }) as unknown as Config;
 

@@ -3,13 +3,12 @@
  */
 import { oneLine, stripIndent } from 'common-tags';
 
-import { applyDefaults } from '@staticcms/core/actions/config';
 import Cursor from '@staticcms/core/lib/util/Cursor';
 import {
   createMockFilesCollectionWithDefaults,
   createMockFolderCollectionWithDefaults,
 } from '@staticcms/test/data/collections.mock';
-import { createMockConfig, createMockConfigWithDefaults } from '@staticcms/test/data/config.mock';
+import { createMockConfig } from '@staticcms/test/data/config.mock';
 import mockFetch from '@staticcms/test/mockFetch';
 import AuthenticationPage from '../AuthenticationPage';
 import GitLab from '../implementation';
@@ -200,7 +199,7 @@ describe('gitlab backend', () => {
     ],
   }) as unknown as FilesCollectionWithDefaults;
 
-  const defaultConfig = createMockConfigWithDefaults({
+  const defaultConfig = createMockConfig({
     backend: {
       name: 'gitlab',
       repo,
@@ -476,9 +475,7 @@ describe('gitlab backend', () => {
       interceptFiles(entryTree.path);
       interceptCollection(collectionContentConfig);
 
-      const config = applyDefaults(
-        createMockConfig({ collections: [createMockFolderCollectionWithDefaults()] }),
-      );
+      const config = createMockConfig({ collections: [createMockFolderCollectionWithDefaults()] });
 
       const entry = await backend.getEntry(
         {

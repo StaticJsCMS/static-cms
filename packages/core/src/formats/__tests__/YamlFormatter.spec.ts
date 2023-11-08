@@ -1,4 +1,3 @@
-import { applyDefaults } from '@staticcms/core/actions/config';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import yamlFormatter from '../YamlFormatter';
 
@@ -112,7 +111,7 @@ const flowStyleYaml = `{
 `;
 
 describe('YamlFormatter', () => {
-  const config = applyDefaults(createMockConfig({ collections: [] })) as ConfigWithDefaults;
+  const config = createMockConfig({ collections: [] }) as ConfigWithDefaults;
 
   describe('toFile', () => {
     it('should convert json to yaml', () => {
@@ -136,40 +135,34 @@ describe('YamlFormatter', () => {
 
     describe('options', () => {
       it('should convert json to yaml with double quotes', () => {
-        const optionsConfig = applyDefaults(
-          createMockConfig({
-            collections: [],
-            yaml: {
-              toStringOptions: { defaultStringType: 'QUOTE_DOUBLE' },
-            },
-          }),
-        ) as ConfigWithDefaults;
+        const optionsConfig = createMockConfig({
+          collections: [],
+          yaml: {
+            toStringOptions: { defaultStringType: 'QUOTE_DOUBLE' },
+          },
+        }) as ConfigWithDefaults;
 
         expect(yamlFormatter.toFile(json, optionsConfig)).toEqual(doubleQuotedYaml);
       });
 
       it('should convert json to yaml without additional idents for block sequences', () => {
-        const optionsConfig = applyDefaults(
-          createMockConfig({
-            collections: [],
-            yaml: {
-              toStringOptions: { indentSeq: false },
-            },
-          }),
-        ) as ConfigWithDefaults;
+        const optionsConfig = createMockConfig({
+          collections: [],
+          yaml: {
+            toStringOptions: { indentSeq: false },
+          },
+        }) as ConfigWithDefaults;
 
         expect(yamlFormatter.toFile(json, optionsConfig)).toEqual(noIdentSeqYaml);
       });
 
       it('should convert json to yaml flow style', () => {
-        const optionsConfig = applyDefaults(
-          createMockConfig({
-            collections: [],
-            yaml: {
-              createNodeOptions: { flow: true },
-            },
-          }),
-        ) as ConfigWithDefaults;
+        const optionsConfig = createMockConfig({
+          collections: [],
+          yaml: {
+            createNodeOptions: { flow: true },
+          },
+        }) as ConfigWithDefaults;
 
         expect(yamlFormatter.toFile(json, optionsConfig)).toEqual(flowStyleYaml);
       });

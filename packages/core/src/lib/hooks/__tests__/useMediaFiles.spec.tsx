@@ -14,8 +14,8 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { createMockEntry } from '@staticcms/test/data/entry.mock';
-import useMediaFiles from '../useMediaFiles';
 import { mockFileField } from '@staticcms/test/data/fields.mock';
+import useMediaFiles from '../useMediaFiles';
 
 import type { MediaField, MediaFile } from '@staticcms/core/interface';
 import type { FC } from 'react';
@@ -162,7 +162,7 @@ describe('useMediaFiles', () => {
       return fn();
     });
 
-    mockSelectCollection.mockReturnValue(() => undefined);
+    mockSelectCollection.mockReturnValue(undefined);
     mockSelectConfig.mockReturnValue(
       createMockConfig({
         collections: [mockCollection],

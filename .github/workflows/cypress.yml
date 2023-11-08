@@ -34,3 +34,11 @@ jobs:
         with:
           start: yarn dev
           wait-on: 'http://localhost:8080'
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
+          name: cypress-screenshots
+          path: cypress/screenshots

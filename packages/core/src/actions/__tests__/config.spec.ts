@@ -7,13 +7,7 @@ import { stripIndent } from 'common-tags';
 import yaml from 'yaml';
 
 import { createMockConfig } from '@staticcms/test/data/config.mock';
-import {
-  applyDefaults,
-  detectProxyServer,
-  handleLocalBackend,
-  loadConfig,
-  parseConfig,
-} from '../config';
+import { detectProxyServer, handleLocalBackend, loadConfig, parseConfig } from '../config';
 
 import type {
   Config,
@@ -189,6 +183,7 @@ describe('config', () => {
       });
     });
   });
+
   describe('applyDefaults', () => {
     describe('publish_mode', () => {
       it('should set publish_mode if not set', () => {
@@ -197,7 +192,7 @@ describe('config', () => {
           public_folder: '/path/to/media',
           collections: [],
         });
-        expect(applyDefaults(config).publish_mode).toEqual('simple');
+        expect(config.publish_mode).toEqual('simple');
       });
 
       it('should set publish_mode from config', () => {
@@ -207,47 +202,41 @@ describe('config', () => {
           public_folder: '/path/to/media',
           collections: [],
         });
-        expect(applyDefaults(config).publish_mode).toEqual('editorial_workflow');
+        expect(config.publish_mode).toEqual('editorial_workflow');
       });
     });
 
     describe('public_folder', () => {
       it('should set public_folder based on media_folder if not set', () => {
         expect(
-          applyDefaults(
-            createMockConfig({
-              media_folder: 'path/to/media',
-              collections: [],
-            }),
-          ).public_folder,
+          createMockConfig({
+            media_folder: 'path/to/media',
+            collections: [],
+          }).public_folder,
         ).toEqual('/path/to/media');
       });
 
       it('should not overwrite public_folder if set', () => {
         expect(
-          applyDefaults(
-            createMockConfig({
-              media_folder: 'path/to/media',
-              public_folder: '/publib/path',
-              collections: [],
-            }),
-          ).public_folder,
+          createMockConfig({
+            media_folder: 'path/to/media',
+            public_folder: '/publib/path',
+            collections: [],
+          }).public_folder,
         ).toEqual('/publib/path');
         expect(
-          applyDefaults(
-            createMockConfig({
-              media_folder: 'path/to/media',
-              public_folder: '',
-              collections: [],
-            }),
-          ).public_folder,
+          createMockConfig({
+            media_folder: 'path/to/media',
+            public_folder: '',
+            collections: [],
+          }).public_folder,
         ).toEqual('');
       });
     });
 
     describe('slug', () => {
       it('should set default slug config if not set', () => {
-        expect(applyDefaults(createMockConfig({ collections: [] })).slug).toEqual({
+        expect(createMockConfig({ collections: [] }).slug).toEqual({
           encoding: 'unicode',
           clean_accents: false,
           sanitize_replacement: '-',
@@ -256,22 +245,20 @@ describe('config', () => {
 
       it('should not overwrite slug encoding if set', () => {
         expect(
-          applyDefaults(createMockConfig({ collections: [], slug: { encoding: 'ascii' } })).slug
-            ?.encoding,
+          createMockConfig({ collections: [], slug: { encoding: 'ascii' } }).slug?.encoding,
         ).toEqual('ascii');
       });
 
       it('should not overwrite slug clean_accents if set', () => {
         expect(
-          applyDefaults(createMockConfig({ collections: [], slug: { clean_accents: true } })).slug
-            ?.clean_accents,
+          createMockConfig({ collections: [], slug: { clean_accents: true } }).slug?.clean_accents,
         ).toEqual(true);
       });
 
       it('should not overwrite slug sanitize_replacement if set', () => {
         expect(
-          applyDefaults(createMockConfig({ collections: [], slug: { sanitize_replacement: '_' } }))
-            .slug?.sanitize_replacement,
+          createMockConfig({ collections: [], slug: { sanitize_replacement: '_' } }).slug
+            ?.sanitize_replacement,
         ).toEqual('_');
       });
     });
@@ -280,16 +267,14 @@ describe('config', () => {
       it('should strip leading slashes from collection folder', () => {
         expect(
           (
-            applyDefaults(
-              createMockConfig({
-                collections: [
-                  {
-                    folder: '/foo',
-                    fields: [{ name: 'title', widget: 'string' }],
-                  } as FolderCollection,
-                ],
-              }),
-            ).collections[0] as FolderCollection
+            createMockConfig({
+              collections: [
+                {
+                  folder: '/foo',
+                  fields: [{ name: 'title', widget: 'string' }],
+                } as FolderCollection,
+              ],
+            }).collections[0] as FolderCollection
           ).folder,
         ).toEqual('foo');
       });
@@ -297,15 +282,13 @@ describe('config', () => {
       it('should strip leading slashes from collection files', () => {
         expect(
           (
-            applyDefaults(
-              createMockConfig({
-                collections: [
-                  {
-                    files: [{ file: '/foo', fields: [{ name: 'title', widget: 'string' }] }],
-                  } as FilesCollection,
-                ],
-              }),
-            ).collections[0] as FilesCollection
+            createMockConfig({
+              collections: [
+                {
+                  files: [{ file: '/foo', fields: [{ name: 'title', widget: 'string' }] }],
+                } as FilesCollection,
+              ],
+            }).collections[0] as FilesCollection
           ).files[0].file,
         ).toEqual('foo');
       });
@@ -313,74 +296,66 @@ describe('config', () => {
       describe('public_folder and media_folder', () => {
         it('should set collection public_folder based on media_folder if not set', () => {
           expect(
-            applyDefaults(
-              createMockConfig({
-                collections: [
-                  {
-                    name: 'foo-collection',
-                    label: 'Foo',
-                    folder: 'foo',
-                    media_folder: 'static/images/docs',
-                    fields: [{ name: 'title', widget: 'string' }],
-                  },
-                ],
-              }),
-            ).collections[0].public_folder,
-          ).toEqual('static/images/docs');
-        });
-
-        it('should not overwrite collection public_folder if set to non empty string', () => {
-          expect(
-            applyDefaults(
-              createMockConfig({
-                collections: [
-                  {
-                    name: 'foo-collection',
-                    label: 'Foo',
-                    folder: 'foo',
-                    media_folder: 'static/images/docs',
-                    public_folder: 'images/docs',
-                    fields: [{ name: 'title', widget: 'string' }],
-                  },
-                ],
-              }),
-            ).collections[0].public_folder,
-          ).toEqual('images/docs');
-        });
-
-        it('should not overwrite collection public_folder if set to empty string', () => {
-          expect(
-            applyDefaults(
-              createMockConfig({
-                collections: [
-                  {
-                    name: 'foo-collection',
-                    label: 'Foo',
-                    folder: 'foo',
-                    media_folder: 'static/images/docs',
-                    public_folder: '',
-                    fields: [{ name: 'title', widget: 'string' }],
-                  },
-                ],
-              }),
-            ).collections[0].public_folder,
-          ).toEqual('');
-        });
-
-        it("should set collection media_folder and public_folder to an empty string when collection path exists, but collection media_folder doesn't", () => {
-          const result = applyDefaults(
             createMockConfig({
               collections: [
                 {
                   name: 'foo-collection',
                   label: 'Foo',
                   folder: 'foo',
-                  path: '{{slug}}/index',
+                  media_folder: 'static/images/docs',
                   fields: [{ name: 'title', widget: 'string' }],
                 },
               ],
-            }),
-          );
+            }).collections[0].public_folder,
+          ).toEqual('static/images/docs');
+        });
+
+        it('should not overwrite collection public_folder if set to non empty string', () => {
+          expect(
+            createMockConfig({
+              collections: [
+                {
+                  name: 'foo-collection',
+                  label: 'Foo',
+                  folder: 'foo',
+                  media_folder: 'static/images/docs',
+                  public_folder: 'images/docs',
+                  fields: [{ name: 'title', widget: 'string' }],
+                },
+              ],
+            }).collections[0].public_folder,
+          ).toEqual('images/docs');
+        });
+
+        it('should not overwrite collection public_folder if set to empty string', () => {
+          expect(
+            createMockConfig({
+              collections: [
+                {
+                  name: 'foo-collection',
+                  label: 'Foo',
+                  folder: 'foo',
+                  media_folder: 'static/images/docs',
+                  public_folder: '',
+                  fields: [{ name: 'title', widget: 'string' }],
+                },
+              ],
+            }).collections[0].public_folder,
+          ).toEqual('');
+        });
+
+        it("should set collection media_folder and public_folder to an empty string when collection path exists, but collection media_folder doesn't", () => {
+          const result = createMockConfig({
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                folder: 'foo',
+                path: '{{slug}}/index',
+                fields: [{ name: 'title', widget: 'string' }],
+              },
+            ],
+          });
           expect(result.collections[0].media_folder).toEqual('');
           expect(result.collections[0].public_folder).toEqual('');
         });
@@ -388,25 +363,23 @@ describe('config', () => {
         it('should set file public_folder based on media_folder if not set', () => {
           expect(
             (
-              applyDefaults(
-                createMockConfig({
-                  collections: [
-                    {
-                      name: 'foo-collection',
-                      label: 'Foo',
-                      files: [
-                        {
-                          name: 'foo-file',
-                          label: 'Foo',
-                          file: 'foo',
-                          media_folder: 'static/images/docs',
-                          fields: [{ name: 'title', widget: 'string' }],
-                        },
-                      ],
-                    } as FilesCollection,
-                  ],
-                }),
-              ).collections[0] as FilesCollection
+              createMockConfig({
+                collections: [
+                  {
+                    name: 'foo-collection',
+                    label: 'Foo',
+                    files: [
+                      {
+                        name: 'foo-file',
+                        label: 'Foo',
+                        file: 'foo',
+                        media_folder: 'static/images/docs',
+                        fields: [{ name: 'title', widget: 'string' }],
+                      },
+                    ],
+                  } as FilesCollection,
+                ],
+              }).collections[0] as FilesCollection
             ).files[0].public_folder,
           ).toEqual('static/images/docs');
         });
@@ -414,68 +387,64 @@ describe('config', () => {
         it('should not overwrite file public_folder if set', () => {
           expect(
             (
-              applyDefaults(
-                createMockConfig({
-                  collections: [
-                    {
-                      name: 'foo-collection',
-                      label: 'Foo',
-                      files: [
-                        {
-                          name: 'foo-file',
-                          label: 'Foo',
-                          file: 'foo',
-                          media_folder: 'static/images/docs',
-                          public_folder: 'images/docs',
-                          fields: [{ name: 'title', widget: 'string' }],
-                        },
-                      ],
-                    } as FilesCollection,
-                  ],
-                }),
-              ).collections[0] as FilesCollection
+              createMockConfig({
+                collections: [
+                  {
+                    name: 'foo-collection',
+                    label: 'Foo',
+                    files: [
+                      {
+                        name: 'foo-file',
+                        label: 'Foo',
+                        file: 'foo',
+                        media_folder: 'static/images/docs',
+                        public_folder: 'images/docs',
+                        fields: [{ name: 'title', widget: 'string' }],
+                      },
+                    ],
+                  } as FilesCollection,
+                ],
+              }).collections[0] as FilesCollection
             ).files[0].public_folder,
           ).toEqual('images/docs');
         });
 
         it('should set nested field public_folder based on media_folder if not set', () => {
-          const config = applyDefaults(
-            createMockConfig({
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  folder: 'foo',
-                  path: '{{slug}}/index',
-                  fields: [
-                    {
-                      name: 'image',
-                      widget: 'image',
-                      media_folder: 'collection/static/images/docs',
-                    },
-                  ],
-                } as FolderCollection,
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  files: [
-                    {
-                      name: 'foo-file',
-                      label: 'Foo',
-                      file: 'foo',
-                      fields: [
-                        {
-                          name: 'image',
-                          widget: 'image',
-                          media_folder: 'file/static/images/docs',
-                        },
-                      ],
-                    },
-                  ],
-                } as FilesCollection,
-              ],
-            }),
-          );
+          const config = createMockConfig({
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                folder: 'foo',
+                path: '{{slug}}/index',
+                fields: [
+                  {
+                    name: 'image',
+                    widget: 'image',
+                    media_folder: 'collection/static/images/docs',
+                  },
+                ],
+              } as FolderCollection,
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                files: [
+                  {
+                    name: 'foo-file',
+                    label: 'Foo',
+                    file: 'foo',
+                    fields: [
+                      {
+                        name: 'image',
+                        widget: 'image',
+                        media_folder: 'file/static/images/docs',
+                      },
+                    ],
+                  },
+                ],
+              } as FilesCollection,
+            ],
+          });
           expect(
             ((config.collections[0] as FolderCollection).fields[0] as FileOrImageField)
               .public_folder,
@@ -487,44 +456,42 @@ describe('config', () => {
         });
 
         it('should not overwrite nested field public_folder if set', () => {
-          const config = applyDefaults(
-            createMockConfig({
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  folder: 'foo',
-                  path: '{{slug}}/index',
-                  fields: [
-                    {
-                      name: 'image',
-                      widget: 'image',
-                      media_folder: 'collection/static/images/docs',
-                      public_folder: 'collection/public_folder',
-                    },
-                  ],
-                } as FolderCollection,
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  files: [
-                    {
-                      name: 'foo-file',
-                      label: 'Foo',
-                      file: 'foo',
-                      fields: [
-                        {
-                          name: 'image',
-                          widget: 'image',
-                          public_folder: 'file/public_folder',
-                        },
-                      ],
-                    },
-                  ],
-                } as FilesCollection,
-              ],
-            }),
-          );
+          const config = createMockConfig({
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                folder: 'foo',
+                path: '{{slug}}/index',
+                fields: [
+                  {
+                    name: 'image',
+                    widget: 'image',
+                    media_folder: 'collection/static/images/docs',
+                    public_folder: 'collection/public_folder',
+                  },
+                ],
+              } as FolderCollection,
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                files: [
+                  {
+                    name: 'foo-file',
+                    label: 'Foo',
+                    file: 'foo',
+                    fields: [
+                      {
+                        name: 'image',
+                        widget: 'image',
+                        public_folder: 'file/public_folder',
+                      },
+                    ],
+                  },
+                ],
+              } as FilesCollection,
+            ],
+          });
           expect(
             ((config.collections[0] as FolderCollection).fields[0] as FileOrImageField)
               .public_folder,
@@ -536,75 +503,69 @@ describe('config', () => {
         });
       });
 
-      // describe('publish', () => {
-      //   it('should set publish to true if not set', () => {
-      //     expect(
-      //       (
-      //         applyDefaults(
-      //           createMockConfig({
-      //             collections: [
-      //               {
-      //                 name: 'foo-collection',
-      //                 label: 'Foo',
-      //                 folder: 'foo',
-      //                 media_folder: 'static/images/docs',
-      //                 fields: [{ name: 'title', widget: 'string' }],
-      //               } as FolderCollection,
-      //             ],
-      //           }),
-      //         ).collections[0] as FolderCollection
-      //       ).publish,
-      //     ).toEqual(true);
-      //   });
+      describe('publish', () => {
+        it('should set publish to true if not set', () => {
+          expect(
+            (
+              createMockConfig({
+                collections: [
+                  {
+                    name: 'foo-collection',
+                    label: 'Foo',
+                    folder: 'foo',
+                    media_folder: 'static/images/docs',
+                    fields: [{ name: 'title', widget: 'string' }],
+                  } as FolderCollection,
+                ],
+              }).collections[0] as FolderCollection
+            ).publish,
+          ).toEqual(true);
+        });
 
-      //   it('should not override existing publish config', () => {
-      //     expect(
-      //       (
-      //         applyDefaults(
-      //           createMockConfig({
-      //             collections: [
-      //               {
-      //                 name: 'foo-collection',
-      //                 label: 'Foo',
-      //                 folder: 'foo',
-      //                 media_folder: 'static/images/docs',
-      //                 publish: false,
-      //                 fields: [{ name: 'title', widget: 'string' }],
-      //               } as FolderCollection,
-      //             ],
-      //           }),
-      //         ).collections[0] as FolderCollection
-      //       ).publish,
-      //     ).toEqual(false);
-      //   });
-      // });
+        it('should not override existing publish config', () => {
+          expect(
+            (
+              createMockConfig({
+                collections: [
+                  {
+                    name: 'foo-collection',
+                    label: 'Foo',
+                    folder: 'foo',
+                    media_folder: 'static/images/docs',
+                    publish: false,
+                    fields: [{ name: 'title', widget: 'string' }],
+                  } as FolderCollection,
+                ],
+              }).collections[0] as FolderCollection
+            ).publish,
+          ).toEqual(false);
+        });
+      });
 
       describe('editor preview', () => {
         it('should set editor preview honoring global config before and specific config after', () => {
-          const config = applyDefaults(
-            createMockConfig({
-              editor: {
-                preview: false,
+          const config = createMockConfig({
+            editor: {
+              preview: false,
+            },
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                fields: [{ name: 'title', widget: 'string' }],
+                folder: 'foo',
               },
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  fields: [{ name: 'title', widget: 'string' }],
-                  folder: 'foo',
+              {
+                name: 'bar-collection',
+                label: 'Bar',
+                editor: {
+                  preview: true,
                 },
-                {
-                  name: 'bar-collection',
-                  label: 'Bar',
-                  editor: {
-                    preview: true,
-                  },
-                  fields: [{ name: 'title', widget: 'string' }],
-                  folder: 'bar',
-                },
-              ],
-            }),
-          );
+                fields: [{ name: 'title', widget: 'string' }],
+                folder: 'bar',
+              },
+            ],
+          });
 
           expect((config.collections[0].editor as DefaultEditorConfig).preview).toEqual(false);
           expect((config.collections[1].editor as DefaultEditorConfig).preview).toEqual(true);
@@ -615,95 +576,166 @@ describe('config', () => {
     describe('i18n', () => {
       it('should set root i18n on collection when collection i18n is set to true', () => {
         expect(
-          applyDefaults(
-            createMockConfig({
-              i18n: {
-                structure: 'multiple_folders',
-                locales: ['en', 'de'],
+          createMockConfig({
+            i18n: {
+              structure: 'multiple_folders',
+              locales: ['en', 'de'],
+            },
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                folder: 'foo',
+                i18n: true,
+                fields: [{ name: 'title', widget: 'string' }],
               },
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  folder: 'foo',
-                  i18n: true,
-                  fields: [{ name: 'title', widget: 'string' }],
-                },
-              ],
-            }),
-          ).collections[0].i18n,
+            ],
+          }).collections[0].i18n,
         ).toEqual({ structure: 'multiple_folders', locales: ['en', 'de'], default_locale: 'en' });
       });
 
       it('should not set root i18n on collection when collection i18n is not set', () => {
         expect(
-          applyDefaults(
-            createMockConfig({
-              i18n: {
-                structure: 'multiple_folders',
-                locales: ['en', 'de'],
+          createMockConfig({
+            i18n: {
+              structure: 'multiple_folders',
+              locales: ['en', 'de'],
+            },
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                folder: 'foo',
+                fields: [{ name: 'title', widget: 'string' }],
               },
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  folder: 'foo',
-                  fields: [{ name: 'title', widget: 'string' }],
-                },
-              ],
-            }),
-          ).collections[0].i18n,
+            ],
+          }).collections[0].i18n,
         ).toBeUndefined();
       });
 
       it('should not set root i18n on collection when collection i18n is set to false', () => {
         expect(
-          applyDefaults(
-            createMockConfig({
-              i18n: {
-                structure: 'multiple_folders',
-                locales: ['en', 'de'],
+          createMockConfig({
+            i18n: {
+              structure: 'multiple_folders',
+              locales: ['en', 'de'],
+            },
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                folder: 'foo',
+                i18n: false,
+                fields: [{ name: 'title', widget: 'string' }],
               },
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  folder: 'foo',
-                  i18n: false,
-                  fields: [{ name: 'title', widget: 'string' }],
-                },
-              ],
-            }),
-          ).collections[0].i18n,
+            ],
+          }).collections[0].i18n,
         ).toBeUndefined();
       });
 
       it('should merge root i18n on collection when collection i18n is set to an object', () => {
         expect(
-          applyDefaults(
-            createMockConfig({
-              i18n: {
-                structure: 'multiple_folders',
-                locales: ['en', 'de'],
-                default_locale: 'en',
+          createMockConfig({
+            i18n: {
+              structure: 'multiple_folders',
+              locales: ['en', 'de'],
+              default_locale: 'en',
+            },
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                folder: 'foo',
+                i18n: { locales: ['en', 'fr'], default_locale: 'fr' },
+                fields: [{ name: 'title', widget: 'string' }],
               },
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  folder: 'foo',
-                  i18n: { locales: ['en', 'fr'], default_locale: 'fr' },
-                  fields: [{ name: 'title', widget: 'string' }],
-                },
-              ],
-            }),
-          ).collections[0].i18n,
+            ],
+          }).collections[0].i18n,
         ).toEqual({ structure: 'multiple_folders', locales: ['en', 'fr'], default_locale: 'fr' });
       });
 
       it('should throw when i18n structure is not single_file on files collection', () => {
         expect(() =>
-          applyDefaults(
+          createMockConfig({
+            i18n: {
+              structure: 'multiple_folders',
+              locales: ['en', 'de'],
+            },
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                files: [
+                  {
+                    name: 'file',
+                    label: 'File',
+                    file: 'file',
+                    i18n: true,
+                    fields: [{ name: 'title', widget: 'string', i18n: true }],
+                  },
+                ],
+                i18n: true,
+              },
+            ],
+          }),
+        ).toThrow('i18n configuration for files collections is limited to single_file structure');
+      });
+
+      it('should throw when i18n structure is set to multiple_folders and contains a single file collection', () => {
+        expect(() =>
+          createMockConfig({
+            i18n: {
+              structure: 'multiple_folders',
+              locales: ['en', 'de'],
+            },
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                files: [
+                  {
+                    name: 'file',
+                    label: 'File',
+                    file: 'file',
+                    fields: [{ name: 'title', widget: 'string' }],
+                  },
+                ],
+                i18n: true,
+              },
+            ],
+          }),
+        ).toThrow('i18n configuration for files collections is limited to single_file structure');
+      });
+
+      it('should throw when i18n structure is set to multiple_files and contains a single file collection', () => {
+        expect(() =>
+          createMockConfig({
+            i18n: {
+              structure: 'multiple_files',
+              locales: ['en', 'de'],
+            },
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                files: [
+                  {
+                    name: 'file',
+                    label: 'File',
+                    file: 'file',
+                    fields: [{ name: 'title', widget: 'string' }],
+                  },
+                ],
+                i18n: true,
+              },
+            ],
+          }),
+        ).toThrow('i18n configuration for files collections is limited to single_file structure');
+      });
+
+      it('should set i18n value to translate on field when i18n=true for field in files collection', () => {
+        expect(
+          (
             createMockConfig({
               i18n: {
                 structure: 'multiple_folders',
@@ -722,99 +754,12 @@ describe('config', () => {
                       fields: [{ name: 'title', widget: 'string', i18n: true }],
                     },
                   ],
-                  i18n: true,
-                },
+                  i18n: {
+                    structure: 'single_file',
+                  },
+                } as FilesCollection,
               ],
-            }),
-          ),
-        ).toThrow('i18n configuration for files collections is limited to single_file structure');
-      });
-
-      it('should throw when i18n structure is set to multiple_folders and contains a single file collection', () => {
-        expect(() =>
-          applyDefaults(
-            createMockConfig({
-              i18n: {
-                structure: 'multiple_folders',
-                locales: ['en', 'de'],
-              },
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  files: [
-                    {
-                      name: 'file',
-                      label: 'File',
-                      file: 'file',
-                      fields: [{ name: 'title', widget: 'string' }],
-                    },
-                  ],
-                  i18n: true,
-                },
-              ],
-            }),
-          ),
-        ).toThrow('i18n configuration for files collections is limited to single_file structure');
-      });
-
-      it('should throw when i18n structure is set to multiple_files and contains a single file collection', () => {
-        expect(() =>
-          applyDefaults(
-            createMockConfig({
-              i18n: {
-                structure: 'multiple_files',
-                locales: ['en', 'de'],
-              },
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  files: [
-                    {
-                      name: 'file',
-                      label: 'File',
-                      file: 'file',
-                      fields: [{ name: 'title', widget: 'string' }],
-                    },
-                  ],
-                  i18n: true,
-                },
-              ],
-            }),
-          ),
-        ).toThrow('i18n configuration for files collections is limited to single_file structure');
-      });
-
-      it('should set i18n value to translate on field when i18n=true for field in files collection', () => {
-        expect(
-          (
-            applyDefaults(
-              createMockConfig({
-                i18n: {
-                  structure: 'multiple_folders',
-                  locales: ['en', 'de'],
-                },
-                collections: [
-                  {
-                    name: 'foo-collection',
-                    label: 'Foo',
-                    files: [
-                      {
-                        name: 'file',
-                        label: 'File',
-                        file: 'file',
-                        i18n: true,
-                        fields: [{ name: 'title', widget: 'string', i18n: true }],
-                      },
-                    ],
-                    i18n: {
-                      structure: 'single_file',
-                    },
-                  } as FilesCollection,
-                ],
-              }),
-            ).collections[0] as FilesCollection
+            }).collections[0] as FilesCollection
           ).files[0].fields[0].i18n,
         ).toEqual('translate');
       });
@@ -822,23 +767,21 @@ describe('config', () => {
       it('should set i18n value to translate on field when i18n=true for field', () => {
         expect(
           (
-            applyDefaults(
-              createMockConfig({
-                i18n: {
-                  structure: 'multiple_folders',
-                  locales: ['en', 'de'],
-                },
-                collections: [
-                  {
-                    name: 'foo-collection',
-                    label: 'Foo',
-                    folder: 'foo',
-                    i18n: true,
-                    fields: [{ name: 'title', widget: 'string', i18n: true }],
-                  } as FolderCollection,
-                ],
-              }),
-            ).collections[0] as FolderCollection
+            createMockConfig({
+              i18n: {
+                structure: 'multiple_folders',
+                locales: ['en', 'de'],
+              },
+              collections: [
+                {
+                  name: 'foo-collection',
+                  label: 'Foo',
+                  folder: 'foo',
+                  i18n: true,
+                  fields: [{ name: 'title', widget: 'string', i18n: true }],
+                } as FolderCollection,
+              ],
+            }).collections[0] as FolderCollection
           ).fields[0].i18n,
         ).toEqual('translate');
       });
@@ -846,70 +789,64 @@ describe('config', () => {
       it('should set i18n value to none on field when i18n=false for field', () => {
         expect(
           (
-            applyDefaults(
-              createMockConfig({
-                i18n: {
-                  structure: 'multiple_folders',
-                  locales: ['en', 'de'],
-                },
-                collections: [
-                  {
-                    name: 'foo-collection',
-                    label: 'Foo',
-                    folder: 'foo',
-                    i18n: true,
-                    fields: [{ name: 'title', widget: 'string', i18n: false }],
-                  } as FolderCollection,
-                ],
-              }),
-            ).collections[0] as FolderCollection
+            createMockConfig({
+              i18n: {
+                structure: 'multiple_folders',
+                locales: ['en', 'de'],
+              },
+              collections: [
+                {
+                  name: 'foo-collection',
+                  label: 'Foo',
+                  folder: 'foo',
+                  i18n: true,
+                  fields: [{ name: 'title', widget: 'string', i18n: false }],
+                } as FolderCollection,
+              ],
+            }).collections[0] as FolderCollection
           ).fields[0].i18n,
         ).toEqual('none');
       });
 
       it('should throw is default locale is missing from root i18n config', () => {
         expect(() =>
-          applyDefaults(
-            createMockConfig({
-              i18n: {
-                structure: 'multiple_folders',
-                locales: ['en', 'de'],
-                default_locale: 'fr',
+          createMockConfig({
+            i18n: {
+              structure: 'multiple_folders',
+              locales: ['en', 'de'],
+              default_locale: 'fr',
+            },
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                folder: 'foo',
+                fields: [{ name: 'title', widget: 'string' }],
               },
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  folder: 'foo',
-                  fields: [{ name: 'title', widget: 'string' }],
-                },
-              ],
-            }),
-          ),
+            ],
+          }),
         ).toThrow("i18n locales 'en, de' are missing the default locale fr");
       });
 
       it('should throw if default locale is missing from collection i18n config', () => {
         expect(() =>
-          applyDefaults(
-            createMockConfig({
-              i18n: {
-                structure: 'multiple_folders',
-                locales: ['en', 'de'],
-              },
-              collections: [
-                {
-                  name: 'foo-collection',
-                  label: 'Foo',
-                  folder: 'foo',
-                  i18n: {
-                    default_locale: 'fr',
-                  },
-                  fields: [{ name: 'title', widget: 'string' }],
+          createMockConfig({
+            i18n: {
+              structure: 'multiple_folders',
+              locales: ['en', 'de'],
+            },
+            collections: [
+              {
+                name: 'foo-collection',
+                label: 'Foo',
+                folder: 'foo',
+                i18n: {
+                  default_locale: 'fr',
                 },
-              ],
-            }),
-          ),
+                fields: [{ name: 'title', widget: 'string' }],
+              },
+            ],
+          }),
         ).toThrow("i18n locales 'en, de' are missing the default locale fr");
       });
     });
