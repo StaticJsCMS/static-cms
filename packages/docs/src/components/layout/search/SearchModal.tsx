@@ -104,11 +104,11 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
     setSearch(event.target.value);
   }, []);
 
-  const searchResults = useSearchScores(search, searchablePages);
+  const escapedSearch = useMemo(() => escapeRegExp(search), [search]);
+
+  const searchResults = useSearchScores(escapedSearch, searchablePages);
 
   const renderedResults = useMemo(() => {
-    const escapedSearch = escapeRegExp(search);
-
     return searchResults?.length > 0 ? (
       [...Array<unknown>(SEARCH_RESULTS_TO_SHOW)].map((_, index) => {
         if (searchResults.length <= index) {
@@ -203,7 +203,7 @@ const SearchModal: FC<SearchModalProps> = ({ open, onClose, searchablePages }) =
         </StyledSuggestionSection>
       </StyledSuggestions>
     );
-  }, [handleClose, search, searchResults, theme.palette.primary.main]);
+  }, [escapedSearch, handleClose, searchResults, theme.palette.primary.main]);
 
   return (
     <StyledDialog open={open} onClose={handleClose} fullScreen={fullScreen} fullWidth>
