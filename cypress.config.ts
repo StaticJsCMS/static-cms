@@ -2,7 +2,7 @@ import { defineConfig } from "cypress";
 import setupNodeEvents from "./cypress/plugins";
 
 export default defineConfig({
-  projectId: "1c35bs",
+  projectId: "wvw3x3",
   retries: {
     runMode: 0,
     openMode: 0,
