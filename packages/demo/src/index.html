@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <title>Static CMS Demo</title>
     <link rel="icon" type="image/png" href="/static-cms-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <style>
       @import url(https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap);
 
@@ -41,12 +42,19 @@
       .CMS_Demo_static-cms-logo {
         height: 10rem;
         width: 20rem;
+        max-width: 80%;
         margin-top: -5rem;
       }
 
       .CMS_Demo_entries {
         display: flex;
         gap: 16px;
+      }
+
+      @media screen and (max-width: 600px) {
+        .CMS_Demo_entries {
+          flex-direction: column;
+        }
       }
 
       .CMS_Demo_Card_root {
