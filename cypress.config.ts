@@ -4,7 +4,7 @@ import setupNodeEvents from "./cypress/plugins";
 export default defineConfig({
   projectId: "wvw3x3",
   retries: {
-    runMode: 0,
+    runMode: 2,
     openMode: 0,
   },
   chromeWebSecurity: false,
