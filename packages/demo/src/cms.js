@@ -30,29 +30,6 @@ const PostDateFieldPreview = ({ value }) => {
   );
 };
 
-const PostDraftFieldPreview = ({ value }) => {
-  return h(
-    'div',
-    {
-      style: {
-        backgroundColor: value === true ? 'rgb(37 99 235)' : 'rgb(22 163 74)',
-        color: 'white',
-        border: 'none',
-        padding: '2px 6px',
-        textAlign: 'center',
-        textDecoration: 'none',
-        display: 'inline-block',
-        cursor: 'pointer',
-        borderRadius: '4px',
-        fontSize: '14px',
-        lineHeight: '16px',
-        height: '20px',
-      },
-    },
-    value === true ? 'Draft' : 'Published',
-  );
-};
-
 const GeneralPreview = ({ widgetsFor, entry, collection }) => {
   const title = entry.data.site_title;
   const posts = entry.data.posts;

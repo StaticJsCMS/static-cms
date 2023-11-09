@@ -5,7 +5,7 @@ backend:
   auth_type: pkce
   app_id: 589ccb30ce31da8ba08e0b1e10b681a10be108e144508c2712573c6e4d60707e
 site_url: 'https://example.com'
-media_folder: assets/uploads
+media_folder: /assets/uploads
 media_library:
   folder_support: true
 locale: en

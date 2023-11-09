@@ -9,7 +9,7 @@ interface CardContentProps {
 }
 
 const CardContent: FC<CardContentProps> = ({ children }) => {
-  return <p className={cardClasses.content}>{children}</p>;
+  return <div className={cardClasses.content}>{children}</div>;
 };
 
 export default CardContent;

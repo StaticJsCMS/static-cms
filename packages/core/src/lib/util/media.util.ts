@@ -1,4 +1,3 @@
-import trim from 'lodash/trim';
 import { dirname } from 'path';
 
 import { basename, isAbsolutePath } from '.';
@@ -259,7 +258,7 @@ export function selectMediaFolder<EF extends BaseField>(
     }
   }
 
-  return trim(mediaFolder, '/');
+  return mediaFolder;
 }
 
 export function selectMediaFilePublicPath<EF extends BaseField>(
@@ -297,7 +296,7 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
     const mediaFolder = customMediaFolder
       ? evaluateFolder('media_folder', config, collection!, entryMap, field)
       : config['media_folder'];
-    selectedPublicFolder = trim(currentFolder, '/').replace(trim(mediaFolder!, '/'), publicFolder);
+    selectedPublicFolder = currentFolder.replace(mediaFolder!, publicFolder);
   }
 
   const finalPublicPath = joinUrlPath(selectedPublicFolder, basename(mediaPath));
@@ -322,17 +321,14 @@ export function selectMediaFilePath(
 
   let mediaFolder = selectMediaFolder(config, collection, entryMap, field, currentFolder);
   if (!currentFolder) {
-    let publicFolder = trim(config['public_folder'] ?? mediaFolder, '/');
-    let mediaPathDir = trim(dirname(mediaPath), '/');
+    let publicFolder = config['public_folder'] ?? mediaFolder;
+    let mediaPathDir = dirname(mediaPath);
     if (mediaPathDir === '.') {
       mediaPathDir = '';
     }
 
     if (hasCustomFolder('public_folder', collection, entryMap?.slug, field)) {
-      publicFolder = trim(
-        evaluateFolder('public_folder', config, collection!, entryMap, field),
-        '/',
-      );
+      publicFolder = evaluateFolder('public_folder', config, collection!, entryMap, field);
     }
 
     if (mediaPathDir.includes(publicFolder) && mediaPathDir != mediaFolder) {
