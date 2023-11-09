@@ -245,7 +245,7 @@ export function selectMediaFolder<EF extends BaseField>(
   } else if (hasCustomFolder('media_folder', collection, entryMap?.slug, field)) {
     const folder = evaluateFolder('media_folder', config, collection!, entryMap, field);
     if (folder.startsWith('/')) {
-      mediaFolder = folder.replace(/^[/]*/g, '');
+      mediaFolder = folder;
     } else {
       const entryPath = entryMap?.path;
       mediaFolder = entryPath
