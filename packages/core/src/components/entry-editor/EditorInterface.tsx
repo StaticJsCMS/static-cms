@@ -417,7 +417,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
     <>
       {!isSmallScreen ? (
         <PanelGroup
-          key="editor-with-preview"
+          key={`editor-with-preview-${editorSize}`}
           autoSaveId={`editor-with-preview-${collection.name}`}
           direction="horizontal"
           units={editorSize === EDITOR_SIZE_COMPACT ? 'pixels' : 'percentages'}
