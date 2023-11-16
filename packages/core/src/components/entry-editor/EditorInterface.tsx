@@ -242,6 +242,8 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
     setSelectedLocale(locale);
   }, []);
 
+  const file = getFileFromSlug(collection, entry.slug);
+
   const { livePreviewUrlTemplate, showPreviewToggle, previewInFrame, editorSize } = useMemo(() => {
     let livePreviewUrlTemplate =
       typeof collection.editor?.live_preview === 'string' ? collection.editor.live_preview : false;
@@ -261,8 +263,6 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
     }
 
     if ('files' in collection) {
-      const file = getFileFromSlug(collection, entry.slug);
-
       if (file?.editor) {
         if (typeof file.editor.live_preview === 'string') {
           livePreviewUrlTemplate = file.editor.live_preview;
@@ -417,8 +417,8 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
     <>
       {!isSmallScreen ? (
         <PanelGroup
-          key={`editor-with-preview-${editorSize}`}
-          autoSaveId={`editor-with-preview-${collection.name}`}
+          key="editor-with-preview"
+          autoSaveId={`editor-with-preview-${collection.name}${file ? `-${file.name}` : ''}`}
           direction="horizontal"
           units={editorSize === EDITOR_SIZE_COMPACT ? 'pixels' : 'percentages'}
           className={classNames(

@@ -14,21 +14,22 @@ import { keyToPathArray } from '../widgets/stringTemplate';
 import { selectField } from './field.util';
 import { selectMediaFolder } from './media.util';
 
-import type { InferrableField } from '@staticcms/core/constants/fieldInference';
 import type {
   BaseField,
-  CollectionWithDefaults,
+  Collection,
+  CollectionFile,
   CollectionFileWithDefaults,
+  CollectionWithDefaults,
   CollectionsWithDefaults,
   Config,
   ConfigWithDefaults,
   Entry,
   Field,
-  FilesCollection,
   InferredField,
   ObjectField,
   SortableField,
 } from '@staticcms/core';
+import type { InferrableField } from '@staticcms/core/constants/fieldInference';
 
 export function fileForEntry<EF extends BaseField>(
   collection: CollectionWithDefaults<EF> | undefined | null,
@@ -282,9 +283,13 @@ function getFieldsWithMediaFolders<EF extends BaseField>(fields: Field<EF>[]) {
 }
 
 export function getFileFromSlug<EF extends BaseField>(
-  collection: FilesCollection<EF>,
+  collection: Collection<EF>,
   slug: string,
-) {
+): CollectionFile<EF> | undefined {
+  if (!('files' in collection)) {
+    return undefined;
+  }
+
   return collection.files?.find(f => f.name === slug);
 }
 
