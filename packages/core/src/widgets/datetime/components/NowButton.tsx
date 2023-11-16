@@ -4,7 +4,7 @@ import Button from '@staticcms/core/components/common/button/Button';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { DateTimeField } from '@staticcms/core/interface';
+import type { DateTimeField } from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 
 import './NowButton.css';

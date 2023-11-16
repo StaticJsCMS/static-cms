@@ -6,7 +6,7 @@ import { compileStringTemplate } from '@staticcms/core/lib/widgets/stringTemplat
 import widgetObjectClasses from './ObjectControl.classes';
 import ObjectFieldWrapper from './ObjectFieldWrapper';
 
-import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core/interface';
+import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './ObjectControl.css';

@@ -10,7 +10,7 @@ import useFilters from './useFilters';
 import usePublishedEntries from './usePublishedEntries';
 import useUnpublishedEntries from './useUnpublishedEntries';
 
-import type { CollectionWithDefaults } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core';
 
 export default function useEntries(collection: CollectionWithDefaults) {
   const publishedEntries = usePublishedEntries(collection.name);

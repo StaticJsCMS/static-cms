@@ -5,7 +5,7 @@ import { getGroup, selectEntriesSelectedGroup } from '@staticcms/core/reducers/s
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import usePublishedEntries from './usePublishedEntries';
 
-import type { GroupOfEntries } from '@staticcms/core/interface';
+import type { GroupOfEntries } from '@staticcms/core';
 
 export default function useGroups(collectionName: string) {
   const entries = usePublishedEntries(collectionName);

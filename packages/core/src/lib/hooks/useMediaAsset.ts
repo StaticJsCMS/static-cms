@@ -11,7 +11,7 @@ import type {
   Entry,
   MediaField,
   UnknownField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 export function useGetMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
   collection?: CollectionWithDefaults<EF>,

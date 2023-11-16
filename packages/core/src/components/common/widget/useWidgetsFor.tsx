@@ -12,7 +12,7 @@ import type {
   ObjectValue,
   WidgetFor,
   WidgetsFor,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { ReactNode } from 'react';
 
 export default function useWidgetsFor(

@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import type { BaseField, CollectionWithDefaults, UnknownField } from '@staticcms/core/interface';
+import type { BaseField, CollectionWithDefaults, UnknownField } from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
 
 export const selectCollections = <EF extends BaseField = UnknownField>(state: RootState<EF>) => {

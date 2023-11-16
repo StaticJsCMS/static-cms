@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { getNewEntryUrl } from '../urlHelper';
 import { isNotEmpty } from '../util/string.util';
 
-import type { CollectionWithDefaults } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core';
 
 export default function useNewEntryUrl(
   collection: CollectionWithDefaults | undefined,

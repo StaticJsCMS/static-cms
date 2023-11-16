@@ -15,7 +15,7 @@ import type {
   FileOrImageField,
   FilesCollection,
   FolderCollection,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 jest.spyOn(console, 'error').mockImplementation(() => {});
 jest.spyOn(console, 'info').mockImplementation(() => {});

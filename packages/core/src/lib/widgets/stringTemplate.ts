@@ -8,7 +8,7 @@ import { basename, dirname, extname } from 'path';
 import { getDatetimeFormats } from '@staticcms/datetime/datetime.util';
 import { getField } from '../util/field.util';
 
-import type { Entry, EntryData, Field, ObjectValue } from '@staticcms/core/interface';
+import type { Entry, EntryData, Field, ObjectValue } from '@staticcms/core';
 
 export interface StringTemplateFilter {
   pattern: RegExp;

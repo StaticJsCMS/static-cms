@@ -18,7 +18,7 @@ import NestedCollection from '../collections/NestedCollection';
 import NavLink from './NavLink';
 import sidebarClasses from './Sidebar.classes';
 
-import type { CollectionWithDefaults } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core';
 import type { FC } from 'react';
 
 export interface SidebarContentProps {

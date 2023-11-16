@@ -7,7 +7,7 @@ import ErrorMessage from './ErrorMessage';
 import Hint from './Hint';
 import Label from './Label';
 
-import type { FieldError } from '@staticcms/core/interface';
+import type { FieldError } from '@staticcms/core';
 import type { FC, MouseEvent, ReactNode } from 'react';
 
 import './Field.css';

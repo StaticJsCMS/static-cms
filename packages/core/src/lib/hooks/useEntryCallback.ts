@@ -12,7 +12,7 @@ import DataUpdateEvent from '../util/events/DataEvent';
 import { useWindowEvent } from '../util/window.util';
 import useDebouncedCallback from './useDebouncedCallback';
 
-import type { CollectionWithDefaults, EntryData, Field } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, EntryData, Field } from '@staticcms/core';
 
 async function handleChange(
   path: string[],

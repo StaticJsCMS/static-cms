@@ -8,7 +8,7 @@ import { localForage } from '@staticcms/core/lib/util';
 import useTranslate from '../lib/hooks/useTranslate';
 import { generateClassNames } from '../lib/util/theming.util';
 
-import type { Config, TranslatedProps } from '@staticcms/core/interface';
+import type { Config, TranslatedProps } from '@staticcms/core';
 import type { FC, ReactNode } from 'react';
 
 import './ErrorBoundary.css';

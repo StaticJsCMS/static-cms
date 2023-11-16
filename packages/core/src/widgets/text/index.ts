@@ -2,7 +2,7 @@ import schema from './schema';
 import controlComponent from './TextControl';
 import previewComponent from './TextPreview';
 
-import type { TextField, WidgetParam } from '@staticcms/core/interface';
+import type { TextField, WidgetParam } from '@staticcms/core';
 
 const TextWidget = (): WidgetParam<string, TextField> => {
   return {

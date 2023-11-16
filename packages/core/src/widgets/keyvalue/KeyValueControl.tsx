@@ -10,7 +10,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { createEmptyPair } from './util';
 
-import type { KeyValueField, WidgetControlProps } from '@staticcms/core/interface';
+import type { KeyValueField, WidgetControlProps } from '@staticcms/core';
 import type { ChangeEvent, FC, MouseEvent } from 'react';
 import type { Pair } from './types';
 

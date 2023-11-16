@@ -1,6 +1,6 @@
 import transform from './deserializeMarkdown';
 
-import type { ShortcodeConfig } from '@staticcms/core/interface';
+import type { ShortcodeConfig } from '@staticcms/core';
 import type { Plugin } from 'unified';
 import type { MdastNode } from './ast-types';
 

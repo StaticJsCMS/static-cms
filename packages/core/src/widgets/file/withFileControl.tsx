@@ -28,7 +28,7 @@ import SortableImage from './components/SortableImage';
 import SortableLink from './components/SortableLink';
 
 import type { DragEndEvent } from '@dnd-kit/core';
-import type { FileOrImageField, MediaPath, WidgetControlProps } from '@staticcms/core/interface';
+import type { FileOrImageField, MediaPath, WidgetControlProps } from '@staticcms/core';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { FC, MouseEvent } from 'react';
 

@@ -9,7 +9,7 @@ import type {
   FilesCollectionWithDefaults,
   FolderCollection,
   FolderCollectionWithDefaults,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 export const createMockFolderCollection = <EF extends BaseField>(
   extra: Partial<Collection<EF>> = {},

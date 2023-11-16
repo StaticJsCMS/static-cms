@@ -7,7 +7,7 @@ import ValidationErrorTypes from '@staticcms/core/constants/validationErrorTypes
 import { mockNumberField } from '@staticcms/test/data/fields.mock';
 import validator from '../validator';
 
-import type { NumberField } from '@staticcms/core/interface';
+import type { NumberField } from '@staticcms/core';
 
 describe('validator number', () => {
   const t = jest.fn();

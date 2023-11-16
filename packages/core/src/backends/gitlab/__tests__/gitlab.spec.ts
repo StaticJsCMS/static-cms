@@ -21,7 +21,7 @@ import type {
   ConfigWithDefaults,
   FilesCollectionWithDefaults,
   FolderCollectionWithDefaults,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
 import type { FetchMethod } from '@staticcms/test/mockFetch';
 

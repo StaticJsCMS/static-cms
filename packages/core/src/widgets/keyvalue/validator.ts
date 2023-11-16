@@ -2,7 +2,7 @@ import ValidationErrorTypes from '@staticcms/core/constants/validationErrorTypes
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { validateMinMax } from '@staticcms/core/lib/widgets/validations';
 
-import type { FieldError, FieldValidationMethod, KeyValueField } from '@staticcms/core/interface';
+import type { FieldError, FieldValidationMethod, KeyValueField } from '@staticcms/core';
 import type { Pair } from './types';
 
 const validator: FieldValidationMethod<Pair[], KeyValueField> = ({ field, value, t }) => {

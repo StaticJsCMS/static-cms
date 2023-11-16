@@ -19,7 +19,7 @@ import type {
   ValueOrNestedValue,
   Widget,
   WidgetPreviewComponent,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { ReactFragment, ReactNode } from 'react';
 
 import './widgetFor.css';

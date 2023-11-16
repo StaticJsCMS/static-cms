@@ -4,7 +4,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import useDefaultPath from '@staticcms/core/lib/hooks/useDefaultPath';
 import Editor from './Editor';
 
-import type { CollectionsWithDefaults } from '@staticcms/core/interface';
+import type { CollectionsWithDefaults } from '@staticcms/core';
 import type { FC } from 'react';
 
 interface EditorRouteProps {

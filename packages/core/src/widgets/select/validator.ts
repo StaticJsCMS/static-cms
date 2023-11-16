@@ -1,6 +1,6 @@
 import { validateMinMax } from '@staticcms/core/lib/widgets/validations';
 
-import type { FieldValidationMethod, SelectField } from '@staticcms/core/interface';
+import type { FieldValidationMethod, SelectField } from '@staticcms/core';
 
 const validator: FieldValidationMethod<string | number | (string | number)[], SelectField> = ({
   field,

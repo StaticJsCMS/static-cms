@@ -11,7 +11,7 @@ import CardActionArea from '../../common/card/CardActionArea';
 import { StaticCmsIcon } from '../../images/_index';
 import ThemeManager from '../ThemeManager';
 
-import type { Theme } from '@staticcms/core/interface';
+import type { Theme } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './ThemeCard.css';

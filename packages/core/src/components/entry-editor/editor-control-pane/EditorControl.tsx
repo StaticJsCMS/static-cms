@@ -32,7 +32,7 @@ import type {
   UnknownField,
   ValueOrNestedValue,
   Widget,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
 import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';

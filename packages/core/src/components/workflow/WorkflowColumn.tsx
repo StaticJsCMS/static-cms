@@ -7,7 +7,7 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import WorkflowCard from './WorkflowCard';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import type { Entry } from '@staticcms/core/interface';
+import type { Entry } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './WorkflowColumn.css';

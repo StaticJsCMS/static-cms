@@ -7,11 +7,7 @@ import Image from '../../common/image/Image';
 import InlineEditTextField from './InlineEditTextField';
 import mediaLibraryClasses from './MediaLibrary.classes';
 
-import type {
-  CollectionWithDefaults,
-  MediaField,
-  MediaLibrarInsertOptions,
-} from '@staticcms/core/interface';
+import type { CollectionWithDefaults, MediaField, MediaLibrarInsertOptions } from '@staticcms/core';
 import type { FC } from 'react';
 
 interface CurrentMediaDetailsProps {

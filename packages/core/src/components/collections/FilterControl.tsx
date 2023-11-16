@@ -7,7 +7,7 @@ import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 
-import type { FilterMap, ViewFilter } from '@staticcms/core/interface';
+import type { FilterMap, ViewFilter } from '@staticcms/core';
 import type { MouseEvent, FC } from 'react';
 
 import './FilterControl.css';

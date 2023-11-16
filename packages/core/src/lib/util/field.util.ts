@@ -11,7 +11,7 @@ import type {
   Entry,
   Field,
   ValueOrNestedValue,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { t } from 'react-polyglot';
 
 export function selectField<EF extends BaseField>(

@@ -4,7 +4,7 @@ import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 
-import type { CollectionWithDefaults, MediaField } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, MediaField } from '@staticcms/core';
 import type { FC } from 'react';
 
 export interface LinkProps<F extends MediaField> {

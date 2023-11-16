@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import type { Entry } from '@staticcms/core/interface';
+import type { Entry } from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
 
 export const selectUnpublishedEntries = (state: RootState) => {

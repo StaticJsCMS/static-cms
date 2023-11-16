@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { isEmpty, isNotEmpty } from '@staticcms/core/lib/util/string.util';
 
-import type { ShortcodeConfig } from '@staticcms/core/interface';
+import type { ShortcodeConfig } from '@staticcms/core';
 import type { BaseMdastNode, MdastNode } from './ast-types';
 
 function cleanRegex(str: string) {

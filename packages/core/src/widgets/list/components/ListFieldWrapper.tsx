@@ -8,7 +8,7 @@ import Label from '@staticcms/core/components/common/field/Label';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import widgetListClasses from '../ListControl.classes';
 
-import type { FieldError, ListField } from '@staticcms/core/interface';
+import type { FieldError, ListField } from '@staticcms/core';
 import type { FC, ReactNode } from 'react';
 
 export interface ListFieldWrapperProps {

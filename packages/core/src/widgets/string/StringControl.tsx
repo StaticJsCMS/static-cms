@@ -6,7 +6,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { StringField, WidgetControlProps } from '@staticcms/core/interface';
+import type { StringField, WidgetControlProps } from '@staticcms/core';
 import type { ChangeEvent, FC } from 'react';
 
 import './StringControl.css';

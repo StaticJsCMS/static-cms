@@ -31,7 +31,7 @@ import type {
   PersistOptions,
   UnpublishedEntry,
   User,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { AsyncLock } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { Semaphore } from 'semaphore';

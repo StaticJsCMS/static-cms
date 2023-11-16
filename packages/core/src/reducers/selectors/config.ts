@@ -3,7 +3,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { EDITORIAL_WORKFLOW } from '@staticcms/core/constants/publishModes';
 
 import type { Workflow } from '@staticcms/core/constants/publishModes';
-import type { ConfigWithDefaults } from '@staticcms/core/interface';
+import type { ConfigWithDefaults } from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
 
 export function selectLocale(config?: ConfigWithDefaults) {

@@ -1,4 +1,4 @@
-import type { ValueOrNestedValue } from '@staticcms/core/interface';
+import type { ValueOrNestedValue } from '@staticcms/core';
 
 export interface DataUpdateEventProps {
   field: string;

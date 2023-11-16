@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 import validator from '../validator';
 import ValidationErrorTypes from '@staticcms/core/constants/validationErrorTypes';
 
-import type { KeyValueField } from '@staticcms/core/interface';
+import type { KeyValueField } from '@staticcms/core';
 
 describe('validator key value', () => {
   const t = jest.fn();

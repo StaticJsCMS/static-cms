@@ -8,7 +8,7 @@ import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Image from '@staticcms/core/components/common/image/Image';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { CollectionWithDefaults, FileOrImageField } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, FileOrImageField } from '@staticcms/core';
 import type { FC, MouseEventHandler } from 'react';
 
 import './SortableImage.css';

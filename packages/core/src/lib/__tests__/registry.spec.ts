@@ -2,7 +2,7 @@ import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import { invokeEvent, registerEventListener, removeEventListener } from '../registry';
 import set from '../util/set.util';
 
-import type { EventListener } from '@staticcms/core/interface';
+import type { EventListener } from '@staticcms/core';
 
 jest.spyOn(console, 'info').mockImplementation(() => {});
 

@@ -2,7 +2,7 @@ import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import { isHidden } from '../field.util';
 import { I18N_FIELD_NONE } from '../../i18n';
 
-import type { StringField, TextField } from '@staticcms/core/interface';
+import type { StringField, TextField } from '@staticcms/core';
 
 describe('filterEntries', () => {
   const mockTitleField: StringField = {

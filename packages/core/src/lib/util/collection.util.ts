@@ -28,7 +28,7 @@ import type {
   InferredField,
   ObjectField,
   SortableField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 export function fileForEntry<EF extends BaseField>(
   collection: CollectionWithDefaults<EF> | undefined | null,

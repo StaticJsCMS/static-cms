@@ -23,7 +23,7 @@ import React from 'react';
 
 import { ELEMENT_SHORTCODE } from '../plateTypes';
 
-import type { ShortcodeConfig } from '@staticcms/core/interface';
+import type { ShortcodeConfig } from '@staticcms/core';
 import type { MdValue } from '../plateTypes';
 
 export const testShortcodeConfigs: Record<string, ShortcodeConfig> = {

@@ -5,7 +5,7 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import { DEFAULT_THEMES } from '../defaultThemes';
 import useThemes from './useThemes';
 
-import type { Theme } from '@staticcms/core/interface';
+import type { Theme } from '@staticcms/core';
 
 export default function useTheme(): Theme {
   const themes = useThemes();

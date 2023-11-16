@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { CollectionWithDefaults, CollectionsWithDefaults } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, CollectionsWithDefaults } from '@staticcms/core';
 import type { ChangeEvent, FC, FocusEvent, KeyboardEvent, MouseEvent } from 'react';
 
 import './CollectionSearch.css';

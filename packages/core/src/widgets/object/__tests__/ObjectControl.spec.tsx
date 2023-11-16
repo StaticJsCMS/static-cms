@@ -9,7 +9,7 @@ import React from 'react';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import ObjectControl from '../ObjectControl';
 
-import type { ObjectField } from '@staticcms/core/interface';
+import type { ObjectField } from '@staticcms/core';
 
 const singleFieldObjectField: ObjectField = {
   widget: 'object',

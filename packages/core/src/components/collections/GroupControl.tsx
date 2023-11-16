@@ -7,7 +7,7 @@ import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 
-import type { GroupMap, ViewGroup } from '@staticcms/core/interface';
+import type { GroupMap, ViewGroup } from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 
 import './GroupControl.css';

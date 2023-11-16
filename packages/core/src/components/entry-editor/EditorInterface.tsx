@@ -34,7 +34,7 @@ import type {
   Entry,
   Field,
   FieldsErrors,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { FC } from 'react';
 
 import './EditorInterface.css';

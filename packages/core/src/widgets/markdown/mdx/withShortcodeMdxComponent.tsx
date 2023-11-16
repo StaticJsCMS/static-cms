@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import { getShortcode } from '../../../lib/registry';
 
-import type { MarkdownField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { MarkdownField, WidgetPreviewProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 export interface WithShortcodeMdxComponentProps {

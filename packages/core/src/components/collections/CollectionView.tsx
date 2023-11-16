@@ -29,12 +29,7 @@ import EntriesCollection from './entries/EntriesCollection';
 import EntriesSearch from './entries/EntriesSearch';
 
 import type { ViewStyle } from '@staticcms/core/constants/views';
-import type {
-  CollectionWithDefaults,
-  SortDirection,
-  ViewFilter,
-  ViewGroup,
-} from '@staticcms/core/interface';
+import type { CollectionWithDefaults, SortDirection, ViewFilter, ViewGroup } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './Collection.css';

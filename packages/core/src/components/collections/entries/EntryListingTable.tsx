@@ -11,7 +11,7 @@ import Table from '../../common/table/Table';
 import entriesClasses from './Entries.classes';
 import EntryRow from './EntryRow';
 
-import type { CollectionEntryData } from '@staticcms/core/interface';
+import type { CollectionEntryData } from '@staticcms/core';
 import type { FC } from 'react';
 
 export interface EntryListingTableProps {

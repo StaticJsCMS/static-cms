@@ -14,7 +14,7 @@ import { addFileTemplateFields } from '@staticcms/core/lib/widgets/stringTemplat
 import Button from '../common/button/Button';
 import collectionClasses from './Collection.classes';
 
-import type { CollectionWithDefaults, Entry } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry } from '@staticcms/core';
 import type { FC } from 'react';
 
 interface CollectionHeaderProps {

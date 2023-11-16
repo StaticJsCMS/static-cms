@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 
 import { getDataPath } from '@staticcms/core/lib/i18n';
 
-import type { I18nSettings } from '@staticcms/core/interface';
+import type { I18nSettings } from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
 
 export const getEntryDataPath = (i18n: I18nSettings | undefined, isMeta: boolean | undefined) => {

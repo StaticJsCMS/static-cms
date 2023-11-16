@@ -17,7 +17,7 @@ import { DEFAULT_DATETIME_FORMAT } from './constants';
 import { useDatetimeFormats } from './datetime.util';
 import { localToUTC } from './utc.util';
 
-import type { DateTimeField, WidgetControlProps } from '@staticcms/core/interface';
+import type { DateTimeField, WidgetControlProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './DateTimeControl.css';

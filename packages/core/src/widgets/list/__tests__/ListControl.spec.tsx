@@ -11,7 +11,7 @@ import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.har
 import ListControl from '../ListControl';
 
 import type { DragEndEvent } from '@dnd-kit/core';
-import type { ListField, ValueOrNestedValue } from '@staticcms/core/interface';
+import type { ListField, ValueOrNestedValue } from '@staticcms/core';
 
 jest.unmock('uuid');
 

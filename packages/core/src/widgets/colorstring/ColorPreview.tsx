@@ -2,7 +2,7 @@ import React from 'react';
 
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { ColorField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { ColorField, WidgetPreviewProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 const classes = generateClassNames('WidgetColorPreview', ['root']);

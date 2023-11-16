@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { ObjectValue, TemplatePreviewProps } from '@staticcms/core/interface';
+import type { ObjectValue, TemplatePreviewProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 const Preview: FC<TemplatePreviewProps<ObjectValue>> = ({ collection, fields, widgetFor }) => {

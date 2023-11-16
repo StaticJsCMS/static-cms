@@ -1,6 +1,6 @@
 import { getTreeData } from '../nested.util';
 
-import type { CollectionWithDefaults, Entry } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry } from '@staticcms/core';
 
 const collection: CollectionWithDefaults = {
   create: true,

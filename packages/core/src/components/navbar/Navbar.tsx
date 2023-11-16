@@ -13,7 +13,7 @@ import Breadcrumbs from './Breadcrumbs';
 import QuickCreate from './QuickCreate';
 import SettingsDropdown from './SettingsDropdown';
 
-import type { Breadcrumb } from '@staticcms/core/interface';
+import type { Breadcrumb } from '@staticcms/core';
 import type { FC, ReactNode } from 'react';
 
 import './Navbar.css';

@@ -4,7 +4,7 @@ import get from 'lodash/get';
 import { dirname } from 'path';
 import { parse } from 'what-the-diff';
 
-import { PreviewState } from '@staticcms/core/interface';
+import { PreviewState } from '@staticcms/core';
 import {
   APIError,
   basename,
@@ -32,7 +32,7 @@ import {
 } from '@staticcms/core/lib/util/APIUtils';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import type { DataFile, PersistOptions, UnpublishedEntry } from '@staticcms/core/interface';
+import type { DataFile, PersistOptions, UnpublishedEntry } from '@staticcms/core';
 import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 

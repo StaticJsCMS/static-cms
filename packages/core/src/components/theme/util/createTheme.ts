@@ -2,7 +2,7 @@ import { darken, lighten } from '@mui/material/styles';
 
 import { DARK_THEME, LIGHT_THEME } from '../defaultThemes';
 
-import type { PartialTheme, Theme, ThemeColor } from '@staticcms/core/interface';
+import type { PartialTheme, Theme, ThemeColor } from '@staticcms/core';
 
 function createDarkColor(
   color: string | undefined,

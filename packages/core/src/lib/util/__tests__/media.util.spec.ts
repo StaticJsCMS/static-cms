@@ -4,7 +4,7 @@ import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import { mockImageField as mockBaseImageField } from '@staticcms/test/data/fields.mock';
 import { selectMediaFilePublicPath, selectMediaFolder } from '../media.util';
 
-import type { FileOrImageField, FolderCollection, UnknownField } from '@staticcms/core/interface';
+import type { FileOrImageField, FolderCollection, UnknownField } from '@staticcms/core';
 
 jest.mock('@staticcms/core/backend');
 

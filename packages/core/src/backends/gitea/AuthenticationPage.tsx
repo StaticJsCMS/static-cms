@@ -5,7 +5,7 @@ import Login from '@staticcms/core/components/login/Login';
 import { PkceAuthenticator } from '@staticcms/core/lib/auth';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 
-import type { AuthenticationPageProps } from '@staticcms/core/interface';
+import type { AuthenticationPageProps } from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 
 const GiteaAuthenticationPage: FC<AuthenticationPageProps> = ({

@@ -5,7 +5,7 @@ import TextArea from '@staticcms/core/components/common/text-field/TextArea';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { TextField, WidgetControlProps } from '@staticcms/core/interface';
+import type { TextField, WidgetControlProps } from '@staticcms/core';
 import type { ChangeEvent, FC } from 'react';
 
 const classes = generateClassNames('WidgetText', [

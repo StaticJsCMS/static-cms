@@ -7,7 +7,7 @@ import { addFileTemplateFields } from '../widgets/stringTemplate';
 import useEntries from './useEntries';
 import useTranslate from './useTranslate';
 
-import type { Breadcrumb, CollectionWithDefaults, Entry } from '@staticcms/core/interface';
+import type { Breadcrumb, CollectionWithDefaults, Entry } from '@staticcms/core';
 
 interface EntryDetails {
   isNewEntry: boolean;

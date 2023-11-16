@@ -2,7 +2,7 @@ import React from 'react';
 
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { MapField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { MapField, WidgetPreviewProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 const classes = generateClassNames('WidgetMapPreview', ['root']);

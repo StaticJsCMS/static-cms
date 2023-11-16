@@ -5,7 +5,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { Breadcrumb } from '@staticcms/core/interface';
+import type { Breadcrumb } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './Breadcrumbs.css';

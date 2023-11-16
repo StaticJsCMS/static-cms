@@ -28,7 +28,7 @@ import type {
   PersistOptions,
   UnpublishedEntry,
   User,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 type RepoFile = { path: string; content: string | AssetProxy; isDirectory?: boolean };
 type RepoTree = { [key: string]: RepoFile | RepoTree };

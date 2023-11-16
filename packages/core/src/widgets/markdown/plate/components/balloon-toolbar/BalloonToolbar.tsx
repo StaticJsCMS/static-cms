@@ -41,7 +41,7 @@ import type {
   CollectionWithDefaults,
   MarkdownField,
   MarkdownToolbarButtonType,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { ClientRectObject } from '@udecode/plate';
 import type { FC, ReactNode } from 'react';
 

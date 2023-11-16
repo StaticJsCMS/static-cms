@@ -3,12 +3,7 @@ import { parse } from 'path';
 
 import { isNullish } from './null.util';
 
-import type {
-  Entry,
-  FieldFilterRule,
-  FilterRule,
-  ValueOrNestedValue,
-} from '@staticcms/core/interface';
+import type { Entry, FieldFilterRule, FilterRule, ValueOrNestedValue } from '@staticcms/core';
 
 function valueToString(value: ValueOrNestedValue) {
   if (Array.isArray(value) || (typeof value === 'object' && !(value instanceof Date))) {

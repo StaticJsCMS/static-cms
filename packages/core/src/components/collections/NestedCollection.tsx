@@ -10,7 +10,7 @@ import { getTreeData } from '@staticcms/core/lib/util/nested.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import NavLink from '../navbar/NavLink';
 
-import type { CollectionWithDefaults, Entry } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry } from '@staticcms/core';
 import type { TreeNodeData } from '@staticcms/core/lib/util/nested.util';
 import type { FC, MouseEvent } from 'react';
 

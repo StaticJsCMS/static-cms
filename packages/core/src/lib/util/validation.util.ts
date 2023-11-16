@@ -10,7 +10,7 @@ import type {
   UnknownField,
   ValueOrNestedValue,
   Widget,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 export function isEmpty(value: ValueOrNestedValue) {
   return (

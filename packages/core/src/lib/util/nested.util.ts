@@ -6,7 +6,7 @@ import { stringTemplate } from '../widgets';
 import { selectEntryCollectionTitle, selectFolderEntryExtension } from './collection.util';
 import { isEmpty, isNotEmpty } from './string.util';
 
-import type { BaseField, CollectionWithDefaults, Entry, Slug } from '@staticcms/core/interface';
+import type { BaseField, CollectionWithDefaults, Entry, Slug } from '@staticcms/core';
 
 const { addFileTemplateFields } = stringTemplate;
 

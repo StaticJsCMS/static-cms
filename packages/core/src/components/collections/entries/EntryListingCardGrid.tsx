@@ -18,7 +18,7 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import entriesClasses from './Entries.classes';
 import EntryCard from './EntryCard';
 
-import type { CollectionEntryData } from '@staticcms/core/interface';
+import type { CollectionEntryData } from '@staticcms/core';
 import type { FC } from 'react';
 import type { GridChildComponentProps } from 'react-window';
 

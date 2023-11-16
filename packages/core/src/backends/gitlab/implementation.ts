@@ -40,7 +40,7 @@ import type {
   UnpublishedEntry,
   UnpublishedEntryMediaFile,
   User,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { AsyncLock, Cursor } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { Semaphore } from 'semaphore';

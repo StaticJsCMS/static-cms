@@ -13,7 +13,7 @@ import IconButton from '../common/button/IconButton';
 import NavigationDrawer from './NavigationDrawer';
 import QuickCreate from './QuickCreate';
 
-import type { CollectionWithDefaults } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './BottomNavigation.css';

@@ -13,7 +13,7 @@ import {
   unsentRequest,
 } from '@staticcms/core/lib/util';
 
-import type { DataFile, PersistOptions } from '@staticcms/core/interface';
+import type { DataFile, PersistOptions } from '@staticcms/core';
 import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { Semaphore } from 'semaphore';

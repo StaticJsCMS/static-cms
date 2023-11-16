@@ -1,6 +1,6 @@
 import { createEmptyPair } from './util';
 
-import type { FieldStorageConverters, KeyValueField } from '@staticcms/core/interface';
+import type { FieldStorageConverters, KeyValueField } from '@staticcms/core';
 import type { Pair } from './types';
 
 const converters: FieldStorageConverters<Pair[], KeyValueField, Record<string, string>> = {

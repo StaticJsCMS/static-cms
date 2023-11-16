@@ -9,7 +9,7 @@ import { mockNumberField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import NumberControl from '../NumberControl';
 
-import type { NumberField } from '@staticcms/core/interface';
+import type { NumberField } from '@staticcms/core';
 
 describe(NumberControl.name, () => {
   const renderControl = createWidgetControlHarness(NumberControl, { field: mockNumberField });

@@ -105,7 +105,7 @@ import type {
   Entry,
   MarkdownField,
   WidgetControlProps,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { AnyObject, AutoformatPlugin, PlatePlugin } from '@udecode/plate';
 import type { FC } from 'react';
 import type { MdEditor, MdValue } from './plateTypes';

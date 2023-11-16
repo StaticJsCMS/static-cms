@@ -8,7 +8,7 @@ import {
   DEFAULT_TIME_FORMAT,
 } from './constants';
 
-import type { DateTimeField, DateTimeFormats } from '@staticcms/core/interface';
+import type { DateTimeField, DateTimeFormats } from '@staticcms/core';
 
 function getDisplayFormat(
   dateFormat: string | boolean,

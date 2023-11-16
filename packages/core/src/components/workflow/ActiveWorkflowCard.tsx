@@ -6,7 +6,7 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import EntryCard from '../collections/entries/EntryCard';
 import { useDatetimeFormats } from '@staticcms/datetime/datetime.util';
 
-import type { DateTimeField, Entry } from '@staticcms/core/interface';
+import type { DateTimeField, Entry } from '@staticcms/core';
 import type { FC } from 'react';
 
 export interface WorkflowCardProps {

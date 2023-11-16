@@ -16,7 +16,7 @@ import type {
   SortMap,
   ViewFilter,
   ViewGroup,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { FC } from 'react';
 
 interface CollectionControlsProps {

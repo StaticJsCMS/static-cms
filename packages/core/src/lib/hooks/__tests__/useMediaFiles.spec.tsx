@@ -17,7 +17,7 @@ import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import { mockFileField } from '@staticcms/test/data/fields.mock';
 import useMediaFiles from '../useMediaFiles';
 
-import type { MediaField, MediaFile } from '@staticcms/core/interface';
+import type { MediaField, MediaFile } from '@staticcms/core';
 import type { FC } from 'react';
 
 interface MockWidgetProps {

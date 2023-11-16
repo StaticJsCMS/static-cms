@@ -1,6 +1,6 @@
 import ValidationErrorTypes from '@staticcms/core/constants/validationErrorTypes';
 
-import type { FieldError, FieldValidationMethod, NumberField } from '@staticcms/core/interface';
+import type { FieldError, FieldValidationMethod, NumberField } from '@staticcms/core';
 import type { t } from 'react-polyglot';
 
 function validateMinMax(

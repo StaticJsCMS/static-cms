@@ -8,7 +8,7 @@ import useCurrentBackend from '@staticcms/core/lib/hooks/useCurrentBackend';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { AuthenticationPageProps, User } from '@staticcms/core/interface';
+import type { AuthenticationPageProps, User } from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 import type GitHub from './implementation';
 

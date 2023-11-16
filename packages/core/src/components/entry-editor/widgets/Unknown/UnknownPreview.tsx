@@ -3,7 +3,7 @@ import React from 'react';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { WidgetPreviewProps } from '@staticcms/core/interface';
+import type { WidgetPreviewProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 const classes = generateClassNames('WidgetUnknownPreview', ['root']);

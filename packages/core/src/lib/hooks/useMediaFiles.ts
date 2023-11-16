@@ -12,7 +12,7 @@ import { selectMediaFolder } from '../util/media.util';
 import useFolderSupport from './useFolderSupport';
 import { fileForEntry } from '../util/collection.util';
 
-import type { MediaField, MediaFile } from '@staticcms/core/interface';
+import type { MediaField, MediaFile } from '@staticcms/core';
 
 export default function useMediaFiles(field?: MediaField, currentFolder?: string): MediaFile[] {
   const [currentFolderMediaFiles, setCurrentFolderMediaFiles] = useState<MediaFile[] | null>(null);

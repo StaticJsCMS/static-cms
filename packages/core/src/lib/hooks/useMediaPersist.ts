@@ -4,7 +4,7 @@ import { persistMedia } from '@staticcms/core/actions/mediaLibrary';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
 import alert from '../../components/common/alert/Alert';
 
-import type { MediaField, MediaLibraryConfig } from '@staticcms/core/interface';
+import type { MediaField, MediaLibraryConfig } from '@staticcms/core';
 import type { AssetProxy } from '@staticcms/core/valueObjects';
 import type { ChangeEvent, DragEvent } from 'react';
 

@@ -9,7 +9,7 @@ import type {
   Entry,
   MediaField,
   UnknownField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 interface CardMediaProps<EF extends BaseField> {
   image: string;

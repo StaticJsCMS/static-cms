@@ -18,12 +18,7 @@ import { mockFileField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import withFileControl from '../withFileControl';
 
-import type {
-  Config,
-  ConfigWithDefaults,
-  FileOrImageField,
-  MediaFile,
-} from '@staticcms/core/interface';
+import type { Config, ConfigWithDefaults, FileOrImageField, MediaFile } from '@staticcms/core';
 import type { WidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 
 jest.mock('@staticcms/core/backend');

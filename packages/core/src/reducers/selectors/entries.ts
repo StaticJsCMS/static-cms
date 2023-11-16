@@ -13,7 +13,7 @@ import type {
   Page,
   SortMap,
   SortObject,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
 
 export const selectEntriesFilters = (entries: RootState) => {

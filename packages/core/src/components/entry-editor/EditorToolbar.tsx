@@ -30,7 +30,7 @@ import MenuItemButton from '../common/menu/MenuItemButton';
 import EditorWorkflowToolbarButtons from './EditorWorkflowToolbarButtons';
 
 import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import type { CollectionWithDefaults, EditorPersistOptions } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, EditorPersistOptions } from '@staticcms/core';
 import type { FC, MouseEventHandler } from 'react';
 
 import './EditorToolbar.css';

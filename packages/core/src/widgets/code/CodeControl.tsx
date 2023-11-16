@@ -16,11 +16,7 @@ import SettingsButton from './SettingsButton';
 import SettingsPane from './SettingsPane';
 import languages from './data/languages';
 
-import type {
-  CodeField,
-  ProcessedCodeLanguage,
-  WidgetControlProps,
-} from '@staticcms/core/interface';
+import type { CodeField, ProcessedCodeLanguage, WidgetControlProps } from '@staticcms/core';
 import type { LanguageName } from '@uiw/codemirror-extensions-langs';
 import type { FC, MouseEvent } from 'react';
 

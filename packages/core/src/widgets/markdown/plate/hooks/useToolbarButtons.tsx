@@ -31,7 +31,7 @@ import type {
   MarkdownField,
   MarkdownToolbarButtonType,
   MarkdownToolbarItem,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { ReactNode } from 'react';
 
 import './useToolbarButtons.css';

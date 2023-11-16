@@ -6,7 +6,7 @@ import { NetlifyAuthenticator, PkceAuthenticator } from '@staticcms/core/lib/aut
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 
-import type { AuthenticationPageProps, AuthenticatorConfig } from '@staticcms/core/interface';
+import type { AuthenticationPageProps, AuthenticatorConfig } from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 
 const clientSideAuthenticators = {

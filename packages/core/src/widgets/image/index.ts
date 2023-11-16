@@ -2,7 +2,7 @@ import withFileControl, { getValidFileValue } from '../file/withFileControl';
 import previewComponent from './ImagePreview';
 import schema from './schema';
 
-import type { FileOrImageField, WidgetParam } from '@staticcms/core/interface';
+import type { FileOrImageField, WidgetParam } from '@staticcms/core';
 
 const controlComponent = withFileControl({ forImage: true });
 

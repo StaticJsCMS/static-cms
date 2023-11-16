@@ -23,7 +23,7 @@ import type {
   ObjectValue,
   ValueOrNestedValue,
   WidgetControlProps,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 import type { t } from 'react-polyglot';
 

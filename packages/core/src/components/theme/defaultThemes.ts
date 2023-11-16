@@ -1,4 +1,4 @@
-import type { Theme } from '@staticcms/core/interface';
+import type { Theme } from '@staticcms/core';
 
 export const DARK_THEME: Theme = {
   name: 'Dark',

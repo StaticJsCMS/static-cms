@@ -8,7 +8,7 @@ import Label from '@staticcms/core/components/common/field/Label';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import widgetObjectClasses from './ObjectControl.classes';
 
-import type { FieldError, ObjectField } from '@staticcms/core/interface';
+import type { FieldError, ObjectField } from '@staticcms/core';
 import type { FC, ReactNode } from 'react';
 
 export interface ObjectFieldWrapperProps {

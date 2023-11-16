@@ -40,7 +40,7 @@ import mediaLibraryClasses from './MediaLibrary.classes';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibrarySearch from './MediaLibrarySearch';
 
-import type { MediaFile } from '@staticcms/core/interface';
+import type { MediaFile } from '@staticcms/core';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 
 import './MediaLibrary.css';

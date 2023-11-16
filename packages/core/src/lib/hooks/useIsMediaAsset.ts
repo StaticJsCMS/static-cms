@@ -11,7 +11,7 @@ import type {
   Entry,
   MediaField,
   UnknownField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 export default function useIsMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
   url: string,

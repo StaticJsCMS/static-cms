@@ -22,7 +22,7 @@ import type {
   MediaField,
   MediaFile,
   MediaLibraryDisplayURL,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { MediaLibraryState } from '@staticcms/core/reducers/mediaLibrary';
 import type { FC } from 'react';
 import type { GridChildComponentProps } from 'react-window';

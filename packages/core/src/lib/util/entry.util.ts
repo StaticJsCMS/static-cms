@@ -8,12 +8,7 @@ import {
 } from '../i18n';
 import { isNotNullish } from './null.util';
 
-import type {
-  CollectionWithDefaults,
-  EntryData,
-  Field,
-  ObjectValue,
-} from '@staticcms/core/interface';
+import type { CollectionWithDefaults, EntryData, Field, ObjectValue } from '@staticcms/core';
 
 export function applyDefaultsToDraftData(
   fields: Field[],

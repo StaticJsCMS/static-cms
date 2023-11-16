@@ -35,7 +35,7 @@ import type {
   ObjectValue,
   RelationField,
   WidgetControlProps,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { FC, ReactNode } from 'react';
 import type { ListChildComponentProps } from 'react-window';
 

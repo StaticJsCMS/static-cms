@@ -10,7 +10,7 @@ import type {
   MediaField,
   MediaLibrarInsertOptions,
   MediaPath,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { MouseEvent } from 'react';
 
 export interface OpenMediaLibraryProps {

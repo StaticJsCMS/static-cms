@@ -4,7 +4,7 @@ import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import { selectUnpublishedEntries } from '@staticcms/core/reducers/selectors/editorialWorkflow';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 
-import type { Entry } from '@staticcms/core/interface';
+import type { Entry } from '@staticcms/core';
 
 export type BoardEntry = Entry & { boardStatus: WorkflowStatus };
 

@@ -20,12 +20,7 @@ import EditorPreviewContent from './EditorPreviewContent';
 import PreviewFrameContent from './PreviewFrameContent';
 
 import type { EditorSize } from '@staticcms/core/constants/views';
-import type {
-  CollectionWithDefaults,
-  Entry,
-  Field,
-  TemplatePreviewProps,
-} from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry, Field, TemplatePreviewProps } from '@staticcms/core';
 import type DataUpdateEvent from '@staticcms/core/lib/util/events/DataEvent';
 import type { FC } from 'react';
 

@@ -29,7 +29,7 @@ import EntryCard from '../collections/entries/EntryCard';
 import IconButton from '../common/button/IconButton';
 import confirm from '../common/confirm/Confirm';
 
-import type { DateTimeField, Entry } from '@staticcms/core/interface';
+import type { DateTimeField, Entry } from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 
 import './WorkflowCard.css';

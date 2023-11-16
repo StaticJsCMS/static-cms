@@ -1,6 +1,6 @@
 import { cloneElement, createElement, isValidElement } from 'react';
 
-import type { WidgetPreviewComponent, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { WidgetPreviewComponent, WidgetPreviewProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

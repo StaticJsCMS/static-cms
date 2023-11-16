@@ -3,7 +3,7 @@ import previewComponent from './RelationPreview';
 import schema from './schema';
 import validator from './validator';
 
-import type { RelationField, WidgetParam } from '@staticcms/core/interface';
+import type { RelationField, WidgetParam } from '@staticcms/core';
 
 function RelationWidget(): WidgetParam<string | string[], RelationField> {
   return {

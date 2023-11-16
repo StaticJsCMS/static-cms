@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 
 import Login from '@staticcms/core/components/login/Login';
 
-import type { AuthenticationPageProps } from '@staticcms/core/interface';
+import type { AuthenticationPageProps } from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 
 const AuthenticationPage: FC<AuthenticationPageProps> = ({

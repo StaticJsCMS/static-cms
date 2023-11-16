@@ -7,7 +7,7 @@ import { DEFAULT_THEMES } from '../defaultThemes';
 import createTheme from '../util/createTheme';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 
-import type { Theme } from '@staticcms/core/interface';
+import type { Theme } from '@staticcms/core';
 
 export default function useThemes(): Theme[] {
   const config = useAppSelector(selectConfig);

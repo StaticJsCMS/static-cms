@@ -6,7 +6,7 @@ import pick from 'lodash/pick';
 import React, { useCallback } from 'react';
 
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import { PreviewState } from '@staticcms/core/interface';
+import { PreviewState } from '@staticcms/core';
 import {
   AccessTokenError,
   APIError,
@@ -38,7 +38,7 @@ import type {
   PersistOptions,
   UnpublishedEntry,
   User,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { ApiRequest, Cursor } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { FC } from 'react';

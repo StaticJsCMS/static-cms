@@ -7,7 +7,7 @@ import type {
   Entry,
   FileOrImageField,
   WidgetPreviewProps,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { FC } from 'react';
 
 interface ImageAssetProps {

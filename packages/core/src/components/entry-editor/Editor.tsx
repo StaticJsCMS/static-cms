@@ -45,11 +45,7 @@ import Loader from '../common/progress/Loader';
 import MediaLibraryModal from '../media-library/MediaLibraryModal';
 import EditorInterface from './EditorInterface';
 
-import type {
-  CollectionWithDefaults,
-  EditorPersistOptions,
-  Entry,
-} from '@staticcms/core/interface';
+import type { CollectionWithDefaults, EditorPersistOptions, Entry } from '@staticcms/core';
 import type { Blocker } from 'history';
 import type { FC } from 'react';
 

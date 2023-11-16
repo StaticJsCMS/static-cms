@@ -13,7 +13,7 @@ import type {
   FileOrImageField,
   MarkdownField,
   MediaPath,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { MouseEvent } from 'react';
 
 import './MediaPopover.css';

@@ -1,7 +1,7 @@
 import { ThemeProvider as MuiThemeProvider, createTheme, lighten } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 
-import type { Theme } from '@staticcms/core/interface';
+import type { Theme } from '@staticcms/core';
 import type { FC, PropsWithChildren } from 'react';
 
 export interface ThemeManagerProps {

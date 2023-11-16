@@ -27,7 +27,7 @@ import type {
   ObjectField,
   RelationField,
   TextField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { WidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 
 jest.mock('@staticcms/core/backend');

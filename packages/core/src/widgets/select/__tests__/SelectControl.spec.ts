@@ -9,7 +9,7 @@ import { mockSelectField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import SelectControl from '../SelectControl';
 
-import type { SelectField } from '@staticcms/core/interface';
+import type { SelectField } from '@staticcms/core';
 
 describe(SelectControl.name, () => {
   const renderControl = createWidgetControlHarness(SelectControl, { field: mockSelectField });

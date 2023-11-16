@@ -12,7 +12,7 @@ import Field from '@staticcms/core/components/common/field/Field';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { MapField, WidgetControlProps } from '@staticcms/core/interface';
+import type { MapField, WidgetControlProps } from '@staticcms/core';
 import type { Geometry } from 'ol/geom';
 import type { FC } from 'react';
 

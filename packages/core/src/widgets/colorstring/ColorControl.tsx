@@ -9,7 +9,7 @@ import TextField from '@staticcms/core/components/common/text-field/TextField';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { ColorField, WidgetControlProps } from '@staticcms/core/interface';
+import type { ColorField, WidgetControlProps } from '@staticcms/core';
 import type { ChangeEvent, FC, MouseEvent, MouseEventHandler } from 'react';
 import type { ColorResult } from 'react-color';
 

@@ -3,7 +3,7 @@ import previewComponent from './DateTimePreview';
 import getDefaultValue from './getDefaultValue';
 import schema from './schema';
 
-import type { DateTimeField, WidgetParam } from '@staticcms/core/interface';
+import type { DateTimeField, WidgetParam } from '@staticcms/core';
 
 const DateTimeWidget = (): WidgetParam<string | Date, DateTimeField> => {
   return {

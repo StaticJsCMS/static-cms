@@ -7,12 +7,7 @@ import { store } from '@staticcms/core/store';
 import { createMockWidgetControlProps } from '@staticcms/test/data/widgets.mock';
 import { renderWithProviders } from '@staticcms/test/test-utils';
 
-import type {
-  BaseField,
-  ObjectValue,
-  UnknownField,
-  WidgetControlProps,
-} from '@staticcms/core/interface';
+import type { BaseField, ObjectValue, UnknownField, WidgetControlProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 export interface WidgetControlHarnessOptions {

@@ -5,7 +5,7 @@ import type {
   CollectionWithDefaults,
   ConfigWithDefaults,
   MediaField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 interface UseFolderSupportProps {
   config?: ConfigWithDefaults;

@@ -10,7 +10,7 @@ import PlateEditor from './plate/PlateEditor';
 import useMarkdownToSlate from './plate/hooks/useMarkdownToSlate';
 import serializeMarkdown from './plate/serialization/serializeMarkdown';
 
-import type { MarkdownField, WidgetControlProps } from '@staticcms/core/interface';
+import type { MarkdownField, WidgetControlProps } from '@staticcms/core';
 import type { ChangeEvent, FC } from 'react';
 import type { MdValue } from './plate/plateTypes';
 

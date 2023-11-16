@@ -14,12 +14,7 @@ import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
 import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { MediaPopover } from '@staticcms/markdown';
 
-import type {
-  CollectionWithDefaults,
-  Entry,
-  MarkdownField,
-  MediaPath,
-} from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry, MarkdownField, MediaPath } from '@staticcms/core';
 import type { MdImageElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { TMediaElement } from '@udecode/plate-media';

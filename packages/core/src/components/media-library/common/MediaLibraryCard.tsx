@@ -15,11 +15,7 @@ import Image from '../../common/image/Image';
 import Pill from '../../common/pill/Pill';
 import CopyToClipBoardButton from './CopyToClipBoardButton';
 
-import type {
-  CollectionWithDefaults,
-  MediaField,
-  MediaLibraryDisplayURL,
-} from '@staticcms/core/interface';
+import type { CollectionWithDefaults, MediaField, MediaLibraryDisplayURL } from '@staticcms/core';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 
 import './MediaLibraryCard.css';

@@ -1,7 +1,7 @@
 import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import filterEntries from '../filter.util';
 
-import type { Entry } from '@staticcms/core/interface';
+import type { Entry } from '@staticcms/core';
 
 describe('filterEntries', () => {
   const mockEnglishEntry = createMockEntry({

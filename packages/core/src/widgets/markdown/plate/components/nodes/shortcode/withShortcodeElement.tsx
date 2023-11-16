@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from 'react';
 
 import { getShortcode } from '@staticcms/core/lib/registry';
 
-import type { MarkdownField, WidgetControlProps } from '@staticcms/core/interface';
+import type { MarkdownField, WidgetControlProps } from '@staticcms/core';
 import type { MdShortcodeElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { FC } from 'react';

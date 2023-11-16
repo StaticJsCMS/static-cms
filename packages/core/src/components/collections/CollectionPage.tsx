@@ -5,7 +5,7 @@ import useBreadcrumbs from '@staticcms/core/lib/hooks/useBreadcrumbs';
 import MainView from '../MainView';
 import CollectionView from './CollectionView';
 
-import type { CollectionWithDefaults } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core';
 import type { FC } from 'react';
 
 const MultiSearchCollectionPage: FC = () => {

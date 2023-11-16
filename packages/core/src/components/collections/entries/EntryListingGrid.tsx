@@ -7,7 +7,7 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 import entriesClasses from './Entries.classes';
 import EntryListingCardGrid from './EntryListingCardGrid';
 
-import type { CollectionEntryData } from '@staticcms/core/interface';
+import type { CollectionEntryData } from '@staticcms/core';
 import type { FC } from 'react';
 
 export interface EntryListingGridProps {

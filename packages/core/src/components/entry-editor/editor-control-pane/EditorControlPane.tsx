@@ -18,7 +18,7 @@ import type {
   FieldsErrors,
   I18nSettings,
   StringField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { FC } from 'react';
 
 import './EditorControlPane.css';

@@ -18,7 +18,7 @@ import type {
   DateTimeField,
   Entry,
   Field,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
 import type { FC } from 'react';
 

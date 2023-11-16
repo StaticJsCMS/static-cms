@@ -8,7 +8,7 @@ import trimStart from 'lodash/trimStart';
 import { dirname } from 'path';
 
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import { PreviewState } from '@staticcms/core/interface';
+import { PreviewState } from '@staticcms/core';
 import {
   APIError,
   EditorialWorkflowError,
@@ -33,7 +33,7 @@ import {
 } from '@staticcms/core/lib/util/APIUtils';
 import { GitHubCommitStatusState, PullRequestState } from './types';
 
-import type { DataFile, PersistOptions, UnpublishedEntry } from '@staticcms/core/interface';
+import type { DataFile, PersistOptions, UnpublishedEntry } from '@staticcms/core';
 import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { Semaphore } from 'semaphore';

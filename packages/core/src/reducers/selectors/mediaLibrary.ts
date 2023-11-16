@@ -7,7 +7,7 @@ import { selectEntryDraft } from './entryDraft';
 import { selectConfig } from './config';
 import { selectCollections } from './collections';
 
-import type { DisplayURLState, MediaField, MediaFile } from '@staticcms/core/interface';
+import type { DisplayURLState, MediaField, MediaFile } from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
 
 export const selectMediaLibraryState = (state: RootState) => {

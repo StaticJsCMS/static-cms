@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Login from '@staticcms/core/components/login/Login';
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 
-import type { AuthenticationPageProps, User } from '@staticcms/core/interface';
+import type { AuthenticationPageProps, User } from '@staticcms/core';
 import type { FC } from 'react';
 
 function useNetlifyIdentifyEvent(eventName: 'login', callback: (login: User) => void): void;

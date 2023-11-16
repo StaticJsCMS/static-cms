@@ -7,11 +7,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type {
-  SelectField,
-  SelectWidgetOptionObject,
-  WidgetControlProps,
-} from '@staticcms/core/interface';
+import type { SelectField, SelectWidgetOptionObject, WidgetControlProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './SelectControl.css';

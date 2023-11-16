@@ -38,7 +38,7 @@ import ThemeManager from './theme/ThemeManager';
 import useTheme from './theme/hooks/useTheme';
 import Dashboard from './workflow/Dashboard';
 
-import type { Credentials } from '@staticcms/core/interface';
+import type { Credentials } from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
 import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';

@@ -28,7 +28,7 @@ import { mockMarkdownField } from '@staticcms/test/data/fields.mock';
 import { renderWithProviders } from '@staticcms/test/test-utils';
 import BalloonToolbar from '../BalloonToolbar';
 
-import type { Config, ConfigWithDefaults } from '@staticcms/core/interface';
+import type { Config, ConfigWithDefaults } from '@staticcms/core';
 import type { MdEditor } from '@staticcms/markdown/plate/plateTypes';
 import type { TRange } from '@udecode/plate';
 import type { FC } from 'react';

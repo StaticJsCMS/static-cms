@@ -1,7 +1,7 @@
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import yamlFormatter from '../YamlFormatter';
 
-import type { ConfigWithDefaults } from '@staticcms/core/interface';
+import type { ConfigWithDefaults } from '@staticcms/core';
 
 jest.unmock('yaml');
 

@@ -29,7 +29,7 @@ import type {
   DateTimeFormats,
   Entry,
   FileOrImageField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { FC, ReactNode } from 'react';
 
 import './EntryCard.css';
