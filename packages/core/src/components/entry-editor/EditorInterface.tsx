@@ -420,20 +420,26 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
           key="editor-with-preview"
           autoSaveId={`editor-with-preview-${collection.name}`}
           direction="horizontal"
-          units="pixels"
+          units={editorSize === EDITOR_SIZE_COMPACT ? 'pixels' : 'percentages'}
           className={classNames(
             classes.root,
             editorSize === EDITOR_SIZE_COMPACT && classes.compact,
           )}
           disablePointerEventsDuringResize={true}
         >
-          <Panel defaultSize={COMPACT_EDITOR_DEFAULT_WIDTH} minSize={COMPACT_EDITOR_DEFAULT_WIDTH}>
+          <Panel
+            defaultSize={editorSize === EDITOR_SIZE_COMPACT ? COMPACT_EDITOR_DEFAULT_WIDTH : 50}
+            minSize={COMPACT_EDITOR_DEFAULT_WIDTH}
+          >
             <ScrollSyncPane>{editor}</ScrollSyncPane>
           </Panel>
           <PanelResizeHandle className={classes['resize-handle']}>
             <DragHandleIcon className={classes['resize-handle-icon']} />
           </PanelResizeHandle>
-          <Panel minSize={MIN_PREVIEW_SIZE}>
+          <Panel
+            defaultSize={editorSize === EDITOR_SIZE_COMPACT ? undefined : 50}
+            minSize={MIN_PREVIEW_SIZE}
+          >
             <EditorPreviewPane
               collection={collection}
               previewInFrame={previewInFrame}
