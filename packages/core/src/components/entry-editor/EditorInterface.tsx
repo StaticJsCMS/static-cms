@@ -429,7 +429,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
         >
           <Panel
             defaultSize={editorSize === EDITOR_SIZE_COMPACT ? COMPACT_EDITOR_DEFAULT_WIDTH : 50}
-            minSize={COMPACT_EDITOR_DEFAULT_WIDTH}
+            minSize={editorSize === EDITOR_SIZE_COMPACT ? COMPACT_EDITOR_DEFAULT_WIDTH : 30}
           >
             <ScrollSyncPane>{editor}</ScrollSyncPane>
           </Panel>
@@ -438,7 +438,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
           </PanelResizeHandle>
           <Panel
             defaultSize={editorSize === EDITOR_SIZE_COMPACT ? undefined : 50}
-            minSize={MIN_PREVIEW_SIZE}
+            minSize={editorSize === EDITOR_SIZE_COMPACT ? MIN_PREVIEW_SIZE : 30}
           >
             <EditorPreviewPane
               collection={collection}
