@@ -290,7 +290,7 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       previewInFrame: frame,
       editorSize: size,
     };
-  }, [collection, config?.slug, entry]);
+  }, [collection, config?.slug, entry, file?.editor]);
 
   const finalPreviewActive = useMemo(
     () => showPreviewToggle && previewActive,
