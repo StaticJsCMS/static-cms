@@ -331,7 +331,7 @@ export function selectMediaFilePath(
       publicFolder = evaluateFolder('public_folder', config, collection!, entryMap, field);
     }
 
-    if (mediaPathDir.includes(publicFolder) && mediaPathDir != mediaFolder) {
+    if (mediaPathDir.startsWith(publicFolder) && mediaPathDir != mediaFolder) {
       mediaFolder = selectMediaFolder(
         config,
         collection,
