@@ -26,6 +26,50 @@ describe('media.util', () => {
       },
     });
 
+    it('does not transform path if it does not start with media_folder', () => {
+      const mockConfig = createMockConfig({
+        collections: [
+          createMockCollection<UnknownField>({
+            folder: 'base/folder',
+            slug: '{{fields.title}}-{{fields.name}}',
+            fields: [
+              {
+                name: 'title',
+                widget: 'string',
+              },
+              {
+                name: 'name',
+                widget: 'string',
+              },
+              mockBaseImageField,
+            ],
+          }),
+        ],
+        media_folder: '/path/to/media/folder/{{slug}}',
+        public_folder: '/path/to/public/folder/{{slug}}',
+      });
+
+      const mockCollection = mockConfig.collections[0];
+      const mockImageField = (mockConfig.collections[0] as FolderCollection)
+        .fields[3] as FileOrImageField;
+
+      const mockEntry = createMockEntry({
+        path: 'path/to/entry/index.md',
+        slug: 'i-am-a-title-fish',
+        data: { title: 'i am a title', name: 'fish' },
+      });
+
+      expect(
+        selectMediaFilePublicPath(
+          mockConfig,
+          mockCollection,
+          '/some/other/path/image.png',
+          mockEntry,
+          mockImageField,
+        ),
+      ).toBe('/some/other/path/image.png');
+    });
+
     describe('top level', () => {
       it('should default to top level config media_folder', () => {
         const mockConfig = createMockConfig({
@@ -138,6 +182,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: 'i-am-a-title-fish',
               data: { title: 'i am a title', name: 'fish' },
             });
 
@@ -174,6 +219,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: 'i-am-a-title-fish',
               data: { title: 'i am a title', name: 'fish' },
             });
 
@@ -211,6 +257,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: '',
               data: {},
               newRecord: true,
             });
@@ -305,6 +352,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: 'i-am-a-title-fish',
               data: { title: 'i am a title', name: 'fish' },
             });
 
@@ -341,6 +389,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: 'i-am-a-title-fish',
               data: { title: 'i am a title', name: 'fish' },
             });
 
@@ -378,6 +427,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: '',
               data: {},
               newRecord: true,
             });
@@ -420,7 +470,7 @@ describe('media.util', () => {
           selectMediaFilePublicPath(
             mockConfig,
             undefined,
-            'image.png',
+            'path/to/media/folder/image.png',
             undefined,
             undefined,
             undefined,
@@ -438,7 +488,7 @@ describe('media.util', () => {
           selectMediaFilePublicPath(
             mockConfig,
             undefined,
-            'image.png',
+            'path/to/media/folder/image.png',
             undefined,
             undefined,
             undefined,
@@ -463,7 +513,7 @@ describe('media.util', () => {
           selectMediaFilePublicPath(
             mockConfig,
             mockCollection,
-            'image.png',
+            'path/to/media/folder/image.png',
             mockBaseEntry,
             mockImageField,
           ),
@@ -484,7 +534,7 @@ describe('media.util', () => {
           selectMediaFilePublicPath(
             mockConfig,
             mockCollection,
-            'image.png',
+            'path/to/media/folder/image.png',
             mockBaseEntry,
             mockImageField,
           ),
@@ -518,7 +568,7 @@ describe('media.util', () => {
             selectMediaFilePublicPath(
               mockConfig,
               mockCollection,
-              'image.png',
+              'path/to/collection/media/folder/image.png',
               mockBaseEntry,
               mockImageField,
             ),
@@ -550,7 +600,7 @@ describe('media.util', () => {
             selectMediaFilePublicPath(
               mockConfig,
               mockCollection,
-              'image.png',
+              'path/to/collection/media/folder/image.png',
               mockBaseEntry,
               mockImageField,
             ),
@@ -583,7 +633,7 @@ describe('media.util', () => {
               selectMediaFilePublicPath(
                 mockConfig,
                 mockCollection,
-                'image.png',
+                'path/to/some/other/media/i-am-a-title/image.png',
                 mockBaseEntry,
                 mockImageField,
               ),
@@ -619,6 +669,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: 'i-am-a-title-fish',
               data: { title: 'i am a title', name: 'fish' },
             });
 
@@ -626,7 +677,7 @@ describe('media.util', () => {
               selectMediaFilePublicPath(
                 mockConfig,
                 mockCollection,
-                'image.png',
+                'path/to/some/other/media/i-am-a-title-fish/image.png',
                 mockEntry,
                 mockImageField,
               ),
@@ -661,6 +712,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: 'i-am-a-title-fish',
               data: { title: 'i am a title', name: 'fish' },
             });
 
@@ -668,7 +720,7 @@ describe('media.util', () => {
               selectMediaFilePublicPath(
                 mockConfig,
                 mockCollection,
-                'image.png',
+                '/path/to/media/folder/i-am-a-title-fish/image.png',
                 mockEntry,
                 mockImageField,
               ),
@@ -704,6 +756,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: 'i-am-a-title-fish',
               data: { title: 'i am a title', name: 'fish' },
             });
 
@@ -711,7 +764,7 @@ describe('media.util', () => {
               selectMediaFilePublicPath(
                 mockConfig,
                 mockCollection,
-                'image.png',
+                'path/to/media/folder/i-am-a-title-fish/image.png',
                 mockEntry,
                 mockImageField,
               ),
@@ -748,6 +801,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: '',
               data: {},
               newRecord: true,
             });
@@ -756,7 +810,7 @@ describe('media.util', () => {
               selectMediaFilePublicPath(
                 mockConfig,
                 mockCollection,
-                'image.png',
+                'path/to/collection/media/folder/image.png',
                 mockEntry,
                 mockImageField,
               ),
@@ -792,7 +846,7 @@ describe('media.util', () => {
             selectMediaFilePublicPath(
               mockConfig,
               mockCollection,
-              'image.png',
+              'path/to/collection/media/folder/image.png',
               mockBaseEntry,
               mockImageField,
             ),
@@ -824,7 +878,7 @@ describe('media.util', () => {
             selectMediaFilePublicPath(
               mockConfig,
               mockCollection,
-              'image.png',
+              '/path/to/collection/media/folder/image.png',
               mockBaseEntry,
               mockImageField,
             ),
@@ -857,7 +911,7 @@ describe('media.util', () => {
               selectMediaFilePublicPath(
                 mockConfig,
                 mockCollection,
-                'image.png',
+                '/path/to/some/other/media/i-am-a-title/image.png',
                 mockBaseEntry,
                 mockImageField,
               ),
@@ -893,6 +947,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: 'i-am-a-title-fish',
               data: { title: 'i am a title', name: 'fish' },
             });
 
@@ -900,7 +955,7 @@ describe('media.util', () => {
               selectMediaFilePublicPath(
                 mockConfig,
                 mockCollection,
-                'image.png',
+                '/path/to/some/other/media/i-am-a-title-fish/image.png',
                 mockEntry,
                 mockImageField,
               ),
@@ -935,6 +990,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: 'i-am-a-title-fish',
               data: { title: 'i am a title', name: 'fish' },
             });
 
@@ -942,7 +998,7 @@ describe('media.util', () => {
               selectMediaFilePublicPath(
                 mockConfig,
                 mockCollection,
-                'image.png',
+                '/path/to/media/folder/i-am-a-title-fish/image.png',
                 mockEntry,
                 mockImageField,
               ),
@@ -978,6 +1034,7 @@ describe('media.util', () => {
 
             const mockEntry = createMockEntry({
               path: 'path/to/entry/index.md',
+              slug: 'i-am-a-title-fish',
               data: { title: 'i am a title', name: 'fish' },
             });
 
@@ -985,7 +1042,7 @@ describe('media.util', () => {
               selectMediaFilePublicPath(
                 mockConfig,
                 mockCollection,
-                'image.png',
+                '/path/to/media/folder/i-am-a-title-fish/image.png',
                 mockEntry,
                 mockImageField,
               ),
@@ -1021,7 +1078,8 @@ describe('media.util', () => {
               .fields[3] as FileOrImageField;
 
             const mockEntry = createMockEntry({
-              path: 'path/to/entry/index.md',
+              path: 'path/to/entry/DRAFT_MEDIA_FILES/index.md',
+              slug: '',
               data: {},
               newRecord: true,
             });
@@ -1030,11 +1088,11 @@ describe('media.util', () => {
               selectMediaFilePublicPath(
                 mockConfig,
                 mockCollection,
-                'image.png',
+                '/path/to/collection/media/folder/DRAFT_MEDIA_FILES/image.png',
                 mockEntry,
                 mockImageField,
               ),
-            ).toBe('/path/to/collection/public/folder/image.png');
+            ).toBe('/path/to/collection/public/folder/DRAFT_MEDIA_FILES/image.png');
           });
         });
       });

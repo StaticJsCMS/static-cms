@@ -305,7 +305,7 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
 
   if (customMediaFolder) {
     mediaFolder = evaluateFolder('media_folder', config, collection!, entryMap, field);
-    selectedMediaFolder = publicFolder;
+    selectedMediaFolder = mediaFolder;
   }
 
   if (currentFolder) {
