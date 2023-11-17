@@ -71,10 +71,10 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
       .filter(f => {
         if (f.name === '.gitkeep') {
           const folder = dirname(f.path);
-          return dirname(folder) === mediaFolder;
+          return dirname(folder) === trim(mediaFolder, '/');
         }
 
-        return dirname(f.path) === mediaFolder;
+        return dirname(f.path) === trim(mediaFolder, '/');
       })
       .map(file => {
         if (file.name === '.gitkeep') {
