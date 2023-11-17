@@ -17,6 +17,8 @@ import TableCell from '../../common/table/TableCell';
 import TableRow from '../../common/table/TableRow';
 import WorkflowStatusPill from '../../workflow/WorkflowStatusPill';
 import entriesClasses from './Entries.classes';
+import RelationSummary from '@staticcms/relation/RelationSummary';
+import { getI18nInfo } from '@staticcms/core/lib/i18n';
 
 import type { BackupEntry, CollectionWithDefaults, Entry, TranslatedProps } from '@staticcms/core';
 import type { FC } from 'react';
@@ -39,6 +41,8 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
     () => `/collections/${collection.name}/entries/${entry.slug}`,
     [collection.name, entry.slug],
   );
+
+  const { default_locale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
 
@@ -107,6 +111,8 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
               <FieldPreviewComponent collection={collection} field={field} value={value} />
             ) : isNullish(value) ? (
               ''
+            ) : field?.widget === 'relation' ? (
+              <RelationSummary field={field} value={value} locale={default_locale} entry={entry} />
             ) : (
               String(value)
             )}

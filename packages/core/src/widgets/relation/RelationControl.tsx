@@ -1,5 +1,4 @@
 import * as fuzzy from 'fuzzy';
-import get from 'lodash/get';
 import uniqBy from 'lodash/uniqBy';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -15,29 +14,22 @@ import Pill from '@staticcms/core/components/common/pill/Pill';
 import CircularProgress from '@staticcms/core/components/common/progress/CircularProgress';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { getFields } from '@staticcms/core/lib/util/collection.util';
-import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { fileSearch, sortByScore } from '@staticcms/core/lib/util/search.util';
-import { isEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
-import {
-  addFileTemplateFields,
-  compileStringTemplate,
-  expandPath,
-  extractTemplateVars,
-} from '@staticcms/core/lib/widgets/stringTemplate';
 import { selectCollection } from '@staticcms/core/reducers/selectors/collections';
 import { useAppSelector } from '@staticcms/core/store/hooks';
+import { getSelectedValue, parseHitOptions } from './util';
 
 import type {
   ConfigWithDefaults,
   Entry,
-  EntryData,
   ObjectValue,
   RelationField,
   WidgetControlProps,
 } from '@staticcms/core';
 import type { FC, ReactNode } from 'react';
 import type { ListChildComponentProps } from 'react-window';
+import type { HitOption } from './types';
 
 import './RelationControl.css';
 
@@ -55,62 +47,13 @@ function Option({ index, style, data }: ListChildComponentProps<{ options: React
   return <div style={style}>{data.options[index]}</div>;
 }
 
-export interface HitOption {
-  data: EntryData;
-  value: string;
-  label: string;
-}
-
 export interface Option {
   value: string;
   label: string;
 }
 
-function getSelectedOptions(value: HitOption[] | undefined | null): HitOption[] | null;
-function getSelectedOptions(value: string[] | undefined | null): string[] | null;
-function getSelectedOptions(value: string[] | HitOption[] | undefined | null) {
-  if (!value || !Array.isArray(value)) {
-    return null;
-  }
-
-  return value;
-}
-
 function uniqOptions(initial: HitOption[], current: HitOption[]): HitOption[] {
   return uniqBy(initial.concat(current), o => o.value);
-}
-
-function getSelectedValue(value: string, options: HitOption[], isMultiple: boolean): string | null;
-function getSelectedValue(
-  value: string[],
-  options: HitOption[],
-  isMultiple: boolean,
-): string[] | null;
-function getSelectedValue(
-  value: string | string[] | null | undefined,
-  options: HitOption[],
-  isMultiple: boolean,
-): string | string[] | null;
-function getSelectedValue(
-  value: string | string[] | null | undefined,
-  options: HitOption[],
-  isMultiple: boolean,
-): string | string[] | null {
-  if (isMultiple && Array.isArray(value)) {
-    const selectedOptions = getSelectedOptions(value);
-    if (selectedOptions === null) {
-      return null;
-    }
-
-    const selected = selectedOptions
-      .map(i => options.find(o => o.value === i))
-      .filter(Boolean)
-      .map(option => (typeof option === 'string' ? option : option?.value)) as string[];
-
-    return selected;
-  } else {
-    return options.find(option => option.value === value)?.value ?? null;
-  }
 }
 
 const DEFAULT_OPTIONS_LIMIT = 20;
@@ -145,56 +88,6 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
   const isMultiple = useMemo(() => {
     return field.multiple ?? false;
   }, [field.multiple]);
-
-  const parseNestedFields = useCallback(
-    (hit: Entry, field: string): string => {
-      const hitData =
-        locale != null && hit.i18n != null && hit.i18n[locale] != null
-          ? hit.i18n[locale].data
-          : hit.data;
-
-      const templateVars = extractTemplateVars(field);
-      // return non template fields as is
-      if (templateVars.length <= 0) {
-        return get(hitData, field) as string;
-      }
-      const data = addFileTemplateFields(hit.path, hitData);
-      return compileStringTemplate(field, null, hit.slug, data, searchCollectionFields);
-    },
-    [locale, searchCollectionFields],
-  );
-
-  const parseHitOptions = useCallback(
-    (hits: Entry[]) => {
-      const valueField = field.value_field;
-      const displayField = field.display_fields || [field.value_field];
-
-      const options = hits.reduce((acc, hit) => {
-        const valuesPaths = expandPath({ data: hit.data, path: valueField });
-        for (let i = 0; i < valuesPaths.length; i++) {
-          const value = parseNestedFields(hit, valuesPaths[i]) as string;
-
-          const label = displayField
-            .map(key => {
-              const displayPaths = expandPath({ data: hit.data, path: key });
-              const path = displayPaths[i] ?? displayPaths[0];
-              if (isNullish(path) || isEmpty(path)) {
-                return value;
-              }
-              return parseNestedFields(hit, displayPaths[i] ?? displayPaths[0]);
-            })
-            .join(' ');
-
-          acc.push({ data: hit.data, value, label });
-        }
-
-        return acc;
-      }, [] as HitOption[]);
-
-      return options;
-    },
-    [field.display_fields, field.value_field, parseNestedFields],
-  );
 
   const [options, setOptions] = useState<HitOption[]>([]);
   const [entries, setEntries] = useState<Entry[] | null>(null);
@@ -232,7 +125,10 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
         );
       }
 
-      let options = uniqBy(parseHitOptions(hits), o => o.value);
+      let options = uniqBy(
+        parseHitOptions(hits, field, locale, searchCollectionFields),
+        o => o.value,
+      );
 
       if (limit !== undefined && limit > 0) {
         options = options.slice(0, limit);
@@ -240,7 +136,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
 
       setOptions(options);
     },
-    [entries, field.file, field.options_length, field.search_fields, parseHitOptions],
+    [entries, field, locale, searchCollectionFields],
   );
 
   useEffect(() => {
@@ -261,7 +157,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
       if (alive) {
         setEntries(options);
 
-        const hitOptions = parseHitOptions(options);
+        const hitOptions = parseHitOptions(options, field, locale, searchCollectionFields);
 
         if (value) {
           const byValue = hitOptions.reduce(
@@ -294,7 +190,7 @@ const RelationControl: FC<WidgetControlProps<string | string[], RelationField>> 
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchCollection, config, loading, parseHitOptions]);
+  }, [searchCollection, config, loading, field, locale, searchCollectionFields]);
 
   const uniqueOptions = useMemo(() => {
     let uOptions = uniqOptions(initialOptions, options);
