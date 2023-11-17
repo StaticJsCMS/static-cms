@@ -10,13 +10,18 @@ import type {
   CollectionWithDefaults,
   Entry,
   MediaField,
+  ObjectValue,
   UnknownField,
 } from '@staticcms/core';
 
-export function useGetMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
+export function useGetMediaAsset<
+  T extends MediaField,
+  EF extends BaseField = UnknownField,
+  D = ObjectValue,
+>(
   collection?: CollectionWithDefaults<EF>,
   field?: T,
-  entry?: Entry,
+  entry?: Entry<D>,
   currentFolder?: string,
   isDirectory = false,
 ): (url: string | undefined | null) => Promise<string | undefined | null> {
@@ -30,7 +35,9 @@ export function useGetMediaAsset<T extends MediaField, EF extends BaseField = Un
         return url;
       }
 
-      const asset = await dispatch(getAsset<T, EF>(collection, entry, url, field, currentFolder));
+      const asset = await dispatch(
+        getAsset<T, EF>(collection, entry as Entry, url, field, currentFolder),
+      );
 
       if (asset !== emptyAsset) {
         return asset?.toString() ?? '';
@@ -42,11 +49,15 @@ export function useGetMediaAsset<T extends MediaField, EF extends BaseField = Un
   );
 }
 
-export default function useMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
+export default function useMediaAsset<
+  T extends MediaField,
+  EF extends BaseField = UnknownField,
+  D = ObjectValue,
+>(
   url: string | undefined | null,
   collection?: CollectionWithDefaults<EF>,
   field?: T,
-  entry?: Entry,
+  entry?: Entry<D>,
   currentFolder?: string,
   isDirectory?: boolean,
 ): string {
@@ -68,7 +79,7 @@ export default function useMediaAsset<T extends MediaField, EF extends BaseField
 
     const fetchMedia = async () => {
       const asset = await dispatch(
-        getAsset<T, EF>(collection, entry, debouncedUrl, field, currentFolder),
+        getAsset<T, EF>(collection, entry as Entry, debouncedUrl, field, currentFolder),
       );
 
       if (alive) {
