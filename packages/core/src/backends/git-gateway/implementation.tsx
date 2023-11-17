@@ -5,8 +5,8 @@ import intersection from 'lodash/intersection';
 import pick from 'lodash/pick';
 import React, { useCallback } from 'react';
 
+import { PreviewState } from '@staticcms/core/constants/enums';
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import { PreviewState } from '@staticcms/core';
 import {
   AccessTokenError,
   APIError,

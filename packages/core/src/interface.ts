@@ -1350,11 +1350,6 @@ export interface ShortcodeConfig<P = {}> {
   preview: ComponentType<ShortcodePreviewProps>;
 }
 
-export enum CollectionType {
-  FOLDER,
-  FILES,
-}
-
 export type DeepPartial<T> = T extends object
   ? {
       [P in keyof T]?: DeepPartial<T[P]>;
@@ -1440,9 +1435,4 @@ export interface UnpublishedEntryDiff {
 export interface UnpublishedEntryMediaFile {
   id: string;
   path: string;
-}
-
-export enum PreviewState {
-  Other = 'other',
-  Success = 'success',
 }

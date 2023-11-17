@@ -7,8 +7,8 @@ import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import { dirname } from 'path';
 
+import { PreviewState } from '@staticcms/core/constants/enums';
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
-import { PreviewState } from '@staticcms/core';
 import {
   APIError,
   EditorialWorkflowError,
