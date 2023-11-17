@@ -283,29 +283,43 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
     config.slug,
   );
 
+  let mediaFolder = folderFormatter(
+    config.media_folder ?? '',
+    entryMap,
+    collection as Collection,
+    config.media_folder ?? '',
+    'media_folder',
+    config.slug,
+  );
+
   let selectedPublicFolder = publicFolder;
+  let selectedMediaFolder = mediaFolder;
 
   const customPublicFolder = hasCustomFolder('public_folder', collection, entryMap?.slug, field);
+  const customMediaFolder = hasCustomFolder('media_folder', collection, entryMap?.slug, field);
 
   if (customPublicFolder) {
     publicFolder = evaluateFolder('public_folder', config, collection!, entryMap, field);
     selectedPublicFolder = publicFolder;
   }
 
+  if (customMediaFolder) {
+    mediaFolder = evaluateFolder('media_folder', config, collection!, entryMap, field);
+    selectedMediaFolder = publicFolder;
+  }
+
   if (currentFolder) {
-    const customMediaFolder = hasCustomFolder('media_folder', collection, entryMap?.slug, field);
     const mediaFolder = customMediaFolder
       ? evaluateFolder('media_folder', config, collection!, entryMap, field)
       : config['media_folder'];
     selectedPublicFolder = trim(currentFolder, '/').replace(trim(mediaFolder!, '/'), publicFolder);
   }
 
-  const finalPublicPath = joinUrlPath(selectedPublicFolder, basename(mediaPath));
-  if (selectedPublicFolder.startsWith('/')) {
-    return `/${finalPublicPath}`;
+  if (mediaPath.startsWith(selectedMediaFolder)) {
+    return mediaPath.replace(selectedMediaFolder, selectedPublicFolder);
   }
 
-  return finalPublicPath;
+  return mediaPath;
 }
 
 export function selectMediaFilePath(

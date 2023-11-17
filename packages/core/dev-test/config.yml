@@ -2,6 +2,7 @@ backend:
   name: test-repo
 site_url: 'https://example.com'
 media_folder: assets/uploads
+public_folder: /assets/uploads
 media_library:
   folder_support: true
 locale: en
