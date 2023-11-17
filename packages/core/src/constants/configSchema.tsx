@@ -419,7 +419,7 @@ function getConfigSchema() {
           frame: { type: 'boolean' },
         },
       },
-      search: { type: 'string' },
+      search: { type: 'boolean' },
     },
     required: ['backend', 'collections', 'media_folder'],
   };
