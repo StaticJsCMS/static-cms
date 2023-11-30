@@ -91,6 +91,8 @@ import type { AsyncLock } from './lib/util';
 import type { RootState } from './store';
 import type AssetProxy from './valueObjects/AssetProxy';
 
+const LIST_ALL_ENTRIES_CACHE_TIME = 5000;
+
 function updatePath(entryPath: string, assetPath: string): string | null {
   const pathDir = dirname(entryPath);
 
@@ -592,15 +594,13 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     };
   }
 
-  // The same as listEntries, except that if a cursor with the "next"
-  // action available is returned, it calls "next" on the cursor and
-  // repeats the process. Once there is no available "next" action, it
-  // returns all the collected entries. Used to retrieve all entries
-  // for local searches and queries.
-  async listAllEntries<EF extends BaseField>(
+  backendPromise: Record<string, { expires: number; data?: Entry[]; promise?: Promise<Entry[]> }> =
+    {};
+
+  async listAllEntriesExecutor<EF extends BaseField>(
     collection: CollectionWithDefaults<EF>,
     config: ConfigWithDefaults<EF>,
-  ) {
+  ): Promise<Entry[]> {
     if ('folder' in collection && collection.folder && this.implementation.allEntriesByFolder) {
       const depth = collectionDepth(collection);
       const extension = selectFolderEntryExtension(collection);
@@ -630,6 +630,50 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       cursor = newCursor;
     }
     return entries;
+  }
+
+  // The same as listEntries, except that if a cursor with the "next"
+  // action available is returned, it calls "next" on the cursor and
+  // repeats the process. Once there is no available "next" action, it
+  // returns all the collected entries. Used to retrieve all entries
+  // for local searches and queries.
+  async listAllEntries<EF extends BaseField>(
+    collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
+  ): Promise<Entry[]> {
+    const now = new Date().getTime();
+    if (collection.name in this.backendPromise) {
+      const cachedRequest = this.backendPromise[collection.name];
+      if (cachedRequest && cachedRequest.expires >= now) {
+        if (cachedRequest.data) {
+          return Promise.resolve(cachedRequest.data);
+        }
+
+        if (cachedRequest.promise) {
+          return cachedRequest.promise;
+        }
+      }
+
+      delete this.backendPromise[collection.name];
+    }
+
+    const p = new Promise<Entry[]>(resolve => {
+      this.listAllEntriesExecutor(collection, config).then(entries => {
+        const responseNow = new Date().getTime();
+        this.backendPromise[collection.name] = {
+          expires: responseNow + LIST_ALL_ENTRIES_CACHE_TIME,
+          data: entries,
+        };
+        resolve(entries);
+      });
+    });
+
+    this.backendPromise[collection.name] = {
+      expires: now + LIST_ALL_ENTRIES_CACHE_TIME,
+      promise: p,
+    };
+
+    return p;
   }
 
   printError(error: Error) {

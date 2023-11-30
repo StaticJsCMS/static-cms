@@ -5,8 +5,8 @@ import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import entriesClasses from './Entries.classes';
 import EntryListing from './EntryListing';
 
-import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { CollectionWithDefaults, CollectionsWithDefaults, Entry } from '@staticcms/core';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type Cursor from '@staticcms/core/lib/util/Cursor';
 import type { FC } from 'react';
 
