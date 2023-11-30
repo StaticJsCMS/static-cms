@@ -2,7 +2,7 @@
   @apply fixed
     inset-0
     overflow-y-auto
-    z-50
+    z-[100]
     flex
     min-h-full
     items-center
@@ -15,7 +15,7 @@
 
   @apply fixed
     inset-0
-    z-50;
+    z-[100];
 }
 
 .CMS_Modal_content {
@@ -28,6 +28,6 @@
     align-middle
     shadow-xl
     transition-all
-    z-[51]
+    z-[101]
     outline-none;
 }

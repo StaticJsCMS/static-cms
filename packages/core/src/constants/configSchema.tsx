@@ -535,7 +535,7 @@ function getConfigSchema() {
           frame: { type: 'boolean' },
         },
       },
-      search: { type: 'string' },
+      search: { type: 'boolean' },
       theme: {
         type: 'object',
         properties: {

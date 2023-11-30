@@ -210,8 +210,6 @@ export function folderFormatter<EF extends BaseField>(
 
   const collectionFields = getFields(collection, entry.slug) as Field[];
 
-  const slug = slugFormatter(collection, entry.data, slugConfig, collectionFields);
-
   const dateFieldName = selectInferredField(collection, 'date');
   const dateField = getField(collectionFields, dateFieldName);
   const date = parseDateFromEntry(entry, dateFieldName, dateField) || null;
@@ -221,7 +219,7 @@ export function folderFormatter<EF extends BaseField>(
   const mediaFolder = compileStringTemplate(
     folderTemplate,
     date,
-    slug,
+    entry.slug,
     fields,
     collectionFields,
     processSegment,
