@@ -29,7 +29,7 @@ describe('media.util', () => {
     it('does not transform path if it does not start with media_folder', () => {
       const mockConfig = createMockConfig({
         collections: [
-          createMockCollection<UnknownField>({
+          createMockFolderCollection<UnknownField>({
             folder: 'base/folder',
             slug: '{{fields.title}}-{{fields.name}}',
             fields: [

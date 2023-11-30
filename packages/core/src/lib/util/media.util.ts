@@ -286,7 +286,7 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
   let mediaFolder = folderFormatter(
     config.media_folder ?? '',
     entryMap,
-    collection as Collection,
+    collection as CollectionWithDefaults,
     config.media_folder ?? '',
     'media_folder',
     config.slug,
