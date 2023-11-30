@@ -172,13 +172,9 @@ export function folderFormatter<EF extends BaseField>(
     'folder' in collection ? collection.folder : '',
   );
 
-  const slug = slugFormatter(collection, entry.data, slugConfig);
-
   const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
 
   const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields?.dirname as string]);
 
-  const mediaFolder = compileStringTemplate(folderTemplate, date, slug, fields, processSegment);
-
-  return mediaFolder;
+  return compileStringTemplate(folderTemplate, date, entry.slug, fields, processSegment);
 }
