@@ -16,19 +16,20 @@ The local backend allows you to use Static CMS with a local git repository, inst
 
 <CodeTabs>
 ```yaml
-backend:
-  name: git-gateway
-
 # when using the default proxy server port
 local_backend: true
+
+backend:
+  name: git-gateway
 ```
 
 ```js
+// when using the default proxy server port
+local_backend: true,
+
 backend: {
   name: 'git-gateway',
 },
-// when using the default proxy server port
-local_backend: true,
 ```
 
 </CodeTabs>
