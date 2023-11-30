@@ -245,7 +245,7 @@ describe('media.util', () => {
             .fields[3] as FileOrImageField;
 
           expect(selectMediaFolder(mockConfig, mockCollection, mockBaseEntry, mockImageField)).toBe(
-            '/path/to/some/other/media/folder',
+            'path/to/some/other/media/folder',
           );
         });
 
@@ -273,7 +273,7 @@ describe('media.util', () => {
 
             expect(
               selectMediaFolder(mockConfig, mockCollection, mockBaseEntry, mockImageField),
-            ).toBe('/path/to/some/other/media/i-am-a-title');
+            ).toBe('path/to/some/other/media/i-am-a-title');
           });
 
           it('should substitute slug', () => {
@@ -309,7 +309,7 @@ describe('media.util', () => {
             });
 
             expect(selectMediaFolder(mockConfig, mockCollection, mockEntry, mockImageField)).toBe(
-              '/path/to/some/other/media/i-am-a-title-fish',
+              'path/to/some/other/media/i-am-a-title-fish',
             );
           });
 
@@ -345,7 +345,7 @@ describe('media.util', () => {
             });
 
             expect(selectMediaFolder(mockConfig, mockCollection, mockEntry, mockImageField)).toBe(
-              '/path/to/media/folder/i-am-a-title-fish',
+              'path/to/media/folder/i-am-a-title-fish',
             );
           });
 
@@ -383,7 +383,7 @@ describe('media.util', () => {
             });
 
             expect(selectMediaFolder(mockConfig, mockCollection, mockEntry, mockImageField)).toBe(
-              '/path/to/some/other/media/',
+              'path/to/some/other/media',
             );
           });
         });

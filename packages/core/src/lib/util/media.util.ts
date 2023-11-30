@@ -1,3 +1,4 @@
+import trim from 'lodash/trim';
 import { dirname } from 'path';
 
 import { basename, isAbsolutePath } from '.';
@@ -245,7 +246,7 @@ export function selectMediaFolder<EF extends BaseField>(
   } else if (hasCustomFolder('media_folder', collection, entryMap?.slug, field)) {
     const folder = evaluateFolder('media_folder', config, collection!, entryMap, field);
     if (folder.startsWith('/')) {
-      mediaFolder = folder;
+      mediaFolder = folder.replace(/^[/]*/g, '');
     } else {
       const entryPath = entryMap?.path;
       mediaFolder = entryPath
@@ -258,7 +259,7 @@ export function selectMediaFolder<EF extends BaseField>(
     }
   }
 
-  return mediaFolder;
+  return trim(mediaFolder, '/');
 }
 
 export function selectMediaFilePublicPath<EF extends BaseField>(
@@ -296,7 +297,7 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
     const mediaFolder = customMediaFolder
       ? evaluateFolder('media_folder', config, collection!, entryMap, field)
       : config['media_folder'];
-    selectedPublicFolder = currentFolder.replace(mediaFolder!, publicFolder);
+    selectedPublicFolder = trim(currentFolder, '/').replace(trim(mediaFolder!, '/'), publicFolder);
   }
 
   const finalPublicPath = joinUrlPath(selectedPublicFolder, basename(mediaPath));
@@ -321,14 +322,17 @@ export function selectMediaFilePath(
 
   let mediaFolder = selectMediaFolder(config, collection, entryMap, field, currentFolder);
   if (!currentFolder) {
-    let publicFolder = config['public_folder'] ?? mediaFolder;
-    let mediaPathDir = dirname(mediaPath);
+    let publicFolder = trim(config['public_folder'] ?? mediaFolder, '/');
+    let mediaPathDir = trim(dirname(mediaPath), '/');
     if (mediaPathDir === '.') {
       mediaPathDir = '';
     }
 
     if (hasCustomFolder('public_folder', collection, entryMap?.slug, field)) {
-      publicFolder = evaluateFolder('public_folder', config, collection!, entryMap, field);
+      publicFolder = trim(
+        evaluateFolder('public_folder', config, collection!, entryMap, field),
+        '/',
+      );
     }
 
     if (mediaPathDir.startsWith(publicFolder) && mediaPathDir != mediaFolder) {
