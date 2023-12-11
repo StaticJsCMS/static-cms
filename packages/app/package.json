@@ -1,6 +1,6 @@
 {
   "name": "@staticcms/app",
-  "version": "4.0.0-beta.12",
+  "version": "4.0.0-beta.13",
   "license": "MIT",
   "description": "Static CMS application.",
   "repository": "https://github.com/StaticJsCMS/static-cms",
@@ -39,7 +39,7 @@
   "dependencies": {
     "@babel/eslint-parser": "7.22.15",
     "@babel/runtime": "7.23.1",
-    "@staticcms/core": "^4.0.0-beta.12",
+    "@staticcms/core": "^4.0.0-beta.13",
     "buffer": "6.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
