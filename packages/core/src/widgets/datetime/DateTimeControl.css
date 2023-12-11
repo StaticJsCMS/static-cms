@@ -42,5 +42,9 @@
         }
       }
     }
+
+    & .MuiIconButton-root {
+      color: var(--text-secondary);
+    }
   }
 }
