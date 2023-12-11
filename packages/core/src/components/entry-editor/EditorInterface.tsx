@@ -355,28 +355,30 @@ const EditorInterface: FC<EditorInterfaceProps> = ({
       locales
         ?.filter(locale => isSmallScreen || locale !== default_locale)
         .map(locale => (
-          <div
-            key={locale}
-            className={classNames(
-              classes.i18n,
-              selectedLocale === locale && classes['i18n-active'],
-            )}
-          >
-            <EditorControlPane
-              collection={collection}
-              entry={entry}
-              fields={fields}
-              fieldsErrors={fieldsErrors}
-              locale={locale}
-              onLocaleChange={handleLocaleChange}
-              allowDefaultLocale={isSmallScreen}
-              submitted={submitted}
-              canChangeLocale
-              context={!isSmallScreen ? 'i18nSplit' : undefined}
-              hideBorder
-              disabled={editorDisabled}
-            />
-          </div>
+          <ScrollSyncPane key={locale}>
+            <div
+              className={classNames(
+                classes.i18n,
+                selectedLocale === locale && classes['i18n-active'],
+                'CMS_Scrollbar_root',
+              )}
+            >
+              <EditorControlPane
+                collection={collection}
+                entry={entry}
+                fields={fields}
+                fieldsErrors={fieldsErrors}
+                locale={locale}
+                onLocaleChange={handleLocaleChange}
+                allowDefaultLocale={isSmallScreen}
+                submitted={submitted}
+                canChangeLocale
+                context={!isSmallScreen ? 'i18nSplit' : undefined}
+                hideBorder
+                disabled={editorDisabled}
+              />
+            </div>
+          </ScrollSyncPane>
         )),
     [
       locales,

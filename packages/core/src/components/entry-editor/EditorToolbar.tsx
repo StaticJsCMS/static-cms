@@ -360,10 +360,10 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                   </MenuItemButton>
                   <MenuItemButton
                     onClick={toggleScrollSync}
-                    disabled={isLoading || i18nActive || !previewActive}
+                    disabled={isLoading || (!i18nActive && !previewActive)}
                     startIcon={HeightIcon}
                     endIcon={
-                      scrollSyncActive && !(i18nActive || !previewActive) ? CheckIcon : undefined
+                      scrollSyncActive && (i18nActive || previewActive) ? CheckIcon : undefined
                     }
                   >
                     {t('editor.editorInterface.toggleScrollSync')}

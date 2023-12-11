@@ -32,7 +32,9 @@
     hidden;
 
   &.CMS_Editor_i18n-active {
-    @apply flex;
+    @apply flex
+      overflow-y-auto
+      h-main;
   }
 }
 
