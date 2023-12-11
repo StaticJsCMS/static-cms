@@ -1,14 +1,19 @@
 import isEqual from 'lodash/isEqual';
+import { dirname } from 'path';
 
+import { DRAFT_MEDIA_FILES } from '@staticcms/core/constants/mediaLibrary';
 import {
   I18N_FIELD_DUPLICATE,
   I18N_FIELD_TRANSLATE,
   duplicateDefaultI18nFields,
   hasI18n,
 } from '../i18n';
+import { joinUrlPath } from '../urlHelper';
 import { isNotNullish } from './null.util';
+import { isNotEmpty } from './string.util';
 
 import type { CollectionWithDefaults, EntryData, Field, ObjectValue } from '@staticcms/core';
+import type { BaseField, Collection, Entry } from '@staticcms/core/interface';
 
 export function applyDefaultsToDraftData(
   fields: Field[],
@@ -75,4 +80,19 @@ export function createEmptyDraftI18nData(collection: CollectionWithDefaults, dat
 
   const i18nData = createEmptyDraftData(dataFields, skipField);
   return duplicateDefaultI18nFields(collection, i18nData);
+}
+
+export function createEntryMediaPath<EF extends BaseField>(
+  entry: Entry | null | undefined,
+  collection: Collection<EF> | null | undefined,
+  folder: string,
+) {
+  const entryPath = entry?.path;
+  return isNotEmpty(entryPath)
+    ? joinUrlPath(dirname(entryPath), folder)
+    : joinUrlPath(
+        collection && 'folder' in collection ? collection.folder : '',
+        DRAFT_MEDIA_FILES,
+        folder,
+      );
 }

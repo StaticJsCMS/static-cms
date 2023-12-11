@@ -1,6 +1,11 @@
 {
   "releases": [
     {
+      "date": "2023-12-11T10:00:00.000Z",
+      "version": "v3.4.7",
+      "type": "patch"
+    },
+    {
       "date": "2023-11-30T10:00:00.000Z",
       "version": "v3.4.6",
       "type": "patch"
