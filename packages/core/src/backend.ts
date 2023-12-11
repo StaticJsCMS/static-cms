@@ -6,6 +6,7 @@ import isError from 'lodash/isError';
 import uniq from 'lodash/uniq';
 import { dirname } from 'path';
 
+import { DRAFT_MEDIA_FILES } from './constants/mediaLibrary';
 import { resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
@@ -44,7 +45,7 @@ import {
   selectMediaFolders,
 } from './lib/util/collection.util';
 import filterEntries from './lib/util/filter.util';
-import { DRAFT_MEDIA_FILES, selectMediaFilePublicPath } from './lib/util/media.util';
+import { selectMediaFilePublicPath } from './lib/util/media.util';
 import { selectCustomPath, slugFromCustomPath } from './lib/util/nested.util';
 import { isNullish } from './lib/util/null.util';
 import { fileSearch, sortByScore } from './lib/util/search.util';
