@@ -149,8 +149,8 @@ export function summaryFormatter<EF extends BaseField>(
   if (entry.updatedOn && !selectField(collection, COMMIT_DATE)) {
     entryData = set(entryData, COMMIT_DATE, entry.updatedOn);
   }
-  const summary = compileStringTemplate(summaryTemplate, date, slug, entryData);
-  return summary;
+
+  return compileStringTemplate(summaryTemplate, date, slug, entryData);
 }
 
 export function folderFormatter<EF extends BaseField>(
