@@ -206,6 +206,112 @@ describe('config', () => {
       });
     });
 
+    describe('media_library', () => {
+      it('should set media_library based on global config if not set', () => {
+        const config = createMockConfig({
+          media_library: {
+            max_file_size: 600000,
+            folder_support: true,
+          },
+          collections: [
+            {
+              name: 'foo-collection',
+              label: 'Foo',
+              folder: 'foo',
+              fields: [{ name: 'title', widget: 'file' }],
+            },
+          ],
+        });
+
+        const collection = config.collections[0] as FolderCollection;
+        expect(collection.media_library).toEqual({
+          max_file_size: 600000,
+          folder_support: true,
+        });
+
+        const field = collection.fields[0] as FileOrImageField;
+        expect(field.media_library).toEqual({
+          max_file_size: 600000,
+          folder_support: true,
+        });
+      });
+
+      it('should set media_library based on collection config if set', () => {
+        const config = createMockConfig({
+          media_library: {
+            max_file_size: 600000,
+            folder_support: true,
+          },
+          collections: [
+            {
+              name: 'foo-collection',
+              label: 'Foo',
+              folder: 'foo',
+              media_library: {
+                max_file_size: 500,
+                folder_support: false,
+              },
+              fields: [{ name: 'title', widget: 'file' }],
+            },
+          ],
+        });
+
+        const collection = config.collections[0] as FolderCollection;
+        expect(collection.media_library).toEqual({
+          max_file_size: 500,
+          folder_support: false,
+        });
+
+        const field = collection.fields[0] as FileOrImageField;
+        expect(field.media_library).toEqual({
+          max_file_size: 500,
+          folder_support: false,
+        });
+      });
+
+      it('should not override media_library if set', () => {
+        const config = createMockConfig({
+          media_library: {
+            max_file_size: 600000,
+            folder_support: true,
+          },
+          collections: [
+            {
+              name: 'foo-collection',
+              label: 'Foo',
+              folder: 'foo',
+              media_library: {
+                max_file_size: 500,
+                folder_support: false,
+              },
+              fields: [
+                {
+                  name: 'title',
+                  widget: 'file',
+                  media_library: {
+                    max_file_size: 1000,
+                    folder_support: true,
+                  },
+                },
+              ],
+            },
+          ],
+        });
+
+        const collection = config.collections[0] as FolderCollection;
+        expect(collection.media_library).toEqual({
+          max_file_size: 500,
+          folder_support: false,
+        });
+
+        const field = collection.fields[0] as FileOrImageField;
+        expect(field.media_library).toEqual({
+          max_file_size: 1000,
+          folder_support: true,
+        });
+      });
+    });
+
     describe('public_folder', () => {
       it('should set public_folder based on media_folder if not set', () => {
         expect(
@@ -344,7 +450,7 @@ describe('config', () => {
           ).toEqual('');
         });
 
-        it("should set collection media_folder and public_folder to an empty string when collection path exists, but collection media_folder doesn't", () => {
+        it('should set collection media_folder and public_folder to an empty string when collection path exists, but collection media_folder does not', () => {
           const result = createMockConfig({
             collections: [
               {
