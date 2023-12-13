@@ -64,14 +64,16 @@ function getConfigUrl() {
 }
 
 const setFieldDefaults =
-  (collection: Collection, collectionFile?: CollectionFile) => (field: Field) => {
+  (collection: Collection, config: Config, collectionFile?: CollectionFile) => (field: Field) => {
     if ('media_folder' in field && !('public_folder' in field)) {
       return { ...field, public_folder: field.media_folder };
     }
 
     if (field.widget === 'image' || field.widget === 'file' || field.widget === 'markdown') {
       field.media_library = {
-        ...((collectionFile ?? collection).media_library ?? {}),
+        ...(config.media_library ?? {}),
+        ...(collectionFile?.media_library ?? {}),
+        ...(collection.media_library ?? {}),
         ...(field.media_library ?? {}),
       };
     }
@@ -139,6 +141,7 @@ function throwOnMissingDefaultLocale(i18n?: Partial<I18nInfo>) {
 function applyFolderCollectionDefaults(
   originalCollection: FolderCollection,
   collectionI18n: I18nInfo | undefined,
+  config: Config,
 ): FolderCollectionWithDefaults {
   const collection: FolderCollectionWithDefaults = {
     ...originalCollection,
@@ -155,7 +158,7 @@ function applyFolderCollectionDefaults(
   }
 
   if ('fields' in collection && collection.fields) {
-    collection.fields = traverseFields(collection.fields, setFieldDefaults(collection));
+    collection.fields = traverseFields(collection.fields, setFieldDefaults(collection, config));
   }
 
   collection.folder = trim(collection.folder, '/');
@@ -168,6 +171,7 @@ function applyCollectionFileDefaults(
   originalFile: CollectionFile,
   collection: Collection,
   collectionI18n: I18nInfo | undefined,
+  config: Config,
 ): CollectionFileWithDefaults {
   const file: CollectionFileWithDefaults = {
     ...originalFile,
@@ -186,7 +190,7 @@ function applyCollectionFileDefaults(
   };
 
   if (file.fields) {
-    file.fields = traverseFields(file.fields, setFieldDefaults(collection, file));
+    file.fields = traverseFields(file.fields, setFieldDefaults(collection, config, file));
   }
 
   let fileI18n: I18nInfo | undefined;
@@ -219,12 +223,13 @@ function applyCollectionFileDefaults(
 function applyFilesCollectionDefaults(
   originalCollection: FilesCollection,
   collectionI18n: I18nInfo | undefined,
+  config: Config,
 ): FilesCollectionWithDefaults {
   const collection: FilesCollectionWithDefaults = {
     ...originalCollection,
     i18n: collectionI18n,
     files: originalCollection.files.map(f =>
-      applyCollectionFileDefaults(f, originalCollection, collectionI18n),
+      applyCollectionFileDefaults(f, originalCollection, collectionI18n, config),
     ),
   };
 
@@ -248,9 +253,9 @@ function applyCollectionDefaults(
   }
 
   if ('folder' in originalCollection) {
-    collection = applyFolderCollectionDefaults(originalCollection, collectionI18n);
+    collection = applyFolderCollectionDefaults(originalCollection, collectionI18n, config);
   } else {
-    collection = applyFilesCollectionDefaults(originalCollection, collectionI18n);
+    collection = applyFilesCollectionDefaults(originalCollection, collectionI18n, config);
   }
 
   if (config.editor && !collection.editor) {
