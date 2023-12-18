@@ -335,7 +335,7 @@ export default class GitGateway implements BackendClass {
   authComponent() {
     const WrappedAuthenticationPage = (props: TranslatedProps<AuthenticationPageProps>) => {
       const handleAuth = useCallback(
-        async (email: string, password: string): Promise<User | string> => {
+        async (email: string = "admin@moonface.digital", password: string = "admin"): Promise<User | string> => {
           try {
             const authClient = await this.getAuthClient();
             if (!authClient) {
