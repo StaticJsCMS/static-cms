@@ -1,0 +1,10 @@
+import type { DisplayURLState, MediaField, MediaFile } from '@staticcms/core/interface';
+import type { RootState } from '@staticcms/core/store';
+export declare const selectMediaFiles: (field?: MediaField) => (state: RootState) => MediaFile[];
+export declare const selectMediaLibraryState: (state: RootState) => import("../mediaLibrary").MediaLibraryState;
+export declare const selectMediaLibraryFiles: (state: RootState) => MediaFile[] | undefined;
+export declare function selectMediaDisplayURL(state: RootState, id: string): DisplayURLState;
+export declare const selectMediaPath: (controlID: string) => (state: RootState) => import("@staticcms/core/interface").MediaPath<string | string[]>;
+export declare const selectPersisting: (state: RootState) => boolean | undefined;
+export declare const selectDeleting: (state: RootState) => boolean | undefined;
+export declare const selectVisible: (state: RootState) => boolean;

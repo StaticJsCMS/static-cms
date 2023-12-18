@@ -1,0 +1,3 @@
+import type { BaseBaseProps } from './Button';
+export declare const buttonClasses: Record<"root" | "root-sm" | "root-rounded-no-padding" | "root-rounded-sm" | "root-rounded" | "contained-primary" | "contained-secondary" | "contained-success" | "contained-error" | "contained-warning" | "outlined-primary" | "outlined-secondary" | "outlined-success" | "outlined-error" | "outlined-warning" | "text-primary" | "text-secondary" | "text-success" | "text-error" | "text-warning" | "start-icon" | "end-icon", string>;
+export default function useButtonClassNames(variant: Required<BaseBaseProps>['variant'], color: Required<BaseBaseProps>['color'], size: Required<BaseBaseProps>['size'], rounded: boolean | 'no-padding'): string;

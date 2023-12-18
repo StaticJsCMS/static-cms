@@ -1,0 +1,20 @@
+import type { ApiRequest, ApiRequestObject, ApiRequestURL } from './API';
+declare function fetchWithTimeout(input: RequestInfo | URL, init?: RequestInit | undefined): Promise<Response>;
+declare function fromURL(wholeURL: string): ApiRequestURL;
+declare function fromFetchArguments(wholeURL: string, options?: RequestInit): ApiRequestObject;
+declare function toURL(req: ApiRequestURL): string;
+declare const _default: {
+    fetchWithTimeout: typeof fetchWithTimeout;
+    fromURL: typeof fromURL;
+    toURL: typeof toURL;
+    fromFetchArguments: typeof fromFetchArguments;
+    performRequest: (req: ApiRequest) => Promise<Response>;
+    getAbsoluteRoot: (root: string, url: string) => string;
+    withRoot: (root: string) => (req: ApiRequest) => ApiRequestObject;
+    withMethod: (value: string | undefined, req: ApiRequest) => ApiRequestObject;
+    withBody: (value: BodyInit | null | undefined, req: ApiRequest) => ApiRequestObject;
+    withHeaders: (value: HeadersInit | undefined, req: ApiRequest) => ApiRequestObject;
+    withParams: (value: Record<string, string> | undefined, req: ApiRequest) => ApiRequestObject;
+    withNoCache: (req: ApiRequest) => ApiRequestObject;
+};
+export default _default;

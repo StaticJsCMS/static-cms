@@ -1,0 +1,34 @@
+import React from 'react';
+import type { Collection, EditorPersistOptions } from '@staticcms/core/interface';
+import type { MouseEventHandler } from 'react';
+import './EditorToolbar.css';
+export declare const classes: Record<"root" | "delete-button" | "more-menu" | "more-menu-button" | "more-menu-label-icon" | "preview-toggle" | "preview-toggle-icon" | "delete-button-icon" | "publish-button" | "publish-button-icon" | "publish-button-label", string>;
+export interface EditorToolbarProps {
+    isPersisting?: boolean;
+    isDeleting?: boolean;
+    onPersist: (opts?: EditorPersistOptions) => Promise<void>;
+    onPersistAndNew: () => Promise<void>;
+    onPersistAndDuplicate: () => Promise<void>;
+    onDelete: () => Promise<void>;
+    onDuplicate: () => void;
+    hasChanged: boolean;
+    displayUrl: string | undefined;
+    collection: Collection;
+    isNewEntry: boolean;
+    isModification?: boolean;
+    showPreviewToggle: boolean;
+    previewActive: boolean;
+    scrollSyncActive: boolean;
+    showI18nToggle: boolean;
+    i18nActive: boolean;
+    togglePreview: MouseEventHandler;
+    toggleScrollSync: MouseEventHandler;
+    toggleI18n: MouseEventHandler;
+    slug?: string | undefined;
+    className?: string;
+    showMobilePreview: boolean;
+    onMobilePreviewToggle: () => void;
+    onDiscardDraft: () => void;
+}
+declare const _default: React.FC<EditorToolbarProps>;
+export default _default;

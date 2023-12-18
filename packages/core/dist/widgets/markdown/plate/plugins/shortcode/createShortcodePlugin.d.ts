@@ -1,0 +1,2 @@
+declare const createShortcodePlugin: <OP = any, OV extends import("@udecode/plate").Value = import("@udecode/plate").Value, OE extends import("@udecode/plate").PlateEditor<OV> = import("@udecode/plate").PlateEditor<OV>>(override?: Partial<import("@udecode/plate").PlatePlugin<import("@udecode/plate").NoInfer<OP>, OV, OE>> | undefined, overrideByKey?: import("@udecode/plate").OverrideByKey<OV, OE> | undefined) => import("@udecode/plate").PlatePlugin<import("@udecode/plate").NoInfer<OP>, OV, OE>;
+export default createShortcodePlugin;

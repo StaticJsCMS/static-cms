@@ -1,0 +1,13 @@
+export declare const VIEW_STYLE_TABLE = "table";
+export declare const VIEW_STYLE_GRID = "grid";
+export type ViewStyle = typeof VIEW_STYLE_TABLE | typeof VIEW_STYLE_GRID;
+export declare const VIEW_STYLES: string[];
+export declare const COLLECTION_CARD_WIDTH = 240;
+export declare const COLLECTION_CARD_HEIGHT = 204;
+export declare const COLLECTION_CARD_IMAGE_HEIGHT = 140;
+export declare const COLLECTION_CARD_HEIGHT_WITHOUT_IMAGE = 64;
+export declare const COLLECTION_CARD_MARGIN = 10;
+export declare const EDITOR_SIZE_COMPACT = "compact";
+export declare const EDITOR_SIZE_HALF = "half";
+export type EditorSize = typeof EDITOR_SIZE_COMPACT | typeof EDITOR_SIZE_HALF;
+export declare const EDITOR_SIZES: string[];
