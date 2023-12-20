@@ -27,8 +27,8 @@
 .CMS_NavLink_external-icon {
   @apply h-5
   w-5
-  text-gray-400
-  dark:text-gray-500;
+  text-neutral-400
+  dark:text-neutral-500;
 }
 
 .CMS_NavLink_content {

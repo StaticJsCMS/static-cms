@@ -1,7 +1,7 @@
 .CMS_CircularProgress_svg {
-  @apply text-gray-200
+  @apply text-neutral-200
     animate-spin
-    dark:text-gray-600
+    dark:text-neutral-600
     fill-blue-600;
 
   &.CMS_CircularProgress_md {

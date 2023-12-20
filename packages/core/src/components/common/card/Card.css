@@ -1,11 +1,11 @@
 .CMS_Card_root {
   @apply bg-white
     border
-    border-gray-100
+    border-neutral-100
     rounded-lg
     shadow-sm
     dark:bg-neutral-800
-    dark:border-gray-700/40
+    dark:border-neutral-700/40
     dark:shadow-md
     flex
     flex-col
@@ -17,7 +17,7 @@
     text-2xl
     font-bold
     tracking-tight
-    text-gray-800
+    text-neutral-800
     dark:text-white;
 }
 
@@ -25,8 +25,8 @@
   @apply w-full
     p-5
     font-normal
-    text-gray-800
-    dark:text-gray-300;
+    text-neutral-800
+    dark:text-neutral-300;
 }
 
 .CMS_Card_media {
@@ -46,10 +46,10 @@
     flex-col
     rounded-lg
     justify-start
-    hover:bg-gray-200
+    hover:bg-neutral-200
     dark:hover:bg-neutral-700/70
     focus:outline-none
     focus:ring-4
-    focus:ring-gray-200
+    focus:ring-neutral-200
     dark:focus:ring-neutral-700;
 }

@@ -218,14 +218,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_CollectionSearch_icon) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_CollectionSearch_input {
@@ -240,11 +240,11 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(209 213 219 / var(--tw-border-opacity));
+    border-color: rgb(212 212 212 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity));
 
     padding: 0.375rem;
 
@@ -256,7 +256,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 .CMS_CollectionSearch_input:focus {
@@ -269,7 +269,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity))
 }
 
 .CMS_CollectionSearch_input:focus-visible {
@@ -283,11 +283,11 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(75 85 99 / var(--tw-border-opacity));
+    border-color: rgb(82 82 82 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
@@ -298,7 +298,7 @@
 
     --tw-placeholder-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-placeholder-opacity))
+    color: rgb(163 163 163 / var(--tw-placeholder-opacity))
 }
 
 :is(.dark .CMS_CollectionSearch_input:focus) {
@@ -429,7 +429,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 .CMS_NavLink_link {
@@ -497,14 +497,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_NavLink_external-icon) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 .CMS_NavLink_content {
@@ -724,7 +724,7 @@
 
     --tw-divide-opacity: 1;
 
-    border-color: rgb(243 244 246 / var(--tw-divide-opacity))
+    border-color: rgb(245 245 245 / var(--tw-divide-opacity))
 }
 
 .CMS_Menu_menu {
@@ -735,7 +735,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(229 231 235 / var(--tw-border-opacity));
+    border-color: rgb(229 229 229 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -759,14 +759,14 @@
 
     --tw-divide-opacity: 1;
 
-    border-color: rgb(75 85 99 / var(--tw-divide-opacity))
+    border-color: rgb(82 82 82 / var(--tw-divide-opacity))
 }
 
 :is(.dark .CMS_Menu_menu) {
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(55 65 81 / var(--tw-border-opacity));
+    border-color: rgb(64 64 64 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -782,7 +782,7 @@
 .CMS_MenuGroup_root {
     border-bottom-width: 1px;
     --tw-border-opacity: 1;
-    border-color: rgb(229 231 235 / var(--tw-border-opacity));
+    border-color: rgb(229 229 229 / var(--tw-border-opacity));
     padding-top: 0.25rem;
     padding-bottom: 0.25rem
 }
@@ -817,7 +817,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 .CMS_MenuItemLink_root:hover {
@@ -831,7 +831,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_MenuItemLink_root:hover) {
@@ -896,7 +896,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity));
 
     padding-left: 1.5rem;
 
@@ -917,7 +917,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(31 41 55 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
 @media (min-width: 768px) {
@@ -1000,7 +1000,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Breadcrumbs_root) {
@@ -1069,7 +1069,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_Breadcrumbs_breadcrumb-link:focus {
@@ -1086,14 +1086,14 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity))
 }
 
 :is(.dark .CMS_Breadcrumbs_breadcrumb-link:hover) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Breadcrumbs_breadcrumb-link:focus) {
@@ -1163,7 +1163,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity))
 }
 
 :is(.dark .CMS_Breadcrumbs_last-non-editor-breadcrumb-link:focus) {
@@ -1212,7 +1212,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity))
 }
 
 :is(.dark .CMS_Breadcrumbs_mobile-current-breadcrumb-link:focus) {
@@ -1303,35 +1303,35 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
   :is(.dark .CMS_MenuItemButton_root.CMS_MenuItemButton_default) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
   .CMS_MenuItemButton_root.CMS_MenuItemButton_default.CMS_MenuItemButton_disabled {
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
   :is(.dark .CMS_MenuItemButton_root.CMS_MenuItemButton_default.CMS_MenuItemButton_disabled) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(55 65 81 / var(--tw-text-opacity))
+    color: rgb(64 64 64 / var(--tw-text-opacity))
 }
 
   .CMS_MenuItemButton_root.CMS_MenuItemButton_default:not(.CMS_MenuItemButton_disabled):hover {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(229 231 235 / var(--tw-bg-opacity))
+    background-color: rgb(229 229 229 / var(--tw-bg-opacity))
 }
 
   :is(.dark .CMS_MenuItemButton_root.CMS_MenuItemButton_default:not(.CMS_MenuItemButton_disabled):hover) {
@@ -1484,11 +1484,11 @@
 
   .CMS_Switch_root.CMS_Switch_disabled .CMS_Switch_toggle::after {
 
-    border-color: rgb(107 114 128 / 0.75);
+    border-color: rgb(115 115 115 / 0.75);
 
     content: var(--tw-content);
 
-    background-color: rgb(107 114 128 / 0.75)
+    background-color: rgb(115 115 115 / 0.75)
 }
 
   .peer:checked ~ .CMS_Switch_root.CMS_Switch_disabled .CMS_Switch_toggle {
@@ -1500,14 +1500,14 @@
 
     content: var(--tw-content);
 
-    border-color: rgb(107 114 128 / 0.75)
+    border-color: rgb(115 115 115 / 0.75)
 }
 
   .CMS_Switch_root:not(.CMS_Switch_disabled) .CMS_Switch_toggle::after {
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(209 213 219 / var(--tw-border-opacity));
+    border-color: rgb(212 212 212 / var(--tw-border-opacity));
 
     content: var(--tw-content);
 
@@ -1621,7 +1621,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(75 85 99 / var(--tw-border-opacity));
+    border-color: rgb(82 82 82 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -1640,14 +1640,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Switch_label) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_SettingsDropdown_root.CMS_SettingsDropdown_in-editor {
@@ -1842,16 +1842,18 @@
 
     justify-content: center;
 
-    --tw-bg-opacity: 1;
+    border-right-width: 1.5px;
 
-    background-color: rgb(115 115 115 / var(--tw-bg-opacity))
+    --tw-border-opacity: 1;
+
+    border-color: rgb(229 229 229 / var(--tw-border-opacity))
 }
 
 :is(.dark .CMS_Navbar_breadcrumbs .CMS_Navbar_logo-wrapper) {
 
-    --tw-bg-opacity: 1;
+    --tw-border-opacity: 1;
 
-    background-color: rgb(64 64 64 / var(--tw-bg-opacity))
+    border-color: rgb(64 64 64 / var(--tw-border-opacity))
 }
 
 .CMS_Navbar_breadcrumbs .CMS_Navbar_logo-wrapper .CMS_Navbar_logo {
@@ -1917,14 +1919,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Navbar_site-url-icon) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 .CMS_Navbar_quick-create {
@@ -2084,7 +2086,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(243 244 246 / var(--tw-border-opacity));
+    border-color: rgb(245 245 245 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -2099,7 +2101,7 @@
 
 :is(.dark .CMS_Card_root) {
 
-    border-color: rgb(55 65 81 / 0.4);
+    border-color: rgb(64 64 64 / 0.4);
 
     --tw-bg-opacity: 1;
 
@@ -2126,7 +2128,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Card_header) {
@@ -2146,14 +2148,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Card_content) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_Card_media {
@@ -2194,7 +2196,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(229 231 235 / var(--tw-bg-opacity))
+    background-color: rgb(229 229 229 / var(--tw-bg-opacity))
 }
 
 .CMS_Card_actions:focus {
@@ -2211,7 +2213,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity))
 }
 
 :is(.dark .CMS_Card_actions:hover) {
@@ -2289,14 +2291,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_FilterControl_filter-label) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_FilterControl_list-root {
@@ -2318,7 +2320,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_FilterControl_list-label) {
@@ -2340,14 +2342,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_FilterControl_list-filter) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_FilterControl_list-filter-label {
@@ -2362,14 +2364,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_FilterControl_list-filter-label) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_GroupControl_root {
@@ -2404,7 +2406,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_GroupControl_list-label) {
@@ -2426,14 +2428,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_GroupControl_list-option) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_GroupControl_list-option-label {
@@ -2448,14 +2450,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_GroupControl_list-option-label) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_GroupControl_list-option-checked-icon {
@@ -2515,7 +2517,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_SortControl_list-label) {
@@ -2537,14 +2539,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_SortControl_list-option) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_SortControl_list-option-label {
@@ -2559,14 +2561,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_SortControl_list-option-label) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_SortControl_list-option-sorted-icon {
@@ -2682,14 +2684,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(229 231 235 / var(--tw-text-opacity))
+    color: rgb(229 229 229 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_CircularProgress_svg) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(75 85 99 / var(--tw-text-opacity))
+    color: rgb(82 82 82 / var(--tw-text-opacity))
 }
 
   .CMS_CircularProgress_svg.CMS_CircularProgress_md {
@@ -2752,7 +2754,7 @@
     max-width: 100%;
     border-radius: 0.375rem;
     border-width: 1px;
-    border-color: rgb(229 231 235 / 0.75);
+    border-color: rgb(229 229 229 / 0.75);
     padding: 2.5rem
 }
   :is(.dark .CMS_Image_root.CMS_Image_empty) {
@@ -2857,14 +2859,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Table_table) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_Table_header {
@@ -2910,7 +2912,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(243 244 246 / var(--tw-border-opacity));
+    border-color: rgb(245 245 245 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -2928,14 +2930,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Table_header-cell-content) {
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(55 65 81 / var(--tw-border-opacity));
+    border-color: rgb(64 64 64 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -2952,7 +2954,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(243 244 246 / var(--tw-border-opacity));
+    border-color: rgb(245 245 245 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -2975,7 +2977,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+    background-color: rgb(245 245 245 / var(--tw-bg-opacity));
 
     outline: 2px solid transparent;
 
@@ -2986,7 +2988,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(55 65 81 / var(--tw-border-opacity));
+    border-color: rgb(64 64 64 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -3011,14 +3013,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Table_body-cell) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_Table_body-cell.CMS_Table_body-cell-has-link {
@@ -3045,7 +3047,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Table_body-cell.CMS_Table_body-cell-emphasis) {
@@ -3226,7 +3228,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(243 244 246 / var(--tw-border-opacity));
+    border-color: rgb(245 245 245 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -3243,7 +3245,7 @@
 
 :is(.dark .CMS_Entries_entry-listing-table) {
 
-    border-color: rgb(55 65 81 / 0.4);
+    border-color: rgb(64 64 64 / 0.4);
 
     --tw-bg-opacity: 1;
 
@@ -3269,7 +3271,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(229 231 235 / var(--tw-bg-opacity))
+    background-color: rgb(229 229 229 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_Entries_entry-listing-table-row:hover) {
@@ -3472,14 +3474,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Collection_header) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 @media (min-width: 768px) {
@@ -3603,14 +3605,14 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(243 244 246 / var(--tw-border-opacity))
+    border-color: rgb(245 245 245 / var(--tw-border-opacity))
 }
 
   .CMS_InlineEditTextField_root.CMS_InlineEditTextField_editable .CMS_InlineEditTextField_preview:hover {
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(209 213 219 / var(--tw-border-opacity))
+    border-color: rgb(212 212 212 / var(--tw-border-opacity))
 }
 
   :is(.dark .CMS_InlineEditTextField_root.CMS_InlineEditTextField_editable .CMS_InlineEditTextField_preview) {
@@ -3689,7 +3691,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 .CMS_InlineEditTextField_input {
@@ -3708,11 +3710,11 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(209 213 219 / var(--tw-border-opacity));
+    border-color: rgb(212 212 212 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity));
 
     padding: 0.375rem;
 
@@ -3722,7 +3724,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 .CMS_InlineEditTextField_input:focus {
@@ -3735,7 +3737,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity))
 }
 
 .CMS_InlineEditTextField_input:focus-visible {
@@ -3749,11 +3751,11 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(75 85 99 / var(--tw-border-opacity));
+    border-color: rgb(82 82 82 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
@@ -3764,7 +3766,7 @@
 
     --tw-placeholder-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-placeholder-opacity))
+    color: rgb(163 163 163 / var(--tw-placeholder-opacity))
 }
 
 :is(.dark .CMS_InlineEditTextField_input:focus) {
@@ -3804,7 +3806,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity));
+    color: rgb(38 38 38 / var(--tw-text-opacity));
 
     outline: 2px solid transparent;
 
@@ -3815,21 +3817,21 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_TextField_input.CMS_TextField_borderless) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_TextField_input.CMS_TextField_borderless:disabled) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 .CMS_TextField_input.CMS_TextField_contained {
@@ -3842,17 +3844,17 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(209 213 219 / var(--tw-border-opacity));
+    border-color: rgb(212 212 212 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity));
 
     padding: 0.625rem;
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 .CMS_TextField_input.CMS_TextField_contained:focus {
@@ -3870,11 +3872,11 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(75 85 99 / var(--tw-border-opacity));
+    border-color: rgb(82 82 82 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
@@ -3885,7 +3887,7 @@
 
     --tw-placeholder-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-placeholder-opacity))
+    color: rgb(163 163 163 / var(--tw-placeholder-opacity))
 }
 
 :is(.dark .CMS_TextField_input.CMS_TextField_contained:focus) {
@@ -3950,7 +3952,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_FolderCreationDialog_title) {
@@ -4026,17 +4028,17 @@
 
   content: var(--tw-content);
 
-  border-color: rgb(107 114 128 / 0.75)
+  border-color: rgb(115 115 115 / 0.75)
 }
 
   .CMS_Checkbox_root.CMS_Checkbox_disabled .CMS_Checkbox_custom-input {
 
-  background-color: rgb(243 244 246 / 0.75)
+  background-color: rgb(245 245 245 / 0.75)
 }
 
   :is(.dark .CMS_Checkbox_root.CMS_Checkbox_disabled .CMS_Checkbox_custom-input) {
 
-  background-color: rgb(55 65 81 / 0.75)
+  background-color: rgb(64 64 64 / 0.75)
 }
 
 .CMS_Checkbox_input {
@@ -4123,11 +4125,11 @@
 
   --tw-border-opacity: 1;
 
-  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+  border-color: rgb(212 212 212 / var(--tw-border-opacity));
 
   --tw-bg-opacity: 1;
 
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  background-color: rgb(245 245 245 / var(--tw-bg-opacity));
 
   --tw-text-opacity: 1;
 
@@ -4151,13 +4153,13 @@
 
   --tw-border-opacity: 1;
 
-  border-color: rgb(75 85 99 / var(--tw-border-opacity));
+  border-color: rgb(82 82 82 / var(--tw-border-opacity));
 
   --tw-bg-opacity: 1;
 
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+  background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
-  --tw-ring-offset-color: #1f2937
+  --tw-ring-offset-color: #262626
 }
 
 :is(.dark .CMS_Checkbox_custom-input:focus) {
@@ -4216,7 +4218,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
   :is(.dark .CMS_Pill_root.CMS_Pill_primary) {
@@ -4227,36 +4229,36 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
   .CMS_Pill_root.CMS_Pill_default {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+    background-color: rgb(229 229 229 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
   :is(.dark .CMS_Pill_root.CMS_Pill_default) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
   .CMS_Pill_root.CMS_Pill_disabled.CMS_Pill_primary {
 
     background-color: rgb(147 197 253 / 0.75);
 
-    color: rgb(243 244 246 / 0.75)
+    color: rgb(245 245 245 / 0.75)
 }
 
   :is(.dark .CMS_Pill_root.CMS_Pill_disabled.CMS_Pill_primary) {
@@ -4265,25 +4267,25 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
   .CMS_Pill_root.CMS_Pill_disabled.CMS_Pill_default {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+    background-color: rgb(245 245 245 / var(--tw-bg-opacity));
 
-    color: rgb(156 163 175 / 0.75)
+    color: rgb(163 163 163 / 0.75)
 }
 
   :is(.dark .CMS_Pill_root.CMS_Pill_disabled.CMS_Pill_default) {
 
-    background-color: rgb(31 41 55 / 0.75);
+    background-color: rgb(38 38 38 / 0.75);
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 .CMS_MediaLibraryCard_root {
@@ -4309,9 +4311,9 @@
 
     border-width: 1px;
 
-    border-color: rgb(229 231 235 / 0.75);
+    border-color: rgb(229 229 229 / 0.75);
 
-    background-color: rgb(249 250 251 / 0.75);
+    background-color: rgb(250 250 250 / 0.75);
 
     --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
@@ -4364,7 +4366,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity))
 }
 
 .CMS_MediaLibraryCard_handle:focus-visible {
@@ -4427,7 +4429,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 .CMS_MediaLibraryCard_controls-overlay {
@@ -4483,7 +4485,7 @@
 
 .CMS_MediaLibraryCard_download-button {
 
-    background-color: rgb(17 24 39 / 0.25);
+    background-color: rgb(23 23 23 / 0.25);
 
     --tw-text-opacity: 1;
 
@@ -4512,7 +4514,7 @@
 
     z-index: 30;
 
-    background-color: rgb(17 24 39 / 0.25);
+    background-color: rgb(23 23 23 / 0.25);
 
     --tw-text-opacity: 1;
 
@@ -4573,7 +4575,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+    background-color: rgb(115 115 115 / var(--tw-bg-opacity));
 
     font-size: 3rem;
 
@@ -4583,7 +4585,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(229 231 235 / var(--tw-text-opacity))
+    color: rgb(229 229 229 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_MediaLibraryCard_folder) {
@@ -4618,7 +4620,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+    background-color: rgb(115 115 115 / var(--tw-bg-opacity));
 
     font-size: 3rem;
 
@@ -4628,7 +4630,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(229 231 235 / var(--tw-text-opacity))
+    color: rgb(229 229 229 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_MediaLibraryCard_file) {
@@ -4720,7 +4722,7 @@
 
     border-bottom-width: 1px;
 
-    border-color: rgb(229 231 235 / 0.75);
+    border-color: rgb(229 229 229 / 0.75);
 
     padding-bottom: 1rem
 }
@@ -4858,14 +4860,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_MediaLibrary_title) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_MediaLibrary_title-icon-wrapper {
@@ -4930,7 +4932,7 @@
 
 .CMS_MediaLibrary_copy-to-clipboard-button {
 
-    background-color: rgb(17 24 39 / 0.25);
+    background-color: rgb(23 23 23 / 0.25);
 
     --tw-text-opacity: 1;
 
@@ -4966,7 +4968,7 @@
 
     border-bottom-width: 1px;
 
-    border-color: rgb(229 231 235 / 0.75);
+    border-color: rgb(229 229 229 / 0.75);
 
     padding-left: 1.25rem;
 
@@ -4994,9 +4996,9 @@
 
     border-width: 1px;
 
-    border-color: rgb(229 231 235 / 0.75);
+    border-color: rgb(229 229 229 / 0.75);
 
-    background-color: rgb(249 250 251 / 0.75);
+    background-color: rgb(250 250 250 / 0.75);
 
     object-fit: cover;
 
@@ -5050,7 +5052,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 .CMS_MediaLibrary_files {
@@ -5115,7 +5117,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_MediaLibrary_search-label) {
@@ -5157,14 +5159,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_MediaLibrary_search-icon) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_MediaLibrary_search-input {
@@ -5179,11 +5181,11 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(209 213 219 / var(--tw-border-opacity));
+    border-color: rgb(212 212 212 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity));
 
     padding: 0.375rem;
 
@@ -5195,7 +5197,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 .CMS_MediaLibrary_search-input:focus {
@@ -5208,7 +5210,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity))
 }
 
 .CMS_MediaLibrary_search-input:focus-visible {
@@ -5222,11 +5224,11 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(75 85 99 / var(--tw-border-opacity));
+    border-color: rgb(82 82 82 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
@@ -5237,7 +5239,7 @@
 
     --tw-placeholder-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-placeholder-opacity))
+    color: rgb(163 163 163 / var(--tw-placeholder-opacity))
 }
 
 :is(.dark .CMS_MediaLibrary_search-input:focus) {
@@ -5273,7 +5275,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(243 244 246 / var(--tw-bg-opacity))
+    background-color: rgb(245 245 245 / var(--tw-bg-opacity))
 }
 
   :is(.dark .CMS_MediaLibraryModal_root .CMS_MediaLibraryModal_close-button) {
@@ -5573,11 +5575,11 @@
 
 .CMS_PreviewFrameContent_content {
     --tw-text-opacity: 1;
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 :is(.dark .CMS_PreviewFrameContent_content) {
     --tw-text-opacity: 1;
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 .CMS_Preview_root {
@@ -5819,7 +5821,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity));
+    color: rgb(115 115 115 / var(--tw-text-opacity));
 
     --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
@@ -5832,11 +5834,11 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity));
+    color: rgb(212 212 212 / var(--tw-text-opacity));
 
     --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
@@ -6011,11 +6013,11 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
     --tw-text-opacity: 1;
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 :is(.dark .CMS_WdigetUnknown_root) {
     --tw-text-opacity: 1;
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 .CMS_Login_root {
@@ -6109,7 +6111,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
@@ -6471,7 +6473,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 .CMS_SelectOption_root:hover {
@@ -6485,7 +6487,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
   .CMS_SelectOption_root.CMS_SelectOption_selected {
@@ -6523,22 +6525,22 @@
 
   .CMS_Select_root.CMS_Select_disabled .CMS_Select_input {
 
-    color: rgb(209 213 219 / 0.75)
+    color: rgb(212 212 212 / 0.75)
 }
 
   :is(.dark .CMS_Select_root.CMS_Select_disabled .CMS_Select_input) {
 
-    color: rgb(75 85 99 / 0.75)
+    color: rgb(82 82 82 / 0.75)
 }
 
   .CMS_Select_root.CMS_Select_disabled .CMS_Select_value .CMS_Select_dropdown .CMS_Select_dropdown-icon {
 
-    color: rgb(209 213 219 / 0.75)
+    color: rgb(212 212 212 / 0.75)
 }
 
   :is(.dark .CMS_Select_root.CMS_Select_disabled .CMS_Select_value .CMS_Select_dropdown .CMS_Select_dropdown-icon) {
 
-    color: rgb(75 85 99 / 0.75)
+    color: rgb(82 82 82 / 0.75)
 }
 
 .CMS_Select_value {
@@ -6589,7 +6591,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_Select_input {
@@ -6620,14 +6622,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Select_input) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 .CMS_Select_popper {
@@ -6715,7 +6717,7 @@
     --tw-border-opacity: 1;
     border-top-color: rgb(212 212 212 / var(--tw-border-opacity));
     --tw-bg-opacity: 1;
-    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+    background-color: rgb(245 245 245 / var(--tw-bg-opacity));
     --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
@@ -6993,9 +6995,9 @@
 
     border-width: 1px;
 
-    border-color: rgb(229 231 235 / 0.75);
+    border-color: rgb(229 229 229 / 0.75);
 
-    background-color: rgb(249 250 251 / 0.75);
+    background-color: rgb(250 250 250 / 0.75);
 
     --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
@@ -7048,7 +7050,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity))
 }
 
 .CMS_WidgetFileImage_SortableImage_handle:focus-visible {
@@ -7099,7 +7101,7 @@
 
 .CMS_WidgetFileImage_SortableImage_replace-button {
 
-    background-color: rgb(17 24 39 / 0.25);
+    background-color: rgb(23 23 23 / 0.25);
 
     --tw-text-opacity: 1;
 
@@ -7128,7 +7130,7 @@
 
     z-index: 30;
 
-    background-color: rgb(17 24 39 / 0.25);
+    background-color: rgb(23 23 23 / 0.25);
 
     --tw-text-opacity: 1;
 
@@ -7704,7 +7706,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 .CMS_WidgetList_ListItem_single-field-controls {
@@ -7833,7 +7835,7 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
     --tw-text-opacity: 1;
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 .CMS_WidgetList_error-message {
@@ -7908,7 +7910,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity));
+    color: rgb(38 38 38 / var(--tw-text-opacity));
 
     outline: 2px solid transparent;
 
@@ -7919,21 +7921,21 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_TextArea_input) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_TextArea_input:disabled) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 .CMS_Button_root.CMS_WidgetMarkdown_ToolbarButton_root {
@@ -7951,7 +7953,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+    background-color: rgb(245 245 245 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
@@ -7991,22 +7993,22 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(229 231 235 / var(--tw-border-opacity));
+    border-color: rgb(229 229 229 / var(--tw-border-opacity));
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
   :is(.dark .CMS_WidgetMarkdown_FontTypeSelect_root.CMS_WidgetMarkdown_FontTypeSelect_disabled .CMS_WidgetMarkdown_FontTypeSelect_select) {
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(75 85 99 / var(--tw-border-opacity));
+    border-color: rgb(82 82 82 / var(--tw-border-opacity));
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 .CMS_WidgetMarkdown_FontTypeSelect_select {
@@ -8029,7 +8031,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(75 85 99 / var(--tw-border-opacity));
+    border-color: rgb(82 82 82 / var(--tw-border-opacity));
 
     padding-left: 0.375rem;
 
@@ -8047,18 +8049,18 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_WidgetMarkdown_FontTypeSelect_select) {
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(156 163 175 / var(--tw-border-opacity));
+    border-color: rgb(163 163 163 / var(--tw-border-opacity));
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 .CMS_WidgetMarkdown_FontTypeSelect_popper {
@@ -8419,7 +8421,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(243 244 246 / var(--tw-border-opacity))
+    border-color: rgb(245 245 245 / var(--tw-border-opacity))
 }
 
 :is(.dark .CMS_WidgetMarkdown_MediaPopover_divider) {
@@ -8435,7 +8437,7 @@
     margin-left: 0.5rem;
     border-left-width: 2px;
     --tw-border-opacity: 1;
-    border-color: rgb(156 163 175 / var(--tw-border-opacity));
+    border-color: rgb(163 163 163 / var(--tw-border-opacity));
     padding-left: 0.5rem
 }
 
@@ -8458,7 +8460,7 @@
 
     border-width: 1px;
 
-    border-color: rgb(243 244 246 / var(--tw-border-opacity));
+    border-color: rgb(245 245 245 / var(--tw-border-opacity));
 
     --tw-border-opacity: 1;
 
@@ -8581,7 +8583,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(229 231 235 / var(--tw-border-opacity))
+    border-color: rgb(229 229 229 / var(--tw-border-opacity))
 }
 
 :is(.dark .CMS_WidgetMarkdown_Table_root) {
@@ -8599,7 +8601,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(229 231 235 / var(--tw-border-opacity));
+    border-color: rgb(229 229 229 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -8610,7 +8612,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(31 41 55 / var(--tw-border-opacity));
+    border-color: rgb(38 38 38 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -8626,7 +8628,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(229 231 235 / var(--tw-border-opacity))
+    border-color: rgb(229 229 229 / var(--tw-border-opacity))
 }
 
 .CMS_WidgetMarkdown_Table_row:last-child {
@@ -8638,7 +8640,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(31 41 55 / var(--tw-border-opacity))
+    border-color: rgb(38 38 38 / var(--tw-border-opacity))
 }
 
 .CMS_WidgetMarkdown_Table_header-cell {
@@ -8647,7 +8649,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(229 231 235 / var(--tw-border-opacity));
+    border-color: rgb(229 229 229 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -8672,7 +8674,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(31 41 55 / var(--tw-border-opacity));
+    border-color: rgb(38 38 38 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
@@ -8690,7 +8692,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(229 231 235 / var(--tw-border-opacity));
+    border-color: rgb(229 229 229 / var(--tw-border-opacity));
 
     padding-left: 0.5rem;
 
@@ -8714,7 +8716,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(31 41 55 / var(--tw-border-opacity))
+    border-color: rgb(38 38 38 / var(--tw-border-opacity))
 }
 
 .CMS_WidgetMarkdown_Table_body-cell>div>p {
@@ -8738,7 +8740,7 @@
     align-items: center;
     gap: 0.125rem;
     border-bottom-width: 1px;
-    border-color: rgb(156 163 175 / 0.1);
+    border-color: rgb(163 163 163 / 0.1);
     --tw-bg-opacity: 1;
     background-color: rgb(250 250 250 / var(--tw-bg-opacity));
     padding-left: 0.5rem;
@@ -8762,7 +8764,7 @@
     white-space: break-spaces;
     border-radius: 0.375rem;
     --tw-bg-opacity: 1;
-    background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+    background-color: rgb(229 229 229 / var(--tw-bg-opacity));
     padding-top: 0.2em;
     padding-bottom: 0.2em;
     padding-left: 0.4em;
@@ -8771,13 +8773,13 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
     --tw-text-opacity: 1;
-    color: rgb(55 65 81 / var(--tw-text-opacity))
+    color: rgb(64 64 64 / var(--tw-text-opacity))
 }
 :is(.dark .CMS_WidgetMarkdown_Code_root) {
     --tw-bg-opacity: 1;
-    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
     --tw-text-opacity: 1;
-    color: rgb(229 231 235 / var(--tw-text-opacity))
+    color: rgb(229 229 229 / var(--tw-text-opacity))
 }
 
 .CMS_WidgetMarkdown_root {
@@ -8987,7 +8989,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 .CMS_WidgetObject_error-message {
@@ -9018,24 +9020,24 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
   :is(.dark .CMS_Autocomplete_root.CMS_Autocomplete_disabled .CMS_Autocomplete_input) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(107 114 128 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
   .CMS_Autocomplete_root.CMS_Autocomplete_disabled .CMS_Autocomplete_button-icon {
 
-    color: rgb(209 213 219 / 0.75)
+    color: rgb(212 212 212 / 0.75)
 }
 
   :is(.dark .CMS_Autocomplete_root.CMS_Autocomplete_disabled .CMS_Autocomplete_button-icon) {
 
-    color: rgb(75 85 99 / 0.75)
+    color: rgb(82 82 82 / 0.75)
 }
 
 .CMS_Autocomplete_input-wrapper {
@@ -9077,7 +9079,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity));
+    color: rgb(38 38 38 / var(--tw-text-opacity));
 
     outline: 2px solid transparent;
 
@@ -9097,7 +9099,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 .CMS_Autocomplete_button-wrapper {
@@ -9122,7 +9124,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(156 163 175 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_Autocomplete_options {
@@ -9216,14 +9218,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Autocomplete_nothing) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(209 213 219 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 .CMS_Autocomplete_option {
@@ -9246,21 +9248,21 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(31 41 55 / var(--tw-text-opacity))
+    color: rgb(38 38 38 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Autocomplete_option) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(243 244 246 / var(--tw-text-opacity))
+    color: rgb(245 245 245 / var(--tw-text-opacity))
 }
 
 .CMS_Autocomplete_option-selected {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(243 244 246 / var(--tw-bg-opacity))
+    background-color: rgb(245 245 245 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_Autocomplete_option-selected) {
@@ -10557,11 +10559,11 @@ body{
   width: 100vw;
   overflow: hidden;
   --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+  color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 :is(.dark body){
   --tw-text-opacity: 1;
-  color: rgb(243 244 246 / var(--tw-text-opacity));
+  color: rgb(245 245 245 / var(--tw-text-opacity));
 }
 /**
   * Buttons
@@ -10582,7 +10584,7 @@ body{
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity));
 }
 :is(.dark .CMS_Button_root:focus){
   --tw-ring-opacity: 1;
@@ -10611,7 +10613,7 @@ body{
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity));
 }
 :is(.dark .CMS_Button_root-sm:focus){
   --tw-ring-opacity: 1;
@@ -10640,7 +10642,7 @@ body{
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity));
 }
 :is(.dark .CMS_Button_root-rounded:focus){
   --tw-ring-opacity: 1;
@@ -10666,7 +10668,7 @@ body{
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity));
 }
 :is(.dark .CMS_Button_root-rounded-sm:focus){
   --tw-ring-opacity: 1;
@@ -10692,7 +10694,7 @@ body{
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(229 229 229 / var(--tw-ring-opacity));
 }
 :is(.dark .CMS_Button_root-rounded-no-padding:focus){
   --tw-ring-opacity: 1;
@@ -10713,9 +10715,9 @@ body{
   background-color: rgb(30 64 175 / var(--tw-bg-opacity));
 }
 .CMS_Button_contained-primary:disabled{
-  background-color: rgb(209 213 219 / 0.8);
+  background-color: rgb(212 212 212 / 0.8);
   --tw-text-opacity: 1;
-  color: rgb(249 250 251 / var(--tw-text-opacity));
+  color: rgb(250 250 250 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_contained-primary){
   --tw-bg-opacity: 1;
@@ -10731,10 +10733,10 @@ body{
 }
 .CMS_Button_outlined-primary{
   --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  border-color: rgb(229 229 229 / var(--tw-border-opacity));
   background-color: transparent;
   --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+  color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .CMS_Button_outlined-primary:hover{
   --tw-border-opacity: 1;
@@ -10746,9 +10748,9 @@ body{
 }
 .CMS_Button_outlined-primary:disabled{
   --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  border-color: rgb(229 229 229 / var(--tw-border-opacity));
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 .CMS_Button_outlined-primary:hover:disabled{
   background-color: transparent;
@@ -10778,7 +10780,7 @@ body{
   border-color: transparent;
   background-color: transparent;
   --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+  color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .CMS_Button_text-primary:hover{
   --tw-bg-opacity: 1;
@@ -10788,14 +10790,14 @@ body{
 }
 .CMS_Button_text-primary:disabled{
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 .CMS_Button_text-primary:hover:disabled{
   background-color: transparent;
 }
 :is(.dark .CMS_Button_text-primary){
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_text-primary:hover){
   background-color: rgb(64 64 64 / 0.75);
@@ -10809,81 +10811,81 @@ body{
   background-color: transparent;
 }
 .CMS_Button_contained-secondary{
-  border-color: rgb(229 231 235 / 0.75);
+  border-color: rgb(229 229 229 / 0.75);
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
   font-weight: 500;
   --tw-text-opacity: 1;
-  color: rgb(75 85 99 / var(--tw-text-opacity));
+  color: rgb(82 82 82 / var(--tw-text-opacity));
 }
 .CMS_Button_contained-secondary:hover{
-  border-color: rgb(229 231 235 / 0.5);
+  border-color: rgb(229 229 229 / 0.5);
   --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  background-color: rgb(245 245 245 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+  color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .CMS_Button_contained-secondary:disabled{
-  border-color: rgb(229 231 235 / 0.05);
+  border-color: rgb(229 229 229 / 0.05);
   background-color: rgb(255 255 255 / 0.8);
-  color: rgb(209 213 219 / 0.75);
+  color: rgb(212 212 212 / 0.75);
 }
 :is(.dark .CMS_Button_contained-secondary){
-  border-color: rgb(75 85 99 / 0.6);
+  border-color: rgb(82 82 82 / 0.6);
   --tw-bg-opacity: 1;
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+  background-color: rgb(38 38 38 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_contained-secondary:hover){
-  border-color: rgb(75 85 99 / 0.8);
+  border-color: rgb(82 82 82 / 0.8);
   --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+  background-color: rgb(64 64 64 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_contained-secondary:disabled){
-  border-color: rgb(75 85 99 / 0.2);
-  background-color: rgb(55 65 81 / 0.2);
-  color: rgb(156 163 175 / 0.2);
+  border-color: rgb(82 82 82 / 0.2);
+  background-color: rgb(64 64 64 / 0.2);
+  color: rgb(163 163 163 / 0.2);
 }
 .CMS_Button_outlined-secondary{
   --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  border-color: rgb(229 229 229 / var(--tw-border-opacity));
   background-color: transparent;
   --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+  color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .CMS_Button_outlined-secondary:hover{
-  border-color: rgb(229 231 235 / 0.5);
+  border-color: rgb(229 229 229 / 0.5);
   --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  background-color: rgb(245 245 245 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+  color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .CMS_Button_outlined-secondary:disabled{
-  border-color: rgb(229 231 235 / 0.4);
-  color: rgb(209 213 219 / 0.75);
+  border-color: rgb(229 229 229 / 0.4);
+  color: rgb(212 212 212 / 0.75);
 }
 .CMS_Button_outlined-secondary:hover:disabled{
   background-color: transparent;
 }
 :is(.dark .CMS_Button_outlined-secondary){
-  border-color: rgb(75 85 99 / 0.6);
+  border-color: rgb(82 82 82 / 0.6);
   background-color: transparent;
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_outlined-secondary:hover){
-  border-color: rgb(75 85 99 / 0.8);
+  border-color: rgb(82 82 82 / 0.8);
   --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+  background-color: rgb(64 64 64 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_outlined-secondary:disabled){
-  border-color: rgb(75 85 99 / 0.2);
-  color: rgb(156 163 175 / 0.2);
+  border-color: rgb(82 82 82 / 0.2);
+  color: rgb(163 163 163 / 0.2);
 }
 :is(.dark .CMS_Button_outlined-secondary:hover:disabled){
   background-color: transparent;
@@ -10892,32 +10894,32 @@ body{
   border-color: transparent;
   background-color: transparent;
   --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+  color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .CMS_Button_text-secondary:hover{
   --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  background-color: rgb(245 245 245 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+  color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .CMS_Button_text-secondary:disabled{
-  color: rgb(209 213 219 / 0.75);
+  color: rgb(212 212 212 / 0.75);
 }
 .CMS_Button_text-secondary:hover:disabled{
   background-color: transparent;
 }
 :is(.dark .CMS_Button_text-secondary){
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_text-secondary:hover){
   --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+  background-color: rgb(64 64 64 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_text-secondary:disabled){
-  color: rgb(156 163 175 / 0.2);
+  color: rgb(163 163 163 / 0.2);
 }
 :is(.dark .CMS_Button_text-secondary:hover:disabled){
   background-color: transparent;
@@ -10934,9 +10936,9 @@ body{
   background-color: rgb(21 128 61 / var(--tw-bg-opacity));
 }
 .CMS_Button_contained-success:disabled{
-  background-color: rgb(209 213 219 / 0.8);
+  background-color: rgb(212 212 212 / 0.8);
   --tw-text-opacity: 1;
-  color: rgb(249 250 251 / var(--tw-text-opacity));
+  color: rgb(250 250 250 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_contained-success){
   --tw-bg-opacity: 1;
@@ -10965,9 +10967,9 @@ body{
 }
 .CMS_Button_outlined-success:disabled{
   --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  border-color: rgb(229 229 229 / var(--tw-border-opacity));
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 .CMS_Button_outlined-success:hover:disabled{
   background-color: transparent;
@@ -11005,7 +11007,7 @@ body{
 }
 .CMS_Button_text-success:disabled{
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 .CMS_Button_text-success:hover:disabled{
   background-color: transparent;
@@ -11037,9 +11039,9 @@ body{
   background-color: rgb(185 28 28 / var(--tw-bg-opacity));
 }
 .CMS_Button_contained-error:disabled{
-  background-color: rgb(209 213 219 / 0.8);
+  background-color: rgb(212 212 212 / 0.8);
   --tw-text-opacity: 1;
-  color: rgb(249 250 251 / var(--tw-text-opacity));
+  color: rgb(250 250 250 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_contained-error){
   --tw-bg-opacity: 1;
@@ -11068,9 +11070,9 @@ body{
 }
 .CMS_Button_outlined-error:disabled{
   --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  border-color: rgb(229 229 229 / var(--tw-border-opacity));
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 .CMS_Button_outlined-error:hover:disabled{
   background-color: transparent;
@@ -11108,7 +11110,7 @@ body{
 }
 .CMS_Button_text-error:disabled{
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 .CMS_Button_text-error:hover:disabled{
   background-color: transparent;
@@ -11140,9 +11142,9 @@ body{
   background-color: rgb(202 138 4 / var(--tw-bg-opacity));
 }
 .CMS_Button_contained-warning:disabled{
-  background-color: rgb(209 213 219 / 0.8);
+  background-color: rgb(212 212 212 / 0.8);
   --tw-text-opacity: 1;
-  color: rgb(249 250 251 / var(--tw-text-opacity));
+  color: rgb(250 250 250 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_contained-warning){
   --tw-bg-opacity: 1;
@@ -11172,9 +11174,9 @@ body{
 }
 .CMS_Button_outlined-warning:disabled{
   --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  border-color: rgb(229 229 229 / var(--tw-border-opacity));
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 .CMS_Button_outlined-warning:hover:disabled{
   background-color: transparent;
@@ -11212,7 +11214,7 @@ body{
 }
 .CMS_Button_text-warning:disabled{
   --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 .CMS_Button_text-warning:hover:disabled{
   background-color: transparent;
@@ -11240,7 +11242,7 @@ body{
   width: 1rem;
   border-radius: 0.25rem;
   --tw-border-opacity: 1;
-  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+  border-color: rgb(212 212 212 / var(--tw-border-opacity));
   --tw-bg-opacity: 1;
   background-color: rgb(245 245 245 / var(--tw-bg-opacity));
   padding: 0.375rem;
@@ -11254,10 +11256,10 @@ body{
 }
 :is(.dark .checkbox){
   --tw-border-opacity: 1;
-  border-color: rgb(75 85 99 / var(--tw-border-opacity));
+  border-color: rgb(82 82 82 / var(--tw-border-opacity));
   --tw-bg-opacity: 1;
   background-color: rgb(64 64 64 / var(--tw-bg-opacity));
-  --tw-ring-offset-color: #1f2937;
+  --tw-ring-offset-color: #262626;
 }
 :is(.dark .checkbox:focus){
   --tw-ring-opacity: 1;

@@ -30,6 +30,6 @@
 .CMS_WidgetMarkdown_MediaPopover_divider {
   @apply w-[1px]
     border
-    border-gray-100
+    border-neutral-100
     dark:border-neutral-600;
 }

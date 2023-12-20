@@ -4,15 +4,15 @@
 
   &.CMS_Select_disabled {
     & .CMS_Select_input {
-      @apply text-gray-300/75
-        dark:text-gray-600/75;
+      @apply text-neutral-300/75
+        dark:text-neutral-600/75;
     }
 
     & .CMS_Select_value {
       & .CMS_Select_dropdown {
         & .CMS_Select_dropdown-icon {
-          @apply text-gray-300/75
-            dark:text-gray-600/75;
+          @apply text-neutral-300/75
+            dark:text-neutral-600/75;
         }
       }
     }
@@ -45,7 +45,7 @@
 .CMS_Select_dropdown-icon {
   @apply h-5
     w-5
-    text-gray-400;
+    text-neutral-400;
 }
 
 .CMS_Select_input {
@@ -58,8 +58,8 @@
     px-4
     py-1.5
     w-full
-    text-gray-800
-    dark:text-gray-100;
+    text-neutral-800
+    dark:text-neutral-100;
 }
 
 .CMS_Select_popper {

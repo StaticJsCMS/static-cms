@@ -17,16 +17,16 @@
   }
 
   &.CMS_MenuItemButton_default {
-    @apply text-gray-800
-      dark:text-gray-300;
+    @apply text-neutral-800
+      dark:text-neutral-300;
 
     &.CMS_MenuItemButton_disabled {
-      @apply text-gray-500
-        dark:text-gray-700;
+      @apply text-neutral-500
+        dark:text-neutral-700;
     }
 
     &:not(.CMS_MenuItemButton_disabled) {
-      @apply hover:bg-gray-200
+      @apply hover:bg-neutral-200
         dark:hover:bg-neutral-600;
     }
   }

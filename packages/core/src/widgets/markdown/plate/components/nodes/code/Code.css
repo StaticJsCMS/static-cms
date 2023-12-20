@@ -4,10 +4,10 @@
     m-0
     text-sm
     whitespace-break-spaces
-    text-gray-700
-    dark:text-gray-200
-    bg-gray-200
-    dark:bg-gray-700
+    text-neutral-700
+    dark:text-neutral-200
+    bg-neutral-200
+    dark:bg-neutral-700
     rounded-md
     font-mono;
 }

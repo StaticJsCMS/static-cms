@@ -59,11 +59,11 @@
     dark:bg-neutral-800
     shadow-md
     border
-    border-gray-200
+    border-neutral-200
     focus:outline-none
     divide-y
-    divide-gray-100
-    dark:border-gray-700
-    dark:divide-gray-600
+    divide-neutral-100
+    dark:border-neutral-700
+    dark:divide-neutral-600
     dark:shadow-lg;
 }

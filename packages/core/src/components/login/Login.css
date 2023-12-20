@@ -34,7 +34,7 @@
     border-red-300
     rounded-lg
     bg-red-50
-    dark:bg-gray-800
+    dark:bg-neutral-800
     dark:text-red-400
     dark:border-red-800;
 }

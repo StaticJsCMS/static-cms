@@ -1,6 +1,6 @@
 import { Moon as MoonIcon } from '@styled-icons/bootstrap/Moon';
 import { Logout as LogoutIcon } from '@styled-icons/material/Logout';
-import { Person as PersonIcon } from '@styled-icons/material/Person';
+import { Cog } from '@styled-icons/ionicons-solid/Cog';
 import React, { useCallback, useState } from 'react';
 import { translate } from 'react-polyglot';
 
@@ -37,7 +37,7 @@ const AvatarImage = ({ imageUrl }: AvatarImageProps) => {
   return imageUrl ? (
     <img className={classes['avatar-image']} src={imageUrl} />
   ) : (
-    <PersonIcon className={classes['avatar-icon']} />
+    <Cog className={classes['avatar-icon']} />
   );
 };
 
@@ -98,7 +98,7 @@ const SettingsDropdown: FC<TranslatedProps<SettingsDropdownProps>> = ({ inEditor
           <AvatarImage imageUrl={user?.avatar_url} />
         </>
       }
-      variant="outlined"
+      variant="text"
       rounded={!user?.avatar_url || 'no-padding'}
       hideDropdownIcon
       rootClassName={classNames(classes.root, inEditor && classes['in-editor'])}

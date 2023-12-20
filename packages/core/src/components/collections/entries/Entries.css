@@ -78,9 +78,9 @@
     bg-white
     shadow-sm
     border
-    border-gray-100
+    border-neutral-100
     dark:bg-neutral-800
-    dark:border-gray-700/40
+    dark:border-neutral-700/40
     dark:shadow-md
     rounded-xl;
 }
@@ -92,7 +92,7 @@
 }
 
 .CMS_Entries_entry-listing-table-row {
-  @apply hover:bg-gray-200
+  @apply hover:bg-neutral-200
     dark:hover:bg-neutral-700/70;
 }
 

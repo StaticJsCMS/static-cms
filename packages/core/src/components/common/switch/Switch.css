@@ -9,16 +9,16 @@
 
     & .CMS_Switch_toggle {
       @apply peer-checked:bg-blue-600/25
-        after:bg-gray-500/75
-        after:border-gray-500/75
-        peer-checked:after:border-gray-500/75;
+        after:bg-neutral-500/75
+        after:border-neutral-500/75
+        peer-checked:after:border-neutral-500/75;
     }
   }
 
   &:not(.CMS_Switch_disabled) {
     & .CMS_Switch_toggle {
       @apply after:bg-white
-        after:border-gray-300;
+        after:border-neutral-300;
     }
   }
 }
@@ -53,13 +53,13 @@
     after:h-5
     after:w-5
     after:transition-all
-    dark:border-gray-600;
+    dark:border-neutral-600;
 }
 
 .CMS_Switch_label {
   @apply ml-3
     text-sm
     font-medium
-    text-gray-800
-    dark:text-gray-300;
+    text-neutral-800
+    dark:text-neutral-300;
 }

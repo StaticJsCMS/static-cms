@@ -55,8 +55,10 @@
       items-center
       justify-center
       w-16
-      bg-neutral-500
-      dark:bg-neutral-700;
+      
+      border-r-[1.5px]
+      border-neutral-200
+      dark:border-neutral-700;
 
     & .CMS_Navbar_logo {
       @apply w-10
@@ -92,8 +94,8 @@
 .CMS_Navbar_site-url-icon {
   @apply h-5
     w-5
-    text-gray-400
-    dark:text-gray-500;
+    text-neutral-400
+    dark:text-neutral-500;
 }
 
 .CMS_Navbar_quick-create {

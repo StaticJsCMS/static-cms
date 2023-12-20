@@ -12,8 +12,8 @@
     overflow-hidden
     cursor-pointer
     border
-    bg-gray-50/75
-    border-gray-200/75
+    bg-neutral-50/75
+    border-neutral-200/75
     dark:bg-neutral-800
     dark:border-neutral-600/75;
 
@@ -33,7 +33,7 @@
     z-20
     overflow-visible
     focus:ring-4
-    focus:ring-gray-200
+    focus:ring-neutral-200
     dark:focus:ring-neutral-700
     focus-visible:outline-none;
 }
@@ -55,7 +55,7 @@
     font-bold
     dark:font-semibold
     text-neutral-600
-    dark:text-gray-100
+    dark:text-neutral-100
     whitespace-nowrap
     overflow-hidden;
 }
@@ -88,7 +88,7 @@
 .CMS_MediaLibraryCard_download-button {
   @apply text-white
     dark:text-white
-    bg-gray-900/25
+    bg-neutral-900/25
     dark:hover:text-blue-100
     dark:hover:bg-blue-800/80;
 }
@@ -96,7 +96,7 @@
 .CMS_MediaLibraryCard_delete-button {
   @apply relative
     text-red-400
-    bg-gray-900/25
+    bg-neutral-900/25
     dark:hover:text-red-600
     dark:hover:bg-red-800/40
     z-30;
@@ -125,9 +125,9 @@
 .CMS_MediaLibraryCard_folder {
   @apply w-media-card
     h-media-card-image
-    bg-gray-500
+    bg-neutral-500
     dark:bg-neutral-700
-    text-gray-200
+    text-neutral-200
     dark:text-neutral-400
     font-bold
     flex
@@ -144,9 +144,9 @@
 .CMS_MediaLibraryCard_file {
   @apply w-media-card
     h-media-card-image
-    bg-gray-500
+    bg-neutral-500
     dark:bg-neutral-700
-    text-gray-200
+    text-neutral-200
     dark:text-neutral-400
     font-bold
     flex

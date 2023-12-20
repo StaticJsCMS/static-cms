@@ -9,7 +9,7 @@ export type GlobalUIState = {
 
 const defaultState: GlobalUIState = {
   isFetching: false,
-  theme: 'light',
+  theme: 'dark',
 };
 
 /**

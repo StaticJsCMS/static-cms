@@ -6,7 +6,7 @@
     &.CMS_WidgetMarkdown_ToolbarButton_active {
       &:not(.CMS_WidgetMarkdown_ToolbarButton_custom-active-color) {
         @apply text-blue-500
-          bg-gray-100
+          bg-neutral-100
           dark:text-blue-500
           dark:bg-neutral-800;
       }

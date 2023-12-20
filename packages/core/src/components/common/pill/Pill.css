@@ -12,31 +12,31 @@
 
   &.CMS_Pill_primary {
     @apply bg-blue-700
-      text-gray-100
+      text-neutral-100
       dark:bg-blue-700
-      dark:text-gray-100;
+      dark:text-neutral-100;
   }
 
   &.CMS_Pill_default {
-    @apply bg-gray-200
-      text-gray-800
-      dark:bg-gray-700
-      dark:text-gray-100;
+    @apply bg-neutral-200
+      text-neutral-800
+      dark:bg-neutral-700
+      dark:text-neutral-100;
   }
 
   &.CMS_Pill_disabled {
     &.CMS_Pill_primary {
       @apply bg-blue-300/75
-        text-gray-100/75
+        text-neutral-100/75
         dark:bg-blue-700/25
-        dark:text-gray-500;
+        dark:text-neutral-500;
     }
 
     &.CMS_Pill_default {
-      @apply bg-gray-100
-        text-gray-400/75
-        dark:bg-gray-800/75
-        dark:text-gray-500;
+      @apply bg-neutral-100
+        text-neutral-400/75
+        dark:bg-neutral-800/75
+        dark:text-neutral-500;
     }
   }
 }

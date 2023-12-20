@@ -8,13 +8,13 @@
 
   &.CMS_Autocomplete_disabled {
     & .CMS_Autocomplete_input {
-      @apply text-gray-300
-        dark:text-gray-500;
+      @apply text-neutral-300
+        dark:text-neutral-500;
     }
 
     & .CMS_Autocomplete_button-icon {
-      @apply text-gray-300/75
-        dark:text-gray-600/75;
+      @apply text-neutral-300/75
+        dark:text-neutral-600/75;
     }
   }
 }
@@ -38,8 +38,8 @@
     outline-none
     flex-grow
     truncate
-    text-gray-800
-    dark:text-gray-100;
+    text-neutral-800
+    dark:text-neutral-100;
 }
 
 .CMS_Autocomplete_button-wrapper {
@@ -55,7 +55,7 @@
 .CMS_Autocomplete_button-icon {
   @apply h-5
     w-5
-    text-gray-400;
+    text-neutral-400;
 }
 
 .CMS_Autocomplete_options {
@@ -83,8 +83,8 @@
     select-none
     py-2
     px-4
-    text-gray-800
-    dark:text-gray-300;
+    text-neutral-800
+    dark:text-neutral-300;
 }
 
 .CMS_Autocomplete_option {
@@ -94,12 +94,12 @@
     pl-10
     pr-4
     cursor-pointer
-    text-gray-800
-    dark:text-gray-100;
+    text-neutral-800
+    dark:text-neutral-100;
 }
 
 .CMS_Autocomplete_option-selected {
-  @apply bg-gray-100
+  @apply bg-neutral-100
     dark:bg-neutral-600;
 }
 

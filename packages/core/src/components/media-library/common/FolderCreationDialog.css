@@ -16,7 +16,7 @@
 .CMS_FolderCreationDialog_title {
   @apply text-xl
     font-semibold
-    text-gray-800
+    text-neutral-800
     dark:text-white;
 }
 

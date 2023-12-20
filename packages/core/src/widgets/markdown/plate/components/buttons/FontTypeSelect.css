@@ -5,10 +5,10 @@
 
   &.CMS_WidgetMarkdown_FontTypeSelect_disabled {
     & .CMS_WidgetMarkdown_FontTypeSelect_select {
-      @apply text-gray-300
-        border-gray-200
-        dark:border-gray-600
-        dark:text-gray-500;
+      @apply text-neutral-300
+        border-neutral-200
+        dark:border-neutral-600
+        dark:text-neutral-500;
     }
   }
 }
@@ -26,10 +26,10 @@
     h-6
     border
     rounded-sm
-    text-gray-800
-    border-gray-600
-    dark:border-gray-400
-    dark:text-gray-100;
+    text-neutral-800
+    border-neutral-600
+    dark:border-neutral-400
+    dark:text-neutral-100;
 }
 
 .CMS_WidgetMarkdown_FontTypeSelect_popper {

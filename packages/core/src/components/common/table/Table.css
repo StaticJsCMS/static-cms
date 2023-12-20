@@ -6,8 +6,8 @@
   @apply w-full
     text-sm
     text-left
-    text-gray-500
-    dark:text-gray-300;
+    text-neutral-500
+    dark:text-neutral-300;
 }
 
 .CMS_Table_header {
@@ -29,12 +29,12 @@
 .CMS_Table_header-cell-content {
   @apply px-4
     py-3
-    text-gray-800
-    border-gray-100
+    text-neutral-800
+    border-neutral-100
     border-b
     bg-white
     dark:text-white
-    dark:border-gray-700
+    dark:border-neutral-700
     dark:bg-neutral-800
     text-[14px]
     truncate
@@ -44,20 +44,20 @@
 .CMS_Table_body-row {
   @apply border-t
     first:border-t-0
-    border-gray-100
-    dark:border-gray-700
+    border-neutral-100
+    dark:border-neutral-700
     bg-white
     hover:bg-neutral-50
     dark:bg-neutral-800
     dark:hover:bg-neutral-700
     focus:outline-none
-    focus:bg-gray-100
+    focus:bg-neutral-100
     focus:dark:bg-neutral-700;
 }
 
 .CMS_Table_body-cell {
-  @apply text-gray-500
-    dark:text-gray-300;
+  @apply text-neutral-500
+    dark:text-neutral-300;
 
   &.CMS_Table_body-cell-has-link {
     @apply p-0;
@@ -70,7 +70,7 @@
 
   &.CMS_Table_body-cell-emphasis {
     @apply font-medium
-      text-gray-800
+      text-neutral-800
       whitespace-nowrap
       dark:text-white;
   }

@@ -12,7 +12,7 @@
 .CMS_GroupControl_list-label {
   @apply text-lg
     font-bold
-    text-gray-800
+    text-neutral-800
     dark:text-white;
 }
 
@@ -21,16 +21,16 @@
     font-medium
     flex
     items-center
-    text-gray-800
-    dark:text-gray-300;
+    text-neutral-800
+    dark:text-neutral-300;
 }
 
 .CMS_GroupControl_list-option-label {
   @apply ml-2
     text-base
     font-medium
-    text-gray-800
-    dark:text-gray-300;
+    text-neutral-800
+    dark:text-neutral-300;
 }
 
 .CMS_GroupControl_list-option-checked-icon {

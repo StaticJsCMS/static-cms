@@ -6,12 +6,12 @@
     gap-3
     py-2
     px-2.5
-    text-gray-500
+    text-neutral-500
     bg-white
     rounded-lg
     shadow-md
-    dark:text-gray-300
-    dark:bg-gray-800
+    dark:text-neutral-300
+    dark:bg-neutral-800
     dark:shadow-lg;
 
   &.CMS_SnackbarAlert_error {

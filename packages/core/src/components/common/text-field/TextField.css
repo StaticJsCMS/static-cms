@@ -13,25 +13,25 @@
       bg-transparent
       outline-none
       font-medium
-      text-gray-800
-      disabled:text-gray-300
-      dark:text-gray-100
-      dark:disabled:text-gray-500;
+      text-neutral-800
+      disabled:text-neutral-300
+      dark:text-neutral-100
+      dark:disabled:text-neutral-500;
   }
 
   &.CMS_TextField_contained {
-    @apply bg-gray-50
+    @apply bg-neutral-50
       border
-      border-gray-300
-      text-gray-800
+      border-neutral-300
+      text-neutral-800
       rounded-lg
       focus:ring-blue-500
       focus:border-blue-500
       block
       p-2.5
-      dark:bg-gray-700
-      dark:border-gray-600
-      dark:placeholder-gray-400
+      dark:bg-neutral-700
+      dark:border-neutral-600
+      dark:placeholder-neutral-400
       dark:text-white
       dark:focus:ring-blue-500
       dark:focus:border-blue-500;
