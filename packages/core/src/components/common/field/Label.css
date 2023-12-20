@@ -7,13 +7,13 @@
 
   &:not(.CMS_Label_error) {
     &.CMS_Label_disabled {
-      @apply text-slate-300
-        dark:text-slate-600;
+      @apply text-neutral-300
+        dark:text-neutral-600;
     }
 
     &:not(.CMS_Label_disabled) {
-      @apply text-slate-500
-       dark:text-slate-400;
+      @apply text-neutral-500
+       dark:text-neutral-400;
     }
   }
 

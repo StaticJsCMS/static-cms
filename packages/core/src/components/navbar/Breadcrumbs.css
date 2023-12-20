@@ -40,7 +40,7 @@
     focus:ring-4
     rounded-md
     focus:ring-gray-200
-    dark:focus:ring-slate-700;
+    dark:focus:ring-neutral-700;
 
   &.CMS_Breadcrumbs_breadcrumb-truncated {
     @apply text-ellipsis;
@@ -73,7 +73,7 @@
     focus:outline-none
     focus:ring-4
     focus:ring-gray-200
-    dark:focus:ring-slate-700;
+    dark:focus:ring-neutral-700;
 }
 
 .CMS_Breadcrumbs_mobile-current-breadcrumb-link {
@@ -86,7 +86,7 @@
     focus:outline-none
     focus:ring-4
     focus:ring-gray-200
-    dark:focus:ring-slate-700;
+    dark:focus:ring-neutral-700;
 }
 
 .CMS_Breadcrumbs_mobile-backlink {

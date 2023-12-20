@@ -4,9 +4,9 @@
 
   &.CMS_NavLink_active {
     @apply bg-blue-200/75
-      dark:bg-slate-700
-      hover:bg-slate-200
-      dark:hover:bg-slate-700/75
+      dark:bg-neutral-700
+      hover:bg-neutral-200
+      dark:hover:bg-neutral-700/75
       text-blue-700
       dark:text-blue-400;
   }

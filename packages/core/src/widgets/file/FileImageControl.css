@@ -39,7 +39,7 @@
     text-blue-500
     bg-white/75
     dark:text-blue-400
-    dark:bg-slate-800/75
+    dark:bg-neutral-800/75
     transition-opacity
     opacity-0;
 }

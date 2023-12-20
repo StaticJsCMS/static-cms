@@ -73,7 +73,7 @@
     focus:outline-none
     sm:text-sm
     z-30
-    dark:bg-slate-700
+    dark:bg-neutral-700
     dark:shadow-lg;
 }
 
@@ -100,7 +100,7 @@
 
 .CMS_Autocomplete_option-selected {
   @apply bg-gray-100
-    dark:bg-slate-600;
+    dark:bg-neutral-600;
 }
 
 .CMS_Autocomplete_option-selected {

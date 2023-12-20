@@ -14,8 +14,8 @@
   @apply px-6
     pb-4
     text-sm
-    text-slate-500
-    dark:text-slate-400;
+    text-neutral-500
+    dark:text-neutral-400;
 }
 
 .CMS_Alert_actions {

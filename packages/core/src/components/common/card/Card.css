@@ -4,7 +4,7 @@
     border-gray-100
     rounded-lg
     shadow-sm
-    dark:bg-slate-800
+    dark:bg-neutral-800
     dark:border-gray-700/40
     dark:shadow-md
     flex
@@ -47,9 +47,9 @@
     rounded-lg
     justify-start
     hover:bg-gray-200
-    dark:hover:bg-slate-700/70
+    dark:hover:bg-neutral-700/70
     focus:outline-none
     focus:ring-4
     focus:ring-gray-200
-    dark:focus:ring-slate-700;
+    dark:focus:ring-neutral-700;
 }

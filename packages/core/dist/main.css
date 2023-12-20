@@ -95,7 +95,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
 .CMS_Confirm_root {
@@ -136,14 +136,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(100 116 139 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Confirm_content) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(148 163 184 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_Confirm_actions {
@@ -305,7 +305,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(51 65 85 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(64 64 64 / var(--tw-ring-opacity))
 }
 
 .CMS_CollectionSearch_search-in {
@@ -354,7 +354,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
@@ -398,14 +398,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(100 116 139 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_CollectionSearch_search-in-label) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(148 163 184 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_CollectionSearch_search-in-option {
@@ -452,14 +452,14 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(226 232 240 / var(--tw-bg-opacity))
+    background-color: rgb(229 229 229 / var(--tw-bg-opacity))
 }
 
   :is(.dark .CMS_NavLink_link.CMS_NavLink_active) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
@@ -468,7 +468,7 @@
 
   :is(.dark .CMS_NavLink_link.CMS_NavLink_active:hover) {
 
-    background-color: rgb(51 65 85 / 0.75)
+    background-color: rgb(64 64 64 / 0.75)
 }
 
 .CMS_NavLink_external {
@@ -770,7 +770,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity));
 
     --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
@@ -788,7 +788,7 @@
 }
 :is(.dark .CMS_MenuGroup_root) {
     --tw-border-opacity: 1;
-    border-color: rgb(51 65 85 / var(--tw-border-opacity))
+    border-color: rgb(64 64 64 / var(--tw-border-opacity))
 }
 
 .CMS_MenuItemLink_root {
@@ -824,7 +824,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(241 245 249 / var(--tw-bg-opacity))
+    background-color: rgb(245 245 245 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_MenuItemLink_root) {
@@ -838,21 +838,21 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity))
+    background-color: rgb(23 23 23 / var(--tw-bg-opacity))
 }
 
   .CMS_MenuItemLink_root.CMS_MenuItemLink_active {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(241 245 249 / var(--tw-bg-opacity))
+    background-color: rgb(245 245 245 / var(--tw-bg-opacity))
 }
 
   :is(.dark .CMS_MenuItemLink_root.CMS_MenuItemLink_active) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity))
+    background-color: rgb(23 23 23 / var(--tw-bg-opacity))
 }
 
 .CMS_MenuItemLink_content {
@@ -1100,7 +1100,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(51 65 85 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(64 64 64 / var(--tw-ring-opacity))
 }
 
 .CMS_Breadcrumbs_breadcrumb-link.CMS_Breadcrumbs_breadcrumb-truncated {
@@ -1170,7 +1170,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(51 65 85 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(64 64 64 / var(--tw-ring-opacity))
 }
 
 @media (min-width: 768px) {
@@ -1219,7 +1219,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(51 65 85 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(64 64 64 / var(--tw-ring-opacity))
 }
 
 @media (min-width: 768px) {
@@ -1289,14 +1289,14 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(226 232 240 / var(--tw-bg-opacity))
+    background-color: rgb(229 229 229 / var(--tw-bg-opacity))
 }
 
   :is(.dark .CMS_MenuItemButton_root:not(.CMS_MenuItemButton_disabled).CMS_MenuItemButton_active) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(71 85 105 / var(--tw-bg-opacity))
+    background-color: rgb(82 82 82 / var(--tw-bg-opacity))
 }
 
   .CMS_MenuItemButton_root.CMS_MenuItemButton_default {
@@ -1338,7 +1338,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(71 85 105 / var(--tw-bg-opacity))
+    background-color: rgb(82 82 82 / var(--tw-bg-opacity))
 }
 
   .CMS_MenuItemButton_root.CMS_MenuItemButton_warning {
@@ -1587,7 +1587,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(226 232 240 / var(--tw-bg-opacity))
+    background-color: rgb(229 229 229 / var(--tw-bg-opacity))
 }
 
 .CMS_Switch_toggle::after {
@@ -1625,7 +1625,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity))
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity))
 }
 
 .CMS_Switch_label {
@@ -1728,7 +1728,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity));
 
     --tw-drop-shadow: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
 
@@ -1844,14 +1844,14 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(100 116 139 / var(--tw-bg-opacity))
+    background-color: rgb(115 115 115 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_Navbar_breadcrumbs .CMS_Navbar_logo-wrapper) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity))
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity))
 }
 
 .CMS_Navbar_breadcrumbs .CMS_Navbar_logo-wrapper .CMS_Navbar_logo {
@@ -1984,7 +1984,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
 .CMS_Sidebar_items > :not([hidden]) ~ :not([hidden]) {
@@ -2009,14 +2009,14 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(248 250 252 / var(--tw-bg-opacity))
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_MainView_root) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity))
+    background-color: rgb(23 23 23 / var(--tw-bg-opacity))
 }
 
 .CMS_MainView_body {
@@ -2103,7 +2103,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity));
 
     --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
@@ -2216,14 +2216,14 @@
 
 :is(.dark .CMS_Card_actions:hover) {
 
-    background-color: rgb(51 65 85 / 0.7)
+    background-color: rgb(64 64 64 / 0.7)
 }
 
 :is(.dark .CMS_Card_actions:focus) {
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(51 65 85 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(64 64 64 / var(--tw-ring-opacity))
 }
 
 .CMS_ViewStyleControl_root {
@@ -2643,7 +2643,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
 .CMS_MobileCollectionControls_toggle {
@@ -2736,11 +2736,11 @@
     justify-content: center;
     gap: 0.5rem;
     --tw-bg-opacity: 1;
-    background-color: rgb(248 250 252 / var(--tw-bg-opacity))
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity))
 }
 :is(.dark .CMS_Loader_root) {
     --tw-bg-opacity: 1;
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity))
+    background-color: rgb(23 23 23 / var(--tw-bg-opacity))
 }
 
 .CMS_Image_root:not(.CMS_Image_empty) {
@@ -2756,16 +2756,16 @@
     padding: 2.5rem
 }
   :is(.dark .CMS_Image_root.CMS_Image_empty) {
-    border-color: rgb(71 85 105 / 0.75)
+    border-color: rgb(82 82 82 / 0.75)
 }
 
 .CMS_WidgetPreview_label {
     --tw-text-opacity: 1;
-    color: rgb(100 116 139 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 :is(.dark .CMS_WidgetPreview_label) {
     --tw-text-opacity: 1;
-    color: rgb(148 163 184 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_EntryCard_root {
@@ -2939,7 +2939,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
@@ -2968,7 +2968,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(248 250 252 / var(--tw-bg-opacity))
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity))
 }
 
 .CMS_Table_body-row:focus {
@@ -2990,21 +2990,21 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_Table_body-row:hover) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity))
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_Table_body-row):focus {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity))
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity))
 }
 
 .CMS_Table_body-cell {
@@ -3161,12 +3161,12 @@
 
     justify-content: center;
 
-    background-color: rgb(248 250 252 / 0.5)
+    background-color: rgb(250 250 250 / 0.5)
 }
 
 :is(.dark .CMS_Entries_entry-listing-loading) {
 
-    background-color: rgb(15 23 42 / 0.5)
+    background-color: rgb(23 23 23 / 0.5)
 }
 
 .CMS_Entries_entry-listing-grid {
@@ -3247,7 +3247,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity));
 
     --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
@@ -3274,7 +3274,7 @@
 
 :is(.dark .CMS_Entries_entry-listing-table-row:hover) {
 
-    background-color: rgb(51 65 85 / 0.7)
+    background-color: rgb(64 64 64 / 0.7)
 }
 
 .CMS_Entries_entry-listing-local-backup {
@@ -3567,14 +3567,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(100 116 139 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_Alert_content) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(148 163 184 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_Alert_actions {
@@ -3617,7 +3617,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(71 85 105 / var(--tw-border-opacity))
+    border-color: rgb(82 82 82 / var(--tw-border-opacity))
 }
 
   .CMS_InlineEditTextField_root.CMS_InlineEditTextField_editable:focus .CMS_InlineEditTextField_label {
@@ -3682,7 +3682,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(71 85 105 / var(--tw-text-opacity))
+    color: rgb(82 82 82 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_InlineEditTextField_preview) {
@@ -3771,7 +3771,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(51 65 85 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(64 64 64 / var(--tw-ring-opacity))
 }
 
 .CMS_TextField_root {
@@ -4322,11 +4322,11 @@
 
 :is(.dark .CMS_MediaLibraryCard_action) {
 
-    border-color: rgb(71 85 105 / 0.75);
+    border-color: rgb(82 82 82 / 0.75);
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
 .CMS_MediaLibraryCard_action:hover .CMS_MediaLibraryCard_controls-overlay {
@@ -4378,7 +4378,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(51 65 85 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(64 64 64 / var(--tw-ring-opacity))
 }
 
 .CMS_MediaLibraryCard_outline {
@@ -4418,7 +4418,7 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(71 85 105 / var(--tw-text-opacity))
+    color: rgb(82 82 82 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_MediaLibraryCard_text) {
@@ -4590,11 +4590,11 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
-    color: rgb(148 163 184 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_MediaLibraryCard_folder-icon {
@@ -4635,11 +4635,11 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
-    color: rgb(148 163 184 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_MediaLibrary_root {
@@ -4727,7 +4727,7 @@
 
 :is(.dark .CMS_MediaLibrary_supports-folders .CMS_MediaLibrary_controls) {
 
-    border-color: rgb(100 116 139 / 0.75)
+    border-color: rgb(115 115 115 / 0.75)
 }
 
 .CMS_MediaLibrary_content-wrapper {
@@ -4783,7 +4783,7 @@
 
 :is(.dark .CMS_MediaLibrary_drop-area) {
 
-    background-color: rgb(30 41 59 / 0.75);
+    background-color: rgb(38 38 38 / 0.75);
 
     --tw-text-opacity: 1;
 
@@ -4979,7 +4979,7 @@
 
 :is(.dark .CMS_MediaLibrary_preview) {
 
-    border-color: rgb(100 116 139 / 0.75)
+    border-color: rgb(115 115 115 / 0.75)
 }
 
 .CMS_MediaLibrary_preview-image {
@@ -5009,11 +5009,11 @@
 
 :is(.dark .CMS_MediaLibrary_preview-image) {
 
-    border-color: rgb(71 85 105 / 0.75);
+    border-color: rgb(82 82 82 / 0.75);
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
 .CMS_MediaLibrary_preview-details {
@@ -5244,7 +5244,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(51 65 85 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(64 64 64 / var(--tw-ring-opacity))
 }
 
 .CMS_MediaLibraryModal_root {
@@ -5280,14 +5280,14 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
   :is(.dark .CMS_MediaLibraryModal_root .CMS_MediaLibraryModal_close-button:hover) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity))
+    background-color: rgb(23 23 23 / var(--tw-bg-opacity))
 }
 
 .CMS_MediaLibraryModal_close-button-icon {
@@ -5439,14 +5439,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(100 116 139 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_LocaleDropdown_no-edit) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(148 163 184 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
 .CMS_EditorControlPane_root {
@@ -5464,7 +5464,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(148 163 184 / var(--tw-border-opacity))
+    border-color: rgb(163 163 163 / var(--tw-border-opacity))
 }
 
   @media (min-width: 1024px) {
@@ -5492,14 +5492,14 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(248 250 252 / var(--tw-bg-opacity))
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_ErrorBoundary_root) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity))
+    background-color: rgb(23 23 23 / var(--tw-bg-opacity))
 }
 
 .CMS_ErrorBoundary_header {
@@ -5594,14 +5594,14 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(248 250 252 / var(--tw-bg-opacity))
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_Preview_root) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity))
+    background-color: rgb(23 23 23 / var(--tw-bg-opacity))
 }
 
 @media (min-width: 768px) {
@@ -6032,14 +6032,14 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(248 250 252 / var(--tw-bg-opacity))
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_Login_root) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity))
+    background-color: rgb(23 23 23 / var(--tw-bg-opacity))
 }
 
 .CMS_Login_custom-logo {
@@ -6175,22 +6175,22 @@
 
   .CMS_Hint_root:not(.CMS_Hint_error).CMS_Hint_disabled {
   --tw-text-opacity: 1;
-  color: rgb(203 213 225 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 
   :is(.dark .CMS_Hint_root:not(.CMS_Hint_error).CMS_Hint_disabled) {
   --tw-text-opacity: 1;
-  color: rgb(71 85 105 / var(--tw-text-opacity));
+  color: rgb(82 82 82 / var(--tw-text-opacity));
 }
 
   .CMS_Hint_root:not(.CMS_Hint_error):not(.CMS_Hint_disabled) {
   --tw-text-opacity: 1;
-  color: rgb(100 116 139 / var(--tw-text-opacity));
+  color: rgb(115 115 115 / var(--tw-text-opacity));
 }
 
   :is(.dark .CMS_Hint_root:not(.CMS_Hint_error):not(.CMS_Hint_disabled)) {
   --tw-text-opacity: 1;
-  color: rgb(148 163 184 / var(--tw-text-opacity));
+  color: rgb(163 163 163 / var(--tw-text-opacity));
 }
 
   .group\/active:focus-within .CMS_Hint_root:not(.CMS_Hint_disabled) {
@@ -6256,28 +6256,28 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(203 213 225 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
   :is(.dark .CMS_Label_root:not(.CMS_Label_error).CMS_Label_disabled) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(71 85 105 / var(--tw-text-opacity))
+    color: rgb(82 82 82 / var(--tw-text-opacity))
 }
 
   .CMS_Label_root:not(.CMS_Label_error):not(.CMS_Label_disabled) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(100 116 139 / var(--tw-text-opacity))
+    color: rgb(115 115 115 / var(--tw-text-opacity))
 }
 
   :is(.dark .CMS_Label_root:not(.CMS_Label_error):not(.CMS_Label_disabled)) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(148 163 184 / var(--tw-text-opacity))
+    color: rgb(163 163 163 / var(--tw-text-opacity))
 }
 
   .group\/active:focus-within .CMS_Label_root:not(.CMS_Label_disabled) {
@@ -6339,7 +6339,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(148 163 184 / var(--tw-border-opacity))
+    border-color: rgb(163 163 163 / var(--tw-border-opacity))
 }
 
 .CMS_Field_root:focus-within {
@@ -6360,28 +6360,28 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(241 245 249 / var(--tw-bg-opacity))
+    background-color: rgb(245 245 245 / var(--tw-bg-opacity))
 }
 
   .CMS_Field_root:not(.CMS_Field_disabled):not(.CMS_Field_no-highlight):hover {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(241 245 249 / var(--tw-bg-opacity))
+    background-color: rgb(245 245 245 / var(--tw-bg-opacity))
 }
 
   :is(.dark .CMS_Field_root:not(.CMS_Field_disabled):not(.CMS_Field_no-highlight):focus-within) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
   :is(.dark .CMS_Field_root:not(.CMS_Field_disabled):not(.CMS_Field_no-highlight):hover) {
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
   .CMS_Field_root:not(.CMS_Field_no-padding) {
@@ -6680,7 +6680,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
@@ -6711,9 +6711,9 @@
     gap: 0.5rem;
     border-left-width: 1px;
     border-top-width: 1px;
-    border-left-color: rgb(148 163 184 / var(--tw-border-opacity));
+    border-left-color: rgb(163 163 163 / var(--tw-border-opacity));
     --tw-border-opacity: 1;
-    border-top-color: rgb(203 213 225 / var(--tw-border-opacity));
+    border-top-color: rgb(212 212 212 / var(--tw-border-opacity));
     --tw-bg-opacity: 1;
     background-color: rgb(243 244 246 / var(--tw-bg-opacity));
     --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -6722,9 +6722,9 @@
 }
 :is(.dark .CMS_WidgetCodeSettings_root) {
     --tw-border-opacity: 1;
-    border-top-color: rgb(51 65 85 / var(--tw-border-opacity));
+    border-top-color: rgb(64 64 64 / var(--tw-border-opacity));
     --tw-bg-opacity: 1;
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
 .CMS_WidgetCode_root {
@@ -6739,7 +6739,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(148 163 184 / var(--tw-border-opacity))
+    border-color: rgb(163 163 163 / var(--tw-border-opacity))
 }
 
 .CMS_WidgetCode_root:focus-within {
@@ -6770,14 +6770,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(203 213 225 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
   :is(.dark .CMS_WidgetCode_root.CMS_WidgetCode_disabled .CMS_WidgetCode_expand-button-icon) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(71 85 105 / var(--tw-text-opacity))
+    color: rgb(82 82 82 / var(--tw-text-opacity))
 }
 
   .CMS_WidgetCode_root.CMS_WidgetCode_expanded .CMS_WidgetCode_expand-button-icon {
@@ -7006,11 +7006,11 @@
 
 :is(.dark .CMS_WidgetFileImage_SortableImage_card) {
 
-    border-color: rgb(71 85 105 / 0.75);
+    border-color: rgb(82 82 82 / 0.75);
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
 .CMS_WidgetFileImage_SortableImage_card:hover .CMS_WidgetFileImage_SortableImage_controls-wrapper {
@@ -7062,7 +7062,7 @@
 
     --tw-ring-opacity: 1;
 
-    --tw-ring-color: rgb(51 65 85 / var(--tw-ring-opacity))
+    --tw-ring-color: rgb(64 64 64 / var(--tw-ring-opacity))
 }
 
 .CMS_WidgetFileImage_SortableImage_controls-wrapper {
@@ -7188,7 +7188,7 @@
 
     --tw-border-opacity: 1;
 
-    border-left-color: rgb(148 163 184 / var(--tw-border-opacity));
+    border-left-color: rgb(163 163 163 / var(--tw-border-opacity));
 
     padding: 0.5rem;
 
@@ -7341,7 +7341,7 @@
 
 :is(.dark .CMS_WidgetFileImage_drop-area) {
 
-    background-color: rgb(30 41 59 / 0.75);
+    background-color: rgb(38 38 38 / 0.75);
 
     --tw-text-opacity: 1;
 
@@ -7534,14 +7534,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(203 213 225 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
   :is(.dark .CMS_WidgetList_ListItem_root.CMS_WidgetList_ListItem_disabled .CMS_WidgetList_ListItem_expand-button-icon) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(71 85 105 / var(--tw-text-opacity))
+    color: rgb(82 82 82 / var(--tw-text-opacity))
 }
 
   .CMS_WidgetList_ListItem_root.CMS_WidgetList_ListItem_open .CMS_WidgetList_ListItem_expand-button-icon {
@@ -7681,7 +7681,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(148 163 184 / var(--tw-border-opacity))
+    border-color: rgb(163 163 163 / var(--tw-border-opacity))
 }
 
 .CMS_WidgetList_ListItem_content {
@@ -7696,7 +7696,7 @@
 
     --tw-border-opacity: 1;
 
-    border-left-color: rgb(148 163 184 / var(--tw-border-opacity));
+    border-left-color: rgb(163 163 163 / var(--tw-border-opacity));
 
     font-size: 0.875rem;
 
@@ -7742,11 +7742,11 @@
 
 .CMS_WidgetList_root.CMS_WidgetList_disabled .CMS_WidgetList_expand-button-icon {
     --tw-text-opacity: 1;
-    color: rgb(203 213 225 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 :is(.dark .CMS_WidgetList_root.CMS_WidgetList_disabled .CMS_WidgetList_expand-button-icon) {
     --tw-text-opacity: 1;
-    color: rgb(71 85 105 / var(--tw-text-opacity))
+    color: rgb(82 82 82 / var(--tw-text-opacity))
 }
   .CMS_WidgetList_root.CMS_WidgetList_error .CMS_WidgetList_content {
     --tw-border-opacity: 1;
@@ -7773,7 +7773,7 @@
     flex-direction: column;
     border-bottom-width: 1px;
     --tw-border-opacity: 1;
-    border-color: rgb(148 163 184 / var(--tw-border-opacity))
+    border-color: rgb(163 163 163 / var(--tw-border-opacity))
 }
 
 .CMS_WidgetList_field-wrapper:focus-within {
@@ -7962,7 +7962,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity));
 
     --tw-text-opacity: 1;
 
@@ -8103,7 +8103,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity));
 
     --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
@@ -8300,7 +8300,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
@@ -8378,7 +8378,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
@@ -8426,7 +8426,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(71 85 105 / var(--tw-border-opacity))
+    border-color: rgb(82 82 82 / var(--tw-border-opacity))
 }
 
 .CMS_WidgetMarkdown_Blockquote_root {
@@ -8479,15 +8479,15 @@
 
 :is(.dark .CMS_WidgetMarkdown_CodeBlock_language-input) {
 
-    border-color: rgb(51 65 85 / var(--tw-border-opacity));
+    border-color: rgb(64 64 64 / var(--tw-border-opacity));
 
     --tw-border-opacity: 1;
 
-    border-bottom-color: rgb(30 41 59 / var(--tw-border-opacity));
+    border-bottom-color: rgb(38 38 38 / var(--tw-border-opacity));
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+    background-color: rgb(38 38 38 / var(--tw-bg-opacity))
 }
 
 .CMS_WidgetMarkdown_Heading1_root {
@@ -8588,7 +8588,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(51 65 85 / var(--tw-border-opacity))
+    border-color: rgb(64 64 64 / var(--tw-border-opacity))
 }
 
 .CMS_WidgetMarkdown_Table_header {
@@ -8603,7 +8603,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(203 213 225 / var(--tw-bg-opacity))
+    background-color: rgb(212 212 212 / var(--tw-bg-opacity))
 }
 
 :is(.dark .CMS_WidgetMarkdown_Table_header) {
@@ -8614,7 +8614,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity))
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity))
 }
 
 .CMS_WidgetMarkdown_Table_body {
@@ -8651,7 +8651,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(203 213 225 / var(--tw-bg-opacity));
+    background-color: rgb(212 212 212 / var(--tw-bg-opacity));
 
     padding-left: 0.5rem;
 
@@ -8676,7 +8676,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity))
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity))
 }
 
 .CMS_WidgetMarkdown_Table_header-cell>div>p {
@@ -8740,7 +8740,7 @@
     border-bottom-width: 1px;
     border-color: rgb(156 163 175 / 0.1);
     --tw-bg-opacity: 1;
-    background-color: rgb(248 250 252 / var(--tw-bg-opacity));
+    background-color: rgb(250 250 250 / var(--tw-bg-opacity));
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     padding-top: 0.5rem;
@@ -8751,7 +8751,7 @@
 }
 :is(.dark .CMS_WidgetMarkdown_Toolbar_root) {
     --tw-bg-opacity: 1;
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity));
+    background-color: rgb(23 23 23 / var(--tw-bg-opacity));
     --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
@@ -8843,7 +8843,7 @@
 
     --tw-border-opacity: 1;
 
-    border-color: rgb(148 163 184 / var(--tw-border-opacity))
+    border-color: rgb(163 163 163 / var(--tw-border-opacity))
 }
 
 .CMS_WidgetObject_root:focus-within {
@@ -8894,14 +8894,14 @@
 
     --tw-text-opacity: 1;
 
-    color: rgb(203 213 225 / var(--tw-text-opacity))
+    color: rgb(212 212 212 / var(--tw-text-opacity))
 }
 
 :is(.dark .CMS_WidgetObject_root.CMS_WidgetObject_disabled .CMS_WidgetObject_expand-icon) {
 
     --tw-text-opacity: 1;
 
-    color: rgb(71 85 105 / var(--tw-text-opacity))
+    color: rgb(82 82 82 / var(--tw-text-opacity))
 }
 
 .CMS_WidgetObject_root.CMS_WidgetObject_open .CMS_WidgetObject_expand-icon {
@@ -8979,7 +8979,7 @@
 
     --tw-border-opacity: 1;
 
-    border-left-color: rgb(148 163 184 / var(--tw-border-opacity));
+    border-left-color: rgb(163 163 163 / var(--tw-border-opacity));
 
     font-size: 0.875rem;
 
@@ -9177,7 +9177,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
 
     --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
@@ -9267,7 +9267,7 @@
 
     --tw-bg-opacity: 1;
 
-    background-color: rgb(71 85 105 / var(--tw-bg-opacity))
+    background-color: rgb(82 82 82 / var(--tw-bg-opacity))
 }
 
 .CMS_Autocomplete_option-selected .CMS_Autocomplete_option-label {
@@ -10586,7 +10586,7 @@ body{
 }
 :is(.dark .CMS_Button_root:focus){
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(71 85 105 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(82 82 82 / var(--tw-ring-opacity));
 }
 .CMS_Button_root{
   border-radius: 0.25rem;
@@ -10615,7 +10615,7 @@ body{
 }
 :is(.dark .CMS_Button_root-sm:focus){
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(71 85 105 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(82 82 82 / var(--tw-ring-opacity));
 }
 .CMS_Button_root-sm{
   border-radius: 0.25rem;
@@ -10644,7 +10644,7 @@ body{
 }
 :is(.dark .CMS_Button_root-rounded:focus){
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(71 85 105 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(82 82 82 / var(--tw-ring-opacity));
 }
 .CMS_Button_root-rounded{
   border-radius: 9999px;
@@ -10670,7 +10670,7 @@ body{
 }
 :is(.dark .CMS_Button_root-rounded-sm:focus){
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(71 85 105 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(82 82 82 / var(--tw-ring-opacity));
 }
 .CMS_Button_root-rounded-sm{
   border-radius: 9999px;
@@ -10696,7 +10696,7 @@ body{
 }
 :is(.dark .CMS_Button_root-rounded-no-padding:focus){
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(71 85 105 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(82 82 82 / var(--tw-ring-opacity));
 }
 .CMS_Button_root-rounded-no-padding{
   border-radius: 9999px;
@@ -10726,8 +10726,8 @@ body{
   background-color: rgb(30 64 175 / var(--tw-bg-opacity));
 }
 :is(.dark .CMS_Button_contained-primary:disabled){
-  background-color: rgb(51 65 85 / 0.5);
-  color: rgb(148 163 184 / 0.5);
+  background-color: rgb(64 64 64 / 0.5);
+  color: rgb(163 163 163 / 0.5);
 }
 .CMS_Button_outlined-primary{
   --tw-border-opacity: 1;
@@ -10740,7 +10740,7 @@ body{
   --tw-border-opacity: 1;
   border-color: rgb(96 165 250 / var(--tw-border-opacity));
   --tw-bg-opacity: 1;
-  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  background-color: rgb(245 245 245 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(29 78 216 / var(--tw-text-opacity));
 }
@@ -10755,10 +10755,10 @@ body{
 }
 :is(.dark .CMS_Button_outlined-primary){
   --tw-border-opacity: 1;
-  border-color: rgb(148 163 184 / var(--tw-border-opacity));
+  border-color: rgb(163 163 163 / var(--tw-border-opacity));
   background-color: transparent;
   --tw-text-opacity: 1;
-  color: rgb(203 213 225 / var(--tw-text-opacity));
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_outlined-primary:hover){
   --tw-border-opacity: 1;
@@ -10768,8 +10768,8 @@ body{
   color: rgb(96 165 250 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_outlined-primary:disabled){
-  border-color: rgb(71 85 105 / 0.75);
-  color: rgb(71 85 105 / 0.75);
+  border-color: rgb(82 82 82 / 0.75);
+  color: rgb(82 82 82 / 0.75);
 }
 :is(.dark .CMS_Button_outlined-primary:hover:disabled){
   background-color: transparent;
@@ -10798,12 +10798,12 @@ body{
   color: rgb(209 213 219 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_text-primary:hover){
-  background-color: rgb(51 65 85 / 0.75);
+  background-color: rgb(64 64 64 / 0.75);
   --tw-text-opacity: 1;
   color: rgb(96 165 250 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_text-primary:disabled){
-  color: rgb(71 85 105 / 0.75);
+  color: rgb(82 82 82 / 0.75);
 }
 :is(.dark .CMS_Button_text-primary:hover:disabled){
   background-color: transparent;
@@ -10947,8 +10947,8 @@ body{
   background-color: rgb(22 101 52 / var(--tw-bg-opacity));
 }
 :is(.dark .CMS_Button_contained-success:disabled){
-  background-color: rgb(51 65 85 / 0.5);
-  color: rgb(148 163 184 / 0.5);
+  background-color: rgb(64 64 64 / 0.5);
+  color: rgb(163 163 163 / 0.5);
 }
 .CMS_Button_outlined-success{
   --tw-border-opacity: 1;
@@ -10985,8 +10985,8 @@ body{
   color: rgb(34 197 94 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_outlined-success:disabled){
-  border-color: rgb(71 85 105 / 0.75);
-  color: rgb(71 85 105 / 0.75);
+  border-color: rgb(82 82 82 / 0.75);
+  color: rgb(82 82 82 / 0.75);
 }
 :is(.dark .CMS_Button_outlined-success:hover:disabled){
   background-color: transparent;
@@ -11020,7 +11020,7 @@ body{
   color: rgb(34 197 94 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_text-success:disabled){
-  color: rgb(71 85 105 / 0.75);
+  color: rgb(82 82 82 / 0.75);
 }
 :is(.dark .CMS_Button_text-success:hover:disabled){
   background-color: transparent;
@@ -11050,8 +11050,8 @@ body{
   background-color: rgb(153 27 27 / var(--tw-bg-opacity));
 }
 :is(.dark .CMS_Button_contained-error:disabled){
-  background-color: rgb(51 65 85 / 0.5);
-  color: rgb(148 163 184 / 0.5);
+  background-color: rgb(64 64 64 / 0.5);
+  color: rgb(163 163 163 / 0.5);
 }
 .CMS_Button_outlined-error{
   --tw-border-opacity: 1;
@@ -11088,8 +11088,8 @@ body{
   color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_outlined-error:disabled){
-  border-color: rgb(71 85 105 / 0.75);
-  color: rgb(71 85 105 / 0.75);
+  border-color: rgb(82 82 82 / 0.75);
+  color: rgb(82 82 82 / 0.75);
 }
 :is(.dark .CMS_Button_outlined-error:hover:disabled){
   background-color: transparent;
@@ -11123,7 +11123,7 @@ body{
   color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_text-error:disabled){
-  color: rgb(71 85 105 / 0.75);
+  color: rgb(82 82 82 / 0.75);
 }
 :is(.dark .CMS_Button_text-error:hover:disabled){
   background-color: transparent;
@@ -11153,8 +11153,8 @@ body{
   background-color: rgb(133 77 14 / var(--tw-bg-opacity));
 }
 :is(.dark .CMS_Button_contained-warning:disabled){
-  background-color: rgb(51 65 85 / 0.5);
-  color: rgb(148 163 184 / 0.5);
+  background-color: rgb(64 64 64 / 0.5);
+  color: rgb(163 163 163 / 0.5);
 }
 .CMS_Button_outlined-warning{
   border-width: 1px;
@@ -11192,8 +11192,8 @@ body{
   color: rgb(234 179 8 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_outlined-warning:disabled){
-  border-color: rgb(71 85 105 / 0.75);
-  color: rgb(71 85 105 / 0.75);
+  border-color: rgb(82 82 82 / 0.75);
+  color: rgb(82 82 82 / 0.75);
 }
 :is(.dark .CMS_Button_outlined-warning:hover:disabled){
   background-color: transparent;
@@ -11227,7 +11227,7 @@ body{
   color: rgb(234 179 8 / var(--tw-text-opacity));
 }
 :is(.dark .CMS_Button_text-warning:disabled){
-  color: rgb(71 85 105 / 0.75);
+  color: rgb(82 82 82 / 0.75);
 }
 :is(.dark .CMS_Button_text-warning:hover:disabled){
   background-color: transparent;
@@ -11242,7 +11242,7 @@ body{
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
   --tw-bg-opacity: 1;
-  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  background-color: rgb(245 245 245 / var(--tw-bg-opacity));
   padding: 0.375rem;
 }
 .checkbox:focus{
@@ -11256,7 +11256,7 @@ body{
   --tw-border-opacity: 1;
   border-color: rgb(75 85 99 / var(--tw-border-opacity));
   --tw-bg-opacity: 1;
-  background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+  background-color: rgb(64 64 64 / var(--tw-bg-opacity));
   --tw-ring-offset-color: #1f2937;
 }
 :is(.dark .checkbox:focus){
@@ -11326,13 +11326,13 @@ body{
   --tw-text-opacity: 1;
   color: rgb(59 130 246 / var(--tw-text-opacity));
 }
-.text-slate-400{
+.text-neutral-400{
   --tw-text-opacity: 1;
-  color: rgb(148 163 184 / var(--tw-text-opacity));
+  color: rgb(163 163 163 / var(--tw-text-opacity));
 }
-.text-slate-500{
+.text-neutral-500{
   --tw-text-opacity: 1;
-  color: rgb(100 116 139 / var(--tw-text-opacity));
+  color: rgb(115 115 115 / var(--tw-text-opacity));
 }
 .underline{
   text-decoration-line: underline;

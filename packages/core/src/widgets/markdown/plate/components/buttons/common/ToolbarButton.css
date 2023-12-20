@@ -8,7 +8,7 @@
         @apply text-blue-500
           bg-gray-100
           dark:text-blue-500
-          dark:bg-slate-800;
+          dark:bg-neutral-800;
       }
     }
   }

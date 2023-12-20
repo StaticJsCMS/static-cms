@@ -28,7 +28,7 @@
     shadow-xl
     transition-all
     bg-white
-    dark:bg-slate-800
+    dark:bg-neutral-800
     z-[101]
     outline-none;
 }

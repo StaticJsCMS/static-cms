@@ -37,8 +37,8 @@
     flex
     items-center
     justify-center
-    bg-slate-50/50
-    dark:bg-slate-900/50;
+    bg-neutral-50/50
+    dark:bg-neutral-900/50;
 }
 
 .CMS_Entries_entry-listing-grid {
@@ -79,7 +79,7 @@
     shadow-sm
     border
     border-gray-100
-    dark:bg-slate-800
+    dark:bg-neutral-800
     dark:border-gray-700/40
     dark:shadow-md
     rounded-xl;
@@ -93,7 +93,7 @@
 
 .CMS_Entries_entry-listing-table-row {
   @apply hover:bg-gray-200
-    dark:hover:bg-slate-700/70;
+    dark:hover:bg-neutral-700/70;
 }
 
 .CMS_Entries_entry-listing-local-backup {

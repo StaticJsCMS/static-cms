@@ -14,8 +14,8 @@
     border
     bg-gray-50/75
     border-gray-200/75
-    dark:bg-slate-800
-    dark:border-slate-600/75;
+    dark:bg-neutral-800
+    dark:border-neutral-600/75;
 
   &:hover {
     & .CMS_WidgetFileImage_SortableImage_controls-wrapper {
@@ -34,7 +34,7 @@
     overflow-visible
     focus:ring-4
     focus:ring-gray-200
-    dark:focus:ring-slate-700
+    dark:focus:ring-neutral-700
     focus-visible:outline-none;
 }
 

@@ -1,8 +1,8 @@
 .CMS_WidgetList_root {
   &.CMS_WidgetList_disabled {
     & .CMS_WidgetList_expand-button-icon {
-      @apply text-slate-300
-        dark:text-slate-600;
+      @apply text-neutral-300
+        dark:text-neutral-600;
     }
   }
 
@@ -43,7 +43,7 @@
     flex
     flex-col
     border-b
-    border-slate-400
+    border-neutral-400
     focus-within:border-blue-800
     dark:focus-within:border-blue-100;
 }

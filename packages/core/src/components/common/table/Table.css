@@ -35,7 +35,7 @@
     bg-white
     dark:text-white
     dark:border-gray-700
-    dark:bg-slate-800
+    dark:bg-neutral-800
     text-[14px]
     truncate
     w-full;
@@ -47,12 +47,12 @@
     border-gray-100
     dark:border-gray-700
     bg-white
-    hover:bg-slate-50
-    dark:bg-slate-800
-    dark:hover:bg-slate-700
+    hover:bg-neutral-50
+    dark:bg-neutral-800
+    dark:hover:bg-neutral-700
     focus:outline-none
     focus:bg-gray-100
-    focus:dark:bg-slate-700;
+    focus:dark:bg-neutral-700;
 }
 
 .CMS_Table_body-cell {

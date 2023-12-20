@@ -76,6 +76,6 @@
     focus:outline-none
     sm:text-sm
     z-[100]
-    dark:bg-slate-700
+    dark:bg-neutral-700
     dark:shadow-lg;
 }

@@ -59,7 +59,7 @@
     @apply pb-4
       border-b
       border-gray-200/75
-      dark:border-slate-500/75;
+      dark:border-neutral-500/75;
   }
 }
 
@@ -87,7 +87,7 @@
     text-blue-500
     bg-white/75
     dark:text-blue-400
-    dark:bg-slate-800/75
+    dark:bg-neutral-800/75
     transition-opacity
     opacity-0;
 }
@@ -191,7 +191,7 @@
     py-4
     border-b
     border-gray-200/75
-    dark:border-slate-500/75;
+    dark:border-neutral-500/75;
 }
 
 .CMS_MediaLibrary_preview-image {
@@ -203,8 +203,8 @@
     border
     bg-gray-50/75
     border-gray-200/75
-    dark:bg-slate-800
-    dark:border-slate-600/75
+    dark:bg-neutral-800
+    dark:border-neutral-600/75
     object-cover;
 }
 
@@ -296,5 +296,5 @@
     dark:border-gray-600
     dark:placeholder-gray-400
     dark:text-white
-    dark:focus:ring-slate-700;
+    dark:focus:ring-neutral-700;
 }

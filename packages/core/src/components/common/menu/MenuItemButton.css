@@ -11,8 +11,8 @@
 
   &:not(.CMS_MenuItemButton_disabled) {
     &.CMS_MenuItemButton_active {
-      @apply bg-slate-200
-        dark:bg-slate-600;
+      @apply bg-neutral-200
+        dark:bg-neutral-600;
     }
   }
 
@@ -27,7 +27,7 @@
 
     &:not(.CMS_MenuItemButton_disabled) {
       @apply hover:bg-gray-200
-        dark:hover:bg-slate-600;
+        dark:hover:bg-neutral-600;
     }
   }
 

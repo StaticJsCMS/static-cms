@@ -9,12 +9,12 @@
     flex
     items-center
     justify-between
-    hover:bg-slate-100
-    dark:hover:bg-slate-900;
+    hover:bg-neutral-100
+    dark:hover:bg-neutral-900;
 
   &.CMS_MenuItemLink_active {
-    @apply bg-slate-100
-      dark:bg-slate-900;
+    @apply bg-neutral-100
+      dark:bg-neutral-900;
   }
 }
 

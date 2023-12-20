@@ -77,11 +77,11 @@ const FrameGlobalStyles = `
     color: rgb(243 244 246);
   }
 
-  .text-slate-500 {
+  .text-neutral-500 {
     color: rgb(100 116 139);
   }
 
-  .dark .dark\\:text-slate-400 {
+  .dark .dark\\:text-neutral-400 {
     color: rgb(148 163 184);
   }
 

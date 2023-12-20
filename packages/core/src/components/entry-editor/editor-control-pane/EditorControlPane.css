@@ -6,7 +6,7 @@
 
   &:not(.CMS_EditorControlPane_no-border) {
     @apply lg:border-r
-      border-slate-400;
+      border-neutral-400;
   }
 }
 

@@ -2,7 +2,7 @@
   @apply border-collapse
     border
     border-gray-200
-    dark:border-slate-700
+    dark:border-neutral-700
     rounded-md
     my-4;
 }
@@ -10,9 +10,9 @@
 .CMS_WidgetMarkdown_Table_header {
   @apply border-r
     border-b
-    bg-slate-300
+    bg-neutral-300
     border-gray-200
-    dark:bg-slate-700
+    dark:bg-neutral-700
     dark:border-gray-800;
 }
 
@@ -31,11 +31,11 @@
     py-1
     [&>div>p]:m-0
     text-left
-    bg-slate-300
+    bg-neutral-300
     text-sm
     border-r
     border-gray-200
-    dark:bg-slate-700
+    dark:bg-neutral-700
     dark:border-gray-800;
 }
 

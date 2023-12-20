@@ -13,7 +13,7 @@
     focus:outline-none
     sm:text-sm
     z-40
-    dark:bg-slate-700
+    dark:bg-neutral-700
     dark:shadow-lg;
 }
 
@@ -31,5 +31,5 @@
   @apply w-[1px]
     border
     border-gray-100
-    dark:border-slate-600;
+    dark:border-neutral-600;
 }

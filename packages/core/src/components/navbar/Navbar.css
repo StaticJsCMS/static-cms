@@ -3,7 +3,7 @@
     relative
     bg-white
     drop-shadow-md
-    dark:bg-slate-800
+    dark:bg-neutral-800
     dark:drop-shadow-lg;
 
   &.CMS_Navbar_in-editor {
@@ -55,8 +55,8 @@
       items-center
       justify-center
       w-16
-      bg-slate-500
-      dark:bg-slate-700;
+      bg-neutral-500
+      dark:bg-neutral-700;
 
     & .CMS_Navbar_logo {
       @apply w-10

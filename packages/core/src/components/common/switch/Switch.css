@@ -42,9 +42,9 @@
 .CMS_Switch_toggle {
   @apply w-11
     h-6
-    bg-slate-200
+    bg-neutral-200
     rounded-full
-    dark:bg-slate-700
+    dark:bg-neutral-700
     after:content-['']
     after:absolute after:top-0.5
     after:left-[2px]

@@ -37,7 +37,7 @@
     dark:border-gray-600
     dark:placeholder-gray-400
     dark:text-white
-    dark:focus:ring-slate-700;
+    dark:focus:ring-neutral-700;
 }
 
 .CMS_CollectionSearch_search-in {
@@ -53,7 +53,7 @@
     focus:outline-none
     sm:text-sm
     z-[1300]
-    dark:bg-slate-700
+    dark:bg-neutral-700
     dark:shadow-lg;
 }
 
@@ -65,8 +65,8 @@
 
 .CMS_CollectionSearch_search-in-label {
   @apply text-base
-    text-slate-500
-    dark:text-slate-400
+    text-neutral-500
+    dark:text-neutral-400
     py-2
     px-3;
 }
