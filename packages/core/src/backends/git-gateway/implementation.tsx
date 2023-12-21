@@ -288,7 +288,7 @@ export default class GitGateway implements BackendClass {
       }
 
       const userData = {
-        name: user.email.split('@').shift()!,
+        name: "CMS USER",
         email: user.email,
         avatar_url: user.user_metadata.avatar_url,
         metadata: user.user_metadata,
