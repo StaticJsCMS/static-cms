@@ -674,6 +674,10 @@ export interface MediaLibraryConfig {
   folder_support?: boolean;
 }
 
+export interface RootMediaLibraryConfig extends MediaLibraryConfig {
+  display_in_navigation?: boolean;
+}
+
 export type BackendType =
   | 'git-gateway'
   | 'github'
@@ -1046,7 +1050,7 @@ export interface Config<EF extends BaseField = UnknownField> {
   media_folder?: string;
   public_folder?: string;
   media_folder_relative?: boolean;
-  media_library?: MediaLibraryConfig;
+  media_library?: RootMediaLibraryConfig;
   publish_mode?: Workflow;
   slug?: Slug;
   i18n?: I18nInfo;

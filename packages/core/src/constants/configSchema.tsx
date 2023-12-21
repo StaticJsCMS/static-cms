@@ -494,6 +494,7 @@ function getConfigSchema() {
       media_library: {
         type: 'object',
         properties: {
+          display_in_navigation: { type: 'boolean' },
           max_file_size: { type: 'number' },
           folder_support: { type: 'boolean' },
         },

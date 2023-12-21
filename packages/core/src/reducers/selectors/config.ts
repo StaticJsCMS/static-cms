@@ -2,8 +2,8 @@ import { createSelector } from '@reduxjs/toolkit';
 
 import { EDITORIAL_WORKFLOW } from '@staticcms/core/constants/publishModes';
 
-import type { Workflow } from '@staticcms/core/constants/publishModes';
 import type { ConfigWithDefaults } from '@staticcms/core';
+import type { Workflow } from '@staticcms/core/constants/publishModes';
 import type { RootState } from '@staticcms/core/store';
 
 export function selectLocale(config?: ConfigWithDefaults) {
@@ -25,6 +25,17 @@ export const selectIsSearchEnabled = createSelector(
   [selectSearch],
   (search: boolean | undefined) => {
     return search !== false;
+  },
+);
+
+export function selectMediaLinkEnabled(state: RootState) {
+  return state.config.config?.media_library?.display_in_navigation;
+}
+
+export const selectIsMediaLinkEnabled = createSelector(
+  [selectMediaLinkEnabled],
+  (display_in_navigation: boolean | undefined) => {
+    return display_in_navigation !== false;
   },
 );
 
