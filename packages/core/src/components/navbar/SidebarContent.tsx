@@ -9,6 +9,7 @@ import { getAdditionalLinks } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollections } from '@staticcms/core/reducers/selectors/collections';
 import {
+  selectIsMediaLinkEnabled,
   selectIsSearchEnabled,
   selectUseWorkflow,
 } from '@staticcms/core/reducers/selectors/config';
@@ -33,6 +34,7 @@ const SidebarContent: FC<SidebarContentProps> = ({ isMobile = false }) => {
 
   const navigate = useNavigate();
   const isSearchEnabled = useAppSelector(selectIsSearchEnabled);
+  const isMediaLinkEnabled = useAppSelector(selectIsMediaLinkEnabled);
   const collections = useAppSelector(selectCollections);
   const useWorkflow = useAppSelector(selectUseWorkflow);
 
@@ -151,14 +153,16 @@ const SidebarContent: FC<SidebarContentProps> = ({ isMobile = false }) => {
         ) : null}
         {collectionLinks}
         {links}
-        <NavLink
-          key="Media"
-          to="/media"
-          icon={<PhotoIcon className={sidebarClasses['icon']} />}
-          data-testid={`${isMobile ? 'mobile-nav' : 'sidebar-nav'}-Media`}
-        >
-          {t('app.header.media')}
-        </NavLink>
+        {isMediaLinkEnabled ? (
+          <NavLink
+            key="Media"
+            to="/media"
+            icon={<PhotoIcon className={sidebarClasses['icon']} />}
+            data-testid={`${isMobile ? 'mobile-nav' : 'sidebar-nav'}-Media`}
+          >
+            {t('app.header.media')}
+          </NavLink>
+        ) : null}
       </ul>
     </div>
   );
