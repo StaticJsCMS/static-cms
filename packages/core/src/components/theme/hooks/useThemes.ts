@@ -15,15 +15,15 @@ export default function useThemes(): Theme[] {
   return useMemo(() => {
     const customThemes: Theme[] = [];
 
-    if (customThemes.length === 0 || config?.theme?.include_built_in_themes !== false) {
-      customThemes.push(...DEFAULT_THEMES);
-    }
-
     customThemes.push(
       ...[...(config?.theme?.themes ?? []), ...getThemes()].map(t =>
         'extends' in t ? createTheme(t) : t,
       ),
     );
+
+    if (customThemes.length === 0 || config?.theme?.include_built_in_themes !== false) {
+      customThemes.push(...DEFAULT_THEMES);
+    }
 
     const defaultTheme = config?.theme?.default_theme;
     if (isNotEmpty(defaultTheme)) {
