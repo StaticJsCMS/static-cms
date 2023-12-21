@@ -9,8 +9,8 @@
 }
 
 .CMS_Login_custom-logo {
-  @apply h-40
-    w-80
+  @apply h-[4.5rem]
+    w-auto
     mb-4
     bg-contain
     bg-no-repeat
