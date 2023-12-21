@@ -421,4 +421,31 @@ view_groups: {
 
 ## Media Library
 
-The `media_library` settings allows customization of the media library at the collection level. See [Media Library](/docs/configuration-options#media-library) for more details.
+The `media_library` settings allows customization of the media library at the collection level.
+
+### Options
+
+| Name                  | Type    | Default  | Description                                                                            |
+| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------- |
+| max_file_size         | number  | `512000` | _Optional_. The max size, in bytes, of files that can be uploaded to the media library |
+| folder_support        | boolean | `false`  | _Optional_. Enables directory navigation and folder creation in your media library     |
+
+### Example
+
+<CodeTabs>
+```yaml
+media_library:
+  max_file_size: 512000
+  folder_support: true
+```
+
+```js
+{
+  media_library: {
+    max_file_size: 512000,
+    folder_support: true
+  }
+}
+```
+
+</CodeTabs>
