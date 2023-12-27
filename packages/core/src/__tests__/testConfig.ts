@@ -74,7 +74,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
           default: false,
         },
         {
-          label: 'Publish Date',
+          label: 'Save Date',
           name: 'date',
           widget: 'datetime',
           date_format: 'yyyy-MM-dd',

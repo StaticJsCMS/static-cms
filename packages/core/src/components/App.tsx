@@ -44,11 +44,11 @@ export const classes = generateClassNames('App', ['root', 'content']);
 
 TopBarProgress.config({
   barColors: {
-    0: '#000',
-    '1.0': '#000',
+    0: '#2563eb',
+    '1.0': '#2563eb',
   },
   shadowBlur: 0,
-  barThickness: 2,
+  barThickness: 3,
 });
 
 window.addEventListener('beforeunload', function (event) {

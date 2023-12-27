@@ -45,7 +45,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
           {breadcrumbs.map((breadcrumb, index) =>
             breadcrumb.name ? (
               <Fragment key={`breadcrumb-${index}`}>
-                {index > 0 ? <span key={`separator-${index}`}>&#62;</span> : null}
+                {index > 0 ? <span key={`separator-${index}`}>&nbsp;&#8725;&nbsp;</span> : null}
                 {breadcrumb.to ? (
                   <Link
                     key={`link-${index}`}
