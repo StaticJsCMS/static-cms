@@ -41,12 +41,12 @@ The Static CMS can be used in two different ways.
 
 # Projects
 
-|Name|Site/Demo|Status|Beta Status|
+|Name|Site/Demo|Status|Beta|
 |---|---|---|---|
 | [@staticcms/core](https://github.com/StaticJsCMS/static-cms/tree/main/packages/core) | [demo.staticcms.org](https://demo.staticcms.org/) | [![Build](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml) [![npm latest package](https://img.shields.io/npm/v/@staticcms/core/latest.svg)](https://www.npmjs.com/package/@staticcms/core) | [![npm next package](https://img.shields.io/npm/v/@staticcms/core/next.svg)](https://www.npmjs.com/package/@staticcms/core/v/next) |
 | [@staticcms/app](https://github.com/StaticJsCMS/static-cms/tree/main/packages/app) | [demo.staticcms.org](https://demo.staticcms.org/) | [![Build](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml/badge.svg)](https://github.com/StaticJsCMS/static-cms/actions/workflows/build.yml) [![npm latest package](https://img.shields.io/npm/v/@staticcms/app/latest.svg)](https://www.npmjs.com/package/@staticcms/app) | [![npm next package](https://img.shields.io/npm/v/@staticcms/app/next.svg)](https://www.npmjs.com/package/@staticcms/app/v/next) |
-| [demo](https://github.com/StaticJsCMS/static-cms/tree/main/packages/demo) | [demo.staticcms.org](https://demo.staticcms.org/) | [![Netlify Status](https://api.netlify.com/api/v1/badges/8c1b73b5-d348-45cd-be2a-7af84be5541f/deploy-status)](https://app.netlify.com/sites/demo-staticjscms/deploys) | |
-| [docs](https://github.com/StaticJsCMS/static-cms/tree/main/packages/docs) | [staticcms.org](https://www.staticcms.org/) | [![Netlify Status](https://api.netlify.com/api/v1/badges/91f6eeb2-f1ed-4e4e-bdd1-f5c6bd01ccd5/deploy-status)](https://app.netlify.com/sites/staticjscms/deploys) | |
+| [demo](https://github.com/StaticJsCMS/static-cms/tree/main/packages/demo) | [demo.staticcms.org](https://demo.staticcms.org/) | [![Netlify Status](https://api.netlify.com/api/v1/badges/8c1b73b5-d348-45cd-be2a-7af84be5541f/deploy-status)](https://app.netlify.com/sites/demo-staticjscms/deploys) | [Beta Demo](https://next.demo.staticcms.org/) |
+| [docs](https://github.com/StaticJsCMS/static-cms/tree/main/packages/docs) | [staticcms.org](https://www.staticcms.org/) | [![Netlify Status](https://api.netlify.com/api/v1/badges/91f6eeb2-f1ed-4e4e-bdd1-f5c6bd01ccd5/deploy-status)](https://app.netlify.com/sites/staticjscms/deploys) | [Beta Docs](https://next.staticcms.org/) |
 
 # Platform Templates
 
