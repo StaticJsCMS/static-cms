@@ -150,7 +150,7 @@
     "react-virtualized-auto-sizer": "1.0.20",
     "react-waypoint": "10.3.0",
     "react-window": "1.8.9",
-    "remark-gfm": "4.0.0",
+    "remark-gfm": "3.0.1",
     "remark-html": "15.0.2",
     "remark-mdx": "2.3.0",
     "remark-parse": "10.0.1",
