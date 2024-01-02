@@ -144,7 +144,7 @@ const StyledNav = styled('nav')(
     align-self: flex-start;
     position: sticky;
     top: 0;
-    max-height: calc(100vh - 72px);
+    max-height: calc(100dvh - 72px);
     overflow-y: auto;
     top: 16px;
 
