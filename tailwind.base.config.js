@@ -3,9 +3,9 @@ module.exports = {
   theme: {
     extend: {
       height: {
-        main: "calc(100vh - 64px)",
-        "main-mobile": "calc(100vh - 128px)",
-        "main-mobile-workflow": "calc(100vh - 179px)",
+        main: "calc(100dvh - 64px)",
+        "main-mobile": "calc(100dvh - 128px)",
+        "main-mobile-workflow": "calc(100dvh - 179px)",
         "media-library-dialog": "80vh",
         "media-card": "240px",
         "media-preview-image": "104px",

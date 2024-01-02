@@ -2,13 +2,15 @@ import { evaluate } from '@mdx-js/mdx';
 import * as provider from '@mdx-js/react';
 import { useCallback, useEffect, useState } from 'react';
 import * as runtime from 'react/jsx-runtime';
-import remarkGfm from 'remark-gfm';
 import { VFile } from 'vfile';
 import { VFileMessage } from 'vfile-message';
 
-import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
-import flattenListItemParagraphs from '../serialization/slate/flattenListItemParagraphs';
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
+import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
+import remarkGfm from '../serialization/gfm';
+import flattenListItemParagraphs from '../serialization/slate/flattenListItemParagraphs';
+
+import type { Compatible } from 'vfile';
 
 export interface UseMdxState {
   file: VFile | null;
@@ -33,7 +35,7 @@ export default function useMdx(
       };
 
       try {
-        file.result = (await evaluate(file, options)).default;
+        file.result = (await evaluate(file as Readonly<Compatible>, options)).default;
       } catch (error) {
         const message = error instanceof VFileMessage ? error : new VFileMessage(String(error));
 
