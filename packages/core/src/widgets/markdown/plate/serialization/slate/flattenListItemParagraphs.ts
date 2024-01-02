@@ -1,7 +1,8 @@
 import { visit } from 'unist-util-visit';
 
 import type { Plugin } from 'unified';
-import type { Parent, Node, VisitorResult } from 'unist-util-visit/lib';
+import type { Node, Parent } from 'unist';
+import type { VisitorResult } from 'unist-util-visit';
 
 const flattenListItemParagraphs: Plugin = function () {
   return ast => {

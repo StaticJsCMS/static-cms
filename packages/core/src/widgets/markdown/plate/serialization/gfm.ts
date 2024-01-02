@@ -41,21 +41,26 @@ function gfm() {
   return combineExtensions([gfmFootnote(), gfmStrikethrough({}), gfmTable(), gfmTaskListItem()]);
 }
 
+declare module 'unified' {
+  interface Data {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    toMarkdownExtensions?: Array<any>;
+  }
+}
+
 /**
  * Plugin to support GFM (footnotes, strikethrough, tables, tasklists).
  */
 const remarkGfm: Plugin<void[], Root> = function (this: Processor) {
   const data = this.data();
 
-  add('micromarkExtensions', gfm());
-  add('fromMarkdownExtensions', gfmFromMarkdown());
-  add('toMarkdownExtensions', gfmToMarkdown());
+  const micromarkExtensions = data.micromarkExtensions || (data.micromarkExtensions = []);
+  const fromMarkdownExtensions = data.fromMarkdownExtensions || (data.fromMarkdownExtensions = []);
+  const toMarkdownExtensions = data.toMarkdownExtensions || (data.toMarkdownExtensions = []);
 
-  function add(field: string, value: unknown) {
-    const list = (data[field] ? data[field] : (data[field] = [])) as unknown[];
-
-    list.push(value);
-  }
+  micromarkExtensions.push(gfm());
+  fromMarkdownExtensions.push(gfmFromMarkdown());
+  toMarkdownExtensions.push(gfmToMarkdown());
 };
 
 export default remarkGfm;

@@ -2,13 +2,15 @@ import { evaluate } from '@mdx-js/mdx';
 import * as provider from '@mdx-js/react';
 import { useCallback, useEffect, useState } from 'react';
 import * as runtime from 'react/jsx-runtime';
-import { Compatible, VFile } from 'vfile';
+import { VFile } from 'vfile';
 import { VFileMessage } from 'vfile-message';
 
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
 import remarkGfm from '../serialization/gfm';
 import flattenListItemParagraphs from '../serialization/slate/flattenListItemParagraphs';
+
+import type { Compatible } from 'vfile';
 
 export interface UseMdxState {
   file: VFile | null;
