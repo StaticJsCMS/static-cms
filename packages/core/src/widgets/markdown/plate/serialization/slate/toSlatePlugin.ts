@@ -1,7 +1,7 @@
 import transform from './deserializeMarkdown';
 
 import type { ShortcodeConfig } from '@staticcms/core/interface';
-import type { Plugin } from 'unified';
+import type { Compiler, Plugin } from 'unified';
 import type { MdastNode } from './ast-types';
 
 export interface ToSlatePluginOptions {
@@ -19,7 +19,7 @@ export const slateCompiler =
 
 const toSlatePlugin = (options: ToSlatePluginOptions): Plugin =>
   function () {
-    this.Compiler = slateCompiler(options);
+    this.compiler = slateCompiler(options) as unknown as Compiler;
   };
 
 export default toSlatePlugin;

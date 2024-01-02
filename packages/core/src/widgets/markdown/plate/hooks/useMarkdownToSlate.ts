@@ -8,6 +8,8 @@ import { getShortcodes } from '../../../../lib/registry';
 import gfm from '../serialization/gfm';
 import toSlatePlugin from '../serialization/slate/toSlatePlugin';
 
+import type { ProcessCallback } from 'unified';
+import type { VFile } from 'vfile';
 import type { ShortcodeConfig } from '../../../../interface';
 import type { MdValue } from '../plateTypes';
 
@@ -22,19 +24,22 @@ export const markdownToSlate = async (
   { useMdx, shortcodeConfigs }: UseMarkdownToSlateOptions,
 ) => {
   return new Promise<MdValue>(resolve => {
+    const callback: ProcessCallback<VFile> = (err, file) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      resolve(file?.result as MdValue);
+      return undefined;
+    };
+
     unified()
       .use(markdown)
       .use(gfm)
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       .use(useMdx ? mdx : () => {})
       .use(toSlatePlugin({ shortcodeConfigs: shortcodeConfigs ?? getShortcodes(), useMdx }))
-      .process(markdownValue, (err, file) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        resolve(file?.result as MdValue);
-      });
+      .process(markdownValue, callback);
   });
 };
 
