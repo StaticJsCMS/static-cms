@@ -20,9 +20,9 @@ import type { Plugin, Processor } from 'unified';
 function gfmFromMarkdown() {
   return [
     gfmFootnoteFromMarkdown(),
-    gfmStrikethroughFromMarkdown,
-    gfmTableFromMarkdown,
-    gfmTaskListItemFromMarkdown,
+    gfmStrikethroughFromMarkdown(),
+    gfmTableFromMarkdown(),
+    gfmTaskListItemFromMarkdown(),
   ];
 }
 
@@ -30,15 +30,15 @@ function gfmToMarkdown() {
   return {
     extensions: [
       gfmFootnoteToMarkdown(),
-      gfmStrikethroughToMarkdown,
+      gfmStrikethroughToMarkdown(),
       gfmTableToMarkdown({}),
-      gfmTaskListItemToMarkdown,
+      gfmTaskListItemToMarkdown(),
     ],
   };
 }
 
 function gfm() {
-  return combineExtensions([gfmFootnote(), gfmStrikethrough({}), gfmTable, gfmTaskListItem]);
+  return combineExtensions([gfmFootnote(), gfmStrikethrough({}), gfmTable(), gfmTaskListItem()]);
 }
 
 /**
