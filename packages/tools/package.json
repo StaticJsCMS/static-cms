@@ -17,7 +17,7 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
-    "@types/common-tags": "1.8.1",
+    "@types/common-tags": "1.8.4",
     "@types/create-react-class": "15.6.6",
     "@types/fs-extra": "11.0.1",
     "@types/is-hotkey": "0.1.7",
