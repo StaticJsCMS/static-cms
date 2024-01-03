@@ -255,7 +255,7 @@
     "react-refresh": "0.14.0",
     "react-svg-loader": "3.0.3",
     "rimraf": "5.0.5",
-    "simple-git": "3.20.0",
+    "simple-git": "3.22.0",
     "source-map-loader": "4.0.1",
     "style-loader": "3.3.3",
     "tailwindcss": "3.3.3",
