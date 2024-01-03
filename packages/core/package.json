@@ -71,7 +71,7 @@
     "@mui/base": "5.0.0-beta.30",
     "@mui/material": "5.15.3",
     "@mui/system": "5.15.3",
-    "@mui/x-date-pickers": "6.16.0",
+    "@mui/x-date-pickers": "6.18.6",
     "@reduxjs/toolkit": "1.9.7",
     "@styled-icons/bootstrap": "10.47.0",
     "@styled-icons/fa-brands": "10.47.0",
