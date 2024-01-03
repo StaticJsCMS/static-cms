@@ -17172,10 +17172,10 @@ sigstore@^1.4.0:
     "@sigstore/tuf" "^1.0.3"
     make-fetch-happen "^11.0.1"
 
-simple-git@3.20.0:
-  version "3.20.0"
-  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-3.20.0.tgz#ff9c3f736d6b2bf0e3510209569d206aac84833d"
-  integrity sha512-ozK8tl2hvLts8ijTs18iFruE+RoqmC/mqZhjs/+V7gS5W68JpJ3+FCTmLVqmR59MaUQ52MfGQuWsIqfsTbbJ0Q==
+simple-git@3.22.0:
+  version "3.22.0"
+  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-3.22.0.tgz#616d41c661e30f9c65778956317d422b1729a242"
+  integrity sha512-6JujwSs0ac82jkGjMHiCnTifvf1crOiY/+tfs/Pqih6iow7VrpNKRRNdWm6RtaXpvvv/JGNYhlUtLhGFqHF+Yw==
   dependencies:
     "@kwsites/file-exists" "^1.1.1"
     "@kwsites/promise-deferred" "^1.1.1"
