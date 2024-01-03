@@ -21,10 +21,12 @@ const hu: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Tartalom',
+      workflow: 'Munkafolyamat',
       media: 'Média',
       quickAdd: 'Gyors hozzáadás',
     },
     app: {
+      loading: 'Betöltés...',
       errorHeader: 'Hiba történt a CMS konfiguráció betöltése közben',
       configErrors: 'Configurációs hibák',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -103,15 +105,35 @@ const hu: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: undefined, // English translation: 'undefined'
+        copyFromLocale: undefined, // English translation: 'undefined'
+        copyFromLocaleConfirm: undefined, // English translation: 'undefined'
       },
     },
     editor: {
       onLeavePage: 'Biztos hogy el akarod hagyni az oldalt?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
+      onUpdatingWithUnsavedChangesBody:
+        'Mentettlen változtatások vannak, kérjük, mentse az állapot frissítése előtt.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'undefined'
+      onPublishingNotReadyBody: 'Változtasd az állapotot "Kész"-re publikálás előtt.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
+      onPublishingWithUnsavedChangesBody:
+        'Mentetlen változtatások vannak, kérjük, mentsen a publikálás előtt.',
+      onPublishingTitle: undefined, // English translation: 'undefined'
+      onPublishingBody: 'Publikálod ezt a bejegyzést?',
+      onUnpublishingTitle: undefined, // English translation: 'undefined'
+      onUnpublishingBody: 'Publikálás visszavonása erre a bejegyzésre?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onDeleteWithUnsavedChangesBody:
         'Töröljük ezt a publikált bejegyzést, a többi mentetlen modositással együtt?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'undefined'
       onDeletePublishedEntryBody: 'Töröljük ezt a publikált bejegyzést?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Ezzel törli a bejegyzés összes nem közzétett módosítását, valamint az aktuális munkamenetből nem mentett módosításokat. Még mindig törli?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'undefined'
+      onDeleteUnpublishedChangesBody:
+        'A bejegyzés összes, nem közzétett módosítása törlődik. Még mindig törli?',
       loadingEntry: 'Bejegyzés betöltése...',
     },
     editorInterface: {
@@ -122,13 +144,35 @@ const hu: LocalePhrasesRoot = {
       toggleScrollSync: undefined, // English translation: 'undefined'
     },
     editorToolbar: {
+      publishing: 'Publikálás...',
       publish: 'Publikáció',
       published: 'Publikálás',
+      unpublish: 'Publikálás visszavonása',
       duplicate: 'Duplikált',
+      unpublishing: 'Publikálás visszavonása...',
       publishAndCreateNew: 'Publikálás és új létrehozása',
       publishAndDuplicate: 'Publikálás és duplikál',
+      deleteUnpublishedChanges: 'Nempublikált változtatások törlése',
+      deleteUnpublishedEntry: 'Nempublikált bejegyzés törlése',
+      deletePublishedEntry: 'Publikált bejegyzés törlése',
       deleteEntry: 'Bejegyzés törlése',
+      saving: 'Mentés...',
+      save: 'Mentés',
+      statusInfoTooltipDraft: undefined, // English translation: 'undefined'
+      statusInfoTooltipInReview: undefined, // English translation: 'undefined'
+      deleting: 'Törlés...',
+      updating: 'Frissítés...',
+      status: 'Beállitása: %{status}',
+      backCollection: ' Írás a %{collectionLabel} gyűjteménybe',
+      unsavedChanges: 'Nemmentett változtatások',
+      changesSaved: 'Változások elmentve',
+      draft: 'Piszkozat',
+      inReview: 'Felülvizsgálat alatt',
+      ready: 'Kész',
       publishNow: 'Publikálás most',
+      deployPreviewPendingButtonLabel: 'Előnézet ellenörzése',
+      deployPreviewButtonLabel: 'Előnézet megtekintése',
+      deployButtonLabel: 'Élő megtekintése',
       discardChanges: undefined, // English translation: 'undefined'
       discardChangesTitle: undefined, // English translation: 'undefined'
       discardChangesBody: undefined, // English translation: 'undefined'
@@ -137,17 +181,35 @@ const hu: LocalePhrasesRoot = {
       markdown: {
         bold: undefined, // English translation: 'undefined'
         italic: undefined, // English translation: 'undefined'
+        strikethrough: undefined, // English translation: 'undefined'
         code: undefined, // English translation: 'undefined'
+        codeBlock: undefined, // English translation: 'undefined'
+        insertCodeBlock: undefined, // English translation: 'undefined'
         link: undefined, // English translation: 'undefined'
-        linkPrompt: undefined, // English translation: 'undefined'
+        insertLink: undefined, // English translation: 'undefined'
+        paragraph: undefined, // English translation: 'undefined'
         headings: undefined, // English translation: 'undefined'
         quote: undefined, // English translation: 'undefined'
+        insertQuote: undefined, // English translation: 'undefined'
         bulletedList: undefined, // English translation: 'undefined'
         numberedList: undefined, // English translation: 'undefined'
         addComponent: undefined, // English translation: 'undefined'
         richText: undefined, // English translation: 'undefined'
         markdown: undefined, // English translation: 'undefined'
         type: undefined, // English translation: 'undefined'
+        decreaseIndent: undefined, // English translation: 'undefined'
+        increaseIndent: undefined, // English translation: 'undefined'
+        image: undefined, // English translation: 'undefined'
+        insertImage: undefined, // English translation: 'undefined'
+        table: {
+          table: undefined, // English translation: 'undefined'
+          deleteColumn: undefined, // English translation: 'undefined'
+          deleteRow: undefined, // English translation: 'undefined'
+          deleteTable: undefined, // English translation: 'undefined'
+          insertColumn: undefined, // English translation: 'undefined'
+          insertRow: undefined, // English translation: 'undefined'
+          insertTable: undefined, // English translation: 'undefined'
+        },
       },
       image: {
         choose: 'Válasszon képet',
@@ -211,6 +273,10 @@ const hu: LocalePhrasesRoot = {
         value: undefined, // English translation: 'undefined'
         uniqueKeys: undefined, // English translation: 'undefined'
       },
+      code: {
+        language: undefined, // English translation: 'undefined'
+        selectLanguage: undefined, // English translation: 'undefined'
+      },
     },
   },
   mediaLibrary: {
@@ -231,10 +297,10 @@ const hu: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Betöltés...',
       noResults: 'Nincs találat.',
       noAssetsFound: 'Nem található tartalom.',
       noImagesFound: 'Nem található kép.',
+      private: 'Privát ',
       images: 'Képek',
       mediaAssets: 'Média tartalmak',
       search: 'Keresés...',
@@ -251,6 +317,7 @@ const hu: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -261,6 +328,7 @@ const hu: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: undefined, // English translation: 'Go back to site'
@@ -281,11 +349,12 @@ const hu: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Kijelentkezés',
     },
     toast: {
       onFailToLoadEntries: 'A bejegyzés betöltése nem sikerült: %{details}',
+      onFailToLoadDeployPreview: 'Az előnézet betöltése nem sikerült: %{details}',
       onFailToPersist: 'Bejegyzés megtartása sikertelen: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'A bejegyzés törlése sikertelen: %{details}',
@@ -293,12 +362,52 @@ const hu: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Az állapot frissítése nem sikerült: %{details}',
       missingRequiredField: 'Hoppá, kihagytál egy kötelező mezőt. Mentés előtt töltsd ki.',
       entrySaved: 'Bejegyzés elmentve',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Bejegyzés publikálva',
+      entryUnpublished: 'Bejegyzés publikálása visszavonva',
       onFailToPublishEntry: 'Bejegyzés publikálása sikertelen: %{details}',
+      onFailToUnpublishEntry: 'Bejegyzés publikálásának visszavonása sikertelen: %{details}',
       entryUpdated: 'Bejegyzés állapota frissült',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Unpublished changes deleted',
       onFailToAuth: '%{details}',
       onLoggedOut: undefined, // English translation: 'You have been logged out, please back up any data and login again'
       onBackendDown: undefined, // English translation: 'The backend service is experiencing an outage. See %{details} for more information'
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'A szerkesztési munkafolyamat-bejegyzések betöltése',
+      workflowHeading: 'Szerkesztői Folyamat',
+      newPost: 'New Post',
+      description:
+        '%{smart_count} bejegyzés felülvizsgálatra vár, %{readyCount} élesítésre vár. |||| %{smart_count} bejegyzés felülvizsgálatra vár, %{readyCount} élesítésre vár. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date}, írta %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: '%{author}',
+      deleteChanges: 'Változtatások törlése',
+      deleteNewEntry: 'Új bejegyzés törlése',
+      publishChanges: 'Változtatások publikálása',
+      publishNewEntry: 'Új bejegyzés publikálása',
+    },
+    workflowList: {
+      onDeleteEntry: 'Biztosan törli ezt a bejegyzést?',
+      onPublishingNotReadyEntry:
+        'Csak a "Kész" állapotú tételek tehetők közzé. A közzététel engedélyezéséhez húzza a kártyát a „Kész” oszlopba.',
+      onPublishEntry: 'Biztosan közzéteszi ezt a bejegyzést?',
+      draft: 'Piszkozat',
+      pending_review: 'Vizsgálat alatt',
+      pending_publish: 'Kész',
+      currentEntries: '%{smart_count} bejegyzés |||| %{smart_count} bejegyzések',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'undefined'
+      forkRepo: undefined, // English translation: 'undefined'
+      markReadyForReview: undefined, // English translation: 'undefined'
     },
   },
 };

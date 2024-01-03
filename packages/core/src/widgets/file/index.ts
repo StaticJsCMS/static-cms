@@ -3,7 +3,7 @@ import schema from './schema';
 import withFileControl, { getValidFileValue } from './withFileControl';
 
 import type { WithFileControlProps } from './withFileControl';
-import type { FileOrImageField, WidgetParam } from '@staticcms/core/interface';
+import type { FileOrImageField, WidgetParam } from '@staticcms/core';
 
 const controlComponent = withFileControl();
 

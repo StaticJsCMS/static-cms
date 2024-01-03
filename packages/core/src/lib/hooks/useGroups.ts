@@ -1,20 +1,16 @@
 import groupBy from 'lodash/groupBy';
 import { useMemo } from 'react';
 
-import { getGroup, selectEntriesGroupField } from '@staticcms/core/reducers/selectors/entries';
+import { getGroup, selectEntriesSelectedGroup } from '@staticcms/core/reducers/selectors/entries';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import usePublishedEntries from './usePublishedEntries';
 
-import type { GroupOfEntries } from '@staticcms/core/interface';
+import type { GroupOfEntries } from '@staticcms/core';
 
 export default function useGroups(collectionName: string) {
   const entries = usePublishedEntries(collectionName);
 
-  const entriesGroupFieldSelector = useMemo(
-    () => selectEntriesGroupField(collectionName),
-    [collectionName],
-  );
-  const selectedGroup = useAppSelector(entriesGroupFieldSelector);
+  const selectedGroup = useAppSelector(state => selectEntriesSelectedGroup(state, collectionName));
 
   return useMemo(() => {
     if (selectedGroup === undefined) {
@@ -23,6 +19,7 @@ export default function useGroups(collectionName: string) {
 
     let groups: Record<string, { id: string; label: string; value: string | boolean | undefined }> =
       {};
+
     const groupedEntries = groupBy(entries, entry => {
       const group = getGroup(entry, selectedGroup);
       groups = { ...groups, [group.id]: group };

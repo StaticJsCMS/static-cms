@@ -4,7 +4,7 @@ import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { DEFAULT_DATETIME_FORMAT, DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT } from './constants';
 import { localToUTC } from './utc.util';
 
-import type { DateTimeField, FieldGetDefaultMethod } from '@staticcms/core/interface';
+import type { DateTimeField, FieldGetDefaultMethod } from '@staticcms/core';
 
 const getDefaultValue: FieldGetDefaultMethod<string | Date, DateTimeField> = (
   defaultValue,

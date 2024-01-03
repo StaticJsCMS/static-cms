@@ -10,6 +10,8 @@ import './Checkbox.css';
 
 export const classes = generateClassNames('Checkbox', [
   'root',
+  'sm',
+  'md',
   'disabled',
   'input',
   'custom-input',
@@ -17,12 +19,22 @@ export const classes = generateClassNames('Checkbox', [
 ]);
 
 export interface CheckboxProps {
+  id?: string;
+  size?: 'sm' | 'md';
   checked: boolean;
   disabled?: boolean;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  readOnly?: boolean;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-const Checkbox: FC<CheckboxProps> = ({ checked, disabled = false, onChange }) => {
+const Checkbox: FC<CheckboxProps> = ({
+  id,
+  size = 'md',
+  checked,
+  disabled = false,
+  readOnly = false,
+  onChange,
+}) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleNoop = useCallback((event: KeyboardEvent | MouseEvent) => {
@@ -46,17 +58,19 @@ const Checkbox: FC<CheckboxProps> = ({ checked, disabled = false, onChange }) =>
 
   return (
     <label
-      className={classNames(classes.root, disabled && classes.disabled)}
+      className={classNames(classes.root, classes[size], disabled && classes.disabled)}
       onClick={handleNoop}
       onKeyDown={handleKeydown}
     >
       <input
+        id={id}
         data-testid="switch-input"
         ref={inputRef}
         type="checkbox"
         checked={checked}
         className={classes.input}
         disabled={disabled}
+        readOnly={readOnly}
         onChange={onChange}
         onClick={handleNoop}
         onKeyDown={handleKeydown}

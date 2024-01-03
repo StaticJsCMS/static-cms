@@ -38,12 +38,12 @@ import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import { getToolbarButtons } from '../../hooks/useToolbarButtons';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   MarkdownField,
   MarkdownToolbarButtonType,
-} from '@staticcms/core/interface';
-import type { FC, ReactNode } from 'react';
+} from '@staticcms/core';
 import type { ClientRectObject } from '@udecode/plate';
+import type { FC, ReactNode } from 'react';
 
 import './BalloonToolbar.css';
 
@@ -91,7 +91,7 @@ const DEFAULT_TABLE_SELECTION_BUTTONS: MarkdownToolbarButtonType[] = [
 export interface BalloonToolbarProps {
   useMdx: boolean;
   containerRef: HTMLElement | null;
-  collection: Collection<MarkdownField>;
+  collection: CollectionWithDefaults<MarkdownField>;
   field: MarkdownField;
   disabled: boolean;
 }

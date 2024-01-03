@@ -1,28 +1,32 @@
 import deepmerge from 'deepmerge';
 import { produce } from 'immer';
+import cloneDeep from 'lodash/cloneDeep';
 import trim from 'lodash/trim';
 import trimStart from 'lodash/trimStart';
 import yaml from 'yaml';
 
-import { resolveBackend } from '@staticcms/core/backend';
 import { CONFIG_FAILURE, CONFIG_REQUEST, CONFIG_SUCCESS } from '../constants';
 import validateConfig from '../constants/configSchema';
-import {
-  I18N,
-  I18N_FIELD_NONE,
-  I18N_FIELD_TRANSLATE,
-  I18N_STRUCTURE_SINGLE_FILE,
-} from '../lib/i18n';
+import { SIMPLE as SIMPLE_PUBLISH_MODE } from '../constants/publishModes';
+import { I18N_FIELD_NONE, I18N_FIELD_TRANSLATE, I18N_STRUCTURE_SINGLE_FILE } from '../lib/i18n';
 import { selectDefaultSortableFields } from '../lib/util/collection.util';
 
 import type { AnyAction } from 'redux';
 import type { ThunkDispatch } from 'redux-thunk';
+import type { Workflow } from '../constants/publishModes';
 import type {
   BaseField,
   Collection,
   CollectionFile,
+  CollectionFileWithDefaults,
+  CollectionWithDefaults,
   Config,
+  ConfigWithDefaults,
   Field,
+  FilesCollection,
+  FilesCollectionWithDefaults,
+  FolderCollection,
+  FolderCollectionWithDefaults,
   I18nInfo,
   LocalBackend,
   UnknownField,
@@ -60,14 +64,16 @@ function getConfigUrl() {
 }
 
 const setFieldDefaults =
-  (collection: Collection, collectionFile?: CollectionFile) => (field: Field) => {
+  (collection: Collection, config: Config, collectionFile?: CollectionFile) => (field: Field) => {
     if ('media_folder' in field && !('public_folder' in field)) {
       return { ...field, public_folder: field.media_folder };
     }
 
     if (field.widget === 'image' || field.widget === 'file' || field.widget === 'markdown') {
       field.media_library = {
-        ...((collectionFile ?? collection).media_library ?? {}),
+        ...(config.media_library ?? {}),
+        ...(collectionFile?.media_library ?? {}),
+        ...(collection.media_library ?? {}),
         ...(field.media_library ?? {}),
       };
     }
@@ -76,23 +82,27 @@ const setFieldDefaults =
   };
 
 function setI18nField<T extends BaseField = UnknownField>(field: T) {
-  if (field[I18N] === true) {
-    return { ...field, [I18N]: I18N_FIELD_TRANSLATE };
-  } else if (field[I18N] === false || !field[I18N]) {
-    return { ...field, [I18N]: I18N_FIELD_NONE };
+  if (field.i18n === true) {
+    return { ...field, ['i18n']: I18N_FIELD_TRANSLATE };
+  } else if (field.i18n === false || !field['i18n']) {
+    return { ...field, ['i18n']: I18N_FIELD_NONE };
   }
   return field;
 }
 
-function getI18nDefaults(collectionOrFileI18n: boolean | I18nInfo, defaultI18n: I18nInfo) {
+function getI18nDefaults(
+  collectionOrFileI18n: boolean | Partial<I18nInfo>,
+  { default_locale, locales = ['en'], structure = I18N_STRUCTURE_SINGLE_FILE }: Partial<I18nInfo>,
+): I18nInfo {
   if (typeof collectionOrFileI18n === 'boolean') {
-    return defaultI18n;
+    return { default_locale, locales, structure };
   } else {
-    const locales = collectionOrFileI18n.locales || defaultI18n.locales;
-    const defaultLocale = collectionOrFileI18n.defaultLocale || locales[0];
-    const mergedI18n: I18nInfo = deepmerge(defaultI18n, collectionOrFileI18n);
-    mergedI18n.locales = locales;
-    mergedI18n.defaultLocale = defaultLocale;
+    const mergedI18n: I18nInfo = deepmerge(
+      { default_locale, locales, structure },
+      collectionOrFileI18n,
+    );
+    mergedI18n.locales = collectionOrFileI18n.locales ?? locales;
+    mergedI18n.default_locale = collectionOrFileI18n.default_locale || locales?.[0];
     throwOnMissingDefaultLocale(mergedI18n);
     return mergedI18n;
   }
@@ -104,13 +114,13 @@ function setI18nDefaultsForFields(collectionOrFileFields: Field[], hasI18n: bool
   } else {
     return traverseFields(collectionOrFileFields, field => {
       const newField = { ...field };
-      delete newField[I18N];
+      delete newField.i18n;
       return newField;
     });
   }
 }
 
-function throwOnInvalidFileCollectionStructure(i18n?: I18nInfo) {
+function throwOnInvalidFileCollectionStructure(i18n?: Partial<I18nInfo>) {
   if (i18n && i18n.structure !== I18N_STRUCTURE_SINGLE_FILE) {
     throw new Error(
       `i18n configuration for files collections is limited to ${I18N_STRUCTURE_SINGLE_FILE} structure`,
@@ -118,162 +128,229 @@ function throwOnInvalidFileCollectionStructure(i18n?: I18nInfo) {
   }
 }
 
-function throwOnMissingDefaultLocale(i18n?: I18nInfo) {
-  if (i18n && i18n.defaultLocale && !i18n.locales.includes(i18n.defaultLocale)) {
+function throwOnMissingDefaultLocale(i18n?: Partial<I18nInfo>) {
+  if (i18n && i18n.default_locale && !i18n.locales?.includes(i18n.default_locale)) {
     throw new Error(
-      `i18n locales '${i18n.locales.join(', ')}' are missing the default locale ${
-        i18n.defaultLocale
+      `i18n locales '${i18n.locales?.join(', ')}' are missing the default locale ${
+        i18n.default_locale
       }`,
     );
   }
 }
 
-export function applyDefaults<EF extends BaseField = UnknownField>(
-  originalConfig: Config<EF>,
-): Config<EF> {
-  return produce(originalConfig, (config: Config) => {
-    config.slug = config.slug || {};
-    config.collections = config.collections || [];
+function applyFolderCollectionDefaults(
+  originalCollection: FolderCollection,
+  collectionI18n: I18nInfo | undefined,
+  config: Config,
+): FolderCollectionWithDefaults {
+  const collection: FolderCollectionWithDefaults = {
+    ...originalCollection,
+    i18n: collectionI18n,
+  };
 
-    // Use `site_url` as default `display_url`.
-    if (!config.display_url && config.site_url) {
-      config.display_url = config.site_url;
-    }
+  if (collection.path && !collection.media_folder) {
+    // default value for media folder when using the path config
+    collection.media_folder = '';
+  }
 
-    // Use media_folder as default public_folder.
-    const defaultPublicFolder = `/${trimStart(config.media_folder, '/')}`;
-    if (!('public_folder' in config)) {
-      config.public_folder = defaultPublicFolder;
-    }
+  if ('media_folder' in collection && !('public_folder' in collection)) {
+    collection.public_folder = collection.media_folder;
+  }
 
-    // default values for the slug config
-    if (!('encoding' in config.slug)) {
-      config.slug.encoding = 'unicode';
-    }
+  if ('fields' in collection && collection.fields) {
+    collection.fields = traverseFields(collection.fields, setFieldDefaults(collection, config));
+  }
 
-    if (!('clean_accents' in config.slug)) {
-      config.slug.clean_accents = false;
-    }
+  collection.folder = trim(collection.folder, '/');
+  collection.publish = collection.publish ?? true;
 
-    if (!('sanitize_replacement' in config.slug)) {
-      config.slug.sanitize_replacement = '-';
-    }
+  return collection;
+}
 
-    const i18n = config[I18N];
+function applyCollectionFileDefaults(
+  originalFile: CollectionFile,
+  collection: Collection,
+  collectionI18n: I18nInfo | undefined,
+  config: Config,
+): CollectionFileWithDefaults {
+  const file: CollectionFileWithDefaults = {
+    ...originalFile,
+    i18n: undefined,
+  };
 
-    if (i18n) {
-      i18n.defaultLocale = i18n.defaultLocale || i18n.locales[0];
-    }
+  file.file = trimStart(file.file, '/');
 
-    throwOnMissingDefaultLocale(i18n);
+  if ('media_folder' in file && !('public_folder' in file)) {
+    file.public_folder = file.media_folder;
+  }
 
-    const backend = resolveBackend(config);
+  file.media_library = {
+    ...(collection.media_library ?? {}),
+    ...(file.media_library ?? {}),
+  };
 
-    for (const collection of config.collections) {
-      let collectionI18n = collection[I18N];
+  if (file.fields) {
+    file.fields = traverseFields(file.fields, setFieldDefaults(collection, config, file));
+  }
 
-      if (config.editor && !collection.editor) {
-        collection.editor = config.editor;
-      }
+  let fileI18n: I18nInfo | undefined;
 
-      collection.media_library = {
-        ...(config.media_library ?? {}),
-        ...(collection.media_library ?? {}),
+  if (originalFile.i18n && collectionI18n) {
+    fileI18n = getI18nDefaults(originalFile.i18n, {
+      locales: collectionI18n.locales,
+      default_locale: collectionI18n.default_locale,
+      structure: collectionI18n.structure,
+    });
+    file.i18n = fileI18n;
+  } else {
+    fileI18n = undefined;
+    delete file.i18n;
+  }
+
+  throwOnInvalidFileCollectionStructure(fileI18n);
+
+  if (file.fields) {
+    file.fields = setI18nDefaultsForFields(file.fields, Boolean(fileI18n));
+  }
+
+  if (collection.editor && !file.editor) {
+    file.editor = collection.editor;
+  }
+
+  return file;
+}
+
+function applyFilesCollectionDefaults(
+  originalCollection: FilesCollection,
+  collectionI18n: I18nInfo | undefined,
+  config: Config,
+): FilesCollectionWithDefaults {
+  const collection: FilesCollectionWithDefaults = {
+    ...originalCollection,
+    i18n: collectionI18n,
+    files: originalCollection.files.map(f =>
+      applyCollectionFileDefaults(f, originalCollection, collectionI18n, config),
+    ),
+  };
+
+  throwOnInvalidFileCollectionStructure(collectionI18n);
+
+  return collection;
+}
+
+function applyCollectionDefaults(
+  originalCollection: Collection,
+  config: Config,
+): CollectionWithDefaults {
+  let collection: CollectionWithDefaults;
+
+  let collectionI18n: I18nInfo | undefined;
+
+  if (config.i18n && originalCollection.i18n) {
+    collectionI18n = getI18nDefaults(originalCollection.i18n, config.i18n);
+  } else {
+    collectionI18n = undefined;
+  }
+
+  if ('folder' in originalCollection) {
+    collection = applyFolderCollectionDefaults(originalCollection, collectionI18n, config);
+  } else {
+    collection = applyFilesCollectionDefaults(originalCollection, collectionI18n, config);
+  }
+
+  if (config.editor && !collection.editor) {
+    collection.editor = config.editor;
+  }
+
+  collection.media_library = {
+    ...(config.media_library ?? {}),
+    ...(collection.media_library ?? {}),
+  };
+
+  if ('fields' in collection && collection.fields) {
+    collection.fields = setI18nDefaultsForFields(collection.fields, Boolean(collectionI18n));
+  }
+
+  const { view_filters, view_groups } = collection;
+
+  if (!collection.sortable_fields) {
+    collection.sortable_fields = {
+      fields: selectDefaultSortableFields(collection, config),
+    };
+  }
+
+  collection.view_filters = {
+    default: collection.view_filters?.default,
+    filters: (view_filters?.filters ?? []).map(filter => {
+      return {
+        ...filter,
+        id: `${filter.field}__${filter.pattern}`,
       };
+    }),
+  };
 
-      if (i18n && collectionI18n) {
-        collectionI18n = getI18nDefaults(collectionI18n, i18n);
-        collection[I18N] = collectionI18n;
-      } else {
-        collectionI18n = undefined;
-        delete collection[I18N];
-      }
+  collection.view_groups = {
+    default: collection.view_groups?.default,
+    groups: (view_groups?.groups ?? []).map(group => {
+      return {
+        ...group,
+        id: `${group.field}__${group.pattern}`,
+      };
+    }),
+  };
 
-      if ('fields' in collection && collection.fields) {
-        collection.fields = setI18nDefaultsForFields(collection.fields, Boolean(collectionI18n));
-      }
+  return collection;
+}
 
-      const { view_filters, view_groups } = collection;
+export function applyDefaults<EF extends BaseField = UnknownField>(
+  originConfig: Config<EF>,
+): ConfigWithDefaults<EF> {
+  const clonedConfig = cloneDeep(originConfig) as Config;
 
-      if ('folder' in collection && collection.folder) {
-        if (collection.path && !collection.media_folder) {
-          // default value for media folder when using the path config
-          collection.media_folder = '';
-        }
+  const i18n = clonedConfig.i18n;
 
-        if ('media_folder' in collection && !('public_folder' in collection)) {
-          collection.public_folder = collection.media_folder;
-        }
+  if (i18n) {
+    i18n.default_locale = i18n.default_locale ?? i18n.locales[0];
+  }
 
-        if ('fields' in collection && collection.fields) {
-          collection.fields = traverseFields(collection.fields, setFieldDefaults(collection));
-        }
+  throwOnMissingDefaultLocale(i18n);
 
-        collection.folder = trim(collection.folder, '/');
-      }
+  const config: ConfigWithDefaults = {
+    ...clonedConfig,
+    collections: (clonedConfig.collections ?? []).map(c =>
+      applyCollectionDefaults(c, clonedConfig),
+    ),
+  };
 
-      if ('files' in collection && collection.files) {
-        throwOnInvalidFileCollectionStructure(collectionI18n);
+  config.publish_mode = config.publish_mode ?? SIMPLE_PUBLISH_MODE;
+  config.slug = config.slug ?? {};
+  config.collections = config.collections ?? [];
 
-        for (const file of collection.files) {
-          file.file = trimStart(file.file, '/');
+  // Use `site_url` as default `display_url`.
+  if (!config.display_url && config.site_url) {
+    config.display_url = config.site_url;
+  }
 
-          if ('media_folder' in file && !('public_folder' in file)) {
-            file.public_folder = file.media_folder;
-          }
+  // Use media_folder as default public_folder.
+  const defaultPublicFolder = `/${trimStart(config.media_folder, '/')}`;
+  if (!('public_folder' in config)) {
+    config.public_folder = defaultPublicFolder;
+  }
 
-          file.media_library = {
-            ...(collection.media_library ?? {}),
-            ...(file.media_library ?? {}),
-          };
+  // default values for the slug config
+  if (!('encoding' in config.slug)) {
+    config.slug.encoding = 'unicode';
+  }
 
-          if (file.fields) {
-            file.fields = traverseFields(file.fields, setFieldDefaults(collection, file));
-          }
+  if (!('clean_accents' in config.slug)) {
+    config.slug.clean_accents = false;
+  }
 
-          let fileI18n = file[I18N];
+  if (!('sanitize_replacement' in config.slug)) {
+    config.slug.sanitize_replacement = '-';
+  }
 
-          if (fileI18n && collectionI18n) {
-            fileI18n = getI18nDefaults(fileI18n, collectionI18n);
-            file[I18N] = fileI18n;
-          } else {
-            fileI18n = undefined;
-            delete file[I18N];
-          }
-
-          throwOnInvalidFileCollectionStructure(fileI18n);
-
-          if (file.fields) {
-            file.fields = setI18nDefaultsForFields(file.fields, Boolean(fileI18n));
-          }
-
-          if (collection.editor && !file.editor) {
-            file.editor = collection.editor;
-          }
-        }
-      }
-
-      if (!collection.sortable_fields) {
-        collection.sortable_fields = {
-          fields: selectDefaultSortableFields(collection, backend),
-        };
-      }
-
-      collection.view_filters = (view_filters || []).map(filter => {
-        return {
-          ...filter,
-          id: `${filter.field}__${filter.pattern}`,
-        };
-      });
-
-      collection.view_groups = (view_groups || []).map(group => {
-        return {
-          ...group,
-          id: `${group.field}__${group.pattern}`,
-        };
-      });
-    }
-  });
+  return config as ConfigWithDefaults<EF>;
 }
 
 export function parseConfig(data: string) {
@@ -305,10 +382,13 @@ async function getConfigYaml(file: string): Promise<Config> {
   return parseConfig(await response.text());
 }
 
-export function configLoaded(config: Config) {
+export function configLoaded(config: ConfigWithDefaults, originalConfig: Config) {
   return {
     type: CONFIG_SUCCESS,
-    payload: config,
+    payload: {
+      config,
+      originalConfig,
+    },
   } as const;
 }
 
@@ -350,15 +430,16 @@ export async function detectProxyServer(localBackend?: boolean | LocalBackend) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'info' }),
     });
-    const { repo, type } = (await res.json()) as {
+    const { repo, publish_modes, type } = (await res.json()) as {
       repo?: string;
+      publish_modes?: Workflow[];
       type?: string;
     };
-    if (typeof repo === 'string' && typeof type === 'string') {
+    if (typeof repo === 'string' && Array.isArray(publish_modes) && typeof type === 'string') {
       console.info(
         `[StaticCMS] Detected Static CMS Proxy Server at '${proxyUrl}' with repo: '${repo}'`,
       );
-      return { proxyUrl, type };
+      return { proxyUrl, publish_modes, type };
     } else {
       console.info(`[StaticCMS] Static CMS Proxy Server not detected at '${proxyUrl}'`);
       return {};
@@ -369,12 +450,28 @@ export async function detectProxyServer(localBackend?: boolean | LocalBackend) {
   }
 }
 
+function getPublishMode(config: Config, publishModes?: Workflow[], backendType?: string) {
+  if (config.publish_mode && publishModes && !publishModes.includes(config.publish_mode)) {
+    const newPublishMode = publishModes[0];
+    console.info(
+      `'${config.publish_mode}' is not supported by '${backendType}' backend, switching to '${newPublishMode}'`,
+    );
+    return newPublishMode;
+  }
+
+  return config.publish_mode;
+}
+
 export async function handleLocalBackend(originalConfig: Config) {
   if (!originalConfig.local_backend) {
     return originalConfig;
   }
 
-  const { proxyUrl } = await detectProxyServer(originalConfig.local_backend);
+  const {
+    proxyUrl,
+    publish_modes: publishModes,
+    type: backendType,
+  } = await detectProxyServer(originalConfig.local_backend);
 
   if (!proxyUrl) {
     return originalConfig;
@@ -383,26 +480,36 @@ export async function handleLocalBackend(originalConfig: Config) {
   return produce(originalConfig, config => {
     config.backend.name = 'proxy';
     config.backend.proxy_url = proxyUrl;
+
+    if (config.publish_mode) {
+      config.publish_mode = getPublishMode(config as Config, publishModes, backendType);
+    }
   });
 }
 
-export function loadConfig(manualConfig: Config | undefined, onLoad: (config: Config) => unknown) {
-  if (window.CMS_CONFIG) {
-    return configLoaded(window.CMS_CONFIG);
-  }
+export function loadConfig(
+  manualConfig: Config | undefined,
+  onLoad: (config: ConfigWithDefaults) => unknown,
+) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
     dispatch(configLoading());
 
     try {
-      const configUrl = getConfigUrl();
-      const mergedConfig = manualConfig ? manualConfig : await getConfigYaml(configUrl);
+      let originalConfig: Config;
 
-      validateConfig(mergedConfig);
+      if (window.CMS_CONFIG) {
+        originalConfig = window.CMS_CONFIG;
+      } else {
+        const configUrl = getConfigUrl();
+        originalConfig = manualConfig ? manualConfig : await getConfigYaml(configUrl);
+      }
 
-      const withLocalBackend = await handleLocalBackend(mergedConfig);
+      validateConfig(originalConfig);
+
+      const withLocalBackend = await handleLocalBackend(originalConfig);
       const config = applyDefaults(withLocalBackend);
 
-      dispatch(configLoaded(config));
+      dispatch(configLoaded(config, originalConfig));
 
       if (typeof onLoad === 'function') {
         onLoad(config);

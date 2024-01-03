@@ -5,18 +5,18 @@ import cardClasses from './Card.classes';
 
 import type {
   BaseField,
-  Collection,
+  CollectionWithDefaults,
   Entry,
   MediaField,
   UnknownField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 interface CardMediaProps<EF extends BaseField> {
   image: string;
   width?: string | number;
   height?: string | number;
   alt?: string;
-  collection?: Collection<EF>;
+  collection?: CollectionWithDefaults<EF>;
   field?: MediaField;
   entry?: Entry;
 }

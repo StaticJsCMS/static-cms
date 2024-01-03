@@ -2,7 +2,7 @@ import withMarkdownControl from './withMarkdownControl';
 import previewComponent from './MarkdownPreview';
 import schema from './schema';
 
-import type { MarkdownField, WidgetParam } from '@staticcms/core/interface';
+import type { MarkdownField, WidgetParam } from '@staticcms/core';
 
 const controlComponent = withMarkdownControl({ useMdx: false });
 

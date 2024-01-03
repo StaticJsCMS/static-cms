@@ -8,7 +8,8 @@ import type {
   NumberField,
   RelationField,
   SelectField,
-  StringOrTextField,
+  StringField,
+  TextField,
   UUIDField,
 } from '@staticcms/core';
 
@@ -66,7 +67,7 @@ export const mockMarkdownField: MarkdownField = {
   label: 'Body',
   name: 'body',
   widget: 'markdown',
-  hint: 'Main content goes here.',
+  hint: '*Main* __content__ __*goes*__ [here](https://example.com/).',
 };
 
 export const mockNumberField: NumberField = {
@@ -92,13 +93,13 @@ export const mockSelectField: SelectField = {
   options: ['Option 1', 'Option 2', 'Option 3'],
 };
 
-export const mockStringField: StringOrTextField = {
+export const mockStringField: StringField = {
   label: 'String',
   name: 'mock_string',
   widget: 'string',
 };
 
-export const mockTextField: StringOrTextField = {
+export const mockTextField: TextField = {
   label: 'Text',
   name: 'mock_text',
   widget: 'text',

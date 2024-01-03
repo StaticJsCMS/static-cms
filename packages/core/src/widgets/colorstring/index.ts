@@ -3,7 +3,7 @@ import previewComponent from './ColorPreview';
 import schema from './schema';
 import validator from './validator';
 
-import type { ColorField, WidgetParam } from '@staticcms/core/interface';
+import type { ColorField, WidgetParam } from '@staticcms/core';
 
 const ColorWidget = (): WidgetParam<string, ColorField> => {
   return {

@@ -49,21 +49,22 @@
 }
 
 .CMS_Menu_menu {
+  background: var(--background-main);
+  border-color: var(--background-light);
+
+  & > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--background-divider);
+  }
+
   @apply absolute
     right-0
     z-40
-    w-56
+    min-w-[224px]
+    max-w-[80%]
     origin-top-right
     rounded-md
-    bg-white
-    dark:bg-slate-800
     shadow-md
     border
-    border-gray-200
     focus:outline-none
-    divide-y
-    divide-gray-100
-    dark:border-gray-700
-    dark:divide-gray-600
-    dark:shadow-lg;
+    divide-y;
 }

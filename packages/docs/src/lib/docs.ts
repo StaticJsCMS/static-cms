@@ -129,18 +129,21 @@ export function fetchDocsContent(): [DocsPage[], DocsGroup[]] {
     },
   );
 
-  const pagesByGroup: Record<string, DocsGroupLink[]> = allDocsData.reduce((acc, doc) => {
-    if (!(doc.data.group in acc)) {
-      acc[doc.data.group] = [];
-    }
-    acc[doc.data.group].push({
-      title: doc.data.title,
-      slug: doc.data.slug,
-      beta: doc.data.beta ?? false,
-      deprecated: doc.data.deprecated ?? false,
-    });
-    return acc;
-  }, {} as Record<string, DocsGroupLink[]>);
+  const pagesByGroup: Record<string, DocsGroupLink[]> = allDocsData.reduce(
+    (acc, doc) => {
+      if (!(doc.data.group in acc)) {
+        acc[doc.data.group] = [];
+      }
+      acc[doc.data.group].push({
+        title: doc.data.title,
+        slug: doc.data.slug,
+        beta: doc.data.beta ?? false,
+        deprecated: doc.data.deprecated ?? false,
+      });
+      return acc;
+    },
+    {} as Record<string, DocsGroupLink[]>,
+  );
 
   const docsGroups: DocsGroup[] = menu.docs.map(group => ({
     ...group,

@@ -4,39 +4,54 @@
     px-3
     py-1
     rounded-lg
-    truncate;
+    truncate
+    flex
+    items-center
+    flex-shrink-0;
 
   &.CMS_Pill_no-wrap {
     @apply whitespace-nowrap;
   }
 
   &.CMS_Pill_primary {
-    @apply bg-blue-700
-      text-gray-100
-      dark:bg-blue-700
-      dark:text-gray-100;
+    color: var(--primary-contrast-color);
+    background: var(--primary-main);
   }
 
   &.CMS_Pill_default {
-    @apply bg-gray-200
-      text-gray-800
-      dark:bg-gray-700
-      dark:text-gray-100;
+    color: var(--text-primary);
+    background: var(--common-gray);
+  }
+
+  &.CMS_Pill_info {
+    color: var(--info-contrast-color);
+    background: var(--info-main);
+  }
+
+  &.CMS_Pill_warning {
+    color: var(--warning-contrast-color);
+    background: var(--warning-main);
+  }
+
+  &.CMS_Pill_error {
+    color: var(--error-contrast-color);
+    background: var(--error-main);
+  }
+
+  &.CMS_Pill_success {
+    color: var(--success-contrast-color);
+    background: var(--success-main);
   }
 
   &.CMS_Pill_disabled {
-    &.CMS_Pill_primary {
-      @apply bg-blue-300/75
-        text-gray-100/75
-        dark:bg-blue-700/25
-        dark:text-gray-500;
-    }
-
-    &.CMS_Pill_default {
-      @apply bg-gray-100
-        text-gray-400/75
-        dark:bg-gray-800/75
-        dark:text-gray-500;
+    &.CMS_Pill_primary,
+    &.CMS_Pill_default,
+    &.CMS_Pill_info,
+    &.CMS_Pill_warning,
+    &.CMS_Pill_error,
+    &.CMS_Pill_success {
+      color: var(--text-disabled);
+      background: var(--common-gray);
     }
   }
 }

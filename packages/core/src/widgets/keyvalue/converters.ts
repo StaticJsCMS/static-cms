@@ -1,6 +1,6 @@
 import { createEmptyPair } from './util';
 
-import type { FieldStorageConverters, KeyValueField } from '@staticcms/core/interface';
+import type { FieldStorageConverters, KeyValueField } from '@staticcms/core';
 import type { Pair } from './types';
 
 const converters: FieldStorageConverters<Pair[], KeyValueField, Record<string, string>> = {
@@ -13,10 +13,13 @@ const converters: FieldStorageConverters<Pair[], KeyValueField, Record<string, s
       : [createEmptyPair()];
   },
   serialize(cmsValue) {
-    return cmsValue?.reduce((acc, pair) => {
-      acc[pair.key] = pair.value;
-      return acc;
-    }, {} as Record<string, string>);
+    return cmsValue?.reduce(
+      (acc, pair) => {
+        acc[pair.key] = pair.value;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
   },
 };
 

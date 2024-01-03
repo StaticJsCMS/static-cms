@@ -1,14 +1,13 @@
 import React from 'react';
-import { translate } from 'react-polyglot';
 
 import Button from '@staticcms/core/components/common/button/Button';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import { StaticCmsLogo } from '../images/_index';
 import GoBackButton from './GoBackButton';
 
-import type { TranslatedProps } from '@staticcms/core/interface';
 import type { FC, MouseEventHandler, ReactNode } from 'react';
 
 import './Login.css';
@@ -30,17 +29,20 @@ export interface LoginProps {
   label?: string;
   error?: ReactNode;
   disabled?: boolean;
+  buttonContent?: ReactNode;
 }
 
-const Login = ({
+const Login: FC<LoginProps> = ({
   inProgress = false,
   login,
   icon,
   label,
   error,
   disabled = false,
-  t,
-}: TranslatedProps<LoginProps>) => {
+  buttonContent,
+}) => {
+  const t = useTranslate();
+
   const config = useAppSelector(selectConfig);
 
   return (
@@ -54,7 +56,7 @@ const Login = ({
         <StaticCmsLogo className={classes['static-cms-logo']} />
       )}
       {error ? (
-        <div className={classes.error} role="alert">
+        <div className={classes.error} data-testid="login-error" role="alert">
           <svg
             aria-hidden="true"
             className={classes['error-icon']}
@@ -72,17 +74,22 @@ const Login = ({
           <div>{error}</div>
         </div>
       ) : null}
-      <Button
-        disabled={inProgress || disabled}
-        onClick={login}
-        className={classes.button}
-        startIcon={icon}
-      >
-        {inProgress ? t('auth.loggingIn') : label ?? t('auth.login')}
-      </Button>
-      {config?.site_url && <GoBackButton href={config.site_url} t={t}></GoBackButton>}
+      {buttonContent ? (
+        buttonContent
+      ) : (
+        <Button
+          disabled={inProgress || disabled}
+          onClick={login}
+          className={classes.button}
+          startIcon={icon}
+          data-testid="login-button"
+        >
+          {inProgress ? t('auth.loggingIn') : label ?? t('auth.login')}
+        </Button>
+      )}
+      {config?.site_url && <GoBackButton href={config.site_url} />}
     </div>
   );
 };
 
-export default translate()(Login) as FC<LoginProps>;
+export default Login;

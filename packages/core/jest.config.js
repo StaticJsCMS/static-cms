@@ -15,5 +15,4 @@ module.exports = {
   setupFiles: ['./test/setupEnv.js'],
   globalSetup: './test/globalSetup.js',
   testRegex: '\\.spec\\.tsx?$',
-  snapshotSerializers: ['@emotion/jest/serializer'],
 };

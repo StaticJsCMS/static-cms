@@ -3,6 +3,7 @@ import { MARK_ITALIC } from '@udecode/plate';
 import React from 'react';
 
 import MarkToolbarButton from './common/MarkToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
 import type { FC } from 'react';
 
@@ -12,9 +13,12 @@ export interface ItalicToolbarButtonsProp {
 }
 
 const ItalicToolbarButton: FC<ItalicToolbarButtonsProp> = ({ disabled, variant }) => {
+  const t = useTranslate();
+
   return (
     <MarkToolbarButton
-      tooltip="Italic"
+      id="italic"
+      tooltip={t('editor.editorWidgets.markdown.italic')}
       type={MARK_ITALIC}
       variant={variant}
       icon={FormatItalicIcon}

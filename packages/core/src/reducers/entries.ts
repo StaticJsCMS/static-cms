@@ -29,7 +29,7 @@ import type { EntriesAction } from '../actions/entries';
 import type { SearchAction } from '../actions/search';
 import type { ViewStyle } from '../constants/views';
 import type {
-  Entities,
+  Entries,
   Entry,
   Filter,
   FilterMap,
@@ -115,7 +115,7 @@ function persistViewStyle(viewStyle: string | undefined) {
 
 export type EntriesState = {
   pages: Pages;
-  entities: Entities;
+  entries: Entries;
   sort: Sort;
   filter?: Filter;
   group?: Group;
@@ -123,7 +123,7 @@ export type EntriesState = {
 };
 
 function entries(
-  state: EntriesState = { entities: {}, pages: {}, sort: loadSort(), viewStyle: loadViewStyle() },
+  state: EntriesState = { entries: {}, pages: {}, sort: loadSort(), viewStyle: loadViewStyle() },
   action: EntriesAction | SearchAction,
 ): EntriesState {
   switch (action.type) {
@@ -132,15 +132,15 @@ function entries(
 
       const key = `${payload.collection}.${payload.slug}`;
       const newEntity: Entry = {
-        ...(state.entities[key] ?? {}),
+        ...(state.entries[key] ?? {}),
       };
 
       newEntity.isFetching = true;
 
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [key]: newEntity,
         },
       };
@@ -151,8 +151,8 @@ function entries(
 
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [`${payload.collection}.${payload.entry.slug}`]: payload.entry,
         },
       };
@@ -184,12 +184,12 @@ function entries(
       const page = payload.page;
       const append = payload.append;
 
-      const entities = {
-        ...state.entities,
+      const entries = {
+        ...state.entries,
       };
 
       loadedEntries.forEach(entry => {
-        entities[`${payload.collection}.${entry.slug}`] = { ...entry, isFetching: false };
+        entries[`${payload.collection}.${entry.slug}`] = { ...entry, isFetching: false };
       });
 
       const pages = {
@@ -204,7 +204,7 @@ function entries(
         isFetching: false,
       };
 
-      return { ...state, entities, pages };
+      return { ...state, entries, pages };
     }
 
     case ENTRIES_FAILURE: {
@@ -231,10 +231,10 @@ function entries(
 
       return {
         ...state,
-        entities: {
-          ...state.entities,
+        entries: {
+          ...state.entries,
           [key]: {
-            ...(state.entities[key] ?? {}),
+            ...(state.entries[key] ?? {}),
             isFetching: false,
             error: payload.error.message,
           },
@@ -246,18 +246,18 @@ function entries(
       const payload = action.payload;
       const loadedEntries = payload.entries;
 
-      const entities = {
-        ...state.entities,
+      const entries = {
+        ...state.entries,
       };
 
       loadedEntries.forEach(entry => {
-        entities[`${entry.collection}.${entry.slug}`] = {
+        entries[`${entry.collection}.${entry.slug}`] = {
           ...entry,
           isFetching: false,
         };
       });
 
-      return { ...state, entities };
+      return { ...state, entries };
     }
 
     case ENTRY_DELETE_SUCCESS: {
@@ -265,11 +265,11 @@ function entries(
       const collection = payload.collectionName;
       const slug = payload.entrySlug;
 
-      const entities = {
-        ...state.entities,
+      const entries = {
+        ...state.entries,
       };
 
-      delete entities[`${collection}.${slug}`];
+      delete entries[`${collection}.${slug}`];
 
       const pages = {
         ...state.pages,
@@ -291,7 +291,7 @@ function entries(
 
       return {
         ...state,
-        entities,
+        entries,
         pages,
       };
     }
@@ -332,14 +332,14 @@ function entries(
     case FILTER_ENTRIES_SUCCESS:
     case SORT_ENTRIES_SUCCESS: {
       const payload = action.payload as { collection: string; entries: Entry[] };
-      const { collection, entries } = payload;
+      const { collection } = payload;
 
-      const entities = {
-        ...state.entities,
+      const entries = {
+        ...state.entries,
       };
 
-      entries.forEach(entry => {
-        entities[`${entry.collection}.${entry.slug}`] = {
+      payload.entries.forEach(entry => {
+        entries[`${entry.collection}.${entry.slug}`] = {
           ...entry,
           isFetching: false,
         };
@@ -349,7 +349,7 @@ function entries(
         ...state.pages,
       };
 
-      const ids = entries.map(entry => entry.slug);
+      const ids = payload.entries.map(entry => entry.slug);
 
       pages[collection] = {
         page: 1,
@@ -359,7 +359,7 @@ function entries(
 
       return {
         ...state,
-        entities,
+        entries,
         pages,
       };
     }

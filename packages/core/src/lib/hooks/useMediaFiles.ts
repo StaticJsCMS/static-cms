@@ -12,7 +12,7 @@ import { selectMediaFolder } from '../util/media.util';
 import useFolderSupport from './useFolderSupport';
 import { fileForEntry } from '../util/collection.util';
 
-import type { MediaField, MediaFile } from '@staticcms/core/interface';
+import type { MediaField, MediaFile } from '@staticcms/core';
 
 export default function useMediaFiles(field?: MediaField, currentFolder?: string): MediaFile[] {
   const [currentFolderMediaFiles, setCurrentFolderMediaFiles] = useState<MediaFile[] | null>(null);
@@ -20,11 +20,7 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
   const entry = useAppSelector(selectEditingDraft);
   const config = useAppSelector(selectConfig);
 
-  const collectionSelector = useMemo(
-    () => selectCollection(entry?.collection),
-    [entry?.collection],
-  );
-  const collection = useAppSelector(collectionSelector);
+  const collection = useAppSelector(state => selectCollection(state, entry?.collection));
   const collectionFile = useMemo(
     () => fileForEntry(collection, entry?.slug),
     [collection, entry?.slug],
@@ -75,10 +71,10 @@ export default function useMediaFiles(field?: MediaField, currentFolder?: string
       .filter(f => {
         if (f.name === '.gitkeep') {
           const folder = dirname(f.path);
-          return dirname(folder) === mediaFolder;
+          return dirname(folder) === trim(mediaFolder, '/');
         }
 
-        return dirname(f.path) === mediaFolder;
+        return dirname(f.path) === trim(mediaFolder, '/');
       })
       .map(file => {
         if (file.name === '.gitkeep') {

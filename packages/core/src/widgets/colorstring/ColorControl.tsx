@@ -9,7 +9,7 @@ import TextField from '@staticcms/core/components/common/text-field/TextField';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { ColorField, WidgetControlProps } from '@staticcms/core/interface';
+import type { ColorField, WidgetControlProps } from '@staticcms/core';
 import type { ChangeEvent, FC, MouseEvent, MouseEventHandler } from 'react';
 import type { ColorResult } from 'react-color';
 
@@ -30,7 +30,6 @@ export const classes = generateClassNames('WidgetColor', [
   'color-picker',
   'input',
   'clear-button',
-  'clear-button-icon',
 ]);
 
 const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
@@ -164,13 +163,13 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
         />
         {showClearButton ? (
           <IconButton
+            icon={CloseIcon}
             variant="text"
             onClick={handleClear}
             disabled={disabled}
-            className={classes['clear-button']}
-          >
-            <CloseIcon className={classes['clear-button-icon']} />
-          </IconButton>
+            rootClassName={classes['clear-button']}
+            aria-label="clear"
+          />
         ) : null}
       </div>
     </Field>

@@ -1,7 +1,6 @@
 import { isEqual } from 'lodash';
 import isEmpty from 'lodash/isEmpty';
 import React, { createElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 
 import {
@@ -12,6 +11,7 @@ import {
 import { query as queryAction } from '@staticcms/core/actions/search';
 import useDebouncedCallback from '@staticcms/core/lib/hooks/useDebouncedCallback';
 import useMemoCompare from '@staticcms/core/lib/hooks/useMemoCompare';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isFieldDuplicate, isFieldHidden } from '@staticcms/core/lib/i18n';
 import { resolveWidget } from '@staticcms/core/lib/registry';
@@ -22,7 +22,6 @@ import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { validate } from '@staticcms/core/lib/util/validation.util';
 import { selectFieldErrors } from '@staticcms/core/reducers/selectors/entryDraft';
-import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { selectIsLoadingAsset } from '@staticcms/core/reducers/selectors/medias';
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
@@ -30,20 +29,19 @@ import type {
   Field,
   FieldsErrors,
   I18nSettings,
-  TranslatedProps,
   UnknownField,
   ValueOrNestedValue,
   Widget,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
-import type { ComponentType } from 'react';
+import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
 import './EditorControl.css';
 
 export const classes = generateClassNames('EditorControl', ['root', 'hidden']);
 
-const EditorControl = ({
+const EditorControl: FC<EditorControlProps> = ({
   collection,
   collectionFile,
   config: configState,
@@ -51,12 +49,11 @@ const EditorControl = ({
   field,
   fieldsErrors,
   submitted,
-  disabled = false,
+  disabled,
   parentDuplicate = false,
   locale,
   parentPath,
   query,
-  t,
   value: storageValue,
   forList = false,
   listItemPath,
@@ -66,15 +63,15 @@ const EditorControl = ({
   fieldName,
   isMeta = false,
   controlled = false,
-}: TranslatedProps<EditorControlProps>) => {
+}) => {
+  const t = useTranslate();
+
   const dispatch = useAppDispatch();
 
   const id = useUUID();
 
   const widgetName = field.widget;
   const widget = resolveWidget(widgetName) as Widget<ValueOrNestedValue, Field>;
-
-  const theme = useAppSelector(selectTheme);
 
   const path = useMemo(
     () =>
@@ -84,7 +81,7 @@ const EditorControl = ({
 
   const finalStorageValue = useMemoCompare(storageValue, isEqual);
 
-  const [internalValue, setInternalValue] = useState(
+  const [internalValue, setInternalValue] = useState(() =>
     widget.converters.deserialize(finalStorageValue, field),
   );
 
@@ -92,11 +89,7 @@ const EditorControl = ({
     !isEmpty(widget.getValidValue(internalValue, field as UnknownField)),
   );
 
-  const fieldErrorsSelector = useMemo(
-    () => selectFieldErrors(path, i18n, isMeta),
-    [i18n, isMeta, path],
-  );
-  const errors = useAppSelector(fieldErrorsSelector);
+  const errors = useAppSelector(state => selectFieldErrors(state, path, i18n, isMeta));
 
   const hasErrors = (submitted || dirty) && Boolean(errors.length);
 
@@ -127,7 +120,12 @@ const EditorControl = ({
       return;
     }
 
-    if ((!dirty && !submitted) || disabled || i18nDisabled) {
+    if (
+      (!dirty && !submitted) ||
+      disabled ||
+      i18nDisabled ||
+      (forList && field.widget === 'object' && field.fields.length === 1)
+    ) {
       return;
     }
 
@@ -151,6 +149,8 @@ const EditorControl = ({
     disabled,
     isMeta,
     i18nDisabled,
+    forList,
+    forSingleList,
   ]);
 
   const clearChildValidation = useCallback(() => {
@@ -212,7 +212,10 @@ const EditorControl = ({
     }
 
     return (
-      <div className={classNames(classes.root, hidden && classes.hidden)}>
+      <div
+        className={classNames(classes.root, hidden && classes.hidden)}
+        aria-label={widgetName?.concat(' field')}
+      >
         {createElement(widget.control, {
           key: `${id}-${version}`,
           collection,
@@ -238,7 +241,6 @@ const EditorControl = ({
           i18n,
           hasErrors,
           errors,
-          theme,
           controlled: controlled || i18nDisabled,
         })}
       </div>
@@ -275,7 +277,7 @@ interface EditorControlOwnProps {
   field: Field;
   fieldsErrors: FieldsErrors;
   submitted: boolean;
-  disabled?: boolean;
+  disabled: boolean;
   parentDuplicate?: boolean;
   locale?: string;
   parentPath: string;
@@ -314,4 +316,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type EditorControlProps = ConnectedProps<typeof connector>;
 
-export default connector(translate()(EditorControl) as ComponentType<EditorControlProps>);
+export default connector(EditorControl);

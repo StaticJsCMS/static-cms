@@ -4,7 +4,7 @@
       & > .CMS_NestedCollection_link {
         & .CMS_NestedCollection_node-children-icon {
           @apply rotate-90
-          transform;
+            transform;
         }
       }
     }
@@ -29,7 +29,7 @@
     & > .CMS_NestedCollection_link {
       & .CMS_NestedCollection_node-children-icon {
         @apply rotate-90
-        transform;
+          transform;
       }
     }
   }
@@ -51,9 +51,7 @@
 .CMS_NestedCollection_node-children-icon {
   @apply transition-transform
     h-5
-    w-5
-    group-focus-within/active-list:text-blue-500
-    group-hover/active-list:text-blue-500;
+    w-5;
 }
 
 .CMS_NestedCollection_node-children {

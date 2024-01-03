@@ -10,7 +10,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
-import type { MouseEvent, ReactNode } from 'react';
+import type { FC, MouseEvent, ReactNode } from 'react';
 
 import './ListItemWrapper.css';
 
@@ -30,6 +30,7 @@ const classes = generateClassNames('WidgetList_ListItem', [
   'button-icon',
   'not-open-placeholder',
   'content',
+  'content-fields',
   'single-field-controls',
   'drag-handle',
   'drag-handle-icon',
@@ -40,7 +41,7 @@ export interface DragHandleProps {
   disabled: boolean;
 }
 
-const DragHandle = ({ listeners, disabled }: DragHandleProps) => {
+const DragHandle: FC<DragHandleProps> = ({ listeners, disabled }) => {
   return (
     <span
       data-testid="drag-handle"
@@ -65,7 +66,7 @@ export interface ListItemWrapperProps {
   disabled: boolean;
 }
 
-const ListItemWrapper = ({
+const ListItemWrapper: FC<ListItemWrapperProps> = ({
   label,
   summary,
   collapsed = false,
@@ -75,7 +76,7 @@ const ListItemWrapper = ({
   children,
   isSingleField,
   disabled,
-}: ListItemWrapperProps) => {
+}) => {
   const [open, setOpen] = useState(!collapsed);
 
   const handleOpenToggle = useCallback(() => {
@@ -87,15 +88,17 @@ const ListItemWrapper = ({
       <div className={classes.controls}>
         {onRemove ? (
           <IconButton
+            icon={CloseIcon}
             data-testid="remove-button"
             size="small"
+            color="secondary"
             variant="text"
             onClick={onRemove}
             disabled={disabled}
-            className={classes['remove-button']}
-          >
-            <CloseIcon className={classes['button-icon']} />
-          </IconButton>
+            rootClassName={classes['remove-button']}
+            iconClassName={classes['button-icon']}
+            aria-label="remove"
+          />
         ) : null}
         {listeners ? <DragHandle listeners={listeners} disabled={disabled} /> : null}
       </div>
@@ -106,7 +109,7 @@ const ListItemWrapper = ({
   if (isSingleField) {
     return (
       <div
-        data-testid="list-item-field"
+        data-testid={`list-item-field-${label?.trim()}`}
         className={classNames(
           classes['single-field-root'],
           hasErrors && classes.error,
@@ -114,7 +117,7 @@ const ListItemWrapper = ({
         )}
       >
         <div data-testid="list-item-objects" className={classes.content}>
-          {children}
+          <div className={classes['content-fields']}>{children}</div>
           <div className={classes['single-field-controls']}>{renderedControls}</div>
         </div>
       </div>
@@ -123,7 +126,7 @@ const ListItemWrapper = ({
 
   return (
     <div
-      data-testid="list-item-field"
+      data-testid={`list-item-field-${label?.trim()}`}
       className={classNames(
         classes.root,
         hasErrors && classes.error,
@@ -136,6 +139,7 @@ const ListItemWrapper = ({
           data-testid="list-item-expand-button"
           className={classes['expand-button']}
           onClick={handleOpenToggle}
+          aria-label={!open ? 'expand' : 'collapse'}
         >
           <ChevronRightIcon className={classes['expand-button-icon']} />
           <div className={classes.summary}>
@@ -148,7 +152,7 @@ const ListItemWrapper = ({
               data-testid="item-label"
               disabled={disabled}
             >
-              {label}
+              {label.trim()}
             </Label>
             {!open ? <span data-testid="item-summary">{summary}</span> : null}
           </div>
@@ -157,7 +161,9 @@ const ListItemWrapper = ({
       </div>
       {!open ? <div className={classes['not-open-placeholder']}></div> : null}
       <Collapse in={open} appear={false}>
-        <div className={classes.content}>{children}</div>
+        <div className={classes.content}>
+          <div className={classes['content-fields']}>{children}</div>
+        </div>
       </Collapse>
     </div>
   );

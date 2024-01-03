@@ -1,32 +1,54 @@
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 import get from 'lodash/get';
 import trimEnd from 'lodash/trimEnd';
 import truncate from 'lodash/truncate';
-import moment from 'moment';
 import { basename, dirname, extname } from 'path';
 
-import type { Entry, EntryData, ObjectValue } from '@staticcms/core/interface';
+import { getDatetimeFormats } from '@staticcms/datetime/datetime.util';
+import { getField } from '../util/field.util';
 
-const filters = [
+import type { Entry, EntryData, Field, ObjectValue } from '@staticcms/core';
+
+export interface StringTemplateFilter {
+  pattern: RegExp;
+  transform: (str: string, match: RegExpMatchArray, field: Field | null) => string;
+}
+
+const filters: StringTemplateFilter[] = [
   { pattern: /^upper$/, transform: (str: string) => str.toUpperCase() },
   {
     pattern: /^lower$/,
-    transform: (str: string) => str.toLowerCase(),
+    transform: str => str.toLowerCase(),
   },
   {
     pattern: /^date\('(.+)'\)$/,
-    transform: (str: string, match: RegExpMatchArray) => moment(str).format(match[1]),
+    transform: (str, match, field) => {
+      if (!field || field.widget !== 'datetime') {
+        return str;
+      }
+
+      const { storageFormat } = getDatetimeFormats(field);
+
+      const date = parse(str, storageFormat, new Date());
+      if (isNaN(date.getTime())) {
+        return str;
+      }
+
+      return format(date, match[1]);
+    },
   },
   {
     pattern: /^default\('(.+)'\)$/,
-    transform: (str: string, match: RegExpMatchArray) => (str ? str : match[1]),
+    transform: (str, match) => (str ? str : match[1]),
   },
   {
     pattern: /^ternary\('(.*)',\s*'(.*)'\)$/,
-    transform: (str: string, match: RegExpMatchArray) => (str ? match[1] : match[2]),
+    transform: (str, match) => (str ? match[1] : match[2]),
   },
   {
     pattern: /^truncate\(([0-9]+)(?:(?:,\s*['"])([^'"]*)(?:['"]))?\)$/,
-    transform: (str: string, match: RegExpMatchArray) => {
+    transform: (str, match) => {
       const omission = match[2] || '...';
       const length = parseInt(match[1]) + omission.length;
 
@@ -77,9 +99,13 @@ export const dateParsers: Record<string, (date: Date) => string> = {
   second: (date: Date) => formatDate(date.getUTCSeconds()),
 };
 
-export function parseDateFromEntry(entry: Entry, dateFieldName?: string | null) {
-  if (!dateFieldName) {
-    return;
+export function parseDateFromEntry(
+  entry: Entry,
+  dateFieldName: string | undefined | null,
+  dateField: Field | null,
+) {
+  if (!dateFieldName || !dateField || dateField.widget !== 'datetime') {
+    return undefined;
   }
 
   const dateValue = entry.data?.[dateFieldName];
@@ -87,11 +113,13 @@ export function parseDateFromEntry(entry: Entry, dateFieldName?: string | null) 
     return dateValue;
   }
 
-  const dateMoment =
-    typeof dateValue === 'string' || typeof dateValue === 'number' ? moment(dateValue) : null;
-  if (dateMoment && dateMoment.isValid()) {
-    return dateMoment.toDate();
+  if (typeof dateValue !== 'string') {
+    return undefined;
   }
+
+  const { storageFormat } = getDatetimeFormats(dateField);
+
+  return parse(dateValue, storageFormat, new Date());
 }
 
 export const SLUG_MISSING_REQUIRED_DATE = 'SLUG_MISSING_REQUIRED_DATE';
@@ -180,7 +208,8 @@ function getFilterFunction(filterStr: string) {
     });
 
     if (filter) {
-      return (str: string) => filter.transform(str, match as RegExpMatchArray);
+      return (str: string, field: Field | null) =>
+        filter.transform(str, match as RegExpMatchArray, field);
     }
   }
   return null;
@@ -190,8 +219,9 @@ export function compileStringTemplate(
   template: string,
   date: Date | undefined | null,
   identifier = '',
-  data: ObjectValue | undefined | null = {},
-  processor?: (value: string) => string,
+  data: ObjectValue | undefined | null,
+  fields: Field[] | undefined,
+  processor?: (value: string, field: Field | null) => string,
 ) {
   if (template === '') {
     return '';
@@ -207,6 +237,8 @@ export function compileStringTemplate(
     RegExp(templateVariablePattern, 'g'),
     (_full, key: string, _part, filter: string) => {
       let replacement;
+
+      const field = getField(fields, key);
       const explicitFieldReplacement = getExplicitFieldReplacement(key, data);
 
       if (explicitFieldReplacement) {
@@ -223,11 +255,11 @@ export function compileStringTemplate(
       }
 
       if (processor) {
-        return processor(replacement);
+        return processor(replacement, field);
       } else {
         const filterFunction = getFilterFunction(filter);
         if (filterFunction) {
-          replacement = filterFunction(replacement);
+          replacement = filterFunction(replacement, field);
         }
       }
 

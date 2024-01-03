@@ -1,8 +1,8 @@
 .CMS_ErrorBoundary_root {
+  background: var(--background-dark);
+
   @apply flex
     flex-col
-    bg-slate-50
-    dark:bg-slate-900
     min-h-screen
     gap-2;
 }
@@ -21,8 +21,9 @@
 }
 
 .CMS_ErrorBoundary_report-link {
-  @apply text-blue-500
-    hover:underline;
+  color: var(--primary-main);
+
+  @apply hover:underline;
 }
 
 .CMS_ErrorBoundary_content {

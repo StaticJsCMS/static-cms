@@ -1,6 +1,6 @@
 import { validateMinMax } from '@staticcms/core/lib/widgets/validations';
 
-import type { FieldValidationMethod, RelationField } from '@staticcms/core/interface';
+import type { FieldValidationMethod, RelationField } from '@staticcms/core';
 
 const validator: FieldValidationMethod<string | string[], RelationField> = ({
   field,

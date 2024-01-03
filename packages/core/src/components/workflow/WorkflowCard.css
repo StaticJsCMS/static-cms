@@ -1,0 +1,28 @@
+.CMS_WorkflowCard_root {
+  @apply w-full
+    min-h-[100px];
+
+  &:hover {
+    & .CMS_WorkflowCard_actions {
+      @apply visible;
+    }
+  }
+}
+
+.CMS_WorkflowCard_actions {
+  background: color-mix(in srgb, var(--background-dark) 95%, transparent);
+
+  @apply py-1
+    px-2
+    gap-2
+    absolute
+    top-3
+    right-3
+    flex
+    transition-all
+    rounded-md
+    invisible;
+}
+
+.CMS_WorkflowCard_action-button {
+}

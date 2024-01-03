@@ -2,7 +2,7 @@ import schema from './schema';
 import controlComponent from './UUIDControl';
 import previewComponent from './UUIDPreview';
 
-import type { UUIDField, WidgetParam } from '@staticcms/core/interface';
+import type { UUIDField, WidgetParam } from '@staticcms/core';
 
 const UUIDWidget = (): WidgetParam<string, UUIDField> => {
   return {

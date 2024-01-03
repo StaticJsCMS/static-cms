@@ -1,0 +1,222 @@
+.CMS_ThemeCard_root {
+  border-color: color-mix(in srgb, var(--background-divider) 50%, transparent);
+
+  @apply w-full
+    rounded-md
+    border
+    drop-shadow-md
+    overflow-hidden;
+}
+
+.CMS_ThemeCard_active {
+  --tw-ring-color: color-mix(in srgb, var(--primary-light) 50%, transparent);
+
+  @apply ring-4;
+}
+
+.CMS_ThemeCard_button {
+  background: color-mix(in srgb, var(--background-dark) 50%, transparent);
+
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+
+  @apply w-full
+    rounded-md;
+}
+
+.CMS_ThemeCard_content {
+  border-color: color-mix(in srgb, var(--background-divider) 50%, transparent);
+
+  @apply px-3
+    py-2
+    flex
+    justify-start
+    items-center
+    border-t
+    w-full;
+}
+
+.CMS_ThemeCard_preview {
+  background: var(--background-dark);
+
+  @apply w-full
+    h-[128px]
+    flex
+    flex-col;
+}
+
+.CMS_ThemeCard_preview-appbar {
+  background: var(--background-main);
+
+  @apply h-5
+    w-full
+    flex
+    items-center
+    justify-between
+    pr-2
+    drop-shadow-md
+    z-[100];
+}
+
+.CMS_ThemeCard_preview-breadcrumbs {
+  @apply flex
+    items-center
+    gap-1
+    h-full;
+}
+
+.CMS_ThemeCard_preview-logo-wrapper {
+  background: var(--background-light);
+
+  @apply flex
+    flex-shrink-0
+    items-center
+    justify-center
+    w-[21px]
+    pl-[1px]
+    h-full;
+
+  & .CMS_ThemeCard_preview-logo {
+    @apply w-3
+      h-3;
+
+    &.CMS_ThemeCard_preview-custom-logo {
+      @apply bg-contain
+        bg-no-repeat
+        bg-center
+        object-cover;
+    }
+  }
+}
+
+.CMS_ThemeCard_preview-appbar-actions {
+  @apply flex
+    items-center
+    gap-1;
+}
+
+.CMS_ThemeCard_preview-primary-button {
+  background: var(--primary-main);
+
+  @apply w-8
+    h-2
+    rounded-md;
+}
+
+.CMS_ThemeCard_preview-secondary-button {
+  background: var(--common-gray);
+
+  @apply w-8
+    h-2
+    rounded-md;
+}
+
+.CMS_ThemeCard_preview-avatar {
+  background: var(--common-gray);
+
+  @apply w-2.5
+    h-2.5
+    rounded-full;
+}
+
+.CMS_ThemeCard_preview-content {
+  @apply flex
+    flex-grow;
+}
+
+.CMS_ThemeCard_preview-text {
+  background: var(--text-primary);
+
+  @apply w-8
+    h-[7px]
+    rounded-md;
+}
+
+.CMS_ThemeCard_preview-sidebar {
+  background: var(--background-main);
+
+  @apply h-full
+    w-12
+    flex
+    flex-col
+    items-center
+    gap-1
+    px-1
+    py-1.5
+    drop-shadow-md;
+
+  & .CMS_ThemeCard_preview-primary-button,
+  & .CMS_ThemeCard_preview-secondary-button {
+    @apply w-full;
+  }
+}
+
+.CMS_ThemeCard_preview-main {
+  @apply flex
+    flex-col
+    flex-grow
+    p-1
+    gap-1;
+}
+
+.CMS_ThemeCard_preview-main-actions {
+  @apply h-2
+    flex
+    gap-1
+    items-center
+    justify-end;
+}
+
+.CMS_ThemeCard_preview-error-button {
+  background: var(--error-main);
+
+  @apply w-[7px]
+    h-[7px]
+    rounded-md;
+}
+
+.CMS_ThemeCard_preview-warning-button {
+  background: var(--warning-main);
+
+  @apply w-[7px]
+    h-[7px]
+    rounded-md;
+}
+
+.CMS_ThemeCard_preview-info-button {
+  background: var(--info-main);
+
+  @apply w-[7px]
+    h-[7px]
+    rounded-md;
+}
+
+.CMS_ThemeCard_preview-success-button {
+  background: var(--success-main);
+
+  @apply w-[7px]
+    h-[7px]
+    rounded-md;
+}
+
+.CMS_ThemeCard_preview-card {
+  background: var(--background-main);
+
+  @apply w-full
+    min-h-[12px]
+    rounded-md
+    px-1;
+}
+
+.CMS_ThemeCard_preview-collection-row {
+  border-color: color-mix(in srgb, var(--background-divider) 25%, transparent);
+
+  @apply h-3
+    border-t
+    first:border-t-0;
+}
+
+.CMS_ThemeCard_preview-collection-highlight {
+  background: color-mix(in srgb, var(--primary-main) 15%, transparent);
+  border-color: color-mix(in srgb, var(--primary-main) 15%, transparent);
+}

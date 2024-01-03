@@ -7,7 +7,6 @@ import fuzzy from 'fuzzy';
 import isEmpty from 'lodash/isEmpty';
 import { dirname, join } from 'path';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { translate } from 'react-polyglot';
 
 import {
   closeMediaLibrary,
@@ -21,6 +20,7 @@ import useDragHandlers from '@staticcms/core/lib/hooks/useDragHandlers';
 import useFolderSupport from '@staticcms/core/lib/hooks/useFolderSupport';
 import useMediaFiles from '@staticcms/core/lib/hooks/useMediaFiles';
 import useMediaPersist from '@staticcms/core/lib/hooks/useMediaPersist';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { fileExtension } from '@staticcms/core/lib/util';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import MediaLibraryCloseEvent from '@staticcms/core/lib/util/events/MediaLibraryCloseEvent';
@@ -40,7 +40,7 @@ import mediaLibraryClasses from './MediaLibrary.classes';
 import MediaLibraryCardGrid from './MediaLibraryCardGrid';
 import MediaLibrarySearch from './MediaLibrarySearch';
 
-import type { MediaFile, TranslatedProps } from '@staticcms/core/interface';
+import type { MediaFile } from '@staticcms/core';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 
 import './MediaLibrary.css';
@@ -67,11 +67,9 @@ interface MediaLibraryProps {
   isDialog?: boolean;
 }
 
-const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
-  canInsert = false,
-  isDialog = false,
-  t,
-}) => {
+const MediaLibrary: FC<MediaLibraryProps> = ({ canInsert = false, isDialog = false }) => {
+  const t = useTranslate();
+
   const [currentFolder, setCurrentFolder] = useState<string | undefined>(undefined);
   const [selectedFile, setSelectedFile] = useState<string | string[] | null>(null);
   const [query, setQuery] = useState<string | undefined>(undefined);
@@ -474,7 +472,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
   const hasSearchResults = queriedFiles && !!queriedFiles.length;
   const hasMedia = hasSearchResults;
   const emptyMessage =
-    (isLoading && !hasMedia && t('mediaLibrary.mediaLibraryModal.loading')) ||
+    (isLoading && !hasMedia && t('app.app.loading')) ||
     (dynamicSearchActive && t('mediaLibrary.mediaLibraryModal.noResults')) ||
     (!hasFiles && t('mediaLibrary.mediaLibraryModal.noAssetsFound')) ||
     (!hasFilteredFiles && t('mediaLibrary.mediaLibraryModal.noImagesFound')) ||
@@ -532,14 +530,15 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
                 {folderSupport ? (
                   <div className={mediaLibraryClasses['folder-controls']}>
                     <IconButton
+                      icon={HomeIcon}
                       onClick={handleHome}
                       title={t('mediaLibrary.folderSupport.home')}
                       color="secondary"
                       disabled={!currentFolder}
-                    >
-                      <HomeIcon className={mediaLibraryClasses['folder-controls-icon']} />
-                    </IconButton>
+                      aria-label="go to home"
+                    />
                     <IconButton
+                      icon={UpwardIcon}
                       onClick={handleGoBack}
                       title={
                         parentFolder
@@ -548,18 +547,15 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
                       }
                       color="secondary"
                       disabled={!parentFolder}
-                    >
-                      <UpwardIcon className={mediaLibraryClasses['folder-controls-icon']} />
-                    </IconButton>
+                      aria-label="go to parent folder"
+                    />
                     <IconButton
+                      icon={NewFolderIcon}
                       onClick={handleCreateFolder}
                       title={t('mediaLibrary.folderSupport.newFolder')}
                       color="secondary"
-                    >
-                      <NewFolderIcon
-                        className={mediaLibraryClasses['folder-controls-icon']}
-                      ></NewFolderIcon>
-                    </IconButton>
+                      aria-label="create folder"
+                    />
                   </div>
                 ) : null}
               </div>
@@ -602,7 +598,7 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
                 onDirectoryOpen={handleOpenDirectory}
                 currentFolder={currentFolder}
                 isPaginating={isPaginating}
-                paginatingMessage={t('mediaLibrary.mediaLibraryModal.loading')}
+                paginatingMessage={t('app.app.loading')}
                 cardDraftText={t('mediaLibrary.mediaLibraryCard.draft')}
                 loadDisplayURL={loadDisplayURL}
                 displayURLs={displayURLs}
@@ -626,10 +622,9 @@ const MediaLibrary: FC<TranslatedProps<MediaLibraryProps>> = ({
         open={folderCreationOpen}
         onClose={handleFolderCreationDialogClose}
         onCreate={handleFolderCreate}
-        t={t}
       />
     </>
   );
 };
 
-export default translate()(MediaLibrary) as FC<MediaLibraryProps>;
+export default MediaLibrary;

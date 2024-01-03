@@ -1,4 +1,8 @@
 .CMS_SnackbarAlert_root {
+  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--background-divider) 75%, transparent);
+  background: var(--background-light);
+
   @apply flex
     items-center
     w-full
@@ -6,47 +10,36 @@
     gap-3
     py-2
     px-2.5
-    text-gray-500
-    bg-white
     rounded-lg
-    shadow-md
-    dark:text-gray-300
-    dark:bg-gray-800
-    dark:shadow-lg;
+    shadow-lg
+    drop-shadow-xl
+    border;
 
   &.CMS_SnackbarAlert_error {
     & .CMS_SnackbarAlert_icon-wrapper {
-      @apply bg-red-500
-        text-red-100
-        dark:bg-red-600
-        dark:text-red-200;
+      color: var(--error-contrast-color);
+      background: var(--error-main);
     }
   }
 
   &.CMS_SnackbarAlert_success {
     & .CMS_SnackbarAlert_icon-wrapper {
-      @apply bg-green-500
-        text-green-100
-        dark:bg-green-600
-        dark:text-green-200;
+      color: var(--success-contrast-color);
+      background: var(--success-main);
     }
   }
 
   &.CMS_SnackbarAlert_warning {
     & .CMS_SnackbarAlert_icon-wrapper {
-      @apply bg-yellow-500
-        text-yellow-100
-        dark:bg-yellow-600
-        dark:text-yellow-200;
+      color: var(--warning-contrast-color);
+      background: var(--warning-main);
     }
   }
 
   &.CMS_SnackbarAlert_info {
     & .CMS_SnackbarAlert_icon-wrapper {
-      @apply text-blue-500
-        bg-blue-100
-        dark:bg-blue-800
-        dark:text-blue-200;
+      color: var(--info-contrast-color);
+      background: var(--info-main);
     }
   }
 }
@@ -68,18 +61,10 @@
 
 .CMS_SnackbarAlert_message {
   @apply text-sm
-    font-normal;
+    font-normal
+    flex-grow;
 }
 
 .CMS_SnackbarAlert_close-button {
   @apply ml-2;
-}
-
-.CMS_SnackbarAlert_close-button-sr-label {
-  @apply sr-only;
-}
-
-.CMS_SnackbarAlert_close-button-icon {
-  @apply w-4
-    h-4;
 }

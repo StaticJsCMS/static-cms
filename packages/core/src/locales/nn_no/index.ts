@@ -22,10 +22,12 @@ const nn_no: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Innhald',
+      workflow: 'Arbeidsflyt',
       media: 'Media',
       quickAdd: 'Hurtiginnlegg',
     },
     app: {
+      loading: 'Lastar...',
       errorHeader: 'Noko gjekk gale under lastinga av CMS konfigurasjonen',
       configErrors: 'Konfigurasjonsfeil',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -104,15 +106,33 @@ const nn_no: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: undefined, // English translation: 'Writing in %{locale}'
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Er du sikker på at du vil navigere bort frå denne sida?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody: 'Du må lagra endringane dine før du endrar status',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'Du må endre status til "Klar" før du publiserer',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody: 'Du må laga endringane dine før du kan publisere.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Er du sikker på at vil publisere?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'Er du sikker på at du vil avpublisere innlegget?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Er du sikkert på at du vil slette eit publisert innlegg med tilhøyrande ulagra endringar?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Er du sikker på at du vil slette dette publiserte innlegget?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Handlinga slettar endringar som ikkje er publisert eller lagra. Vil du halde fram?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Alle endringar som ikkje er publisert vil gå tapt. Vil du halde fram?',
       loadingEntry: 'Lastar innlegg...',
     },
     editorInterface: {
@@ -123,13 +143,35 @@ const nn_no: LocalePhrasesRoot = {
       toggleScrollSync: undefined, // English translation: 'Sync scrolling'
     },
     editorToolbar: {
+      publishing: 'Publiserer...',
       publish: 'Publiser',
       published: 'Publisert',
+      unpublish: 'Avpubliser',
       duplicate: 'Dupliser',
+      unpublishing: 'Avpubliserer...',
       publishAndCreateNew: 'Publiser og lag nytt',
       publishAndDuplicate: 'Publiser og dupliser',
+      deleteUnpublishedChanges: 'Slett upubliserte endringar',
+      deleteUnpublishedEntry: 'Slett upublisert innlegg',
+      deletePublishedEntry: 'Slett publisert innlegg',
       deleteEntry: 'Slettar innlegg',
+      saving: 'Lagrar...',
+      save: 'Lagre',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: 'Slettar...',
+      updating: 'Oppdaterer...',
+      status: 'Status: %{status}',
+      backCollection: ' Skriv i samlinga %{collectionLabel}',
+      unsavedChanges: 'Ulagra endringar',
+      changesSaved: 'Endringar lagret',
+      draft: 'Kladd',
+      inReview: 'Til godkjenning',
+      ready: 'Klar',
       publishNow: 'Publiser no',
+      deployPreviewPendingButtonLabel: 'Kontroller førehandsvisning',
+      deployPreviewButtonLabel: 'Sjå førehandsvisning',
+      deployButtonLabel: 'Sjå i produksjon',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +180,35 @@ const nn_no: LocalePhrasesRoot = {
       markdown: {
         bold: undefined, // English translation: 'Bold'
         italic: undefined, // English translation: 'Italic'
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: undefined, // English translation: 'Code'
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: undefined, // English translation: 'Link'
-        linkPrompt: undefined, // English translation: 'Enter the URL of the link'
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: undefined, // English translation: 'Headings'
         quote: undefined, // English translation: 'Quote'
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: undefined, // English translation: 'Bulleted List'
         numberedList: undefined, // English translation: 'Numbered List'
         addComponent: undefined, // English translation: 'Add Component'
         richText: 'Rik-tekst',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Vel bilete',
@@ -212,6 +272,10 @@ const nn_no: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -232,10 +296,10 @@ const nn_no: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Lastar...',
       noResults: 'Ingen resultat.',
       noAssetsFound: 'Ingen elementer funne.',
       noImagesFound: 'Ingen bilete funne.',
+      private: 'Privat ',
       images: 'Bileter',
       mediaAssets: 'Mediebibliotek',
       search: 'Søk...',
@@ -252,6 +316,7 @@ const nn_no: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -262,6 +327,7 @@ const nn_no: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Attende til sida',
@@ -283,11 +349,12 @@ const nn_no: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Logg ut',
     },
     toast: {
       onFailToLoadEntries: 'Kunne ikkje laste innlegg: %{details}',
+      onFailToLoadDeployPreview: 'Kunne ikkje laste førehandsvisning: %{details}',
       onFailToPersist: 'Kunne ikkje lagre: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Kunne ikkje slette: %{details}',
@@ -296,12 +363,52 @@ const nn_no: LocalePhrasesRoot = {
       missingRequiredField:
         'Oisann, gløymte du noko? Alle påkrevde felt må fyllast ut før du kan halde fram',
       entrySaved: 'Innlegg lagra',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Innlegg publisert',
+      entryUnpublished: 'Innlegg avpublisert',
       onFailToPublishEntry: 'Kunne ikkje publisere: %{details}',
+      onFailToUnpublishEntry: 'Kunne ikkje avpublisere: %{details}',
       entryUpdated: 'Innleggsstatus oppdatert',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Avpubliserte endringar sletta',
       onFailToAuth: '%{details}',
       onLoggedOut: undefined, // English translation: 'You have been logged out, please back up any data and login again'
       onBackendDown: undefined, // English translation: 'The backend service is experiencing an outage. See %{details} for more information'
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Lastar innlegg for redaksjonell arbeidsflyt',
+      workflowHeading: 'Redaksjonell arbeidsflyt',
+      newPost: 'Nytt innlegg',
+      description:
+        '%{smart_count} innlegg treng gjennomgong, og %{readyCount} er klar til publisering. |||| %{smart_count} innlegg treng gjennomgong, og %{readyCount} er klar til publisering ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} av %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'av %{author}',
+      deleteChanges: 'Slett endringar',
+      deleteNewEntry: 'Slett nytt innlegg',
+      publishChanges: 'Publiser endringar',
+      publishNewEntry: 'Publiser nytt innlegg',
+    },
+    workflowList: {
+      onDeleteEntry: 'Er du sikker på du vil slette innlegget?',
+      onPublishingNotReadyEntry:
+        'Du kan berre publisere innlegg i "Klar" kolonna. Dra kortet til riktig stad for å halde fram.',
+      onPublishEntry: 'Er du sikker på du vil publisere innlegget?',
+      draft: 'Kladd',
+      pending_review: 'Gjennomgås',
+      pending_publish: 'Klar',
+      currentEntries: '%{smart_count} innlegg |||| %{smart_count} innlegg',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

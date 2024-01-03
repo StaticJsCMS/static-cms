@@ -2,11 +2,13 @@ import React from 'react';
 
 import type { InferredField } from '../interface';
 
+export type InferrableField = 'title' | 'shortTitle' | 'author' | 'date' | 'description' | 'image';
+
 export const IDENTIFIER_FIELDS = ['title', 'path'] as const;
 
-export const SORTABLE_FIELDS = ['title', 'date', 'author', 'description'] as const;
+export const SORTABLE_FIELDS = ['title', 'date', 'author', 'description'] as InferrableField[];
 
-export const INFERABLE_FIELDS: Record<string, InferredField> = {
+export const INFERABLE_FIELDS: Record<InferrableField, InferredField> = {
   title: {
     type: 'string',
     secondaryTypes: [],

@@ -7,11 +7,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type {
-  SelectField,
-  SelectWidgetOptionObject,
-  WidgetControlProps,
-} from '@staticcms/core/interface';
+import type { SelectField, SelectWidgetOptionObject, WidgetControlProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './SelectControl.css';
@@ -67,10 +63,13 @@ const SelectControl: FC<WidgetControlProps<string | number | (string | number)[]
 
   const optionsByValue = useMemo(
     () =>
-      options.reduce((acc, option) => {
-        acc[`${option.value}`] = option;
-        return acc;
-      }, {} as Record<string, SelectWidgetOptionObject>),
+      options.reduce(
+        (acc, option) => {
+          acc[`${option.value}`] = option;
+          return acc;
+        },
+        {} as Record<string, SelectWidgetOptionObject>,
+      ),
     [options],
   );
 

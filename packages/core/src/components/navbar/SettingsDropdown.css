@@ -19,9 +19,3 @@
 .CMS_SettingsDropdown_sr-label {
   @apply sr-only;
 }
-
-.CMS_SettingsDropdown_theme-toggle {
-  @apply flex
-    justify-between
-    w-full;
-}

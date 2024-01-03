@@ -4,6 +4,8 @@ import React, { useMemo } from 'react';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import SidebarContent from './SidebarContent';
 
+import type { FC } from 'react';
+
 import './NavigationDrawer.css';
 
 export const classes = generateClassNames('NavigationDrawer', ['root', 'content']);
@@ -15,7 +17,7 @@ interface NavigationDrawerProps {
   onMobileOpenToggle: () => void;
 }
 
-const NavigationDrawer = ({ mobileOpen, onMobileOpenToggle }: NavigationDrawerProps) => {
+const NavigationDrawer: FC<NavigationDrawerProps> = ({ mobileOpen, onMobileOpenToggle }) => {
   const container = useMemo(
     () => (typeof window !== 'undefined' ? window.document.body : undefined),
     [],
@@ -47,7 +49,7 @@ const NavigationDrawer = ({ mobileOpen, onMobileOpenToggle }: NavigationDrawerPr
       }}
     >
       <div onClick={onMobileOpenToggle} className={classes.content}>
-        <SidebarContent />
+        <SidebarContent isMobile />
       </div>
     </Drawer>
   );

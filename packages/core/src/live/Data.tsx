@@ -2,7 +2,7 @@ import React from 'react';
 
 import useData from './useData';
 
-import type { ValueOrNestedValue } from '@staticcms/core/interface';
+import type { ValueOrNestedValue } from '@staticcms/core';
 import type { FC } from 'react';
 
 export interface DataProps {

@@ -1,15 +1,31 @@
-import { THEME_CHANGE } from '../constants';
+import { THEME_CHANGE, USE_OPEN_AUTHORING } from '../constants';
+import { isNotNullish } from '../lib/util/null.util';
 
 import type { GlobalUIAction } from '../actions/globalUI';
 
 export type GlobalUIState = {
   isFetching: boolean;
-  theme: 'dark' | 'light';
+  useOpenAuthoring: boolean;
+  theme: string;
 };
+
+function loadColorTheme(): string {
+  const themeName = localStorage.getItem('color-theme');
+  if (isNotNullish(themeName)) {
+    return themeName;
+  }
+
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  }
+
+  return 'light';
+}
 
 const defaultState: GlobalUIState = {
   isFetching: false,
-  theme: 'light',
+  useOpenAuthoring: false,
+  theme: loadColorTheme(),
 };
 
 /**
@@ -30,10 +46,16 @@ const globalUI = (state: GlobalUIState = defaultState, action: GlobalUIAction): 
   }
 
   switch (action.type) {
-    case THEME_CHANGE:
+    case USE_OPEN_AUTHORING:
       return {
         ...state,
-        theme: action.payload,
+        useOpenAuthoring: true,
+      };
+    case THEME_CHANGE:
+      localStorage.setItem('color-theme', action.payload.toLowerCase());
+      return {
+        ...state,
+        theme: action.payload.toLowerCase(),
       };
     default:
       return state;

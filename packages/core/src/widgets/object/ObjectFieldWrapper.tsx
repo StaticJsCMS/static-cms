@@ -8,7 +8,7 @@ import Label from '@staticcms/core/components/common/field/Label';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import widgetObjectClasses from './ObjectControl.classes';
 
-import type { FieldError, ObjectField } from '@staticcms/core/interface';
+import type { FieldError, ObjectField } from '@staticcms/core';
 import type { FC, ReactNode } from 'react';
 
 export interface ObjectFieldWrapperProps {
@@ -44,7 +44,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
 
   return (
     <div
-      data-testid="object-field"
+      data-testid={`object-field-${openLabel?.trim()}`}
       className={classNames(
         widgetObjectClasses.root,
         disabled && widgetObjectClasses.disabled,
@@ -58,6 +58,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
         data-testid="expand-button"
         className={widgetObjectClasses.expand}
         onClick={handleOpenToggle}
+        aria-label={!open ? 'expand' : 'collapse'}
       >
         <ChevronRightIcon className={widgetObjectClasses['expand-icon']} />
         <Label
@@ -68,7 +69,7 @@ const ObjectFieldWrapper: FC<ObjectFieldWrapperProps> = ({
           variant="inline"
           disabled={disabled}
         >
-          {open ? openLabel : closedLabel}
+          {open ? openLabel.trim() : closedLabel.trim()}
         </Label>
       </button>
       <Collapse in={open} appear={false}>

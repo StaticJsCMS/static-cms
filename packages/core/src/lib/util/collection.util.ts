@@ -14,25 +14,27 @@ import { keyToPathArray } from '../widgets/stringTemplate';
 import { selectField } from './field.util';
 import { selectMediaFolder } from './media.util';
 
-import type { Backend } from '@staticcms/core/backend';
 import type {
   BaseField,
   Collection,
   CollectionFile,
-  Collections,
+  CollectionFileWithDefaults,
+  CollectionWithDefaults,
+  CollectionsWithDefaults,
   Config,
+  ConfigWithDefaults,
   Entry,
   Field,
-  FilesCollection,
   InferredField,
   ObjectField,
   SortableField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
+import type { InferrableField } from '@staticcms/core/constants/fieldInference';
 
 export function fileForEntry<EF extends BaseField>(
-  collection: Collection<EF> | undefined | null,
+  collection: CollectionWithDefaults<EF> | undefined | null,
   slug?: string,
-): CollectionFile<EF> | undefined {
+): CollectionFileWithDefaults<EF> | undefined {
   if (!collection || !('files' in collection)) {
     return undefined;
   }
@@ -44,19 +46,9 @@ export function fileForEntry<EF extends BaseField>(
   return files && files.filter(f => f?.name === slug)?.[0];
 }
 
-export function selectFields<EF extends BaseField>(
-  collection: Collection<EF>,
-  slug?: string,
-): Field<EF>[] {
-  if ('fields' in collection) {
-    return collection.fields;
-  }
-
-  const file = fileForEntry(collection, slug);
-  return file ? file.fields : [];
-}
-
-export function selectFolderEntryExtension<EF extends BaseField>(collection: Collection<EF>) {
+export function selectFolderEntryExtension<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF>,
+) {
   return (collection.extension || formatExtensions[collection.format ?? 'frontmatter']).replace(
     /^\./,
     '',
@@ -64,7 +56,7 @@ export function selectFolderEntryExtension<EF extends BaseField>(collection: Col
 }
 
 export function selectFileEntryLabel<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   slug: string,
 ) {
   if ('fields' in collection) {
@@ -75,7 +67,10 @@ export function selectFileEntryLabel<EF extends BaseField>(
   return file && file.label;
 }
 
-export function selectEntryPath<EF extends BaseField>(collection: Collection<EF>, slug: string) {
+export function selectEntryPath<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF>,
+  slug: string,
+) {
   if ('fields' in collection) {
     const folder = collection.folder.replace(/\/$/, '');
 
@@ -92,7 +87,10 @@ export function selectEntryPath<EF extends BaseField>(collection: Collection<EF>
   return file && file.file;
 }
 
-export function selectEntrySlug<EF extends BaseField>(collection: Collection<EF>, path: string) {
+export function selectEntrySlug<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF>,
+  path: string,
+) {
   if ('fields' in collection) {
     const folder = (collection.folder as string).replace(/\/$/, '');
     const slug = path
@@ -107,7 +105,9 @@ export function selectEntrySlug<EF extends BaseField>(collection: Collection<EF>
   return file && file.name;
 }
 
-export function selectAllowNewEntries<EF extends BaseField>(collection: Collection<EF>) {
+export function selectAllowNewEntries<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF>,
+) {
   if ('fields' in collection) {
     return collection.create ?? true;
   }
@@ -115,7 +115,7 @@ export function selectAllowNewEntries<EF extends BaseField>(collection: Collecti
   return false;
 }
 
-export function selectAllowDeletion<EF extends BaseField>(collection: Collection<EF>) {
+export function selectAllowDeletion<EF extends BaseField>(collection: CollectionWithDefaults<EF>) {
   if ('fields' in collection) {
     return collection.delete ?? true;
   }
@@ -123,7 +123,22 @@ export function selectAllowDeletion<EF extends BaseField>(collection: Collection
   return false;
 }
 
-export function selectTemplateName<EF extends BaseField>(collection: Collection<EF>, slug: string) {
+export function selectAllowPublish<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF>,
+  slug: string | undefined,
+) {
+  const file = fileForEntry(collection, slug);
+  if (file) {
+    return file.publish;
+  }
+
+  return 'publish' in collection ? collection.publish ?? true : true;
+}
+
+export function selectTemplateName<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF>,
+  slug: string,
+) {
   if ('fields' in collection) {
     return collection.name;
   }
@@ -132,9 +147,13 @@ export function selectTemplateName<EF extends BaseField>(collection: Collection<
 }
 
 export function selectEntryCollectionTitle<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF> | undefined,
   entry: Entry,
 ): string {
+  if (!collection) {
+    return '';
+  }
+
   // prefer formatted summary over everything else
   const summaryTemplate = collection.summary;
   if (summaryTemplate) {
@@ -163,19 +182,21 @@ export function selectEntryCollectionTitle<EF extends BaseField>(
 }
 
 export function selectDefaultSortableFields<EF extends BaseField>(
-  collection: Collection<EF>,
-  backend: Backend<EF>,
+  collection: CollectionWithDefaults<EF>,
+  config: Config<EF>,
 ) {
-  let defaultSortable = SORTABLE_FIELDS.map((type: string) => {
+  const isGitBackend = !['proxy', 'test'].includes(config.backend.name);
+
+  let defaultSortable = SORTABLE_FIELDS.map(type => {
     const field = selectInferredField(collection, type);
-    if (backend.isGitBackend() && type === 'author' && !field) {
+    if (isGitBackend && type === 'author' && !field) {
       // default to commit author if not author field is found
       return COMMIT_AUTHOR;
     }
     return field;
   }).filter(Boolean);
 
-  if (backend.isGitBackend()) {
+  if (isGitBackend) {
     // always have commit date by default
     defaultSortable = [COMMIT_DATE, ...defaultSortable];
   }
@@ -183,8 +204,8 @@ export function selectDefaultSortableFields<EF extends BaseField>(
   return defaultSortable as string[];
 }
 
-export function selectSortableFields(
-  collection: Collection | undefined,
+export function getSortableFields(
+  collection: CollectionWithDefaults | undefined,
   t: (key: string) => string,
 ): SortableField[] {
   if (!collection) {
@@ -209,16 +230,16 @@ export function selectSortableFields(
   return fields;
 }
 
-export function selectViewFilters<EF extends BaseField>(collection?: Collection<EF>) {
+export function getViewFilters<EF extends BaseField>(collection?: CollectionWithDefaults<EF>) {
   return collection?.view_filters;
 }
 
-export function selectViewGroups<EF extends BaseField>(collection?: Collection<EF>) {
+export function getViewGroups<EF extends BaseField>(collection?: CollectionWithDefaults<EF>) {
   return collection?.view_groups;
 }
 
 export function selectFieldsComments<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   entryMap: Entry,
 ) {
   let fields: Field<EF>[] = [];
@@ -262,14 +283,18 @@ function getFieldsWithMediaFolders<EF extends BaseField>(fields: Field<EF>[]) {
 }
 
 export function getFileFromSlug<EF extends BaseField>(
-  collection: FilesCollection<EF>,
+  collection: Collection<EF>,
   slug: string,
-) {
+): CollectionFile<EF> | undefined {
+  if (!('files' in collection)) {
+    return undefined;
+  }
+
   return collection.files?.find(f => f.name === slug);
 }
 
 export function selectFieldsWithMediaFolders<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   slug: string,
 ) {
   if ('folder' in collection) {
@@ -282,8 +307,8 @@ export function selectFieldsWithMediaFolders<EF extends BaseField>(
 }
 
 export function selectMediaFolders<EF extends BaseField>(
-  config: Config<EF>,
-  collection: Collection<EF>,
+  config: ConfigWithDefaults<EF>,
+  collection: CollectionWithDefaults<EF>,
   entry: Entry,
 ) {
   const fields = selectFieldsWithMediaFolders(collection, entry.slug);
@@ -344,10 +369,10 @@ export function traverseFields(
 }
 
 export function updateFieldByKey(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   key: string,
   updater: (field: Field) => Field,
-): Collection {
+): CollectionWithDefaults {
   const selected = selectField(collection, key);
   if (!selected) {
     return collection;
@@ -372,7 +397,7 @@ export function updateFieldByKey(
   return collection;
 }
 
-export function selectIdentifier<EF extends BaseField>(collection: Collection<EF>) {
+export function selectIdentifier<EF extends BaseField>(collection: CollectionWithDefaults<EF>) {
   const identifier = collection.identifier_field;
   const identifierFields = identifier ? [identifier, ...IDENTIFIER_FIELDS] : [...IDENTIFIER_FIELDS];
   const fieldNames = getFieldsNames('fields' in collection ? collection.fields ?? [] : []);
@@ -382,24 +407,17 @@ export function selectIdentifier<EF extends BaseField>(collection: Collection<EF
 }
 
 export function selectInferredField<EF extends BaseField>(
-  collection: Collection<EF>,
-  fieldName: string,
+  collection: CollectionWithDefaults<EF> | undefined,
+  fieldName: InferrableField,
 ) {
+  if (!collection) {
+    return;
+  }
+
   if (fieldName === 'title' && collection.identifier_field) {
     return selectIdentifier(collection);
   }
-  const inferableField = (
-    INFERABLE_FIELDS as Record<
-      string,
-      {
-        type: string;
-        synonyms: string[];
-        secondaryTypes: string[];
-        fallbackToFirstField: boolean;
-        showError: boolean;
-      }
-    >
-  )[fieldName];
+  const inferableField = INFERABLE_FIELDS[fieldName];
   const fields = 'fields' in collection ? collection.fields ?? [] : undefined;
   let field;
 
@@ -441,7 +459,55 @@ export function selectInferredField<EF extends BaseField>(
   return null;
 }
 
-export function useInferredFields(collection: Collection) {
+export function getInferredFields(
+  collection: CollectionWithDefaults | undefined,
+): Partial<Record<InferrableField, string>> {
+  if (!collection) {
+    return {};
+  }
+
+  const iFields: Partial<Record<InferrableField, string>> = {};
+
+  const titleField = selectInferredField(collection, 'title');
+  if (titleField) {
+    iFields.title = titleField;
+  }
+
+  const shortTitleField = selectInferredField(collection, 'shortTitle');
+  if (shortTitleField) {
+    iFields.shortTitle = shortTitleField;
+  }
+
+  const authorField = selectInferredField(collection, 'author');
+  if (authorField) {
+    iFields.author = authorField;
+  }
+
+  const dateField = selectInferredField(collection, 'date');
+  if (dateField) {
+    iFields.date = dateField;
+  }
+
+  const descriptionField = selectInferredField(collection, 'description');
+  if (descriptionField) {
+    iFields.description = descriptionField;
+  }
+
+  const imageField = selectInferredField(collection, 'image');
+  if (imageField) {
+    iFields.image = imageField;
+  }
+
+  return iFields;
+}
+
+export function useInferredFields(
+  collection: CollectionWithDefaults | undefined,
+): Partial<Record<InferrableField, string>> {
+  return useMemo(() => getInferredFields(collection), [collection]);
+}
+
+export function useInferredFieldsByName(collection: CollectionWithDefaults) {
   return useMemo(() => {
     const titleField = selectInferredField(collection, 'title');
     const shortTitleField = selectInferredField(collection, 'shortTitle');
@@ -461,7 +527,11 @@ export function useInferredFields(collection: Collection) {
   }, [collection]);
 }
 
-export function getDefaultPath(collections: Collections) {
+export function getDefaultPath(collections: CollectionsWithDefaults, useWorkflow: boolean) {
+  if (useWorkflow) {
+    return '/dashboard';
+  }
+
   if (Object.keys(collections).length === 0) {
     throw new Error('No collections found');
   }
@@ -476,4 +546,26 @@ export function getDefaultPath(collections: Collections) {
   }
 
   return `/collections/${options[0].name}`;
+}
+
+export function getFields<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF> | undefined,
+  slug?: string,
+): Field<EF>[] {
+  if (!collection) {
+    return [];
+  }
+
+  if ('fields' in collection) {
+    return collection.fields;
+  }
+
+  if (slug) {
+    const file = getFileFromSlug(collection, slug);
+    if (file) {
+      return file.fields;
+    }
+  }
+
+  return [];
 }

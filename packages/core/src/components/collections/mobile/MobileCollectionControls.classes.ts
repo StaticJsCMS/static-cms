@@ -4,7 +4,6 @@ const mobileCollectionControlsClasses = generateClassNames('MobileCollectionCont
   'root',
   'content',
   'toggle',
-  'toggle-icon',
 ]);
 
 export default mobileCollectionControlsClasses;

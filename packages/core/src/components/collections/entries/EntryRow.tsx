@@ -6,24 +6,26 @@ import { getFieldPreview } from '@staticcms/core/lib/registry';
 import { getEntryBackupKey } from '@staticcms/core/lib/util/backup.util';
 import {
   selectEntryCollectionTitle,
-  selectFields,
+  getFields,
   selectTemplateName,
 } from '@staticcms/core/lib/util/collection.util';
 import localForage from '@staticcms/core/lib/util/localForage';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
-import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
+import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import TableCell from '../../common/table/TableCell';
 import TableRow from '../../common/table/TableRow';
+import WorkflowStatusPill from '../../workflow/WorkflowStatusPill';
 import entriesClasses from './Entries.classes';
+import RelationSummary from '@staticcms/relation/RelationSummary';
+import { getI18nInfo } from '@staticcms/core/lib/i18n';
 
-import type { BackupEntry, Collection, Entry, TranslatedProps } from '@staticcms/core/interface';
+import type { BackupEntry, CollectionWithDefaults, Entry, TranslatedProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 export interface EntryRowProps {
   entry: Entry;
-  collection: Collection;
+  collection: CollectionWithDefaults;
   collectionLabel?: string;
   columnFields: string[];
 }
@@ -40,18 +42,19 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
     [collection.name, entry.slug],
   );
 
+  const { default_locale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
+
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
 
-  const fields = selectFields(collection, entry.slug);
+  const fields = useMemo(() => getFields(collection, entry.slug), [collection, entry.slug]);
 
   const config = useAppSelector(selectConfig);
+  const useWorkflow = useAppSelector(selectUseWorkflow);
 
   const templateName = useMemo(
     () => selectTemplateName(collection, entry.slug),
     [collection, entry.slug],
   );
-
-  const theme = useAppSelector(selectTheme);
 
   const [hasLocalBackup, setHasLocalBackup] = useState(false);
   useEffect(() => {
@@ -105,14 +108,11 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
         return (
           <TableCell key={fieldName} to={path}>
             {field && FieldPreviewComponent ? (
-              <FieldPreviewComponent
-                collection={collection}
-                field={field}
-                value={value}
-                theme={theme}
-              />
+              <FieldPreviewComponent collection={collection} field={field} value={value} />
             ) : isNullish(value) ? (
               ''
+            ) : field?.widget === 'relation' ? (
+              <RelationSummary field={field} value={value} locale={default_locale} entry={entry} />
             ) : (
               String(value)
             )}
@@ -127,6 +127,11 @@ const EntryRow: FC<TranslatedProps<EntryRowProps>> = ({
           />
         ) : null}
       </TableCell>
+      {useWorkflow ? (
+        <TableCell key="status" to={path} shrink>
+          <WorkflowStatusPill status={entry.status} />
+        </TableCell>
+      ) : null}
     </TableRow>
   );
 };

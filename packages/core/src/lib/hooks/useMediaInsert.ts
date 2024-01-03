@@ -6,11 +6,11 @@ import { selectMediaPath } from '@staticcms/core/reducers/selectors/mediaLibrary
 import { useAppDispatch, useAppSelector } from '@staticcms/core/store/hooks';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   MediaField,
   MediaLibrarInsertOptions,
   MediaPath,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { MouseEvent } from 'react';
 
 export interface OpenMediaLibraryProps {
@@ -22,7 +22,7 @@ export interface OpenMediaLibraryProps {
 export default function useMediaInsert<T extends string | string[], F extends MediaField>(
   value: MediaPath<T> | undefined,
   options: {
-    collection: Collection<F>;
+    collection: CollectionWithDefaults<F>;
     field: F;
     controlID?: string;
     forImage?: boolean;
@@ -43,8 +43,7 @@ export default function useMediaInsert<T extends string | string[], F extends Me
   } = options;
 
   const finalControlID = useMemo(() => controlID ?? uuid(), [controlID]);
-  const mediaPathSelector = useMemo(() => selectMediaPath(finalControlID), [finalControlID]);
-  const mediaPath = useAppSelector(mediaPathSelector);
+  const mediaPath = useAppSelector(state => selectMediaPath(state, finalControlID));
 
   useEffect(() => {
     if (mediaPath && (!value || mediaPath.path !== value.path || mediaPath.alt !== value.alt)) {

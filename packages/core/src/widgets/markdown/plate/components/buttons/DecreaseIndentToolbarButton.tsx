@@ -4,6 +4,7 @@ import React, { useCallback } from 'react';
 
 import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
 import type { FC } from 'react';
 
@@ -16,6 +17,8 @@ const DecreaseIndentToolbarButton: FC<DecreaseIndentToolbarButtonProps> = ({
   disabled,
   variant,
 }) => {
+  const t = useTranslate();
+
   const editor = useMdPlateEditorState();
 
   const handleOutdent = useCallback(() => {
@@ -24,7 +27,8 @@ const DecreaseIndentToolbarButton: FC<DecreaseIndentToolbarButtonProps> = ({
 
   return (
     <ToolbarButton
-      tooltip="Decrease indent"
+      id="decrease-ident"
+      tooltip={t('editor.editorWidgets.markdown.decreaseIndent')}
       onClick={handleOutdent}
       icon={FormatIndentDecreaseIcon}
       disabled={disabled}

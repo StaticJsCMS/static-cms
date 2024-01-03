@@ -11,7 +11,7 @@ import type {
   FileMetadata,
   ImplementationEntry,
   ImplementationFile,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { AsyncLock } from './asyncLock';
 
 const MAX_CONCURRENT_DOWNLOADS = 10;
@@ -76,6 +76,18 @@ export async function entriesByFiles(
   apiName: string,
 ) {
   return fetchFiles(files, readFile, readFileMetadata, apiName);
+}
+
+export async function unpublishedEntries(listEntriesKeys: () => Promise<string[]>) {
+  try {
+    const keys = await listEntriesKeys();
+    return keys;
+  } catch (error) {
+    if (error instanceof Error && error.message === 'Not Found') {
+      return Promise.resolve([]);
+    }
+    throw error;
+  }
 }
 
 export function blobToFileObj(name: string, blob: Blob) {
@@ -212,34 +224,37 @@ async function getDiffFromLocalTree({
   const diff = await getDifferences(branch.sha, localTree.head);
   const diffFiles = diff
     .filter(d => d.oldPath?.startsWith(folder) || d.newPath?.startsWith(folder))
-    .reduce((acc, d) => {
-      if (d.status === 'renamed') {
-        acc.push({
-          path: d.oldPath,
-          name: basename(d.oldPath),
-          deleted: true,
-        });
-        acc.push({
-          path: d.newPath,
-          name: basename(d.newPath),
-          deleted: false,
-        });
-      } else if (d.status === 'deleted') {
-        acc.push({
-          path: d.oldPath,
-          name: basename(d.oldPath),
-          deleted: true,
-        });
-      } else {
-        acc.push({
-          path: d.newPath || d.oldPath,
-          name: basename(d.newPath || d.oldPath),
-          deleted: false,
-        });
-      }
+    .reduce(
+      (acc, d) => {
+        if (d.status === 'renamed') {
+          acc.push({
+            path: d.oldPath,
+            name: basename(d.oldPath),
+            deleted: true,
+          });
+          acc.push({
+            path: d.newPath,
+            name: basename(d.newPath),
+            deleted: false,
+          });
+        } else if (d.status === 'deleted') {
+          acc.push({
+            path: d.oldPath,
+            name: basename(d.oldPath),
+            deleted: true,
+          });
+        } else {
+          acc.push({
+            path: d.newPath || d.oldPath,
+            name: basename(d.newPath || d.oldPath),
+            deleted: false,
+          });
+        }
 
-      return acc;
-    }, [] as { path: string; name: string; deleted: boolean }[])
+        return acc;
+      },
+      [] as { path: string; name: string; deleted: boolean }[],
+    )
 
     .filter(filterFile);
 
@@ -342,10 +357,13 @@ export async function allEntriesByFolder({
         // return local copy
         return localTree.files;
       } else {
-        const deleted = diff.reduce((acc, d) => {
-          acc[d.path] = d.deleted;
-          return acc;
-        }, {} as Record<string, boolean>);
+        const deleted = diff.reduce(
+          (acc, d) => {
+            acc[d.path] = d.deleted;
+            return acc;
+          },
+          {} as Record<string, boolean>,
+        );
         const newCopy = sortBy(
           unionBy(
             diff.filter(d => !deleted[d.path]),

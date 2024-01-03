@@ -22,10 +22,12 @@ const pt: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Conteúdos',
+      workflow: 'Fluxo de Trabalho',
       media: 'Mídia',
       quickAdd: 'Adição rápida',
     },
     app: {
+      loading: 'Carregando...',
       errorHeader: 'Erro ao carregar a configuração do CMS',
       configErrors: 'Erros de configuração',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -104,15 +106,35 @@ const pt: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Escrevendo em %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Tem certeza que deseja sair desta página?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'Há mudanças não salvas. Por favor, salve-as antes de atualizar o status.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'Por favor, altere o status para "Pronto" antes de publicar.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        'Há mudanças não salvas. Por favor, salve-as antes de publicar.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Tem certeza que deseja publicar essa entrada?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'Tem certeza que deseja cancelar a publicação dessa entrada?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Tem certeza de que deseja excluir esta entrada publicada, bem como as alterações não salvas da sessão atual?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Tem certeza de que deseja excluir esta entrada publicada?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Isso excluirá todas as alterações não publicadas nesta entrada, bem como as alterações não salvas da sessão atual. Você ainda deseja excluir?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Todas as alterações não publicadas nesta entrada serão excluídas. Você ainda deseja excluir?',
       loadingEntry: 'Carregando entrada...',
     },
     editorInterface: {
@@ -123,13 +145,37 @@ const pt: LocalePhrasesRoot = {
       toggleScrollSync: 'Sincronizar rolagem',
     },
     editorToolbar: {
+      publishing: 'Publicando...',
       publish: 'Publicar',
       published: 'Publicado',
+      unpublish: 'Despublicar',
       duplicate: 'Duplicado',
+      unpublishing: 'Despublicando...',
       publishAndCreateNew: 'Publicar e criar novo(a)',
       publishAndDuplicate: 'Publicar e duplicar',
+      deleteUnpublishedChanges: 'Excluir alterações não publicadas',
+      deleteUnpublishedEntry: 'Excluir entrada não publicada',
+      deletePublishedEntry: 'Excluir entrada publicada',
       deleteEntry: 'Excluir entrada',
+      saving: 'Salvando...',
+      save: 'Salvar',
+      statusInfoTooltipDraft:
+        "Entrada definida como rascunho. Para finalizar e enviá-la a revisão, mude seu estado para 'Em revisão'",
+      statusInfoTooltipInReview:
+        'Entrada está sendo revisada, nenhuma ação extra é requirida. Porém, você ainda pode fazer mudanças adicionais enquanto ela está sendo revisada.',
+      deleting: 'Excluindo...',
+      updating: 'Atualizando...',
+      status: 'Status: %{status}',
+      backCollection: ' Escrevendo na coleção %{collectionLabel}',
+      unsavedChanges: 'Alterações não salvas',
+      changesSaved: 'Alterações salvas',
+      draft: 'Rascunho',
+      inReview: 'Em revisão',
+      ready: 'Pronto',
       publishNow: 'Publicar agora',
+      deployPreviewPendingButtonLabel: 'Verificar se há Pré-visualização',
+      deployPreviewButtonLabel: 'Ver Pré-visualização',
+      deployButtonLabel: 'Ver em Produção',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +184,35 @@ const pt: LocalePhrasesRoot = {
       markdown: {
         bold: 'Negrito',
         italic: 'Itálico',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'Código',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Link',
-        linkPrompt: 'Insira a URL do link',
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Cabeçalho',
         quote: 'Citação',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'Lista Pontilhada',
         numberedList: 'Lista Numerada',
         addComponent: 'Adicionar Componente',
         richText: 'Rich Text',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Escolha uma imagem',
@@ -212,6 +276,10 @@ const pt: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -233,10 +301,10 @@ const pt: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Carregando...',
       noResults: 'Nenhum resultado.',
       noAssetsFound: 'Nenhum recurso encontrado.',
       noImagesFound: 'Nenhuma imagem encontrada.',
+      private: 'Privado ',
       images: 'Imagens',
       mediaAssets: 'Recursos de mídia',
       search: 'Pesquisar...',
@@ -253,6 +321,7 @@ const pt: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -263,6 +332,7 @@ const pt: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Voltar ao site',
@@ -284,11 +354,12 @@ const pt: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Sair',
     },
     toast: {
       onFailToLoadEntries: 'Falha ao carregar a entrada: %{details}',
+      onFailToLoadDeployPreview: 'Falha ao carregar a pré-visualização: %{details}',
       onFailToPersist: 'Falha ao persistir na entrada: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Falha ao excluir a entrada: %{details}',
@@ -297,12 +368,52 @@ const pt: LocalePhrasesRoot = {
       missingRequiredField:
         'Ops, você perdeu um campo obrigatório. Por favor, preencha antes de salvar.',
       entrySaved: 'Entrada salva',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Entrada publicada',
+      entryUnpublished: 'Entrada despublicada',
       onFailToPublishEntry: 'Falha ao publicar: %{details}',
+      onFailToUnpublishEntry: 'Falha ao cancelar a publicação da entrada: %{details}',
       entryUpdated: 'Status da entrada atualizado',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Alterações não publicadas excluídas',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Você foi desconectado. Por favor, salve as alterações e entre novamente',
       onBackendDown: 'O serviço de back-end está fora do ar. Veja %{details} para mais informações',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Carregando entradas do Fluxo de Trabalho Editorial',
+      workflowHeading: 'Fluxo de Trabalho Editorial',
+      newPost: 'Nova Publicação',
+      description:
+        '%{smart_count} entrada aguardando revisão, %{readyCount} pronta para publicação. |||| %{smart_count} entradas aguardando revisão, %{readyCount} pronta para publicação.',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} por %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'por %{author}',
+      deleteChanges: 'Excluir alterações',
+      deleteNewEntry: 'Excluir nova entrada',
+      publishChanges: 'Publicar alterações',
+      publishNewEntry: 'Publicar nova entrada',
+    },
+    workflowList: {
+      onDeleteEntry: 'Tem certeza de que deseja excluir esta entrada?',
+      onPublishingNotReadyEntry:
+        'Somente itens com o status "Pronto" podem ser publicados. Arraste o cartão para a coluna "Pronto" para poder publicar.',
+      onPublishEntry: 'Tem certeza de que quer publicar esta entrada?',
+      draft: 'Rascunhos',
+      pending_review: 'Em Revisão',
+      pending_publish: 'Prontos',
+      currentEntries: '%{smart_count} entrada |||| %{smart_count} entradas',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

@@ -2,6 +2,7 @@ import auth from './auth';
 import collections from './collections';
 import config from './config';
 import cursors from './cursors';
+import editorialWorkflow from './editorialWorkflow';
 import entries from './entries';
 import entryDraft from './entryDraft';
 import globalUI from './globalUI';
@@ -16,6 +17,7 @@ const reducers = {
   collections,
   config,
   cursors,
+  editorialWorkflow,
   entries,
   entryDraft,
   globalUI,

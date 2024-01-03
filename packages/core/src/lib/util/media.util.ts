@@ -8,9 +8,9 @@ import { createEntryMediaPath } from './entry.util';
 
 import type {
   BaseField,
-  Collection,
-  CollectionFile,
-  Config,
+  CollectionFileWithDefaults,
+  CollectionWithDefaults,
+  ConfigWithDefaults,
   Entry,
   Field,
   FileOrImageField,
@@ -18,10 +18,10 @@ import type {
   MarkdownField,
   MediaField,
   ObjectField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 function getFileField<EF extends BaseField>(
-  collectionFiles: CollectionFile<EF>[],
+  collectionFiles: CollectionFileWithDefaults<EF>[],
   slug: string | undefined,
 ) {
   const file = collectionFiles.find(f => f?.name === slug);
@@ -37,7 +37,7 @@ function isMediaField(
 
 function hasCustomFolder<EF extends BaseField>(
   folderKey: 'media_folder' | 'public_folder',
-  collection: Collection<EF> | undefined | null,
+  collection: CollectionWithDefaults<EF> | undefined | null,
   slug: string | undefined,
   field: MediaField | undefined,
 ): field is FileOrImageField | MarkdownField {
@@ -67,8 +67,8 @@ function hasCustomFolder<EF extends BaseField>(
 
 function evaluateFolder<EF extends BaseField>(
   folderKey: 'media_folder' | 'public_folder',
-  config: Config<EF>,
-  c: Collection<EF>,
+  config: ConfigWithDefaults<EF>,
+  c: CollectionWithDefaults<EF>,
   entryMap: Entry | null | undefined,
   field: FileOrImageField | MarkdownField,
 ) {
@@ -160,8 +160,8 @@ function evaluateFolder<EF extends BaseField>(
 
 function traverseFields<EF extends BaseField>(
   folderKey: 'media_folder' | 'public_folder',
-  config: Config<EF>,
-  collection: Collection<EF>,
+  config: ConfigWithDefaults<EF>,
+  collection: CollectionWithDefaults<EF>,
   entryMap: Entry | null | undefined,
   field: FileOrImageField | MarkdownField | ListField<EF> | ObjectField<EF>,
   fields: Field<EF>[],
@@ -225,8 +225,8 @@ function traverseFields<EF extends BaseField>(
 }
 
 export function selectMediaFolder<EF extends BaseField>(
-  config: Config<EF>,
-  collection: Collection<EF> | undefined | null,
+  config: ConfigWithDefaults<EF>,
+  collection: CollectionWithDefaults<EF> | undefined | null,
   entry: Entry | undefined | null,
   field: MediaField | undefined,
   currentFolder?: string,
@@ -234,7 +234,7 @@ export function selectMediaFolder<EF extends BaseField>(
   let mediaFolder = folderFormatter(
     config.media_folder ?? '',
     entry,
-    collection as Collection,
+    collection as CollectionWithDefaults,
     config.media_folder ?? '',
     'media_folder',
     config.slug,
@@ -255,8 +255,8 @@ export function selectMediaFolder<EF extends BaseField>(
 }
 
 export function selectMediaFilePublicPath<EF extends BaseField>(
-  config: Config<EF>,
-  collection: Collection<EF> | undefined | null,
+  config: ConfigWithDefaults<EF>,
+  collection: CollectionWithDefaults<EF> | undefined | null,
   mediaPath: string,
   entry: Entry | undefined | null,
   field: MediaField | undefined,
@@ -269,7 +269,7 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
   let publicFolder = folderFormatter(
     config.public_folder ?? '',
     entry,
-    collection as Collection,
+    collection as CollectionWithDefaults,
     config.public_folder ?? '',
     'public_folder',
     config.slug,
@@ -278,7 +278,7 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
   let mediaFolder = folderFormatter(
     config.media_folder ?? '',
     entry,
-    collection as Collection,
+    collection as CollectionWithDefaults,
     config.media_folder ?? '',
     'media_folder',
     config.slug,
@@ -312,8 +312,8 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
 }
 
 export function selectMediaFilePath(
-  config: Config,
-  collection: Collection | null | undefined,
+  config: ConfigWithDefaults,
+  collection: CollectionWithDefaults | null | undefined,
   entryMap: Entry | null | undefined,
   mediaPath: string,
   field: MediaField | undefined,
@@ -338,7 +338,7 @@ export function selectMediaFilePath(
       );
     }
 
-    if (mediaPathDir.includes(publicFolder) && mediaPathDir != mediaFolder) {
+    if (mediaPathDir.startsWith(publicFolder) && mediaPathDir != mediaFolder) {
       mediaFolder = selectMediaFolder(
         config,
         collection,

@@ -6,7 +6,7 @@ import { compileStringTemplate } from '@staticcms/core/lib/widgets/stringTemplat
 import widgetObjectClasses from './ObjectControl.classes';
 import ObjectFieldWrapper from './ObjectFieldWrapper';
 
-import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core/interface';
+import type { ObjectField, ObjectValue, WidgetControlProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './ObjectControl.css';
@@ -27,12 +27,14 @@ const ObjectControl: FC<WidgetControlProps<ObjectValue, ObjectField>> = ({
   value = {},
   listItemPath,
 }) => {
+  const fields = useMemo(() => field.fields, [field.fields]);
+
   const objectLabel = useMemo(() => {
     const summary = field.summary;
-    return summary ? `${label} - ${compileStringTemplate(summary, null, '', value)}` : label;
-  }, [field.summary, label, value]);
-
-  const fields = useMemo(() => field.fields, [field.fields]);
+    return summary
+      ? `${label} - ${compileStringTemplate(summary, null, '', value, fields)}`
+      : label;
+  }, [field.summary, fields, label, value]);
 
   const hasChildErrors = useHasChildErrors(path, fieldsErrors, i18n, false);
 

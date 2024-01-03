@@ -9,7 +9,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isEmpty, isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { UUIDField, WidgetControlProps } from '@staticcms/core/interface';
+import type { UUIDField, WidgetControlProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './UUIDControl.css';
@@ -21,7 +21,6 @@ export const classes = generateClassNames('WidgetUUID', [
   'disabled',
   'for-single-list',
   'refresh-button',
-  'refresh-button-icon',
   'input',
 ]);
 
@@ -92,15 +91,14 @@ const UUIDControl: FC<WidgetControlProps<string, UUIDField>> = ({
       endAdornment={
         allowRegenerate ? (
           <IconButton
+            icon={RefreshIcon}
             data-testid="generate-new-uuid"
             title="Generate new UUID"
-            aria-label="generate new uuid"
             onClick={generateUUID}
             variant="text"
-            className={classes['refresh-button']}
-          >
-            <RefreshIcon className={classes['refresh-button-icon']} />
-          </IconButton>
+            rootClassName={classes['refresh-button']}
+            aria-label="generate new uuid"
+          />
         ) : null
       }
       rootClassName={classNames(

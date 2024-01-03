@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 import validator from '../validator';
 import ValidationErrorTypes from '@staticcms/core/constants/validationErrorTypes';
 
-import type { RelationField } from '@staticcms/core/interface';
+import type { RelationField } from '@staticcms/core';
 
 describe('validator relation', () => {
   const t = jest.fn();

@@ -2,14 +2,14 @@ import cleanStack from 'clean-stack';
 import copyToClipboard from 'copy-text-to-clipboard';
 import truncate from 'lodash/truncate';
 import React, { Component } from 'react';
-import { translate } from 'react-polyglot';
 import yaml from 'yaml';
 
 import { localForage } from '@staticcms/core/lib/util';
+import useTranslate from '../lib/hooks/useTranslate';
 import { generateClassNames } from '../lib/util/theming.util';
 
-import type { Config, TranslatedProps } from '@staticcms/core/interface';
-import type { ComponentClass, ReactNode } from 'react';
+import type { Config, TranslatedProps } from '@staticcms/core';
+import type { FC, ReactNode } from 'react';
 
 import './ErrorBoundary.css';
 
@@ -86,7 +86,9 @@ interface RecoveredEntryProps {
   entry: string;
 }
 
-const RecoveredEntry = ({ entry, t }: TranslatedProps<RecoveredEntryProps>) => {
+const RecoveredEntry: FC<RecoveredEntryProps> = ({ entry }) => {
+  const t = useTranslate();
+
   console.info('[StaticCMS] Recovered entry', entry);
   return (
     <>
@@ -197,11 +199,11 @@ class ErrorBoundary extends Component<TranslatedProps<ErrorBoundaryProps>, Error
               <br key={`error-break-${index}`} />,
             ])}
           </p>
-          {backup && showBackup && <RecoveredEntry key="backup" entry={backup} t={t} />}
+          {backup && showBackup && <RecoveredEntry key="backup" entry={backup} />}
         </div>
       </div>
     );
   }
 }
 
-export default translate()(ErrorBoundary) as ComponentClass<ErrorBoundaryProps>;
+export default ErrorBoundary;

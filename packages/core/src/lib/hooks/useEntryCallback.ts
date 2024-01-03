@@ -12,7 +12,7 @@ import DataUpdateEvent from '../util/events/DataEvent';
 import { useWindowEvent } from '../util/window.util';
 import useDebouncedCallback from './useDebouncedCallback';
 
-import type { Collection, EntryData, Field } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, EntryData, Field } from '@staticcms/core';
 
 async function handleChange(
   path: string[],
@@ -32,8 +32,8 @@ async function handleChange(
     newEntry = await invokeEvent({
       name: 'change',
       collection,
-      field: field.name,
-      fieldPath,
+      fieldName: field.name,
+      field: fieldPath,
       data: newEntry,
     });
 
@@ -65,7 +65,7 @@ async function handleChange(
 
 interface EntryCallbackProps {
   hasLivePreview: boolean;
-  collection: Collection;
+  collection: CollectionWithDefaults | undefined;
   slug: string | undefined;
   callback: () => void;
 }
@@ -84,7 +84,11 @@ export default function useEntryCallback({
   const [lastEntryData, setLastEntryData] = useState<EntryData>(cloneDeep(entry?.data));
 
   const runUpdateCheck = useCallback(async () => {
-    if ((hasLivePreview && !livePreviewLoaded) || isEqual(lastEntryData, entry?.data)) {
+    if (
+      !collection ||
+      (hasLivePreview && !livePreviewLoaded) ||
+      isEqual(lastEntryData, entry?.data)
+    ) {
       return;
     }
 

@@ -3,7 +3,7 @@ import yaml from 'js-yaml';
 import uniq from 'lodash/uniq';
 import path from 'path';
 
-import type { ProcessedCodeLanguage } from '@staticcms/core/interface';
+import type { ProcessedCodeLanguage } from '@staticcms/core';
 import type { LanguageName } from '@uiw/codemirror-extensions-langs';
 
 const rawDataPath = '../data/languages-raw.yml';
@@ -26,7 +26,7 @@ function outputData(data: ProcessedCodeLanguage[]) {
   const filePath = path.resolve(__dirname, outputPath);
   return fs.writeFile(
     filePath,
-    `import type { ProcessedCodeLanguage } from '@staticcms/core/interface';
+    `import type { ProcessedCodeLanguage } from '@staticcms/core';
 
 const languages: ProcessedCodeLanguage[] = ${JSON.stringify(data, null, 2)};
 

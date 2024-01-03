@@ -2,7 +2,7 @@ import controlComponent from './ObjectControl';
 import previewComponent from './ObjectPreview';
 import schema from './schema';
 
-import type { ObjectField, ObjectValue, WidgetParam } from '@staticcms/core/interface';
+import type { ObjectField, ObjectValue, WidgetParam } from '@staticcms/core';
 
 const ObjectWidget = (): WidgetParam<ObjectValue, ObjectField> => {
   return {

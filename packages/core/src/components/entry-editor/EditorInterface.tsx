@@ -1,4 +1,6 @@
+import { DragHandle as DragHandleIcon } from '@styled-icons/material/DragHandle';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
@@ -13,21 +15,27 @@ import {
 } from '@staticcms/core/lib/util/collection.util';
 import { customPathFromSlug } from '@staticcms/core/lib/util/nested.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectConfig, selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
+import {
+  selectIsFetching,
+  selectUseOpenAuthoring,
+} from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
 import EditorToolbar from './EditorToolbar';
+import EditorWorkflowToolbarButtons from './EditorWorkflowToolbarButtons';
 import EditorControlPane from './editor-control-pane/EditorControlPane';
 import EditorPreviewPane from './editor-preview-pane/EditorPreviewPane';
 
+import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type {
-  Collection,
+  CollectionWithDefaults,
   EditorPersistOptions,
   Entry,
   Field,
   FieldsErrors,
-  TranslatedProps,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
+import type { FC } from 'react';
 
 import './EditorInterface.css';
 
@@ -35,17 +43,26 @@ export const classes = generateClassNames('Editor', [
   'root',
   'default',
   'i18n',
+  'i18n-panel',
   'i18n-active',
-  'mobile-i18n',
   'split-view',
-  'mobile-preview',
   'wrapper-preview',
   'wrapper-i18n-side-by-side',
   'compact',
   'toolbar',
   'content',
   'content-wrapper',
+  'resize-handle',
+  'resize-handle-icon',
+  'mobile-root',
+  'workflow',
+  'mobile-preview',
+  'mobile-preview-active',
+  'mobile-workflow-controls',
 ]);
+
+const COMPACT_EDITOR_DEFAULT_WIDTH = 450;
+const MIN_PREVIEW_SIZE = 300;
 
 const PREVIEW_VISIBLE = 'cms.preview-visible';
 const I18N_VISIBLE = 'cms.i18n-visible';
@@ -58,13 +75,13 @@ interface EditorContentProps {
   editorWithPreview: JSX.Element;
 }
 
-const EditorContent = ({
+const EditorContent: FC<EditorContentProps> = ({
   i18nActive,
   previewActive,
   editor,
   editorSideBySideLocale,
   editorWithPreview,
-}: EditorContentProps) => {
+}) => {
   if (i18nActive) {
     return editorSideBySideLocale;
   } else if (previewActive) {
@@ -81,14 +98,13 @@ const EditorContent = ({
 interface EditorInterfaceProps {
   draftKey: string;
   entry: Entry;
-  collection: Collection;
+  collection: CollectionWithDefaults;
   fields: Field[] | undefined;
   fieldsErrors: FieldsErrors;
   onPersist: (opts?: EditorPersistOptions) => void;
   onDelete: () => Promise<void>;
   onDuplicate: () => void;
   hasChanged: boolean;
-  displayUrl: string | undefined;
   isNewEntry: boolean;
   isModification: boolean;
   toggleScroll: () => Promise<void>;
@@ -97,9 +113,17 @@ interface EditorInterfaceProps {
   submitted: boolean;
   slug: string | undefined;
   onDiscardDraft: () => void;
+  currentStatus: WorkflowStatus | undefined;
+  isUpdatingStatus: boolean;
+  onChangeStatus: (status: WorkflowStatus) => void;
+  hasUnpublishedChanges: boolean;
+  isPublishing: boolean;
+  onPublish: (opts?: EditorPersistOptions) => Promise<void>;
+  onUnPublish: () => Promise<void>;
+  onDeleteUnpublishedChanges: () => Promise<void>;
 }
 
-const EditorInterface = ({
+const EditorInterface: FC<EditorInterfaceProps> = ({
   collection,
   entry,
   fields = [],
@@ -108,26 +132,47 @@ const EditorInterface = ({
   onDuplicate,
   onPersist,
   hasChanged,
-  displayUrl,
   isNewEntry,
   isModification,
   draftKey,
   scrollSyncActive,
-  t,
   loadScroll,
   toggleScroll,
   submitted,
   slug,
   onDiscardDraft,
-}: TranslatedProps<EditorInterfaceProps>) => {
+  currentStatus,
+  isUpdatingStatus,
+  onChangeStatus,
+  hasUnpublishedChanges,
+  isPublishing,
+  onPublish,
+  onUnPublish,
+  onDeleteUnpublishedChanges,
+}) => {
   const config = useAppSelector(selectConfig);
+  const useWorkflow = useAppSelector(selectUseWorkflow);
+  const useOpenAuthoring = useAppSelector(selectUseOpenAuthoring);
 
   const isSmallScreen = useIsSmallScreen();
 
-  const { locales, defaultLocale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
+  const isLoading = useAppSelector(selectIsFetching);
+  const disabled = useMemo(
+    () =>
+      Boolean(
+        isLoading || entry.isPersisting || isPublishing || isUpdatingStatus || entry.isDeleting,
+      ),
+    [entry.isDeleting, entry.isPersisting, isLoading, isPublishing, isUpdatingStatus],
+  );
+  const editorDisabled = useMemo(
+    () => Boolean(disabled || entry.openAuthoring),
+    [disabled, entry.openAuthoring],
+  );
+
+  const { locales, default_locale } = useMemo(() => getI18nInfo(collection), [collection]) ?? {};
   const translatedLocales = useMemo(
-    () => (isSmallScreen ? locales : locales?.filter(locale => locale !== defaultLocale)) ?? [],
-    [isSmallScreen, locales, defaultLocale],
+    () => (isSmallScreen ? locales : locales?.filter(locale => locale !== default_locale)) ?? [],
+    [isSmallScreen, locales, default_locale],
   );
 
   const [previewActive, setPreviewActive] = useState(
@@ -141,12 +186,12 @@ const EditorInterface = ({
   );
 
   const [selectedLocale, setSelectedLocale] = useState<string>(
-    (i18nActive ? translatedLocales?.[0] : defaultLocale) ?? 'en',
+    (i18nActive ? translatedLocales?.[0] : default_locale) ?? 'en',
   );
 
   useEffect(() => {
-    setSelectedLocale((i18nActive ? translatedLocales?.[0] : defaultLocale) ?? 'en');
-  }, [defaultLocale, i18nActive, translatedLocales]);
+    setSelectedLocale((i18nActive ? translatedLocales?.[0] : default_locale) ?? 'en');
+  }, [default_locale, i18nActive, translatedLocales]);
 
   useEffect(() => {
     loadScroll();
@@ -155,10 +200,17 @@ const EditorInterface = ({
   const handleOnPersist = useCallback(
     async (opts: EditorPersistOptions = {}) => {
       const { createNew = false, duplicate = false } = opts;
-      // await switchToDefaultLocale();
       onPersist({ createNew, duplicate });
     },
     [onPersist],
+  );
+
+  const handleOnPublish = useCallback(
+    async (opts: EditorPersistOptions = {}) => {
+      const { createNew = false, duplicate = false } = opts;
+      onPublish({ createNew, duplicate });
+    },
+    [onPublish],
   );
 
   const handleToggleScrollSync = useCallback(() => {
@@ -169,10 +221,10 @@ const EditorInterface = ({
     const newI18nActive = !i18nActive;
     setI18nActive(newI18nActive);
     setSelectedLocale(selectedLocale =>
-      newI18nActive && selectedLocale === defaultLocale ? translatedLocales?.[0] : selectedLocale,
+      newI18nActive && selectedLocale === default_locale ? translatedLocales?.[0] : selectedLocale,
     );
     localStorage.setItem(I18N_VISIBLE, `${newI18nActive}`);
-  }, [i18nActive, setSelectedLocale, translatedLocales, defaultLocale]);
+  }, [i18nActive, setSelectedLocale, translatedLocales, default_locale]);
 
   const handleTogglePreview = useCallback(() => {
     let newPreviewActive = true;
@@ -189,6 +241,8 @@ const EditorInterface = ({
   const handleLocaleChange = useCallback((locale: string) => {
     setSelectedLocale(locale);
   }, []);
+
+  const file = getFileFromSlug(collection, entry.slug);
 
   const { livePreviewUrlTemplate, showPreviewToggle, previewInFrame, editorSize } = useMemo(() => {
     let livePreviewUrlTemplate =
@@ -209,8 +263,6 @@ const EditorInterface = ({
     }
 
     if ('files' in collection) {
-      const file = getFileFromSlug(collection, entry.slug);
-
       if (file?.editor) {
         if (typeof file.editor.live_preview === 'string') {
           livePreviewUrlTemplate = file.editor.live_preview;
@@ -238,7 +290,7 @@ const EditorInterface = ({
       previewInFrame: frame,
       editorSize: size,
     };
-  }, [collection, config?.slug, entry]);
+  }, [collection, config?.slug, entry, file?.editor]);
 
   const finalPreviewActive = useMemo(
     () => showPreviewToggle && previewActive,
@@ -259,12 +311,11 @@ const EditorInterface = ({
   const editor = useMemo(
     () => (
       <div
-        key={defaultLocale}
+        key={default_locale}
         id="control-pane"
         className={classNames(
           classes.default,
           (finalPreviewActive || i18nActive) && `${classes['split-view']} CMS_Scrollbar_root`,
-          showMobilePreview && classes['mobile-preview'],
         )}
       >
         <EditorControlPane
@@ -272,21 +323,20 @@ const EditorInterface = ({
           entry={entry}
           fields={fields}
           fieldsErrors={fieldsErrors}
-          locale={i18nActive ? defaultLocale : selectedLocale}
+          locale={i18nActive ? default_locale : selectedLocale}
           submitted={submitted}
           hideBorder={!finalPreviewActive && !i18nActive}
           canChangeLocale={i18nEnabled && !i18nActive}
           onLocaleChange={handleLocaleChange}
           slug={slug}
-          t={t}
+          disabled={editorDisabled}
         />
       </div>
     ),
     [
-      defaultLocale,
+      default_locale,
       finalPreviewActive,
       i18nActive,
-      showMobilePreview,
       collection,
       entry,
       fields,
@@ -296,64 +346,63 @@ const EditorInterface = ({
       i18nEnabled,
       handleLocaleChange,
       slug,
-      t,
+      editorDisabled,
     ],
   );
 
   const editorLocale = useMemo(
     () =>
       locales
-        ?.filter(locale => isSmallScreen || locale !== defaultLocale)
+        ?.filter(locale => isSmallScreen || locale !== default_locale)
         .map(locale => (
-          <div
-            key={locale}
-            className={classNames(
-              classes.i18n,
-              selectedLocale === locale && classes['i18n-active'],
-            )}
-          >
-            <EditorControlPane
-              collection={collection}
-              entry={entry}
-              fields={fields}
-              fieldsErrors={fieldsErrors}
-              locale={locale}
-              onLocaleChange={handleLocaleChange}
-              allowDefaultLocale={isSmallScreen}
-              submitted={submitted}
-              canChangeLocale
-              context={!isSmallScreen ? 'i18nSplit' : undefined}
-              hideBorder
-              t={t}
-            />
-          </div>
+          <ScrollSyncPane key={locale}>
+            <div
+              className={classNames(
+                classes.i18n,
+                selectedLocale === locale && classes['i18n-active'],
+                'CMS_Scrollbar_root',
+              )}
+            >
+              <EditorControlPane
+                collection={collection}
+                entry={entry}
+                fields={fields}
+                fieldsErrors={fieldsErrors}
+                locale={locale}
+                onLocaleChange={handleLocaleChange}
+                allowDefaultLocale={isSmallScreen}
+                submitted={submitted}
+                canChangeLocale
+                context={!isSmallScreen ? 'i18nSplit' : undefined}
+                hideBorder
+                disabled={editorDisabled}
+              />
+            </div>
+          </ScrollSyncPane>
         )),
     [
+      locales,
+      default_locale,
+      selectedLocale,
       collection,
-      defaultLocale,
       entry,
       fields,
       fieldsErrors,
       handleLocaleChange,
       isSmallScreen,
-      locales,
-      selectedLocale,
       submitted,
-      t,
+      editorDisabled,
     ],
   );
 
   const previewEntry = useMemo(
     () =>
-      collectHasI18n ? getPreviewEntry(collection, entry, selectedLocale, defaultLocale) : entry,
-    [collectHasI18n, collection, defaultLocale, entry, selectedLocale],
+      collectHasI18n ? getPreviewEntry(collection, entry, selectedLocale, default_locale) : entry,
+    [collectHasI18n, collection, default_locale, entry, selectedLocale],
   );
 
-  const editorWithPreview = (
-    <div
-      className={classNames(classes.root, editorSize === EDITOR_SIZE_COMPACT && classes.compact)}
-    >
-      <ScrollSyncPane>{editor}</ScrollSyncPane>
+  const mobilePreview = (
+    <div className={classes['mobile-preview']}>
       <EditorPreviewPane
         collection={collection}
         previewInFrame={previewInFrame}
@@ -366,15 +415,93 @@ const EditorInterface = ({
     </div>
   );
 
-  const editorSideBySideLocale = isSmallScreen ? (
-    <>{editorLocale}</>
-  ) : (
-    <div className={classNames(classes.root, classes['wrapper-i18n-side-by-side'])}>
-      <ScrollSyncPane>{editor}</ScrollSyncPane>
-      <ScrollSyncPane>
-        <>{editorLocale}</>
-      </ScrollSyncPane>
-    </div>
+  const editorWithPreview = (
+    <>
+      {!isSmallScreen ? (
+        <PanelGroup
+          key="editor-with-preview"
+          autoSaveId={`editor-with-preview-${collection.name}${file ? `-${file.name}` : ''}`}
+          direction="horizontal"
+          units={editorSize === EDITOR_SIZE_COMPACT ? 'pixels' : 'percentages'}
+          className={classNames(
+            classes.root,
+            editorSize === EDITOR_SIZE_COMPACT && classes.compact,
+          )}
+          disablePointerEventsDuringResize={true}
+        >
+          <Panel
+            defaultSize={editorSize === EDITOR_SIZE_COMPACT ? COMPACT_EDITOR_DEFAULT_WIDTH : 50}
+            minSize={editorSize === EDITOR_SIZE_COMPACT ? COMPACT_EDITOR_DEFAULT_WIDTH : 30}
+          >
+            <ScrollSyncPane>{editor}</ScrollSyncPane>
+          </Panel>
+          <PanelResizeHandle className={classes['resize-handle']}>
+            <DragHandleIcon className={classes['resize-handle-icon']} />
+          </PanelResizeHandle>
+          <Panel
+            defaultSize={editorSize === EDITOR_SIZE_COMPACT ? undefined : 50}
+            minSize={editorSize === EDITOR_SIZE_COMPACT ? MIN_PREVIEW_SIZE : 30}
+          >
+            <EditorPreviewPane
+              collection={collection}
+              previewInFrame={previewInFrame}
+              livePreviewUrlTemplate={livePreviewUrlTemplate}
+              entry={previewEntry}
+              fields={fields}
+              editorSize={editorSize}
+              showMobilePreview={showMobilePreview}
+            />
+          </Panel>
+        </PanelGroup>
+      ) : (
+        <div
+          className={classNames(
+            classes['mobile-root'],
+            showMobilePreview && classes['mobile-preview-active'],
+            useWorkflow && classes.workflow,
+          )}
+        >
+          {editor}
+          {mobilePreview}
+        </div>
+      )}
+    </>
+  );
+
+  const editorSideBySideLocale = (
+    <>
+      {!isSmallScreen ? (
+        <PanelGroup
+          key="editor-side-by-side-locale"
+          autoSaveId={`editor-side-by-side-locale-${collection.name}`}
+          direction="horizontal"
+          className={classNames(classes.root, classes['wrapper-i18n-side-by-side'])}
+        >
+          <Panel defaultSize={50} minSize={30}>
+            <ScrollSyncPane>{editor}</ScrollSyncPane>
+          </Panel>
+          <PanelResizeHandle className={classes['resize-handle']}>
+            <DragHandleIcon className={classes['resize-handle-icon']} />
+          </PanelResizeHandle>
+          <Panel defaultSize={50} minSize={30} className={classes['i18n-panel']}>
+            <ScrollSyncPane>
+              <>{editorLocale}</>
+            </ScrollSyncPane>
+          </Panel>
+        </PanelGroup>
+      ) : (
+        <div
+          className={classNames(
+            classes['mobile-root'],
+            showMobilePreview && classes['mobile-preview-active'],
+            useWorkflow && classes.workflow,
+          )}
+        >
+          {editorLocale}
+          {mobilePreview}
+        </div>
+      )}
+    </>
   );
 
   const summary = useMemo(() => selectEntryCollectionTitle(collection, entry), [collection, entry]);
@@ -382,7 +509,9 @@ const EditorInterface = ({
     () => customPathFromSlug(collection, entry.slug),
     [collection, entry.slug],
   );
-  const breadcrumbs = useBreadcrumbs(collection, nestedFieldPath, { isNewEntry, summary, t });
+  const breadcrumbs = useBreadcrumbs(collection, nestedFieldPath, { isNewEntry, summary });
+
+  const isPersisting = useMemo(() => Boolean(entry.isPersisting), [entry.isPersisting]);
 
   return (
     <MainView
@@ -391,15 +520,13 @@ const EditorInterface = ({
       noScroll={finalPreviewActive || i18nActive}
       navbarActions={
         <EditorToolbar
-          isPersisting={entry.isPersisting}
-          isDeleting={entry.isDeleting}
+          isPersisting={isPersisting}
           onPersist={handleOnPersist}
           onPersistAndNew={() => handleOnPersist({ createNew: true })}
           onPersistAndDuplicate={() => handleOnPersist({ createNew: true, duplicate: true })}
           onDelete={onDelete}
           onDuplicate={onDuplicate}
           hasChanged={hasChanged}
-          displayUrl={displayUrl}
           collection={collection}
           isNewEntry={isNewEntry}
           isModification={isModification}
@@ -416,9 +543,36 @@ const EditorInterface = ({
           onMobilePreviewToggle={toggleMobilePreview}
           className={classes.toolbar}
           onDiscardDraft={onDiscardDraft}
+          currentStatus={currentStatus}
+          isUpdatingStatus={isUpdatingStatus}
+          onChangeStatus={onChangeStatus}
+          hasUnpublishedChanges={hasUnpublishedChanges}
+          isPublishing={isPublishing}
+          onDeleteUnpublishedChanges={onDeleteUnpublishedChanges}
+          onPublish={onPublish}
+          onUnPublish={onUnPublish}
+          onPublishAndNew={() => handleOnPublish({ createNew: true })}
+          onPublishAndDuplicate={() => handleOnPublish({ createNew: true, duplicate: true })}
+          disabled={disabled}
         />
       }
     >
+      {useWorkflow ? (
+        <div className={classes['mobile-workflow-controls']}>
+          <EditorWorkflowToolbarButtons
+            hasChanged={hasChanged}
+            isPersisting={isPersisting}
+            onPersist={onPersist}
+            currentStatus={currentStatus}
+            isUpdatingStatus={isUpdatingStatus}
+            disabled={disabled}
+            onChangeStatus={onChangeStatus}
+            isLoading={isLoading}
+            useOpenAuthoring={useOpenAuthoring}
+            mobile
+          />
+        </div>
+      ) : null}
       <EditorContent
         key={draftKey}
         i18nActive={i18nActive}

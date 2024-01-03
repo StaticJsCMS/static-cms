@@ -10,11 +10,11 @@ import { useAppSelector } from '@staticcms/core/store/hooks';
 
 import type {
   BaseField,
-  Collection,
+  CollectionWithDefaults,
   Entry,
   MediaField,
   UnknownField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { CSSProperties } from 'react';
 
 import './Image.css';
@@ -26,7 +26,7 @@ export interface ImageProps<EF extends BaseField> {
   alt?: string;
   className?: string;
   style?: CSSProperties;
-  collection?: Collection<EF>;
+  collection?: CollectionWithDefaults<EF>;
   field?: MediaField;
   entry?: Entry;
   'data-testid'?: string;

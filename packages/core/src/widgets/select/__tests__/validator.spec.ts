@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 import validator from '../validator';
 import ValidationErrorTypes from '@staticcms/core/constants/validationErrorTypes';
 
-import type { SelectField } from '@staticcms/core/interface';
+import type { SelectField } from '@staticcms/core';
 
 describe('validator select', () => {
   const t = jest.fn();

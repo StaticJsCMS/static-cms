@@ -5,6 +5,8 @@ import intersection from 'lodash/intersection';
 import pick from 'lodash/pick';
 import React, { useCallback } from 'react';
 
+import { PreviewState } from '@staticcms/core/constants/enums';
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import {
   AccessTokenError,
   APIError,
@@ -28,17 +30,18 @@ import type {
   AuthenticationPageProps,
   BackendClass,
   BackendEntry,
-  Config,
+  ConfigWithDefaults,
   Credentials,
   DisplayURL,
   DisplayURLObject,
   ImplementationFile,
   PersistOptions,
-  TranslatedProps,
+  UnpublishedEntry,
   User,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { ApiRequest, Cursor } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
+import type { FC } from 'react';
 import type { Client } from './netlify-lfs-client';
 
 const STATUS_PAGE = 'https://www.netlifystatus.com';
@@ -112,10 +115,18 @@ interface NetlifyUser extends Credentials {
   user_metadata: { full_name: string; avatar_url: string };
 }
 
+async function apiGet(path: string) {
+  const apiRoot = 'https://api.netlify.com/api/v1/sites';
+  const response = await fetch(`${apiRoot}/${path}`).then(res => res.json());
+  return response;
+}
+
 export default class GitGateway implements BackendClass {
-  config: Config;
+  config: ConfigWithDefaults;
   api?: GitHubAPI | GitLabAPI | BitBucketAPI;
   branch: string;
+  squashMerges: boolean;
+  cmsLabelPrefix: string;
   mediaFolder?: string;
   transformImages: boolean;
   gatewayUrl: string;
@@ -131,15 +142,19 @@ export default class GitGateway implements BackendClass {
   options: {
     proxied: boolean;
     API: GitHubAPI | GitLabAPI | BitBucketAPI | null;
+    initialWorkflowStatus: WorkflowStatus;
   };
-  constructor(config: Config, options = {}) {
+  constructor(config: ConfigWithDefaults, options = {}) {
     this.options = {
       proxied: true,
       API: null,
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
       ...options,
     };
     this.config = config;
     this.branch = config.backend.branch?.trim() || 'main';
+    this.squashMerges = config.backend.squash_merges || false;
+    this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
     this.mediaFolder = config.media_folder;
     const { use_large_media_transforms_in_media_library: transformImages = true } = config.backend;
     this.transformImages = transformImages;
@@ -161,10 +176,6 @@ export default class GitGateway implements BackendClass {
     }
 
     this.backend = null;
-  }
-
-  isGitBackend() {
-    return true;
   }
 
   async status() {
@@ -299,6 +310,9 @@ export default class GitGateway implements BackendClass {
         tokenPromise: this.tokenPromise!,
         commitAuthor: pick(userData, ['name', 'email']),
         isLargeMedia: (filename: string) => this.isLargeMediaFile(filename),
+        squashMerges: this.squashMerges,
+        cmsLabelPrefix: this.cmsLabelPrefix,
+        initialWorkflowStatus: this.options.initialWorkflowStatus,
       };
 
       if (this.backendType === 'github') {
@@ -333,7 +347,7 @@ export default class GitGateway implements BackendClass {
   }
 
   authComponent() {
-    const WrappedAuthenticationPage = (props: TranslatedProps<AuthenticationPageProps>) => {
+    const WrappedAuthenticationPage: FC<AuthenticationPageProps> = props => {
       const handleAuth = useCallback(
         async (email: string, password: string): Promise<User | string> => {
           try {
@@ -541,5 +555,88 @@ export default class GitGateway implements BackendClass {
   }
   traverseCursor(cursor: Cursor, action: string) {
     return this.backend!.traverseCursor!(cursor, action);
+  }
+
+  /**
+   * Editorial Workflow
+   */
+  unpublishedEntries() {
+    return this.backend!.unpublishedEntries();
+  }
+
+  unpublishedEntry({
+    id,
+    collection,
+    slug,
+  }: {
+    id?: string;
+    collection?: string;
+    slug?: string;
+  }): Promise<UnpublishedEntry> {
+    return this.backend!.unpublishedEntry({ id, collection, slug });
+  }
+
+  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
+    return this.backend!.updateUnpublishedEntryStatus(collection, slug, newStatus);
+  }
+
+  deleteUnpublishedEntry(collection: string, slug: string) {
+    return this.backend!.deleteUnpublishedEntry(collection, slug);
+  }
+
+  publishUnpublishedEntry(collection: string, slug: string) {
+    return this.backend!.publishUnpublishedEntry(collection, slug);
+  }
+
+  async unpublishedEntryDataFile(collection: string, slug: string, path: string, id: string) {
+    return this.backend!.unpublishedEntryDataFile(collection, slug, path, id);
+  }
+
+  async unpublishedEntryMediaFile(collection: string, slug: string, path: string, id: string) {
+    const isLargeMedia = await this.isLargeMediaFile(path);
+    if (isLargeMedia) {
+      const branch = this.backend!.getBranch(collection, slug);
+      const { url, blob } = await this.getLargeMediaDisplayURL({ path, id }, branch);
+      return {
+        id,
+        name: basename(path),
+        path,
+        url,
+        displayURL: url,
+        file: new File([blob], basename(path)),
+        size: blob.size,
+      };
+    } else {
+      return this.backend!.unpublishedEntryMediaFile(collection, slug, path, id);
+    }
+  }
+
+  async getDeployPreview(collection: string, slug: string) {
+    let preview = await this.backend!.getDeployPreview(collection, slug);
+    if (!preview) {
+      try {
+        // if the commit doesn't have a status, try to use Netlify API directly
+        // this is useful when builds are queue up in Netlify and don't have a commit status yet
+        // and only works with public logs at the moment
+        // TODO: get Netlify API Token and use it to access private logs
+        const siteId = new URL(localStorage.getItem('netlifySiteURL') || '').hostname;
+        const site = await apiGet(siteId);
+        const deploys: { state: string; commit_ref: string; deploy_url: string }[] = await apiGet(
+          `${site.id}/deploys?per_page=100`,
+        );
+        if (deploys.length > 0) {
+          const ref = await this.api!.getUnpublishedEntrySha(collection, slug);
+          const deploy = deploys.find(d => d.commit_ref === ref);
+          if (deploy) {
+            preview = {
+              status: deploy.state === 'ready' ? PreviewState.Success : PreviewState.Other,
+              url: deploy.deploy_url,
+            };
+          }
+        }
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
+    }
+    return preview;
   }
 }

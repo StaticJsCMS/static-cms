@@ -4,10 +4,11 @@ import flatten from 'lodash/flatten';
 import get from 'lodash/get';
 import isError from 'lodash/isError';
 import uniq from 'lodash/uniq';
-import { dirname } from 'path';
+import { dirname, extname } from 'path';
 
 import { DRAFT_MEDIA_FILES } from './constants/mediaLibrary';
-import { resolveFormat } from './formats/formats';
+import { WorkflowStatus, workflowStatusFromString } from './constants/publishModes';
+import { formatExtensions, resolveFormat } from './formats/formats';
 import { commitMessageFormatter, slugFormatter } from './lib/formatters';
 import {
   I18N_STRUCTURE_MULTIPLE_FILES,
@@ -15,6 +16,7 @@ import {
   formatI18nBackup,
   getFilePaths,
   getI18nBackup,
+  getI18nDataFiles,
   getI18nEntry,
   getI18nFiles,
   getI18nFilesDepth,
@@ -32,8 +34,10 @@ import {
   getPathDepth,
   localForage,
 } from './lib/util';
+import { EDITORIAL_WORKFLOW_ERROR } from './lib/util/EditorialWorkflowError';
 import { getEntryBackupKey } from './lib/util/backup.util';
 import {
+  getFields,
   selectAllowDeletion,
   selectAllowNewEntries,
   selectEntryPath,
@@ -47,10 +51,11 @@ import {
 import filterEntries from './lib/util/filter.util';
 import { selectMediaFilePublicPath } from './lib/util/media.util';
 import { selectCustomPath, slugFromCustomPath } from './lib/util/nested.util';
-import { isNullish } from './lib/util/null.util';
+import { isNotNullish, isNullish } from './lib/util/null.util';
 import { fileSearch, sortByScore } from './lib/util/search.util';
 import set from './lib/util/set.util';
 import { dateParsers, expandPath, extractTemplateVars } from './lib/widgets/stringTemplate';
+import { getUseWorkflow } from './reducers/selectors/config';
 import createEntry from './valueObjects/createEntry';
 
 import type {
@@ -58,9 +63,10 @@ import type {
   BackendInitializer,
   BackupEntry,
   BaseField,
-  Collection,
   CollectionFile,
-  Config,
+  CollectionWithDefaults,
+  CollectionsWithDefaults,
+  ConfigWithDefaults,
   Credentials,
   DataFile,
   DisplayURL,
@@ -68,6 +74,7 @@ import type {
   EntryData,
   EventData,
   FilterRule,
+  FolderCollectionWithDefaults,
   I18nInfo,
   ImplementationEntry,
   MediaField,
@@ -76,12 +83,16 @@ import type {
   SearchQueryResponse,
   SearchResponse,
   UnknownField,
+  UnpublishedEntry,
+  UnpublishedEntryDiff,
   User,
   ValueOrNestedValue,
 } from './interface';
 import type { AsyncLock } from './lib/util';
 import type { RootState } from './store';
 import type AssetProxy from './valueObjects/AssetProxy';
+
+const LIST_ALL_ENTRIES_CACHE_TIME = 5000;
 
 function updatePath(entryPath: string, assetPath: string): string | null {
   const pathDir = dirname(entryPath);
@@ -185,19 +196,22 @@ export function expandSearchEntries(
   field: string;
 })[] {
   // expand the entries for the purpose of the search
-  const expandedEntries = entries.reduce((acc, e) => {
-    const expandedFields = searchFields.reduce((acc, f) => {
-      const fields = expandPath({ data: e.data, path: f });
-      acc.push(...fields);
+  const expandedEntries = entries.reduce(
+    (acc, e) => {
+      const expandedFields = searchFields.reduce((acc, f) => {
+        const fields = expandPath({ data: e.data, path: f });
+        acc.push(...fields);
+        return acc;
+      }, [] as string[]);
+
+      for (let i = 0; i < expandedFields.length; i++) {
+        acc.push({ ...e, field: expandedFields[i] });
+      }
+
       return acc;
-    }, [] as string[]);
-
-    for (let i = 0; i < expandedFields.length; i++) {
-      acc.push({ ...e, field: expandedFields[i] });
-    }
-
-    return acc;
-  }, [] as (Entry & { field: string })[]);
+    },
+    [] as (Entry & { field: string })[],
+  );
 
   return expandedEntries;
 }
@@ -207,31 +221,34 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]): En
   const fields = entries.map(f => f.field);
   const arrayPaths: Record<string, Set<string>> = {};
 
-  const merged = entries.reduce((acc, e) => {
-    if (!acc[e.slug]) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { field, ...rest } = e;
-      acc[e.slug] = rest;
-      arrayPaths[e.slug] = new Set();
-    }
-
-    const nestedFields = e.field.split('.');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let value = acc[e.slug].data as any;
-    for (let i = 0; i < nestedFields.length; i++) {
-      value = value[nestedFields[i]];
-      if (Array.isArray(value)) {
-        const path = nestedFields.slice(0, i + 1).join('.');
-        arrayPaths[e.slug] = arrayPaths[e.slug].add(path);
+  const merged = entries.reduce(
+    (acc, e) => {
+      if (!acc[e.slug]) {
+        const { field: _field, ...rest } = e;
+        acc[e.slug] = rest;
+        arrayPaths[e.slug] = new Set();
       }
-    }
 
-    return acc;
-  }, {} as Record<string, Entry>);
+      const nestedFields = e.field.split('.');
+      let value: ValueOrNestedValue = acc[e.slug].data;
+      for (let i = 0; i < nestedFields.length; i++) {
+        if (isNotNullish(value)) {
+          value = value[nestedFields[i]];
+          if (Array.isArray(value)) {
+            const path = nestedFields.slice(0, i + 1).join('.');
+            arrayPaths[e.slug] = arrayPaths[e.slug].add(path);
+          }
+        }
+      }
+
+      return acc;
+    },
+    {} as Record<string, Entry>,
+  );
 
   // this keeps the search score sorting order designated by the order in entries
   // and filters non matching items
-  Object.keys(merged).forEach(slug => {
+  return Object.keys(merged).map(slug => {
     let data = merged[slug].data ?? {};
     for (const path of arrayPaths[slug]) {
       const array = get(data, path) as unknown[];
@@ -252,9 +269,12 @@ export function mergeExpandedEntries(entries: (Entry & { field: string })[]): En
 
       data = set(data, path, filtered);
     }
-  });
 
-  return Object.values(merged);
+    return {
+      ...merged[slug],
+      data,
+    };
+  });
 }
 
 interface AuthStore {
@@ -265,7 +285,7 @@ interface AuthStore {
 
 interface BackendOptions<EF extends BaseField> {
   backendName: string;
-  config: Config<EF>;
+  config: ConfigWithDefaults<EF>;
   authStore?: AuthStore;
 }
 
@@ -285,7 +305,21 @@ export interface MediaFile {
   isDirectory?: boolean;
 }
 
-function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
+function selectHasMetaPath(
+  collection: CollectionWithDefaults,
+): collection is FolderCollectionWithDefaults {
+  return Boolean('folder' in collection && collection.meta?.path);
+}
+
+function prepareMetaPath(path: string, collection: CollectionWithDefaults) {
+  if (!selectHasMetaPath(collection)) {
+    return path;
+  }
+  const dir = dirname(path);
+  return dir.slice(collection.folder!.length + 1) || '/';
+}
+
+function collectionDepth<EF extends BaseField>(collection: CollectionWithDefaults<EF>) {
   let depth;
   depth =
     ('nested' in collection && collection.nested?.depth) || getPathDepth(collection.path ?? '');
@@ -297,19 +331,21 @@ function collectionDepth<EF extends BaseField>(collection: Collection<EF>) {
   return depth;
 }
 
-function i18nRuleString(ruleString: string, { defaultLocale, structure }: I18nInfo): string {
+function i18nRuleString(ruleString: string, { default_locale, structure }: I18nInfo): string {
   if (structure === I18N_STRUCTURE_MULTIPLE_FOLDERS) {
-    return `${defaultLocale}\\/${ruleString}`;
+    return `${default_locale}\\/${ruleString}`;
   }
 
   if (structure === I18N_STRUCTURE_MULTIPLE_FILES) {
-    return `${ruleString}\\.${defaultLocale}\\..*`;
+    return `${ruleString}\\.${default_locale}\\..*`;
   }
 
   return ruleString;
 }
 
-function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegExp | undefined {
+function collectionRegex<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF>,
+): RegExp | undefined {
   let ruleString = '';
 
   if ('folder' in collection && collection.path) {
@@ -326,7 +362,7 @@ function collectionRegex<EF extends BaseField>(collection: Collection<EF>): RegE
 export class Backend<EF extends BaseField = UnknownField, BC extends BackendClass = BackendClass> {
   implementation: BC;
   backendName: string;
-  config: Config<EF>;
+  config: ConfigWithDefaults<EF>;
   authStore?: AuthStore;
   user?: User | null;
   backupSync: AsyncLock;
@@ -339,7 +375,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     this.deleteAnonymousBackup();
     this.config = config;
     this.implementation = implementation.init(this.config, {
+      useWorkflow: getUseWorkflow(this.config as ConfigWithDefaults),
       updateUserCredentials: this.updateUserCredentials,
+      initialWorkflowStatus: WorkflowStatus.DRAFT,
     }) as BC;
     this.backendName = backendName;
     this.authStore = authStore;
@@ -386,10 +424,6 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return Promise.resolve(null);
   }
 
-  isGitBackend() {
-    return this.implementation.isGitBackend?.() || false;
-  }
-
   updateUserCredentials = (updatedCredentials: Credentials) => {
     const storedUser = this.authStore!.retrieve();
     if (storedUser && storedUser.backendName === this.backendName) {
@@ -429,7 +463,27 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   getToken = () => this.implementation.getToken();
 
-  async entryExist(path: string) {
+  async entryExist(
+    collection: CollectionWithDefaults,
+    path: string,
+    slug: string,
+    useWorkflow: boolean,
+  ) {
+    const unpublishedEntry =
+      useWorkflow &&
+      (await this.implementation
+        .unpublishedEntry({ collection: collection.name, slug })
+        .catch(error => {
+          if (error.name === EDITORIAL_WORKFLOW_ERROR && error.notUnderEditorialWorkflow) {
+            return Promise.resolve(false);
+          }
+          return Promise.reject(error);
+        }));
+
+    if (unpublishedEntry) {
+      return unpublishedEntry;
+    }
+
     const publishedEntry = await this.implementation
       .getEntry(path)
       .then(({ data }) => data)
@@ -441,9 +495,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   }
 
   async generateUniqueSlug(
-    collection: Collection,
-    entryData: EntryData,
-    config: Config,
+    collection: CollectionWithDefaults,
+    entry: Entry,
+    config: ConfigWithDefaults,
     usedSlugs: string[],
     customPath: string | undefined,
   ) {
@@ -452,15 +506,21 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     if (customPath) {
       slug = slugFromCustomPath(collection, customPath);
     } else {
-      slug = slugFormatter(collection, entryData, slugConfig);
+      const collectionFields = getFields(collection, entry.slug);
+      slug = slugFormatter(collection, entry.data, slugConfig, collectionFields);
     }
     let i = 1;
     let uniqueSlug = slug;
 
-    // Check for duplicate slug in loaded entities store first before repo
+    // Check for duplicate slug in loaded entries store first before repo
     while (
       usedSlugs.includes(uniqueSlug) ||
-      (await this.entryExist(selectEntryPath(collection, uniqueSlug) as string))
+      (await this.entryExist(
+        collection,
+        selectEntryPath(collection, uniqueSlug) as string,
+        uniqueSlug,
+        getUseWorkflow(config),
+      ))
     ) {
       uniqueSlug = `${slug}${sanitizeChar(' ', slugConfig)}${i++}`;
     }
@@ -469,7 +529,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   processEntries<EF extends BaseField>(
     loadedEntries: ImplementationEntry[],
-    collection: Collection<EF>,
+    collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
   ): Entry[] {
     const entries = loadedEntries.map(loadedEntry =>
       createEntry(
@@ -484,7 +545,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         },
       ),
     );
-    const formattedEntries = entries.map(this.entryWithFormat(collection));
+    const formattedEntries = entries.map(this.entryWithFormat(collection, config));
     // If this collection has a "filter" property, filter entries accordingly
     const collectionFilter = collection.filter;
     const filteredEntries = collectionFilter
@@ -500,7 +561,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return filteredEntries;
   }
 
-  async listEntries(collection: Collection) {
+  async listEntries(collection: CollectionWithDefaults, config: ConfigWithDefaults) {
     const extension = selectFolderEntryExtension(collection);
     let listMethod: () => Promise<ImplementationEntry[]>;
     if ('folder' in collection) {
@@ -528,18 +589,19 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       collection,
     });
     return {
-      entries: this.processEntries(loadedEntries, collection),
+      entries: this.processEntries(loadedEntries, collection, config),
       pagination: cursor.meta?.page,
       cursor,
     };
   }
 
-  // The same as listEntries, except that if a cursor with the "next"
-  // action available is returned, it calls "next" on the cursor and
-  // repeats the process. Once there is no available "next" action, it
-  // returns all the collected entries. Used to retrieve all entries
-  // for local searches and queries.
-  async listAllEntries<EF extends BaseField>(collection: Collection<EF>) {
+  backendPromise: Record<string, { expires: number; data?: Entry[]; promise?: Promise<Entry[]> }> =
+    {};
+
+  async listAllEntriesExecutor<EF extends BaseField>(
+    collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
+  ): Promise<Entry[]> {
     if ('folder' in collection && collection.folder && this.implementation.allEntriesByFolder) {
       const depth = collectionDepth(collection);
       const extension = selectFolderEntryExtension(collection);
@@ -550,21 +612,80 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
           depth,
           collectionRegex(collection),
         )
-        .then(entries => this.processEntries(entries, collection));
+        .then(entries => this.processEntries(entries, collection, config));
     }
 
-    const response = await this.listEntries(collection as Collection);
+    const response = await this.listEntries(
+      collection as CollectionWithDefaults,
+      config as ConfigWithDefaults,
+    );
     const { entries } = response;
     let { cursor } = response;
     while (cursor && cursor.actions?.has('next')) {
-      const { entries: newEntries, cursor: newCursor } = await this.traverseCursor(cursor, 'next');
+      const { entries: newEntries, cursor: newCursor } = await this.traverseCursor(
+        cursor,
+        'next',
+        config as ConfigWithDefaults,
+      );
       entries.push(...newEntries);
       cursor = newCursor;
     }
     return entries;
   }
 
-  async search(collections: Collection[], searchTerm: string): Promise<SearchResponse> {
+  // The same as listEntries, except that if a cursor with the "next"
+  // action available is returned, it calls "next" on the cursor and
+  // repeats the process. Once there is no available "next" action, it
+  // returns all the collected entries. Used to retrieve all entries
+  // for local searches and queries.
+  async listAllEntries<EF extends BaseField>(
+    collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
+  ): Promise<Entry[]> {
+    const now = new Date().getTime();
+    if (collection.name in this.backendPromise) {
+      const cachedRequest = this.backendPromise[collection.name];
+      if (cachedRequest && cachedRequest.expires >= now) {
+        if (cachedRequest.data) {
+          return Promise.resolve(cachedRequest.data);
+        }
+
+        if (cachedRequest.promise) {
+          return cachedRequest.promise;
+        }
+      }
+
+      delete this.backendPromise[collection.name];
+    }
+
+    const p = new Promise<Entry[]>(resolve => {
+      this.listAllEntriesExecutor(collection, config).then(entries => {
+        const responseNow = new Date().getTime();
+        this.backendPromise[collection.name] = {
+          expires: responseNow + LIST_ALL_ENTRIES_CACHE_TIME,
+          data: entries,
+        };
+        resolve(entries);
+      });
+    });
+
+    this.backendPromise[collection.name] = {
+      expires: now + LIST_ALL_ENTRIES_CACHE_TIME,
+      promise: p,
+    };
+
+    return p;
+  }
+
+  printError(error: Error) {
+    return `\n\n${error.stack}`;
+  }
+
+  async search(
+    collections: CollectionWithDefaults[],
+    searchTerm: string,
+    config: ConfigWithDefaults,
+  ): Promise<SearchResponse> {
     // Perform a local search by requesting all entries. For each
     // collection, load it, search, and call onCollectionResults with
     // its results.
@@ -596,7 +717,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
           ];
         }
         const filteredSearchFields = searchFields.filter(Boolean) as string[];
-        const collectionEntries = await this.listAllEntries(collection);
+        const collectionEntries = await this.listAllEntries(collection, config);
         return fuzzy.filter(searchTerm, collectionEntries, {
           extract: extractSearchFields(uniq(filteredSearchFields)),
         });
@@ -611,9 +732,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     const entries = await Promise.all(collectionEntriesRequests).then(arrays => flatten(arrays));
 
     if (errors.length > 0) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      throw new Error({ message: 'Errors occurred while searching entries locally!', errors });
+      throw new Error(
+        `Errors occurred while searching entries locally!${errors.map(this.printError)}`,
+      );
     }
 
     const hits = entries
@@ -624,13 +745,17 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   }
 
   async query<EF extends BaseField>(
-    collection: Collection<EF>,
+    collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
     searchFields: string[],
     searchTerm: string,
     file?: string,
     limit?: number,
   ): Promise<SearchQueryResponse> {
-    const entries = await this.listAllEntries(collection as Collection);
+    const entries = await this.listAllEntries(
+      collection as CollectionWithDefaults,
+      config as ConfigWithDefaults,
+    );
     if (file) {
       let hits = fileSearch(
         entries.find(e => e.slug === file),
@@ -663,13 +788,17 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return { query: searchTerm, hits: merged };
   }
 
-  traverseCursor(cursor: Cursor, action: string): Promise<{ entries: Entry[]; cursor: Cursor }> {
+  traverseCursor(
+    cursor: Cursor,
+    action: string,
+    config: ConfigWithDefaults,
+  ): Promise<{ entries: Entry[]; cursor: Cursor }> {
     const [data, unwrappedCursor] = cursor.unwrapData();
     // TODO: stop assuming all cursors are for collections
-    const collection = data.collection as Collection;
+    const collection = data.collection as CollectionWithDefaults;
     return this.implementation.traverseCursor!(unwrappedCursor, action).then(
       async ({ entries, cursor: newCursor }) => ({
-        entries: this.processEntries(entries, collection),
+        entries: this.processEntries(entries, collection, config),
         cursor: Cursor.create(newCursor).wrapData({
           cursorType: 'collectionEntries',
           collection,
@@ -679,7 +808,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   }
 
   async getLocalDraftBackup(
-    collection: Collection,
+    collection: CollectionWithDefaults,
+    config: ConfigWithDefaults,
     slug: string,
   ): Promise<{ entry: Entry | null }> {
     const key = getEntryBackupKey(collection.name, slug);
@@ -701,7 +831,10 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     const label = selectFileEntryLabel(collection, slug);
 
     const formatRawData = (raw: string) => {
-      return this.entryWithFormat(collection)(
+      return this.entryWithFormat(
+        collection,
+        config,
+      )(
         createEntry(collection.name, slug, path, {
           raw,
           label,
@@ -719,11 +852,15 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return { entry };
   }
 
-  async persistLocalDraftBackup(entry: Entry, collection: Collection) {
+  async persistLocalDraftBackup(
+    entry: Entry,
+    collection: CollectionWithDefaults,
+    config: ConfigWithDefaults,
+  ) {
     try {
       await this.backupSync.acquire();
       const key = getEntryBackupKey(collection.name, entry.slug);
-      const raw = this.entryToRaw(collection, entry);
+      const raw = this.entryToRaw(collection, entry, config);
 
       if (!raw.trim()) {
         return;
@@ -742,7 +879,9 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
       let i18n;
       if (hasI18n(collection)) {
-        i18n = getI18nBackup(collection, entry, entry => this.entryToRaw(collection, entry));
+        i18n = getI18nBackup(collection, entry, entry =>
+          this.entryToRaw(collection, entry, config),
+        );
       }
 
       await localForage.setItem<BackupEntry>(key, {
@@ -760,7 +899,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     }
   }
 
-  async deleteLocalDraftBackup(collection: Collection, slug: string) {
+  async deleteLocalDraftBackup(collection: CollectionWithDefaults, slug: string) {
     try {
       await this.backupSync.acquire();
       await localForage.removeItem(getEntryBackupKey(collection.name, slug));
@@ -783,7 +922,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   async getEntry<EF extends BaseField>(
     state: RootState<EF>,
-    collection: Collection<EF>,
+    collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
     slug: string,
   ) {
     const path = selectEntryPath(collection, slug) as string;
@@ -798,7 +938,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         mediaFiles: [],
       });
 
-      entry = this.entryWithFormat(collection)(entry);
+      entry = this.entryWithFormat(collection, config)(entry);
       entry = await this.processEntry(state, collection, entry);
 
       return entry;
@@ -833,14 +973,21 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return Promise.reject(err);
   }
 
-  entryWithFormat<EF extends BaseField>(collection: Collection<EF>) {
+  entryWithFormat<EF extends BaseField>(
+    collection: CollectionWithDefaults<EF>,
+    config: ConfigWithDefaults<EF>,
+  ) {
     return (entry: Entry): Entry => {
       const format = resolveFormat(collection, entry);
       if (entry && entry.raw !== undefined) {
-        const data = (format && attempt(format.fromFile.bind(format, entry.raw))) || {};
+        const data =
+          (format &&
+            attempt(format.fromFile.bind(format, entry.raw, config as ConfigWithDefaults))) ||
+          {};
         if (isError(data)) {
           console.error(data);
         }
+
         return Object.assign(entry, { data: isError(data) ? {} : data });
       }
 
@@ -850,7 +997,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
   async processEntry<EF extends BaseField>(
     state: RootState<EF>,
-    collection: Collection<EF>,
+    collection: CollectionWithDefaults<EF>,
     entry: Entry,
   ) {
     const configState = state.config;
@@ -891,6 +1038,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     entryDraft: draft,
     assetProxies,
     usedSlugs,
+    unpublished = false,
     status,
   }: PersistArgs) {
     const modifiedData = await this.invokePreSaveEvent(draft.entry, collection);
@@ -906,6 +1054,8 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     const newEntry = entryDraft.entry.newRecord ?? false;
 
+    const useWorkflow = getUseWorkflow(config);
+
     const customPath = selectCustomPath(draft.entry, collection, rootSlug, config.slug);
 
     let dataFile: DataFile;
@@ -915,7 +1065,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       }
       const slug = await this.generateUniqueSlug(
         collection,
-        entryDraft.entry.data,
+        entryDraft.entry,
         config,
         usedSlugs,
         customPath,
@@ -929,14 +1079,15 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
       dataFile = {
         path,
         slug,
-        raw: this.entryToRaw(collection, entryDraft.entry),
+        raw: this.entryToRaw(collection, entryDraft.entry, config),
       };
     } else {
       const slug = entryDraft.entry.slug;
       dataFile = {
         path: entryDraft.entry.path,
-        slug: customPath ? slugFromCustomPath(collection, customPath) : slug,
-        raw: this.entryToRaw(collection, entryDraft.entry),
+        // for workflow entries we refresh the slug on publish
+        slug: customPath && !useWorkflow ? slugFromCustomPath(collection, customPath) : slug,
+        raw: this.entryToRaw(collection, entryDraft.entry, config),
         newPath: customPath,
       };
     }
@@ -950,7 +1101,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         collection,
         extension,
         entryDraft.entry,
-        (draftData: Entry) => this.entryToRaw(collection, draftData),
+        (draftData: Entry) => this.entryToRaw(collection, draftData, config),
         path,
         slug,
         newPath,
@@ -958,23 +1109,33 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     }
 
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter(newEntry ? 'create' : 'update', config, {
-      collection,
-      slug,
-      path,
-      authorLogin: user.login,
-      authorName: user.name,
-    });
+    const commitMessage = commitMessageFormatter(
+      newEntry ? 'create' : 'update',
+      config,
+      {
+        collection,
+        slug,
+        path,
+        authorLogin: user.login,
+        authorName: user.name,
+      },
+      user.useOpenAuthoring,
+    );
 
     const collectionName = collection.name;
 
-    const updatedOptions = { status };
     const opts = {
       newEntry,
       commitMessage,
       collectionName,
-      ...updatedOptions,
+      useWorkflow,
+      unpublished,
+      status,
     };
+
+    if (!useWorkflow) {
+      await this.invokePrePublishEvent(entryDraft.entry, collection);
+    }
 
     await this.implementation.persistEntry(
       {
@@ -986,6 +1147,10 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
 
     await this.invokePostSaveEvent(entryDraft.entry, collection);
 
+    if (!useWorkflow) {
+      await this.invokePostPublishEvent(entryDraft.entry, collection);
+    }
+
     return slug;
   }
 
@@ -994,31 +1159,46 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     return { entry, author: { login, name } };
   }
 
-  async invokePreSaveEvent(entry: Entry, collection: Collection): Promise<EntryData> {
+  async invokePrePublishEvent(entry: Entry, collection: CollectionWithDefaults) {
+    const eventData = await this.getEventData(entry);
+    return await invokeEvent({ name: 'prePublish', collection: collection.name, data: eventData });
+  }
+
+  async invokePostPublishEvent(entry: Entry, collection: CollectionWithDefaults) {
+    const eventData = await this.getEventData(entry);
+    return await invokeEvent({ name: 'postPublish', collection: collection.name, data: eventData });
+  }
+
+  async invokePreSaveEvent(entry: Entry, collection: CollectionWithDefaults): Promise<EntryData> {
     const eventData = await this.getEventData(entry);
     return await invokeEvent({ name: 'preSave', collection: collection.name, data: eventData });
   }
 
-  async invokePostSaveEvent(entry: Entry, collection: Collection): Promise<void> {
+  async invokePostSaveEvent(entry: Entry, collection: CollectionWithDefaults): Promise<void> {
     const eventData = await this.getEventData(entry);
     await invokeEvent({ name: 'postSave', collection: collection.name, data: eventData });
   }
 
-  async persistMedia(config: Config, file: AssetProxy) {
+  async persistMedia(config: ConfigWithDefaults, file: AssetProxy) {
     const user = (await this.currentUser()) as User;
     const options = {
-      commitMessage: commitMessageFormatter('uploadMedia', config, {
-        path: file.path,
-        authorLogin: user.login,
-        authorName: user.name,
-      }),
+      commitMessage: commitMessageFormatter(
+        'uploadMedia',
+        config,
+        {
+          path: file.path,
+          authorLogin: user.login,
+          authorName: user.name,
+        },
+        user.useOpenAuthoring,
+      ),
     };
     return this.implementation.persistMedia(file, options);
   }
 
   async deleteEntry<EF extends BaseField>(
     state: RootState<EF>,
-    collection: Collection<EF>,
+    collection: CollectionWithDefaults<EF>,
     slug: string,
   ) {
     const configState = state.config;
@@ -1034,13 +1214,18 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     }
 
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter('delete', configState.config, {
-      collection,
-      slug,
-      path,
-      authorLogin: user.login,
-      authorName: user.name,
-    });
+    const commitMessage = commitMessageFormatter(
+      'delete',
+      configState.config,
+      {
+        collection,
+        slug,
+        path,
+        authorLogin: user.login,
+        authorName: user.name,
+      },
+      user.useOpenAuthoring,
+    );
 
     let paths = [path];
     if (hasI18n(collection)) {
@@ -1049,24 +1234,29 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
     await this.implementation.deleteFiles(paths, commitMessage);
   }
 
-  async deleteMedia(config: Config, path: string) {
+  async deleteMedia(config: ConfigWithDefaults, path: string) {
     const user = (await this.currentUser()) as User;
-    const commitMessage = commitMessageFormatter('deleteMedia', config, {
-      path,
-      authorLogin: user.login,
-      authorName: user.name,
-    });
+    const commitMessage = commitMessageFormatter(
+      'deleteMedia',
+      config,
+      {
+        path,
+        authorLogin: user.login,
+        authorName: user.name,
+      },
+      user.useOpenAuthoring,
+    );
     return this.implementation.deleteFiles([path], commitMessage);
   }
 
-  entryToRaw(collection: Collection, entry: Entry): string {
+  entryToRaw(collection: CollectionWithDefaults, entry: Entry, config: ConfigWithDefaults): string {
     const format = resolveFormat(collection, entry);
     const fieldsOrder = this.fieldsOrder(collection, entry);
     const fieldsComments = selectFieldsComments(collection, entry);
-    return format ? format.toFile(entry.data ?? {}, fieldsOrder, fieldsComments) : '';
+    return format ? format.toFile(entry.data ?? {}, config, fieldsOrder, fieldsComments) : '';
   }
 
-  fieldsOrder(collection: Collection, entry: Entry) {
+  fieldsOrder(collection: CollectionWithDefaults, entry: Entry) {
     if ('fields' in collection) {
       return collection.fields?.map(f => f!.name) ?? [];
     }
@@ -1083,9 +1273,144 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
   filterEntries(collection: { entries: Entry[] }, filterRule: FilterRule | FilterRule[]) {
     return filterEntries(collection.entries, filterRule, undefined);
   }
+
+  /**
+   * Editorial Workflows
+   */
+  async processUnpublishedEntry(
+    collection: CollectionWithDefaults,
+    config: ConfigWithDefaults,
+    entryData: UnpublishedEntry,
+    withMediaFiles: boolean,
+  ) {
+    const { slug, openAuthoring } = entryData;
+    let extension: string;
+    if ('files' in collection) {
+      const file = collection.files.find(f => f?.name === slug);
+      extension = file ? extname(file.file) : formatExtensions['json'];
+    } else {
+      extension = selectFolderEntryExtension(collection);
+    }
+
+    const mediaFiles: MediaFile[] = [];
+    if (withMediaFiles) {
+      const nonDataFiles = entryData.diffs.filter(d => !d.path.endsWith(extension));
+      const files = await Promise.all(
+        nonDataFiles.map(f =>
+          this.implementation!.unpublishedEntryMediaFile(collection.name, slug, f.path, f.id),
+        ),
+      );
+      mediaFiles.push(...files.map(f => ({ ...f, draft: true })));
+    }
+
+    const dataFiles = entryData.diffs.filter(d => d.path.endsWith(extension));
+    dataFiles.sort((a, b) => a.path.length - b.path.length);
+
+    const formatData = (data: string, path: string, newFile: boolean) => {
+      const entry = createEntry(collection.name, slug, path, {
+        raw: data,
+        isModification: !newFile,
+        label: collection && selectFileEntryLabel(collection, slug),
+        mediaFiles,
+        updatedOn: entryData.updatedAt,
+        author: entryData.pullRequestAuthor,
+        status: workflowStatusFromString(entryData.status),
+        meta: { path: prepareMetaPath(path, collection) },
+        openAuthoring,
+      });
+
+      return this.entryWithFormat(collection, config)(entry);
+    };
+
+    const readAndFormatDataFile = async (dataFile: UnpublishedEntryDiff) => {
+      const data = await this.implementation.unpublishedEntryDataFile(
+        collection.name,
+        entryData.slug,
+        dataFile.path,
+        dataFile.id,
+      );
+
+      return formatData(data, dataFile.path, dataFile.newFile);
+    };
+
+    // if the unpublished entry has no diffs, return the original
+    if (dataFiles.length <= 0) {
+      const loadedEntry = await this.implementation.getEntry(
+        selectEntryPath(collection, slug) as string,
+      );
+      return formatData(loadedEntry.data, loadedEntry.file.path, false);
+    } else if (hasI18n(collection)) {
+      // we need to read all locales files and not just the changes
+      const path = selectEntryPath(collection, slug) as string;
+      const i18nFiles = getI18nDataFiles(collection, extension, path, slug, dataFiles);
+      let entries = await Promise.all(
+        i18nFiles.map(dataFile => readAndFormatDataFile(dataFile).catch(() => null)),
+      );
+      entries = entries.filter(Boolean);
+      const grouped = await groupEntries(collection, extension, entries as Entry[]);
+      return grouped[0];
+    } else {
+      return readAndFormatDataFile(dataFiles[0]);
+    }
+  }
+
+  async unpublishedEntries(collections: CollectionsWithDefaults, config: ConfigWithDefaults) {
+    const ids = await this.implementation.unpublishedEntries();
+    const entries = (
+      await Promise.all(
+        ids.map(async id => {
+          const entryData = await this.implementation.unpublishedEntry({ id });
+          const collectionName = entryData.collection;
+          const collection = Object.values(collections).find(c => c.name === collectionName);
+          if (!collection) {
+            console.warn(`Missing collection '${collectionName}' for unpublished entry '${id}'`);
+            return null;
+          }
+
+          return this.processUnpublishedEntry(collection, config, entryData, false);
+        }),
+      )
+    ).filter(Boolean) as Entry[];
+
+    return { pagination: 0, entries };
+  }
+
+  async unpublishedEntry(
+    state: RootState,
+    collection: CollectionWithDefaults,
+    config: ConfigWithDefaults,
+    slug: string,
+  ) {
+    const entryData = await this.implementation.unpublishedEntry({
+      collection: collection.name,
+      slug,
+    });
+
+    let entry = await this.processUnpublishedEntry(collection, config, entryData, true);
+    entry = await this.processEntry(state, collection, entry);
+    return entry;
+  }
+
+  persistUnpublishedEntry(args: PersistArgs) {
+    return this.persistEntry({ ...args, unpublished: true });
+  }
+
+  updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
+    return this.implementation.updateUnpublishedEntryStatus(collection, slug, newStatus);
+  }
+
+  deleteUnpublishedEntry(collection: string, slug: string) {
+    return this.implementation.deleteUnpublishedEntry(collection, slug);
+  }
+
+  async publishUnpublishedEntry(collection: CollectionWithDefaults, entry: Entry) {
+    await this.invokePrePublishEvent(entry, collection);
+    await this.implementation.publishUnpublishedEntry(collection.name, entry.slug);
+    await this.invokePostPublishEvent(entry, collection);
+  }
 }
 
-export function resolveBackend<EF extends BaseField>(config?: Config<EF>) {
+export function resolveBackend<EF extends BaseField>(config?: ConfigWithDefaults<EF>) {
   if (!config?.backend.name) {
     throw new Error('No backend defined in configuration');
   }
@@ -1104,7 +1429,7 @@ export function resolveBackend<EF extends BaseField>(config?: Config<EF>) {
 export const currentBackend = (function () {
   let backend: Backend;
 
-  return <EF extends BaseField = UnknownField>(config: Config<EF>) => {
+  return <EF extends BaseField = UnknownField>(config: ConfigWithDefaults<EF>) => {
     if (backend) {
       return backend;
     }

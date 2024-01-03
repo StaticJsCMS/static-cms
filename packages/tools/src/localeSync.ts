@@ -8,8 +8,6 @@ import baseLocale from '@staticcms/core/locales/en';
 import type { BaseLocalePhrases, LocalePhrases, LocalePhrasesRoot } from '@staticcms/core/locales';
 import { readFileSync, writeFileSync } from 'fs';
 
-// const localesDir = "../core/src/locales";
-
 function processLocaleSection(
   baseSection: BaseLocalePhrases,
   localeSection: LocalePhrases,
@@ -28,7 +26,7 @@ function processLocaleSection(
   }, {} as LocalePhrasesRoot);
 }
 
-function processLocale(name: string, locale: LocalePhrasesRoot) {
+async function processLocale(name: string, locale: LocalePhrasesRoot) {
   const newLocale = Object.keys(baseLocale).reduce((acc, section) => {
     acc[section] = processLocaleSection(baseLocale[section], locale[section]);
 
@@ -37,7 +35,7 @@ function processLocale(name: string, locale: LocalePhrasesRoot) {
 
   const path = join(__dirname, '../../core/src/locales', name, `/index.ts`);
 
-  const formattedCode = prettier.format(
+  const formattedCode = await prettier.format(
     `import type { LocalePhrasesRoot } from '../types';
 
 const ${name}: LocalePhrasesRoot = ${JSON.stringify(
@@ -100,11 +98,13 @@ export default ${name};
 }
 
 (async function () {
-  Object.keys(locales).forEach(locale => {
+  for (const locale in locales) {
     if (locale === 'en') {
-      return;
+      continue;
     }
 
-    processLocale(locale, locales[locale]);
-  });
+    console.info(`Processing locale "${locale}"`);
+
+    await processLocale(locale, locales[locale]);
+  }
 })();

@@ -1,4 +1,4 @@
-import type { ListField, ObjectField, ObjectValue } from '@staticcms/core/interface';
+import type { ListField, ObjectField, ObjectValue } from '@staticcms/core';
 
 export const TYPES_KEY = 'types';
 export const TYPE_KEY = 'type_key';

@@ -11,13 +11,13 @@ import { selectConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { selectMediaLibraryFiles } from '@staticcms/core/reducers/selectors/mediaLibrary';
 import { useAppSelector } from '@staticcms/core/store/hooks';
-import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { createMockEntry } from '@staticcms/test/data/entry.mock';
-import useMediaFiles from '../useMediaFiles';
 import { mockFileField } from '@staticcms/test/data/fields.mock';
+import useMediaFiles from '../useMediaFiles';
 
-import type { MediaField, MediaFile } from '@staticcms/core/interface';
+import type { MediaField, MediaFile } from '@staticcms/core';
 import type { FC } from 'react';
 
 interface MockWidgetProps {
@@ -123,7 +123,7 @@ const testEntryMediaFiles: Record<string, MediaFile[]> = {
 };
 
 describe('useMediaFiles', () => {
-  const mockSelectCollection = selectCollection as jest.Mock;
+  const mockSelectCollection = selectCollection as unknown as jest.Mock;
   const mockSelectConfig = selectConfig as jest.Mock;
   const mockSelectEditingDraft = selectEditingDraft as jest.Mock;
   const mockSelectMediaLibraryFiles = selectMediaLibraryFiles as jest.Mock;
@@ -132,7 +132,7 @@ describe('useMediaFiles', () => {
 
   const mockGetMedia = jest.fn();
 
-  const mockCollection = createMockCollection();
+  const mockCollection = createMockFolderCollection();
 
   const createMockComponent = async (props: MockWidgetProps = {}) => {
     const { rerender, ...result } = render(<MockWidget {...props} />);
@@ -162,7 +162,7 @@ describe('useMediaFiles', () => {
       return fn();
     });
 
-    mockSelectCollection.mockReturnValue(() => undefined);
+    mockSelectCollection.mockReturnValue(undefined);
     mockSelectConfig.mockReturnValue(
       createMockConfig({
         collections: [mockCollection],

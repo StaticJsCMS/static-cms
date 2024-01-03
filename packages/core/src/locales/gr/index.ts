@@ -22,10 +22,12 @@ const gr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Περιεχόμενα',
+      workflow: 'Ροής εργασίας',
       media: 'Πολυμέσα',
       quickAdd: 'Γρήγορη προσθήκη',
     },
     app: {
+      loading: 'Φόρτωση...',
       errorHeader: 'Σφάλμα κατά τη φόρτωση της ρύθμισης παραμέτρων CMS',
       configErrors: 'Σφάλματα ρύθμισης παραμέτρων',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -104,16 +106,37 @@ const gr: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: undefined, // English translation: 'Writing in %{locale}'
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Είστε βέβαιοι ότι θέλετε να αφήσετε αυτήν τη σελίδα;',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν να ενημερώσετε την κατάσταση.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'Ενημερώστε την κατάσταση σε "έτοιμο" πριν από τη δημοσίευση.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        'Έχετε μη αποθηκευμένες αλλαγές, αποθηκεύστε πριν από τη δημοσίευση.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody:
+        'Είστε βέβαιοι ότι θέλετε να καταργήσετε τη δημοσίευση αυτής της καταχώρησης;',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση, καθώς και τις αλλαγές που δεν αποθηκεύσατε από την τρέχουσα περίοδο λειτουργίας;',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody:
         'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη δημοσιευμένη καταχώρηση;',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Αυτό θα διαγράψει όλες τις μη δημοσιευμένες αλλαγές σε αυτήν την καταχώρηση, καθώς και τις αλλαγές που δεν έχετε αποθηκεύσει από την τρέχουσα περίοδο λειτουργίας. Θέλετε ακόμα να διαγράψετε;',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Όλες οι μη δημοσιευμένες αλλαγές σε αυτήν την καταχώρηση θα διαγραφούν. Θέλετε ακόμα να διαγράψετε;',
       loadingEntry: 'Φόρτωση εισόδου...',
     },
     editorInterface: {
@@ -124,13 +147,35 @@ const gr: LocalePhrasesRoot = {
       toggleScrollSync: undefined, // English translation: 'Sync scrolling'
     },
     editorToolbar: {
+      publishing: 'Δημοσίευση...',
       publish: 'Δημοσίευση',
       published: 'Δημοσιεύθηκε',
+      unpublish: 'Κατάργηση δημοσίευσης',
       duplicate: 'Διπλότυπο',
+      unpublishing: 'Κατάργηση δημοσίευσης...',
       publishAndCreateNew: 'Δημοσίευση και δημιουργία νέων',
       publishAndDuplicate: 'Δημοσίευση και αντίγραφο',
+      deleteUnpublishedChanges: 'Διαγραφή μη δημοσιευμένων αλλαγών',
+      deleteUnpublishedEntry: 'Διαγραφή μη δημοσιευμένης καταχώρησης',
+      deletePublishedEntry: 'Διαγραφή δημοσιευμένης καταχώρησης',
       deleteEntry: 'Διαγραφή καταχώρησης',
+      saving: 'Εξοικονόμηση...',
+      save: 'Αποθήκευση',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: 'Διαγραφή...',
+      updating: 'Ενημέρωση...',
+      status: 'Κατάστασης: %{status}',
+      backCollection: ' Εγγραφή στη συλλογή %{collectionLabel}',
+      unsavedChanges: 'Μη αποθηκευμένες αλλαγές',
+      changesSaved: 'Αλλαγές που αποθηκεύτηκαν',
+      draft: 'Σχέδιο',
+      inReview: 'Σε επανεξέταση',
+      ready: 'Έτοιμα',
       publishNow: 'Δημοσίευση τώρα',
+      deployPreviewPendingButtonLabel: 'Έλεγχος για προεπισκόπηση',
+      deployPreviewButtonLabel: 'Προβολή προεπισκόπησης',
+      deployButtonLabel: 'Προβολή Live',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -139,17 +184,35 @@ const gr: LocalePhrasesRoot = {
       markdown: {
         bold: undefined, // English translation: 'Bold'
         italic: undefined, // English translation: 'Italic'
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: undefined, // English translation: 'Code'
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: undefined, // English translation: 'Link'
-        linkPrompt: undefined, // English translation: 'Enter the URL of the link'
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: undefined, // English translation: 'Headings'
         quote: undefined, // English translation: 'Quote'
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: undefined, // English translation: 'Bulleted List'
         numberedList: undefined, // English translation: 'Numbered List'
         addComponent: undefined, // English translation: 'Add Component'
         richText: undefined, // English translation: 'Rich Text'
         markdown: undefined, // English translation: 'Markdown'
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Επιλέξτε μια εικόνα',
@@ -213,6 +276,10 @@ const gr: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -234,10 +301,10 @@ const gr: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Φόρτωση...',
       noResults: 'Χωρίς αποτελέσματα.',
       noAssetsFound: 'Δεν βρέθηκαν αρχεία.',
       noImagesFound: 'Δεν βρέθηκαν εικόνες.',
+      private: 'Ιδιωτικό',
       images: 'Εικόνες',
       mediaAssets: 'Αρχεία πολυμέσων',
       search: 'Αναζήτηση...',
@@ -254,6 +321,7 @@ const gr: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -264,6 +332,7 @@ const gr: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: undefined, // English translation: 'Go back to site'
@@ -284,11 +353,12 @@ const gr: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Αποσύνδεση',
     },
     toast: {
       onFailToLoadEntries: 'Απέτυχε η φόρτωση της καταχώρησης: %{details}',
+      onFailToLoadDeployPreview: 'Απέτυχε η φόρτωση της προεπισκόπησης: %{details}',
       onFailToPersist: 'Απέτυχε η διατήρηση της καταχώρησης:% {Details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Απέτυχε η διαγραφή της καταχώρησης: %{details}',
@@ -297,12 +367,52 @@ const gr: LocalePhrasesRoot = {
       missingRequiredField:
         'Ουπς, ξεχάσατε ένα απαιτούμενο πεδίο. Συμπληρώστε το πριν από την αποθήκευση.',
       entrySaved: 'Η καταχώρηση Αποθηκεύτηκε',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Η καταχώρηση δημοσιεύτηκε',
+      entryUnpublished: 'Μη δημοσιευμένη καταχώρηση',
       onFailToPublishEntry: 'Η δημοσίευση απέτυχε: %{details}',
+      onFailToUnpublishEntry: 'Απέτυχε η κατάργηση δημοσίευσης καταχώρησης: %{details}',
       entryUpdated: 'Η κατάσταση εισόδου ενημερώθηκε',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Οι μη δημοσιευμένες αλλαγές διαγράφηκαν',
       onFailToAuth: '%{details}',
       onLoggedOut: undefined, // English translation: 'You have been logged out, please back up any data and login again'
       onBackendDown: undefined, // English translation: 'The backend service is experiencing an outage. See %{details} for more information'
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Φόρτωση καταχωρήσεων ροής εργασίας σύνταξης',
+      workflowHeading: 'Ροή εργασιών',
+      newPost: 'Νέα δημοσίευση',
+      description:
+        '%{smart_count} καταχώρησεις σε αναμονή για αναθεώρηση, %{readyCount} έτοιμες για Live μετάβαση. |||| %{smart_count} καταχωρήσεις σε αναμονή για αναθεώρηση, %{readyCount} έτοιμες για Live μετάβαση. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} από %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'από %{author}',
+      deleteChanges: 'Διαγραφή αλλαγών',
+      deleteNewEntry: 'Διαγραφή νέας καταχώρησης',
+      publishChanges: 'Δημοσίευση αλλαγών',
+      publishNewEntry: 'Δημοσίευση νέας καταχώρησης',
+    },
+    workflowList: {
+      onDeleteEntry: 'Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν την καταχώρηση;',
+      onPublishingNotReadyEntry:
+        'Μόνο τα στοιχεία με κατάσταση "Ready" μπορούν να δημοσιευτούν. Σύρετε την κάρτα στη στήλη "έτοιμο" για να ενεργοποιήσετε τη δημοσίευση.',
+      onPublishEntry: 'Είστε βέβαιοι ότι θέλετε να δημοσιεύσετε αυτήν την καταχώρηση;',
+      draft: 'Προσχέδια',
+      pending_review: 'Σε ανασκόπηση',
+      pending_publish: 'Έτοιμα',
+      currentEntries: '%{smart_count} καταχωρηση |||| %{smart_count} καταχωρησεις',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

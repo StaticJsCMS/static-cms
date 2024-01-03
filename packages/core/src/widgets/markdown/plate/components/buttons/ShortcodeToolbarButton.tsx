@@ -48,10 +48,12 @@ const ShortcodeToolbarButton: FC<ShortcodeToolbarButtonProps> = ({ disabled }) =
       data-testid="toolbar-button-shortcode"
       keepMounted
       hideDropdownIcon
+      color="secondary"
       variant="text"
       rootClassName={classes.root}
       buttonClassName={classes.button}
       disabled={disabled}
+      aria-label="add shortcode"
     >
       <MenuGroup>
         {Object.keys(configs).map(name => {

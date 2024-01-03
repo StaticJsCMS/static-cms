@@ -26,12 +26,12 @@ import StrikethroughToolbarButton from '../components/buttons/StrikethroughToolb
 import UnorderedListButton from '../components/buttons/UnorderedListToolbarButton';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   LowLevelMarkdownToolbarButtonType,
   MarkdownField,
   MarkdownToolbarButtonType,
   MarkdownToolbarItem,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { ReactNode } from 'react';
 
 import './useToolbarButtons.css';
@@ -40,7 +40,7 @@ const classes = generateClassNames('WidgetMarkdown_MenuToolbar', ['root', 'butto
 
 export default function useToolbarButtons(
   toolbarButtons: MarkdownToolbarItem[],
-  collection: Collection<MarkdownField>,
+  collection: CollectionWithDefaults<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
 ): ReactNode[] {
@@ -52,7 +52,7 @@ export default function useToolbarButtons(
 
 export function getToolbarButtons(
   toolbarButtons: MarkdownToolbarItem[] | MarkdownToolbarButtonType[],
-  collection: Collection<MarkdownField>,
+  collection: CollectionWithDefaults<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
 ): ReactNode[] {
@@ -68,10 +68,12 @@ export function getToolbarButtons(
         data-testid={`toolbar-menu-${button.label.toLowerCase().replace(' ', '-')}`}
         keepMounted
         hideDropdownIcon
+        color="secondary"
         variant="text"
         rootClassName={classes.root}
         buttonClassName={classes.button}
         disabled={disabled}
+        aria-label="additional toolbar options dropdown"
       >
         {button.groups.map((group, index) => {
           if (group.items.length === 0) {
@@ -91,21 +93,21 @@ export function getToolbarButtons(
 
 function getToolbarButton(
   name: MarkdownToolbarButtonType,
-  collection: Collection<MarkdownField>,
+  collection: CollectionWithDefaults<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
   variant: 'button',
 ): ReactNode;
 function getToolbarButton(
   name: LowLevelMarkdownToolbarButtonType,
-  collection: Collection<MarkdownField>,
+  collection: CollectionWithDefaults<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
   variant: 'menu',
 ): ReactNode;
 function getToolbarButton(
   name: MarkdownToolbarButtonType | LowLevelMarkdownToolbarButtonType,
-  collection: Collection<MarkdownField>,
+  collection: CollectionWithDefaults<MarkdownField>,
   field: MarkdownField,
   disabled: boolean,
   variant: 'button' | 'menu',

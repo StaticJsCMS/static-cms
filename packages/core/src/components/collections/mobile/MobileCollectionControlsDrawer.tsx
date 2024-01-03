@@ -7,6 +7,7 @@ import GroupControl from '../GroupControl';
 import SortControl from '../SortControl';
 import mobileCollectionControlsClasses from './MobileCollectionControls.classes';
 
+import type { FC } from 'react';
 import type { FilterControlProps } from '../FilterControl';
 import type { GroupControlProps } from '../GroupControl';
 import type { SortControlProps } from '../SortControl';
@@ -22,7 +23,7 @@ export type MobileCollectionControlsDrawerProps = Omit<FilterControlProps, 'vari
     showSortControl: boolean;
   };
 
-const MobileCollectionControlsDrawer = ({
+const MobileCollectionControlsDrawer: FC<MobileCollectionControlsDrawerProps> = ({
   mobileOpen,
   onMobileOpenToggle,
   showFilterControl,
@@ -37,7 +38,7 @@ const MobileCollectionControlsDrawer = ({
   sort,
   fields,
   onSortClick,
-}: MobileCollectionControlsDrawerProps) => {
+}) => {
   const container = useMemo(
     () => (typeof window !== 'undefined' ? window.document.body : undefined),
     [],

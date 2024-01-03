@@ -3,7 +3,7 @@ import trimEnd from 'lodash/trimEnd';
 
 import { createNonce, isInsecureProtocol, validateNonce } from './utils';
 
-import type { User, AuthenticatorConfig } from '@staticcms/core/interface';
+import type { User, AuthenticatorConfig } from '@staticcms/core';
 import type { NetlifyError } from './netlify-auth';
 
 export default class ImplicitAuthenticator {
@@ -60,10 +60,13 @@ export default class ImplicitAuthenticator {
     // Remove tokens from hash so that token does not remain in browser history.
     this.clearHash();
 
-    const params = [...hashParams.entries()].reduce((acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>);
+    const params = [...hashParams.entries()].reduce(
+      (acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
 
     const { nonce } = JSON.parse(params.state ?? '');
     const validNonce = validateNonce(nonce);

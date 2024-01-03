@@ -7,15 +7,15 @@ import useDebounce from './useDebounce';
 
 import type {
   BaseField,
-  Collection,
+  CollectionWithDefaults,
   Entry,
   MediaField,
   UnknownField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
 export default function useIsMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
   url: string,
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   field: T,
   entry: Entry,
   currentFolder?: string,
@@ -29,17 +29,27 @@ export default function useIsMediaAsset<T extends MediaField, EF extends BaseFie
       return;
     }
 
+    let alive = true;
+
     const checkMediaExistence = async () => {
       const asset = await dispatch(
         getAsset<T, EF>(collection, entry, debouncedUrl, field, currentFolder),
       );
-      setExists(
-        Boolean(asset && asset !== emptyAsset && isNotEmpty(asset.toString()) && asset.fileObj),
-      );
+
+      if (alive) {
+        setExists(
+          Boolean(asset && asset !== emptyAsset && isNotEmpty(asset.toString()) && asset.fileObj),
+        );
+      }
     };
 
     checkMediaExistence();
-  }, [collection, dispatch, entry, field, debouncedUrl, currentFolder]);
+
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedUrl]);
 
   return exists;
 }

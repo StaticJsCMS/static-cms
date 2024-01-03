@@ -3,7 +3,7 @@ import React from 'react';
 import tableClasses from './Table.classes';
 import TableHeaderCell from './TableHeaderCell';
 
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import './Table.css';
 
@@ -12,7 +12,7 @@ interface TableCellProps {
   children: ReactNode[];
 }
 
-const TableCell = ({ columns, children }: TableCellProps) => {
+const TableCell: FC<TableCellProps> = ({ columns, children }) => {
   return (
     <div className={tableClasses.root}>
       <table className={tableClasses.table}>

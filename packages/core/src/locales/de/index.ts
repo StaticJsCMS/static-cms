@@ -12,8 +12,8 @@ const de: LocalePhrasesRoot = {
     errors: {
       email: 'Stellen Sie sicher, Ihre E-Mail-Adresse einzugeben.',
       password: 'Bitte geben Sie Ihr Passwort ein.',
-      authTitle: undefined, // English translation: 'Error logging in'
-      authBody: 'Fehler beim Anmelden',
+      authTitle: 'Fehler beim Anmelden',
+      authBody: '%{details}',
       netlifyIdentityNotFound: 'Das Netlify Identity Plugin wurde nicht gefunden',
       identitySettings:
         'Identity-Einstellungen konnten nicht abgerufen werden. Stellen Sie bei der Verwendung des Git-Gateway Backends sicher, den Identity Service und das Git Gateway zu aktivieren.',
@@ -22,10 +22,12 @@ const de: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Inhalt',
+      workflow: 'Arbeitsablauf',
       media: 'Medien',
       quickAdd: 'Schnellerstellung',
     },
     app: {
+      loading: 'Laden...',
       errorHeader: 'Fehler beim Laden der CMS-Konfiguration.',
       configErrors: 'Konfigurationsfehler',
       configNotFound: 'KOnfiguration nicht gefunden',
@@ -66,8 +68,8 @@ const de: LocalePhrasesRoot = {
       negateLabel: 'Nicht %{label}',
     },
     table: {
-      summary: undefined, // English translation: 'Summary'
-      collection: undefined, // English translation: 'Collection'
+      summary: 'Zusammenfassung',
+      collection: 'Bereich',
     },
     defaultFields: {
       author: {
@@ -77,7 +79,7 @@ const de: LocalePhrasesRoot = {
         label: 'Änderungsdatum',
       },
     },
-    notFound: undefined, // English translation: 'Collection not found'
+    notFound: 'Bereich nicht gefunden',
   },
   editor: {
     editorControl: {
@@ -104,15 +106,38 @@ const de: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Aktuelle Sprache: %{locale}',
+        copyFromLocale: 'Aus anderer Sprache übernehmen',
+        copyFromLocaleConfirm:
+          'Wollen Sie wirklich die Daten aus der Sprache %{locale} übernehmen?\nAlle bishergen Inhalte werden überschrieben.',
       },
     },
     editor: {
       onLeavePage: 'Möchten Sie diese Seite wirklich verlassen?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speichern Sie diese, bevor Sie den Status aktualisieren.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody:
+        'Bitte setzten die den Status vor dem Veröffentlichen auf "Abgeschlossen".',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        'Es sind noch ungespeicherte Änderungen vorhanden. Bitte speicheren Sie vor dem Veröffentlichen.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Soll dieser Beitrag wirklich veröffentlicht werden?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody:
+        'Soll die Veröffentlichung dieses Beitrags wirklich zurückgezogen werden?',
       onDeleteWithUnsavedChangesTitle: 'Veröffentlichten Beitrag löschen?',
       onDeleteWithUnsavedChangesBody:
         'Möchten Sie diesen veröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
       onDeletePublishedEntryTitle: 'Veröffentlichten Beitrag löschen?',
       onDeletePublishedEntryBody: 'Soll dieser veröffentlichte Beitrag wirklich gelöscht werden?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Möchten Sie diesen unveröffentlichten Beitrag, sowie Ihre nicht gespeicherten Änderungen löschen?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Alle unveröffentlichten Änderungen werden gelöscht. Möchten Sie wirklich löschen?',
       loadingEntry: 'Beitrag laden...',
     },
     editorInterface: {
@@ -123,13 +148,37 @@ const de: LocalePhrasesRoot = {
       toggleScrollSync: 'Synchron scrollen',
     },
     editorToolbar: {
+      publishing: 'Veröffentlichen...',
       publish: 'Veröffentlichen',
       published: 'Veröffentlicht',
+      unpublish: 'Veröffentlichung zurückziehen',
       duplicate: 'Duplizieren',
+      unpublishing: 'Veröffentlichung wird zurückgezogen...',
       publishAndCreateNew: 'Veröffentlichen und neuen Beitrag erstellen',
       publishAndDuplicate: 'Veröffentlichen und Beitrag duplizieren',
+      deleteUnpublishedChanges: 'Unveröffentlichte Änderungen verwerfen',
+      deleteUnpublishedEntry: 'Lösche unveröffentlichten Beitrag',
+      deletePublishedEntry: 'Lösche veröffentlichten Beitrag',
       deleteEntry: 'Lösche Beitrag',
+      saving: 'Speichern...',
+      save: 'Speichern',
+      statusInfoTooltipDraft:
+        'Beitrag ist im Entwurfsstatus. Um ihn fertigzustellen und zur Überprüfung freizugeben, setzen Sie den Status auf ‘Zur Überprüfung‘.',
+      statusInfoTooltipInReview:
+        'Beitrag wird überprüft, keine weitere Aktion erforderlich. Sie können weitere Änderungen vornehmen, während die Überprüfung läuft.',
+      deleting: 'Löschen...',
+      updating: 'Aktualisieren...',
+      status: 'Status: %{status}',
+      backCollection: 'Zurück zu allen %{collectionLabel}',
+      unsavedChanges: 'Ungespeicherte Änderungen',
+      changesSaved: 'Änderungen gespeichert',
+      draft: 'Entwurf',
+      inReview: 'Zur Überprüfung',
+      ready: 'Abgeschlossen',
       publishNow: 'Jetzt veröffentlichen',
+      deployPreviewPendingButtonLabel: 'Überprüfen ob eine Vorschau vorhanden ist',
+      deployPreviewButtonLabel: 'Vorschau anzeigen',
+      deployButtonLabel: 'Live ansehen',
       discardChanges: 'Änderungen verwerfen',
       discardChangesTitle: 'Änderungen verwerfen',
       discardChangesBody: 'Sicher, dass Sie ungespeicherte Änderungen verwerfen wollen?',
@@ -138,17 +187,35 @@ const de: LocalePhrasesRoot = {
       markdown: {
         bold: 'Fett',
         italic: 'Kursiv',
+        strikethrough: 'Durchgestrichen',
         code: 'Code',
+        codeBlock: 'Codeblock',
+        insertCodeBlock: 'Codeblock einfügen',
         link: 'Link',
-        linkPrompt: 'Link-URL eingeben',
+        insertLink: 'Link einfügen',
+        paragraph: 'Paragraph',
         headings: 'Überschriften',
         quote: 'Zitat',
+        insertQuote: 'Zitat einfügen',
         bulletedList: 'Aufzählungsliste',
         numberedList: 'Nummerierte Liste',
         addComponent: 'Komponente hinzufügen',
         richText: 'Rich Text',
         markdown: 'Markdown',
-        type: undefined, // English translation: 'Type...'
+        type: 'Tippen...',
+        decreaseIndent: 'Weniger einrücken',
+        increaseIndent: 'Einrücken',
+        image: 'Bild',
+        insertImage: 'Bild einfügen',
+        table: {
+          table: 'Tabelle',
+          deleteColumn: 'Spalte entfernen',
+          deleteRow: 'Zeile entfernen',
+          deleteTable: 'Tabelle entfernen',
+          insertColumn: 'Spalte einfügen',
+          insertRow: 'Zeile einfügen',
+          insertTable: 'Tabelle einfügen',
+        },
       },
       image: {
         choose: 'Bild wählen',
@@ -199,18 +266,22 @@ const de: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Jetzt',
-        invalidDateTitle: undefined, // English translation: 'Invalid date'
+        invalidDateTitle: 'Ungültiges Datum',
         invalidDateBody: 'Das eingegebene Datum ist ungültig.',
       },
       list: {
         add: '%{item} hinzufügen',
         addType: '%{item} hinzufügen',
-        noValue: undefined, // English translation: 'No value'
+        noValue: 'Kein Wert',
       },
       keyvalue: {
-        key: undefined, // English translation: 'Key'
-        value: undefined, // English translation: 'Value'
-        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
+        key: 'Variable',
+        value: 'Wert',
+        uniqueKeys: '%{keyLabel} muss einmalig sein',
+      },
+      code: {
+        language: 'Programmiersprache',
+        selectLanguage: 'Programmiersprache wählen',
       },
     },
   },
@@ -232,10 +303,10 @@ const de: LocalePhrasesRoot = {
       alreadyExistsBody: '%{filename} existiert bereits. Soll sie überschrieben werden?',
     },
     mediaLibraryModal: {
-      loading: 'Laden...',
       noResults: 'Keine Egebnisse.',
       noAssetsFound: 'Keine Medien gefunden.',
       noImagesFound: 'Keine Bilder gefunden.',
+      private: 'Privat ',
       images: 'Bilder',
       mediaAssets: 'Medien',
       search: 'Suchen...',
@@ -245,13 +316,14 @@ const de: LocalePhrasesRoot = {
       deleting: 'Löschen...',
       deleteSelected: 'Ausgewähltes Element löschen',
       chooseSelected: 'Ausgewähltes Element verwenden',
-      dropImages: undefined, // English translation: 'Drop images to upload'
-      dropFiles: undefined, // English translation: 'Drop files to upload'
+      dropImages: 'Zum Hochladen Bilder hierher ziehen',
+      dropFiles: 'Zum Hochladen Dateien hierher ziehen',
     },
     folderSupport: {
       newFolder: 'Neuer Ordner',
       createNewFolder: 'Neuen Ordner erstellen',
       enterFolderName: 'Ordnernamen eingeben...',
+      create: 'Erstellen',
       home: 'Start',
       up: 'Zurück',
       upToFolder: 'Zurück zu %{folder}',
@@ -261,7 +333,8 @@ const de: LocalePhrasesRoot = {
     common: {
       yes: 'Ja',
       no: 'Nein',
-      okay: undefined, // English translation: 'OK'
+      okay: 'OK',
+      cancel: 'Abbrechen',
     },
     default: {
       goBackToSite: 'Zurück zur Seite',
@@ -283,11 +356,12 @@ const de: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: 'Dunkler Modus',
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Abmelden',
     },
     toast: {
       onFailToLoadEntries: 'Beitrag konnte nicht geladen werden: %{details}',
+      onFailToLoadDeployPreview: 'Vorschau konnte nicht geladen werden: %{details}',
       onFailToPersist: 'Beitrag speichern fehlgeschlagen: %{details}',
       onFailToPersistMedia: 'Speichern des Meidums fehlgeschlagen: %{details}',
       onFailToDelete: 'Beitrag löschen fehlgeschlagen: %{details}',
@@ -295,14 +369,55 @@ const de: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Status aktualisieren fehlgeschlagen: %{details}',
       missingRequiredField: 'Oops, einige zwingend erforderliche Felder sind nicht ausgefüllt.',
       entrySaved: 'Beitrag gespeichert',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Beitrag veröffentlicht',
+      entryUnpublished: 'Beitrag nicht mehr öffentlich',
       onFailToPublishEntry: 'Veröffentlichen fehlgeschlagen: %{details}',
+      onFailToUnpublishEntry:
+        'Veröffentlichung des Beitrags konnte nicht rückgängig gemacht werden: %{details}',
       entryUpdated: 'Beitragsstatus aktualisiert',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Unveröffentlichte Änderungen verworfen',
       onFailToAuth: '%{details}',
       onLoggedOut:
         'Sie wurden ausgeloggt. Bitte sichern Sie Ihre Daten und melden Sie sich erneut an.',
       onBackendDown:
         'Der Server ist aktuell nicht erreichbar. Für weitere Informationen, siehe: %{details}',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Arbeitsablauf Beiträge laden',
+      workflowHeading: 'Redaktioneller Arbeitsablauf',
+      newPost: 'Neuer Beitrag',
+      description:
+        '%{smart_count} Beitrag zur Überprüfung bereit, %{readyCount} bereit zur Veröffentlichung. |||| %{smart_count} Beiträge zur Überprüfung bereit, %{readyCount} bereit zur Veröffentlichung. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} von %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'von %{author}',
+      deleteChanges: 'Änderungen verwerfen',
+      deleteNewEntry: 'Lösche neuen Beitrag',
+      publishChanges: 'Veröffentliche Änderungen',
+      publishNewEntry: 'Veröffentliche neuen Beitrag',
+    },
+    workflowList: {
+      onDeleteEntry: 'Soll dieser Beitrag wirklich gelöscht werden?',
+      onPublishingNotReadyEntry:
+        'Nur Beiträge im Status "Abgeschlossen" können veröffentlicht werden. Bitte ziehen Sie den Beitrag in die "Abgeschlossen" Spalte um die Veröffentlichung zu aktivieren.',
+      onPublishEntry: 'Soll dieser Beitrag wirklich veröffentlicht werden soll?',
+      draft: 'Entwurf',
+      pending_review: 'In Prüfung',
+      pending_publish: 'Abgeschlossen',
+      currentEntries: '%{smart_count} Beitrag |||| %{smart_count} Beiträge',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

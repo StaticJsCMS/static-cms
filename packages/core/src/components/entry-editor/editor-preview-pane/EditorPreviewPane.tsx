@@ -1,17 +1,16 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import Frame from 'react-frame-component';
-import { translate } from 'react-polyglot';
 import { ScrollSyncPane } from 'react-scroll-sync';
 
 import { EDITOR_SIZE_COMPACT } from '@staticcms/core/constants/views';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getPreviewStyles, getPreviewTemplate } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectTemplateName } from '@staticcms/core/lib/util/collection.util';
 import LivePreviewLoadedEvent from '@staticcms/core/lib/util/events/LivePreviewLoadedEvent';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
-import { selectConfig } from '@staticcms/core/reducers/selectors/config';
+import { selectConfig, selectOriginConfig } from '@staticcms/core/reducers/selectors/config';
 import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import ErrorBoundary from '../../ErrorBoundary';
@@ -21,13 +20,7 @@ import EditorPreviewContent from './EditorPreviewContent';
 import PreviewFrameContent from './PreviewFrameContent';
 
 import type { EditorSize } from '@staticcms/core/constants/views';
-import type {
-  Collection,
-  Entry,
-  Field,
-  TemplatePreviewProps,
-  TranslatedProps,
-} from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry, Field, TemplatePreviewProps } from '@staticcms/core';
 import type DataUpdateEvent from '@staticcms/core/lib/util/events/DataEvent';
 import type { FC } from 'react';
 
@@ -53,7 +46,7 @@ const FrameGlobalStyles = `
   }
 
   a {
-    color: rgb(59 130 246);
+    color: var(--primary-main);
     text-decoration: none;
   }
 
@@ -62,37 +55,27 @@ const FrameGlobalStyles = `
   }
 
   .frame-content {
-    padding: 16px;
+    padding: 8px 12px 8px 0;
   }
 
-  .text-blue-500 {
-    color: rgb(59 130 246);
+  @media (max-width: 1024px) {
+    .frame-content {
+      padding: 8px 12px;
+    }
   }
 
   .CMS_PreviewFrameContent_content {
-    color: rgb(17 24 39);
-  }
-
-  .dark .CMS_PreviewFrameContent_content {
-    color: rgb(243 244 246);
-  }
-
-  .text-slate-500 {
-    color: rgb(100 116 139);
-  }
-
-  .dark .dark\\:text-slate-400 {
-    color: rgb(148 163 184);
+    color: var(--text-primary);
   }
 
   .CMS_Scrollbar_root {
-    --scrollbar-foreground: rgba(100, 116, 139, 0.25);
-    --scrollbar-background: rgb(248 250 252);
+    --scrollbar-foreground: var(--scrollbar-main);
+    --scrollbar-background: var(--background-dark);
   }
 
-  .dark.CMS_Scrollbar_root {
-    --scrollbar-foreground: rgba(30, 41, 59, 0.8);
-    --scrollbar-background: rgb(15 23 42);
+  .CMS_Scrollbar_root.CMS_Scrollbar_secondary {
+    --scrollbar-foreground: var(--scrollbar-light);
+    --scrollbar-background: var(--background-main);
   }
 
   .CMS_Scrollbar_root {
@@ -121,7 +104,7 @@ const FrameGlobalStyles = `
 `;
 
 export interface EditorPreviewPaneProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   fields: Field[];
   entry: Entry;
   previewInFrame: boolean;
@@ -130,7 +113,9 @@ export interface EditorPreviewPaneProps {
   showMobilePreview: boolean;
 }
 
-const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
+const EditorPreviewPane: FC<EditorPreviewPaneProps> = props => {
+  const t = useTranslate();
+
   const {
     editorSize,
     entry,
@@ -139,9 +124,9 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
     previewInFrame,
     livePreviewUrlTemplate,
     showMobilePreview,
-    t,
   } = props;
 
+  const originalConfig = useAppSelector(selectOriginConfig);
   const config = useAppSelector(selectConfig);
 
   const { widgetFor, widgetsFor } = useWidgetsFor(config, collection, fields, entry);
@@ -192,7 +177,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
         theme,
         widgetFor,
         widgetsFor,
-      } as Omit<TemplatePreviewProps, 'document' | 'window'>),
+      }) as Omit<TemplatePreviewProps, 'document' | 'window'>,
     [props, theme, widgetFor, widgetsFor],
   );
 
@@ -217,7 +202,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
       return null;
     }
 
-    return createPortal(
+    return (
       <div
         className={classNames(
           classes.root,
@@ -225,7 +210,7 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
           !showMobilePreview && classes['show-mobile-preview'],
         )}
       >
-        <ErrorBoundary config={config}>
+        <ErrorBoundary config={originalConfig} t={t}>
           {livePreviewUrlTemplate ? (
             <iframe
               key="live-preview-frame"
@@ -275,18 +260,16 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
             </ScrollSyncPane>
           )}
         </ErrorBoundary>
-      </div>,
-      element,
-      'preview-content',
+      </div>
     );
   }, [
     collection,
-    config,
     editorSize,
     element,
     handleLivePreviewIframeLoaded,
     initialFrameContent,
     livePreviewUrlTemplate,
+    originalConfig,
     previewComponent,
     previewInFrame,
     previewProps,
@@ -296,4 +279,4 @@ const EditorPreviewPane = (props: TranslatedProps<EditorPreviewPaneProps>) => {
   ]);
 };
 
-export default translate()(EditorPreviewPane) as FC<EditorPreviewPaneProps>;
+export default EditorPreviewPane;

@@ -1,8 +1,8 @@
 .CMS_CircularProgress_svg {
-  @apply text-gray-200
-    animate-spin
-    dark:text-gray-600
-    fill-blue-600;
+  color: var(--text-secondary);
+  fill: var(--primary-main);
+
+  @apply animate-spin;
 
   &.CMS_CircularProgress_md {
     @apply w-8

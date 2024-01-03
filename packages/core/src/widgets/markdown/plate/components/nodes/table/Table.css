@@ -1,51 +1,49 @@
 .CMS_WidgetMarkdown_Table_root {
+  border-color: var(--background-light);
+
   @apply border-collapse
     border
-    border-gray-200
-    dark:border-slate-700
     rounded-md
     my-4;
 }
 
 .CMS_WidgetMarkdown_Table_header {
+  background: var(--background-main);
+  border-color: var(--background-light);
+
   @apply border-r
-    border-b
-    bg-slate-300
-    border-gray-200
-    dark:bg-slate-700
-    dark:border-gray-800;
+    border-b;
 }
 
 .CMS_WidgetMarkdown_Table_body {
 }
 
 .CMS_WidgetMarkdown_Table_row {
+  border-color: var(--background-light);
+
   @apply border-b
-    border-gray-200
-    last:border-0
-    dark:border-gray-800;
+    last:border-0;
 }
 
 .CMS_WidgetMarkdown_Table_header-cell {
+  background: var(--background-main);
+  border-color: var(--background-light);
+
   @apply px-2
     py-1
     [&>div>p]:m-0
     text-left
-    bg-slate-300
     text-sm
-    border-r
-    border-gray-200
-    dark:bg-slate-700
-    dark:border-gray-800;
+    border-r;
 }
 
 .CMS_WidgetMarkdown_Table_body-cell {
+  border-color: var(--background-light);
+
   @apply px-2
     py-1
     [&>div>p]:m-0
     border-r
-    border-gray-200
     last:border-0
-    dark:border-gray-800
     text-sm;
 }

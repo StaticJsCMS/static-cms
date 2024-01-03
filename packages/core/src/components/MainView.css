@@ -1,7 +1,7 @@
 .CMS_MainView_root {
-  @apply flex
-    bg-slate-50
-    dark:bg-slate-900;
+  background: var(--background-dark);
+
+  @apply flex;
 }
 
 .CMS_MainView_body {

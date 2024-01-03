@@ -52,7 +52,7 @@
       "@staticcms/core": ["../core/src"],
       "@staticcms/core/*": ["../core/src/*"]
     },
-    "types": ["@emotion/react/types/css-prop", "@types/jest", "@testing-library/jest-dom"]
+    "types": ["@types/jest", "@testing-library/jest-dom"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]

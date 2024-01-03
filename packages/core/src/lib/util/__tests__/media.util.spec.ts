@@ -1,16 +1,16 @@
-import { createMockCollection } from '@staticcms/test/data/collections.mock';
+import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
 import { createMockConfig } from '@staticcms/test/data/config.mock';
 import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import { mockImageField as mockBaseImageField } from '@staticcms/test/data/fields.mock';
 import { selectMediaFilePublicPath, selectMediaFolder } from '../media.util';
 
-import type { FileOrImageField, FolderCollection, UnknownField } from '@staticcms/core/interface';
+import type { FileOrImageField, FolderCollection, UnknownField } from '@staticcms/core';
 
 jest.mock('@staticcms/core/backend');
 
 describe('media.util', () => {
   describe('selectMediaFolder', () => {
-    const mockBaseCollection = createMockCollection<UnknownField>({
+    const mockBaseCollection = createMockFolderCollection<UnknownField>({
       fields: [
         {
           name: 'title',
@@ -29,7 +29,7 @@ describe('media.util', () => {
     it('does not transform path if it does not start with media_folder', () => {
       const mockConfig = createMockConfig({
         collections: [
-          createMockCollection<UnknownField>({
+          createMockFolderCollection<UnknownField>({
             folder: 'base/folder',
             slug: '{{fields.title}}-{{fields.name}}',
             fields: [
@@ -103,7 +103,7 @@ describe('media.util', () => {
         it('should use collection media_folder if available', () => {
           const mockConfig = createMockConfig({
             collections: [
-              createMockCollection<UnknownField>({
+              createMockFolderCollection<UnknownField>({
                 folder: 'base/folder',
                 media_folder: 'path/to/some/other/media/folder',
                 fields: [
@@ -130,7 +130,7 @@ describe('media.util', () => {
           it('should substitute field value', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: 'path/to/some/other/media/{{fields.title}}',
                   fields: [
@@ -156,7 +156,7 @@ describe('media.util', () => {
           it('should substitute slug', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: 'path/to/some/other/media/{{slug}}',
                   slug: '{{fields.title}}-{{fields.name}}',
@@ -194,7 +194,7 @@ describe('media.util', () => {
           it('should substitute slug from top level media_folder (always considered an absolute path)', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   slug: '{{fields.title}}-{{fields.name}}',
                   fields: [
@@ -231,7 +231,7 @@ describe('media.util', () => {
           it('should not throw error when evaluating slug for new entry', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: 'path/to/some/other/media/{{slug}}',
                   slug: '{{fields.title}}-{{fields.name}}',
@@ -273,7 +273,7 @@ describe('media.util', () => {
         it('should use collection media_folder if available', () => {
           const mockConfig = createMockConfig({
             collections: [
-              createMockCollection<UnknownField>({
+              createMockFolderCollection<UnknownField>({
                 folder: 'base/folder',
                 media_folder: '/path/to/some/other/media/folder',
                 fields: [
@@ -300,7 +300,7 @@ describe('media.util', () => {
           it('should substitute field value', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: '/path/to/some/other/media/{{fields.title}}',
                   fields: [
@@ -326,7 +326,7 @@ describe('media.util', () => {
           it('should substitute slug', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: '/path/to/some/other/media/{{slug}}',
                   slug: '{{fields.title}}-{{fields.name}}',
@@ -364,7 +364,7 @@ describe('media.util', () => {
           it('should substitute slug from top level media_folder', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   slug: '{{fields.title}}-{{fields.name}}',
                   fields: [
@@ -401,7 +401,7 @@ describe('media.util', () => {
           it('should not throw error when evaluating slug for new entry', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: '/path/to/some/other/media/{{slug}}',
                   slug: '{{fields.title}}-{{fields.name}}',
@@ -442,7 +442,7 @@ describe('media.util', () => {
   });
 
   describe('selectMediaFilePublicPath', () => {
-    const mockBaseCollection = createMockCollection<UnknownField>({
+    const mockBaseCollection = createMockFolderCollection<UnknownField>({
       fields: [
         {
           name: 'title',
@@ -543,7 +543,7 @@ describe('media.util', () => {
         it('should use collection public_folder if available', () => {
           const mockConfig = createMockConfig({
             collections: [
-              createMockCollection<UnknownField>({
+              createMockFolderCollection<UnknownField>({
                 folder: 'base/folder',
                 media_folder: 'path/to/collection/media/folder',
                 public_folder: 'path/to/collection/public/folder',
@@ -576,7 +576,7 @@ describe('media.util', () => {
         it('should use collection media_folder if no public_folder is available', () => {
           const mockConfig = createMockConfig({
             collections: [
-              createMockCollection<UnknownField>({
+              createMockFolderCollection<UnknownField>({
                 folder: 'base/folder',
                 media_folder: 'path/to/collection/media/folder',
                 fields: [
@@ -608,7 +608,7 @@ describe('media.util', () => {
         it('should handle folder collections path', () => {
           const mockConfig = createMockConfig({
             collections: [
-              createMockCollection<UnknownField>({
+              createMockFolderCollection<UnknownField>({
                 folder: 'base/folder',
                 media_folder: '',
                 public_folder: '',
@@ -645,7 +645,7 @@ describe('media.util', () => {
         it('should handle folder collections path for new entry', () => {
           const mockConfig = createMockConfig({
             collections: [
-              createMockCollection<UnknownField>({
+              createMockFolderCollection<UnknownField>({
                 folder: 'base/folder',
                 media_folder: '',
                 public_folder: '',
@@ -683,7 +683,7 @@ describe('media.util', () => {
           it('should substitute field value', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: 'path/to/some/other/media/{{fields.title}}',
                   fields: [
@@ -715,7 +715,7 @@ describe('media.util', () => {
           it('should substitute slug', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: 'path/to/some/other/media/{{slug}}',
                   slug: '{{fields.title}}-{{fields.name}}',
@@ -759,7 +759,7 @@ describe('media.util', () => {
           it('should substitute slug from top level media_folder if no public_folders', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   slug: '{{fields.title}}-{{fields.name}}',
                   fields: [
@@ -802,7 +802,7 @@ describe('media.util', () => {
           it('should substitute slug from top level public_folder', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   slug: '{{fields.title}}-{{fields.name}}',
                   fields: [
@@ -846,7 +846,7 @@ describe('media.util', () => {
           it('should not throw error when evaluating slug for new entry', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: 'path/to/collection/media/folder/{{slug}}',
                   public_folder: 'path/to/collection/public/folder/{{slug}}',
@@ -895,7 +895,7 @@ describe('media.util', () => {
         it('should use collection public_folder if available', () => {
           const mockConfig = createMockConfig({
             collections: [
-              createMockCollection<UnknownField>({
+              createMockFolderCollection<UnknownField>({
                 folder: 'base/folder',
                 media_folder: 'path/to/collection/media/folder',
                 public_folder: '/path/to/collection/public/folder',
@@ -928,7 +928,7 @@ describe('media.util', () => {
         it('should use collection media_folder if no public_folder is available', () => {
           const mockConfig = createMockConfig({
             collections: [
-              createMockCollection<UnknownField>({
+              createMockFolderCollection<UnknownField>({
                 folder: 'base/folder',
                 media_folder: '/path/to/collection/media/folder',
                 fields: [
@@ -961,7 +961,7 @@ describe('media.util', () => {
           it('should substitute field value', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: '/path/to/some/other/media/{{fields.title}}',
                   fields: [
@@ -993,7 +993,7 @@ describe('media.util', () => {
           it('should substitute slug', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: '/path/to/some/other/media/{{slug}}',
                   slug: '{{fields.title}}-{{fields.name}}',
@@ -1037,7 +1037,7 @@ describe('media.util', () => {
           it('should substitute slug from top level media_folder if no public_folders', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   slug: '{{fields.title}}-{{fields.name}}',
                   fields: [
@@ -1080,7 +1080,7 @@ describe('media.util', () => {
           it('should substitute slug from top level public_folder', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   slug: '{{fields.title}}-{{fields.name}}',
                   fields: [
@@ -1124,7 +1124,7 @@ describe('media.util', () => {
           it('should not throw error when evaluating slug for new entry', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: '/path/to/collection/media/folder/{{slug}}',
                   public_folder: '/path/to/collection/public/folder/{{slug}}',
@@ -1171,7 +1171,7 @@ describe('media.util', () => {
     });
 
     describe('with folder support', () => {
-      const mockBaseCollection = createMockCollection<UnknownField>({
+      const mockBaseCollection = createMockFolderCollection<UnknownField>({
         fields: [
           {
             name: 'title',
@@ -1276,7 +1276,7 @@ describe('media.util', () => {
           it('should handle folder collections path', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: '',
                   public_folder: '',
@@ -1314,7 +1314,7 @@ describe('media.util', () => {
           it('should handle folder collections path for new entry', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: '',
                   public_folder: '',
@@ -1352,7 +1352,7 @@ describe('media.util', () => {
           it('should use collection public_folder if available', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: 'path/to/collection/media/folder',
                   public_folder: 'path/to/collection/public/folder',
@@ -1386,7 +1386,7 @@ describe('media.util', () => {
           it('should use collection media_folder if no public_folder is available', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: 'path/to/collection/media/folder',
                   fields: [
@@ -1419,7 +1419,7 @@ describe('media.util', () => {
           it('should handle folder collections path', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: '',
                   public_folder: '',
@@ -1458,7 +1458,7 @@ describe('media.util', () => {
             it('should substitute field value', () => {
               const mockConfig = createMockConfig({
                 collections: [
-                  createMockCollection<UnknownField>({
+                  createMockFolderCollection<UnknownField>({
                     folder: 'base/folder',
                     media_folder: 'path/to/some/other/media/{{fields.title}}',
                     fields: [
@@ -1491,7 +1491,7 @@ describe('media.util', () => {
             it('should substitute slug', () => {
               const mockConfig = createMockConfig({
                 collections: [
-                  createMockCollection<UnknownField>({
+                  createMockFolderCollection<UnknownField>({
                     folder: 'base/folder',
                     media_folder: 'path/to/some/other/media/{{slug}}',
                     slug: '{{fields.title}}-{{fields.name}}',
@@ -1536,7 +1536,7 @@ describe('media.util', () => {
             it('should substitute slug from top level media_folder if no public_folders', () => {
               const mockConfig = createMockConfig({
                 collections: [
-                  createMockCollection<UnknownField>({
+                  createMockFolderCollection<UnknownField>({
                     folder: 'base/folder',
                     slug: '{{fields.title}}-{{fields.name}}',
                     fields: [
@@ -1580,7 +1580,7 @@ describe('media.util', () => {
             it('should substitute slug from top level public_folder', () => {
               const mockConfig = createMockConfig({
                 collections: [
-                  createMockCollection<UnknownField>({
+                  createMockFolderCollection<UnknownField>({
                     folder: 'base/folder',
                     slug: '{{fields.title}}-{{fields.name}}',
                     fields: [
@@ -1625,7 +1625,7 @@ describe('media.util', () => {
             it('should not throw error when evaluating slug for new entry', () => {
               const mockConfig = createMockConfig({
                 collections: [
-                  createMockCollection<UnknownField>({
+                  createMockFolderCollection<UnknownField>({
                     folder: 'base/folder',
                     media_folder: 'path/to/collection/media/folder/{{slug}}',
                     public_folder: 'path/to/collection/public/folder/{{slug}}',
@@ -1675,7 +1675,7 @@ describe('media.util', () => {
           it('should use collection public_folder if available', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: 'path/to/collection/media/folder',
                   public_folder: '/path/to/collection/public/folder',
@@ -1709,7 +1709,7 @@ describe('media.util', () => {
           it('should use collection media_folder if no public_folder is available', () => {
             const mockConfig = createMockConfig({
               collections: [
-                createMockCollection<UnknownField>({
+                createMockFolderCollection<UnknownField>({
                   folder: 'base/folder',
                   media_folder: '/path/to/collection/media/folder',
                   fields: [
@@ -1743,7 +1743,7 @@ describe('media.util', () => {
             it('should substitute field value', () => {
               const mockConfig = createMockConfig({
                 collections: [
-                  createMockCollection<UnknownField>({
+                  createMockFolderCollection<UnknownField>({
                     folder: 'base/folder',
                     media_folder: '/path/to/some/other/media/{{fields.title}}',
                     fields: [
@@ -1776,7 +1776,7 @@ describe('media.util', () => {
             it('should substitute slug', () => {
               const mockConfig = createMockConfig({
                 collections: [
-                  createMockCollection<UnknownField>({
+                  createMockFolderCollection<UnknownField>({
                     folder: 'base/folder',
                     media_folder: '/path/to/some/other/media/{{slug}}',
                     slug: '{{fields.title}}-{{fields.name}}',
@@ -1821,7 +1821,7 @@ describe('media.util', () => {
             it('should substitute slug from top level media_folder if no public_folders', () => {
               const mockConfig = createMockConfig({
                 collections: [
-                  createMockCollection<UnknownField>({
+                  createMockFolderCollection<UnknownField>({
                     folder: 'base/folder',
                     slug: '{{fields.title}}-{{fields.name}}',
                     fields: [
@@ -1865,7 +1865,7 @@ describe('media.util', () => {
             it('should substitute slug from top level public_folder', () => {
               const mockConfig = createMockConfig({
                 collections: [
-                  createMockCollection<UnknownField>({
+                  createMockFolderCollection<UnknownField>({
                     folder: 'base/folder',
                     slug: '{{fields.title}}-{{fields.name}}',
                     fields: [
@@ -1910,7 +1910,7 @@ describe('media.util', () => {
             it('should not throw error when evaluating slug for new entry', () => {
               const mockConfig = createMockConfig({
                 collections: [
-                  createMockCollection<UnknownField>({
+                  createMockFolderCollection<UnknownField>({
                     folder: 'base/folder',
                     media_folder: '/path/to/collection/media/folder/{{slug}}',
                     public_folder: '/path/to/collection/public/folder/{{slug}}',

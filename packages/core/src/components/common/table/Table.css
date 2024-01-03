@@ -3,11 +3,11 @@
 }
 
 .CMS_Table_table {
+  color: var(--text-primary);
+
   @apply w-full
     text-sm
-    text-left
-    text-gray-500
-    dark:text-gray-300;
+    text-left;
 }
 
 .CMS_Table_header {
@@ -27,37 +27,34 @@
 }
 
 .CMS_Table_header-cell-content {
+  color: var(--text-primary);
+  background: var(--background-main);
+  border-color: var(--background-light);
+
   @apply px-4
     py-3
-    text-gray-800
-    border-gray-100
     border-b
-    bg-white
-    dark:text-white
-    dark:border-gray-700
-    dark:bg-slate-800
     text-[14px]
     truncate
     w-full;
 }
 
 .CMS_Table_body-row {
+  background: var(--background-main);
+  border-color: color-mix(in srgb, var(--background-divider) 25%, transparent);
+
+  &:focus,
+  &:hover {
+    background: color-mix(in srgb, var(--primary-main) 15%, transparent);
+    border-color: color-mix(in srgb, var(--primary-main) 15%, transparent);
+  }
+
   @apply border-t
-    first:border-t-0
-    border-gray-100
-    dark:border-gray-700
-    bg-white
-    hover:bg-slate-50
-    dark:bg-slate-800
-    dark:hover:bg-slate-700
-    focus:outline-none
-    focus:bg-gray-100
-    focus:dark:bg-slate-700;
+    focus:outline-none;
 }
 
 .CMS_Table_body-cell {
-  @apply text-gray-500
-    dark:text-gray-300;
+  color: var(--text-primary);
 
   &.CMS_Table_body-cell-has-link {
     @apply p-0;
@@ -69,10 +66,10 @@
   }
 
   &.CMS_Table_body-cell-emphasis {
+    color: var(--text-primary);
+
     @apply font-medium
-      text-gray-800
-      whitespace-nowrap
-      dark:text-white;
+      whitespace-nowrap;
   }
 
   &.CMS_Table_body-cell-shrink {

@@ -22,10 +22,12 @@ const ro: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Conținut',
+      workflow: 'Workflow',
       media: 'Fișiere',
       quickAdd: 'Adaugă',
     },
     app: {
+      loading: 'Se încarcă...',
       errorHeader: 'A apărut o eroare cu configurarea CMS-ului.',
       configErrors: 'Au apărut erori de configurare.',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -95,8 +97,8 @@ const ro: LocalePhrasesRoot = {
         max: '%{fieldLabel} poate fi mai mic sau egal cu %{maxValue}.',
         rangeCount: '%{fieldLabel} poate avea între %{minCount} și %{maxCount} intrări.',
         rangeCountExact: '%{fieldLabel} trebuie să conțină exact %{count} intrări.',
-        rangeMin: undefined, // English translation: '%{fieldLabel} must have at least %{minCount} item(s).'
-        rangeMax: undefined, // English translation: '%{fieldLabel} must have %{maxCount} or less item(s).'
+        rangeMin: '%{fieldLabel} trebuie să conțină cel puțin %{minCount} intrări.',
+        rangeMax: '%{fieldLabel} trebuie să conțină cel mult %{maxCount} intrări.',
         invalidPath: "'%{path}' nu este o cale validă.",
         pathExists: "Calea '%{path}' există deja.",
         invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
@@ -104,15 +106,35 @@ const ro: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Scrii în limba %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Ești sigur/ă că dorești să părăsești pagina?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'Există modificări nesalvate! Te rugăm salvează înainte de a actualiza statusul.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'Actualizează statusul la „Gata” înainte de publicare.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        'Există modificări nesalvate, salvează-le înainte de publicare.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Ești sigur/ă că dorești să publici acest articol?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'Ești sigur/ă că dorești să anulezi publicarea acestui articol?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Ești sigur/ă că dorești să ștergi această publicare, dar și modificările nesalvate din sesiunea curentă?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Ești sigur/ă că dorești să ștergi această publicare?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Se vor șterge toate modificările nepublicate din aceast articol și modificările nesalvate din sesiunea curentă. Continui cu ștergerea?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Toate modificările nepublicate din acest articol vor fi șterse. Continui cu ștergerea?',
       loadingEntry: 'Se încarcă...',
     },
     editorInterface: {
@@ -123,13 +145,35 @@ const ro: LocalePhrasesRoot = {
       toggleScrollSync: 'Sincronizează scroll-ul',
     },
     editorToolbar: {
+      publishing: 'Se publică...',
       publish: 'Publicare',
       published: 'Publicat',
+      unpublish: 'Anulează publicarea',
       duplicate: 'Duplifică',
+      unpublishing: 'Se anulează publicarea...',
       publishAndCreateNew: 'Publicare apoi crează altul',
       publishAndDuplicate: 'Publicare apoi duplifică',
+      deleteUnpublishedChanges: 'Șterge modificări nepublicate',
+      deleteUnpublishedEntry: 'Șterge intrarea nepublicată',
+      deletePublishedEntry: 'Șterge intrarea publicată',
       deleteEntry: 'Șterge intrare',
+      saving: 'Se salvează...',
+      save: 'Salvează',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: 'Se șterge...',
+      updating: 'Se actualizează...',
+      status: 'Status: %{status}',
+      backCollection: ' Scrii în colecția „%{collectionLabel}”',
+      unsavedChanges: 'Modificări nesalvate',
+      changesSaved: 'Modificări salvate',
+      draft: 'Ciornă',
+      inReview: 'În revizuire',
+      ready: 'Gata',
       publishNow: 'Publicare',
+      deployPreviewPendingButtonLabel: 'Verifică publicare',
+      deployPreviewButtonLabel: 'Previzualizare',
+      deployButtonLabel: 'Vezi publicarea',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +182,35 @@ const ro: LocalePhrasesRoot = {
       markdown: {
         bold: 'Bold',
         italic: 'Italic',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'Cod sursă',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Link',
-        linkPrompt: 'Scrie URL-ul',
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Titluri',
         quote: 'Citat',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'Listă cu puncte',
         numberedList: 'Listă cu numere',
         addComponent: 'Adaugă componentă',
         richText: 'Rich Text',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Alege o imagine',
@@ -212,6 +274,10 @@ const ro: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -233,10 +299,10 @@ const ro: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Se încarcă...',
       noResults: 'Nu sunt rezultate.',
       noAssetsFound: 'Nu s-au găsit fișiere.',
       noImagesFound: 'Nu s-au găsit imagini.',
+      private: 'Privat ',
       images: 'Imagini',
       mediaAssets: 'Fișiere media',
       search: 'Caută...',
@@ -253,6 +319,7 @@ const ro: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -263,6 +330,7 @@ const ro: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Înapoi la site',
@@ -284,11 +352,12 @@ const ro: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Ieșire din cont',
     },
     toast: {
       onFailToLoadEntries: 'A eșuat încărcarea intrării: %{details}',
+      onFailToLoadDeployPreview: 'A eșuat încărcarea previzualizării: %{details}',
       onFailToPersist: 'A eșuat persistarea intrării: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'A eșuat ștergerea intrării: %{details}',
@@ -296,12 +365,52 @@ const ro: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'A eșuat actualizarea status-ului: %{details}',
       missingRequiredField: 'Oops, ai ratat un câmp obligatoriu. Completează-l pentru a salva.',
       entrySaved: 'Intrare salvată',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Intrare publicată',
+      entryUnpublished: 'Publicare anulată',
       onFailToPublishEntry: 'A eșuat publicarea: %{details}',
+      onFailToUnpublishEntry: 'A eșuat anularea publicării: %{details}',
       entryUpdated: 'S-a actualizat status-ul intrării',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Modificări nepublicate șterse',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Ai fost delogat, te rugăm salvează orice date și autentifică-te din nou.',
       onBackendDown: 'Există probleme la server. Vezi %{details} pentru mai multe informații.',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Se încarcă intrările din Workflow-ul Editorial',
+      workflowHeading: 'Workflow Editorial',
+      newPost: 'Postare nouă',
+      description:
+        '%{smart_count} pregătite de revizuire, %{readyCount} gata de publicare. |||| %{smart_count} pregătite de revizuire, %{readyCount} gata de publicare. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} de %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'de %{author}',
+      deleteChanges: 'Modificări șterse',
+      deleteNewEntry: 'Șterge intrarea nouă',
+      publishChanges: 'Publicare modificări',
+      publishNewEntry: 'Publicare intrare nouă',
+    },
+    workflowList: {
+      onDeleteEntry: 'Ești sigur/ă că dorești ștergerea intrării?',
+      onPublishingNotReadyEntry:
+        'Numai intrări cu status-ul „Gata” pot fi publicate. Trage un card în coloana „Gata” pentru a putea publica.',
+      onPublishEntry: 'Ești sigur/ă că dorești să faci publicarea?',
+      draft: 'Ciorne',
+      pending_review: 'În revizuire',
+      pending_publish: 'Gata',
+      currentEntries: '%{smart_count} intrări |||| %{smart_count} intrări',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

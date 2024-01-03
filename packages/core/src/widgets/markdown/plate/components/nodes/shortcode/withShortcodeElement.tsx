@@ -2,10 +2,8 @@ import { findNodePath, setNodes } from '@udecode/plate';
 import React, { useCallback, useMemo } from 'react';
 
 import { getShortcode } from '@staticcms/core/lib/registry';
-import { selectTheme } from '@staticcms/core/reducers/selectors/globalUI';
-import { useAppSelector } from '@staticcms/core/store/hooks';
 
-import type { MarkdownField, WidgetControlProps } from '@staticcms/core/interface';
+import type { MarkdownField, WidgetControlProps } from '@staticcms/core';
 import type { MdShortcodeElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps } from '@udecode/plate';
 import type { FC } from 'react';
@@ -43,17 +41,10 @@ const withShortcodeElement = ({ controlProps }: WithShortcodeElementProps) => {
       [config, editor, element],
     );
 
-    const theme = useAppSelector(selectTheme);
-
     return (
       <span contentEditable={false}>
         {ShortcodeControl ? (
-          <ShortcodeControl
-            controlProps={controlProps}
-            onChange={handleOnChange}
-            theme={theme}
-            {...props}
-          />
+          <ShortcodeControl controlProps={controlProps} onChange={handleOnChange} {...props} />
         ) : null}
         {children}
       </span>

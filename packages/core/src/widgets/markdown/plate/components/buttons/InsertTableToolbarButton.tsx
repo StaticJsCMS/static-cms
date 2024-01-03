@@ -4,6 +4,7 @@ import React, { useCallback } from 'react';
 
 import { useMdPlateEditorState } from '../../plateTypes';
 import ToolbarButton from './common/ToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
 import type { FC } from 'react';
 
@@ -16,6 +17,8 @@ const InsertTableToolbarButton: FC<InsertTableToolbarButtonProps> = ({
   disabled,
   variant = 'button',
 }) => {
+  const t = useTranslate();
+
   const editor = useMdPlateEditorState();
 
   const handleTableAdd = useCallback(() => {
@@ -27,8 +30,9 @@ const InsertTableToolbarButton: FC<InsertTableToolbarButtonProps> = ({
 
   return (
     <ToolbarButton
-      label="Table"
-      tooltip="Insert table"
+      id="insert-table"
+      label={t('editor.editorWidgets.markdown.table.table')}
+      tooltip={t('editor.editorWidgets.markdown.table.insertTable')}
       icon={TableAdd}
       onClick={handleTableAdd}
       disabled={disabled}

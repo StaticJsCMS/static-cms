@@ -22,10 +22,12 @@ const tr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'İçerikler',
+      workflow: 'İş Akışı',
       media: 'Medya',
       quickAdd: 'Hızlı ekle',
     },
     app: {
+      loading: 'Yükleniyor...',
       errorHeader: 'CMS yapılandırması yüklenirken hata oluştu',
       configErrors: 'Yapılandırma Hataları',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -105,15 +107,36 @@ const tr: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: '%{locale} için yazılıyor',
+        copyFromLocale: 'Başka bir dilden doldurun',
+        copyFromLocaleConfirm:
+          'Verileri %{locale} dilinden mi doldurmak istiyorsun?\nVarolan bütün verilerin üzerine yazılacak.',
       },
     },
     editor: {
       onLeavePage: 'Bu sayfadan ayrılmak istediğinize emin misiniz?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
+      onUpdatingWithUnsavedChangesBody:
+        'Kaydedilmemiş değişiklikleriniz var, lütfen içeriği güncellemeden önce kaydedin.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'undefined'
+      onPublishingNotReadyBody: 'Lütfen yayınlamadan önce içeriği "Hazır" olarak güncelleyin.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
+      onPublishingWithUnsavedChangesBody:
+        'Kaydedilmemiş değişiklikleriniz var, lütfen yayınlamadan önce kaydedin.',
+      onPublishingTitle: undefined, // English translation: 'undefined'
+      onPublishingBody: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
+      onUnpublishingTitle: undefined, // English translation: 'undefined'
+      onUnpublishingBody: 'Bu girdiyi yayından kaldırmak istediğinizden emin misiniz?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
       onDeleteWithUnsavedChangesBody:
         'Bu oturumda kaydedilmiş değişikliklerin yanı sıra geçerli oturumdaki kaydedilmemiş değişikliklerinizi silmek istediğinize emin misiniz?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'undefined'
       onDeletePublishedEntryBody: 'Bu yayınlanmış girdiyi silmek istediğinize emin misiniz?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'undefined'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Bu girdide yayınlanmamış tüm değişiklikleri ve geçerli oturumdaki kaydedilmemiş değişikliklerinizi siler. Hala silmek istiyor musun?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'undefined'
+      onDeleteUnpublishedChangesBody:
+        'Bu girdide yayınlanmamış tüm değişiklikler silinecek. Hala silmek istiyor musun?',
       loadingEntry: 'Girdiler yükleniyor...',
     },
     editorInterface: {
@@ -124,13 +147,37 @@ const tr: LocalePhrasesRoot = {
       toggleScrollSync: 'Kaydırmayı senkronize et',
     },
     editorToolbar: {
+      publishing: 'Yayınlanıyor...',
       publish: 'Yayınla',
       published: 'Yayınlanan',
+      unpublish: 'Yayından Kaldır',
       duplicate: 'Kopyala',
+      unpublishing: 'Yayından kaldırılıyor...',
       publishAndCreateNew: 'Yayınla ve yeni oluştur',
       publishAndDuplicate: 'Yayınla ve kopya oluştur',
+      deleteUnpublishedChanges: 'Yayımlanmamış değişiklikleri sil',
+      deleteUnpublishedEntry: 'Yayımlanmamış girdiyi sil',
+      deletePublishedEntry: 'Yayınlanan girdiyi sil',
       deleteEntry: 'Girdiyi sil',
+      saving: 'Kaydediliyor...',
+      save: 'Kaydet',
+      statusInfoTooltipDraft:
+        'Giriş durumu taslak olarak ayarlandı. Girişi bitirmek ve incelemeye göndermek için giriş durumunu ‘İncelemede’ olarak ayarlayın',
+      statusInfoTooltipInReview:
+        'Giriş gözden geçiriliyor, başka bir işlem yapılmasına gerek yok. Ancak, incelenirken yine de ek değişiklikler yapabilirsiniz.',
+      deleting: 'Siliniyor...',
+      updating: 'Güncelleniyor...',
+      status: 'Durumu: %{status}',
+      backCollection: ' %{collectionLabel} koleksiyonunda yazılı',
+      unsavedChanges: 'Kaydedilmemiş Değişiklikler',
+      changesSaved: 'Değişiklikler kaydedildi',
+      draft: 'Taslak',
+      inReview: 'İncelemede',
+      ready: 'Hazır',
       publishNow: 'Şimdi yayımla',
+      deployPreviewPendingButtonLabel: 'Önizlemeyi Denetle',
+      deployPreviewButtonLabel: 'Önizlemeyi Görüntüle',
+      deployButtonLabel: 'Canlı Görüntüle',
       discardChanges: undefined, // English translation: 'undefined'
       discardChangesTitle: undefined, // English translation: 'undefined'
       discardChangesBody: undefined, // English translation: 'undefined'
@@ -139,17 +186,35 @@ const tr: LocalePhrasesRoot = {
       markdown: {
         bold: 'Kalın',
         italic: 'İtalik',
+        strikethrough: undefined, // English translation: 'undefined'
         code: 'Kod',
+        codeBlock: undefined, // English translation: 'undefined'
+        insertCodeBlock: undefined, // English translation: 'undefined'
         link: 'Bağlantı',
-        linkPrompt: "Bağlantının URL'sini girin",
+        insertLink: undefined, // English translation: 'undefined'
+        paragraph: undefined, // English translation: 'undefined'
         headings: 'Başlıklar',
         quote: 'Alıntı',
+        insertQuote: undefined, // English translation: 'undefined'
         bulletedList: 'Maddeli Liste',
         numberedList: 'Numaralı Liste',
         addComponent: 'Bileşen Ekle',
         richText: 'Zengin Metin',
         markdown: 'Markdown',
         type: undefined, // English translation: 'undefined'
+        decreaseIndent: undefined, // English translation: 'undefined'
+        increaseIndent: undefined, // English translation: 'undefined'
+        image: undefined, // English translation: 'undefined'
+        insertImage: undefined, // English translation: 'undefined'
+        table: {
+          table: undefined, // English translation: 'undefined'
+          deleteColumn: undefined, // English translation: 'undefined'
+          deleteRow: undefined, // English translation: 'undefined'
+          deleteTable: undefined, // English translation: 'undefined'
+          insertColumn: undefined, // English translation: 'undefined'
+          insertRow: undefined, // English translation: 'undefined'
+          insertTable: undefined, // English translation: 'undefined'
+        },
       },
       image: {
         choose: 'Bir resim seçin',
@@ -213,6 +278,10 @@ const tr: LocalePhrasesRoot = {
         value: undefined, // English translation: 'undefined'
         uniqueKeys: undefined, // English translation: 'undefined'
       },
+      code: {
+        language: undefined, // English translation: 'undefined'
+        selectLanguage: undefined, // English translation: 'undefined'
+      },
     },
   },
   mediaLibrary: {
@@ -234,10 +303,10 @@ const tr: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Yükleniyor...',
       noResults: 'Sonuç yok.',
       noAssetsFound: 'Hiçbir dosya bulunamadı.',
       noImagesFound: 'Resim bulunamadı.',
+      private: 'Özel ',
       images: 'Görseller',
       mediaAssets: 'Medya dosyaları',
       search: 'Ara...',
@@ -254,6 +323,7 @@ const tr: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -264,6 +334,7 @@ const tr: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Siteye geri git',
@@ -285,11 +356,12 @@ const tr: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Çıkış Yap',
     },
     toast: {
       onFailToLoadEntries: 'Girdi yüklenemedi: %{details}',
+      onFailToLoadDeployPreview: 'Önizleme yüklenemedi: %{details}',
       onFailToPersist: 'Girdi devam ettirilemedi: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Girdi silinemedi: %{details}',
@@ -297,13 +369,53 @@ const tr: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Durum güncellenemedi: %{details}',
       missingRequiredField: 'Gerekli bir alan eksik. Lütfen kaydetmeden önce tamamlayın.',
       entrySaved: 'Girdi kaydedildi',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Girdi yayınlandı',
+      entryUnpublished: 'Girdi yayınlanmamış',
       onFailToPublishEntry: 'Yayınlanamadı: %{details}',
+      onFailToUnpublishEntry: 'Girdi yayından kaldırılamadı: %{details}',
       entryUpdated: 'Girdi durumu güncellendi',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Yayımlanmamış değişiklikler silindi',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Çıkış yaptınız, lütfen tüm verileri yedekleyin ve tekrar giriş yapın',
       onBackendDown:
         'Arka uç hizmetinde bir kesinti yaşanıyor. Daha fazla bilgi için %{details} gör',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'İş Akışı Girdileri Yükleniyor',
+      workflowHeading: 'Editoryal İş Akışı',
+      newPost: 'Yeni Mesaj',
+      description:
+        '%{smart_count} girdi incelemeyi bekliyor, %{readyCount} yayına hazır. |||| %{smart_count} girdi incelemeyi bekliyor, %{readyCount} yayınlanmaya hazır. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} tarafından %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: '%{author} tarafından',
+      deleteChanges: 'Değişiklikleri sil',
+      deleteNewEntry: 'Yeni girdiyi sil',
+      publishChanges: 'Değişiklikleri yayınla',
+      publishNewEntry: 'Yeni girdi yayınla',
+    },
+    workflowList: {
+      onDeleteEntry: 'Bu girdiyi silmek istediğinize emin misiniz?',
+      onPublishingNotReadyEntry:
+        'Yalnızca "Hazır" durumu olan öğeler yayınlanabilir. Lütfen yayınlamayı etkinleştirmek için kartı "Hazır" sütununa sürükleyin.',
+      onPublishEntry: 'Bu girdiyi yayınlamak istediğinize emin misiniz?',
+      draft: 'Taslaklar',
+      pending_review: 'İncelemede',
+      pending_publish: 'Hazır',
+      currentEntries: '%{smart_count} girdi |||| %{smart_count} girdiler',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

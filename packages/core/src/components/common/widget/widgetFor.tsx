@@ -8,8 +8,8 @@ import { getTypedFieldForValue } from '@staticcms/list/typedListHelpers';
 import PreviewHOC from './PreviewHOC';
 
 import type {
-  Collection,
-  Config,
+  CollectionWithDefaults,
+  ConfigWithDefaults,
   Entry,
   EntryData,
   Field,
@@ -19,7 +19,7 @@ import type {
   ValueOrNestedValue,
   Widget,
   WidgetPreviewComponent,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { ReactFragment, ReactNode } from 'react';
 
 import './widgetFor.css';
@@ -33,12 +33,11 @@ export const classes = generateClassNames('WidgetPreview', ['label']);
  * exposed for use in custom preview templates.
  */
 export default function getWidgetFor(
-  config: Config,
-  collection: Collection,
+  config: ConfigWithDefaults,
+  collection: CollectionWithDefaults,
   name: string,
   fields: Field[],
   entry: Entry,
-  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
   widgetFields: Field[] = fields,
   values: EntryData = entry.data,
@@ -62,7 +61,6 @@ export default function getWidgetFor(
         collection,
         fields,
         entry,
-        theme,
         inferredFields,
         field.fields,
         value as EntryData | EntryData[],
@@ -76,7 +74,6 @@ export default function getWidgetFor(
         collection,
         field,
         entry,
-        theme,
         inferredFields,
         value as EntryData[],
       ),
@@ -111,7 +108,7 @@ export default function getWidgetFor(
   }
 
   return renderedValue
-    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, theme, idx)
+    ? getWidget(config, fieldWithWidgets, collection, renderedValue, entry, idx)
     : null;
 }
 
@@ -119,11 +116,10 @@ export default function getWidgetFor(
  * Retrieves widgets for nested fields (children of object/list fields)
  */
 function getNestedWidgets(
-  config: Config,
-  collection: Collection,
+  config: ConfigWithDefaults,
+  collection: CollectionWithDefaults,
   fields: Field[],
   entry: Entry,
-  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
   widgetFields: Field[],
   values: EntryData | EntryData[],
@@ -136,7 +132,6 @@ function getNestedWidgets(
         collection,
         fields,
         entry,
-        theme,
         inferredFields,
         widgetFields,
         value,
@@ -150,7 +145,6 @@ function getNestedWidgets(
     collection,
     fields,
     entry,
-    theme,
     inferredFields,
     widgetFields,
     values,
@@ -161,11 +155,10 @@ function getNestedWidgets(
  * Retrieves widgets for nested fields (children of object/list fields)
  */
 function getTypedNestedWidgets(
-  config: Config,
-  collection: Collection,
+  config: ConfigWithDefaults,
+  collection: CollectionWithDefaults,
   field: ListField,
   entry: Entry,
-  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
   values: EntryData[],
 ) {
@@ -181,7 +174,6 @@ function getTypedNestedWidgets(
         collection,
         itemType.fields,
         entry,
-        theme,
         inferredFields,
         itemType.fields,
         value,
@@ -195,11 +187,10 @@ function getTypedNestedWidgets(
  * Use getWidgetFor as a mapping function for recursive widget retrieval
  */
 function widgetsForNestedFields(
-  config: Config,
-  collection: Collection,
+  config: ConfigWithDefaults,
+  collection: CollectionWithDefaults,
   fields: Field[],
   entry: Entry,
-  theme: 'dark' | 'light',
   inferredFields: Record<string, InferredField>,
   widgetFields: Field[],
   values: EntryData,
@@ -213,7 +204,6 @@ function widgetsForNestedFields(
         field.name,
         fields,
         entry,
-        theme,
         inferredFields,
         widgetFields,
         values,
@@ -224,12 +214,11 @@ function widgetsForNestedFields(
 }
 
 function getWidget(
-  config: Config,
+  config: ConfigWithDefaults,
   field: RenderedField<Field>,
-  collection: Collection,
+  collection: CollectionWithDefaults,
   value: ValueOrNestedValue | ReactNode,
   entry: Entry,
-  theme: 'dark' | 'light',
   idx: number | null = null,
 ) {
   if (!field.widget) {
@@ -265,7 +254,6 @@ function getWidget(
       collection={collection}
       value={finalValue}
       entry={entry}
-      theme={theme}
     />
   );
 }

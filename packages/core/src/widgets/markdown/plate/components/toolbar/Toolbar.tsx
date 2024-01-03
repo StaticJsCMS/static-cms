@@ -20,7 +20,7 @@ import {
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import useToolbarButtons from '../../hooks/useToolbarButtons';
 
-import type { Collection, MarkdownField, MarkdownToolbarItem } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, MarkdownField, MarkdownToolbarItem } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './Toolbar.css';
@@ -56,7 +56,7 @@ const DEFAULT_TOOLBAR_BUTTONS: MarkdownToolbarItem[] = [
 
 export interface ToolbarProps {
   useMdx: boolean;
-  collection: Collection<MarkdownField>;
+  collection: CollectionWithDefaults<MarkdownField>;
   field: MarkdownField;
   disabled: boolean;
 }

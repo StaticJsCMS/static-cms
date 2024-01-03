@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 
 import converters from '../converters';
 
-import type { KeyValueField } from '@staticcms/core/interface';
+import type { KeyValueField } from '@staticcms/core';
 
 describe('converters key value', () => {
   const keyValueField: KeyValueField = {

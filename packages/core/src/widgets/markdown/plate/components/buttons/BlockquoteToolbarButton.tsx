@@ -3,6 +3,7 @@ import { ELEMENT_BLOCKQUOTE } from '@udecode/plate';
 import React from 'react';
 
 import BlockToolbarButton from './common/BlockToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
 import type { FC } from 'react';
 
@@ -12,10 +13,13 @@ export interface BlockquoteToolbarButtonProps {
 }
 
 const BlockquoteToolbarButton: FC<BlockquoteToolbarButtonProps> = ({ disabled, variant }) => {
+  const t = useTranslate();
+
   return (
     <BlockToolbarButton
-      label="Blockquote"
-      tooltip="Insert blockquote"
+      id="blockquote"
+      label={t('editor.editorWidgets.markdown.quote')}
+      tooltip={t('editor.editorWidgets.markdown.insertQuote')}
       icon={FormatQuoteIcon}
       type={ELEMENT_BLOCKQUOTE}
       disabled={disabled}

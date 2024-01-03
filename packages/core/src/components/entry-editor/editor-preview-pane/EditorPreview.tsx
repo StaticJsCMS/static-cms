@@ -1,8 +1,9 @@
 import React from 'react';
 
-import type { ObjectValue, TemplatePreviewProps } from '@staticcms/core/interface';
+import type { ObjectValue, TemplatePreviewProps } from '@staticcms/core';
+import type { FC } from 'react';
 
-const Preview = ({ collection, fields, widgetFor }: TemplatePreviewProps<ObjectValue>) => {
+const Preview: FC<TemplatePreviewProps<ObjectValue>> = ({ collection, fields, widgetFor }) => {
   if (!collection || !fields) {
     return null;
   }

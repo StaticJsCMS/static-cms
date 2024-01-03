@@ -1,17 +1,18 @@
+import { useVirtualizer } from '@tanstack/react-virtual';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { useVirtual } from 'react-virtual';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
+import { selectUseWorkflow } from '@staticcms/core/reducers/selectors/config';
 import { selectIsFetching } from '@staticcms/core/reducers/selectors/globalUI';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import Table from '../../common/table/Table';
 import entriesClasses from './Entries.classes';
 import EntryRow from './EntryRow';
 
-import type { CollectionEntryData } from '@staticcms/core/interface';
+import type { CollectionEntryData } from '@staticcms/core';
 import type { FC } from 'react';
-import type { t } from 'react-polyglot';
 
 export interface EntryListingTableProps {
   isSingleCollectionInList: boolean;
@@ -23,7 +24,6 @@ export interface EntryListingTableProps {
   canLoadMore: boolean;
   isLoadingEntries: boolean;
   loadNext: () => void;
-  t: t;
 }
 
 const EntryListingTable: FC<EntryListingTableProps> = ({
@@ -33,17 +33,21 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
   canLoadMore,
   isLoadingEntries,
   loadNext,
-  t,
 }) => {
+  const t = useTranslate();
+
   const isFetching = useAppSelector(selectIsFetching);
 
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const { virtualItems: virtualRows, totalSize } = useVirtual({
-    parentRef: tableContainerRef,
-    size: entryData.length,
+  const rowVirtualizer = useVirtualizer({
+    getScrollElement: () => tableContainerRef.current,
+    count: entryData.length,
     overscan: 10,
+    estimateSize: () => 45,
   });
+
+  const virtualRows = rowVirtualizer.getVirtualItems();
 
   const paddingTop = useMemo(
     () => (virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0),
@@ -51,8 +55,10 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
   );
   const paddingBottom = useMemo(
     () =>
-      virtualRows.length > 0 ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0,
-    [totalSize, virtualRows],
+      virtualRows.length > 0
+        ? rowVirtualizer.getTotalSize() - (virtualRows?.[virtualRows.length - 1]?.end || 0)
+        : 0,
+    [rowVirtualizer, virtualRows],
   );
 
   const fetchMoreOnBottomReached = useCallback(
@@ -73,6 +79,8 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
     fetchMoreOnBottomReached(scrollHeight, scrollTop, clientHeight);
   }, [clientHeight, fetchMoreOnBottomReached, scrollHeight, scrollTop]);
 
+  const useWorkflow = useAppSelector(selectUseWorkflow);
+
   const baseColumnHeaders = useMemo(() => {
     const cols = [...summaryFields.map(f => f.label), ''];
 
@@ -80,8 +88,12 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
       cols.unshift(t('collection.table.collection'));
     }
 
+    if (useWorkflow) {
+      cols.push('');
+    }
+
     return cols;
-  }, [isSingleCollectionInList, summaryFields, t]);
+  }, [isSingleCollectionInList, summaryFields, t, useWorkflow]);
 
   const columnFields = useMemo(() => [...summaryFields.map(f => f.name)], [summaryFields]);
 
@@ -101,7 +113,7 @@ const EntryListingTable: FC<EntryListingTableProps> = ({
               <td style={{ height: `${paddingTop}px` }} />
             </tr>
           )}
-          {virtualRows.map(virtualRow => {
+          {rowVirtualizer.getVirtualItems().map(virtualRow => {
             const data = entryData[virtualRow.index];
             return (
               <EntryRow

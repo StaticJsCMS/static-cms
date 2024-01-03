@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { currentBackend } from './backend';
 import bootstrap from './bootstrap';
+import useTheme from './components/theme/hooks/useTheme';
 import useEntries from './lib/hooks/useEntries';
 import useFolderSupport from './lib/hooks/useFolderSupport';
 import useHasChildErrors from './lib/hooks/useHasChildErrors';
@@ -19,6 +20,7 @@ export * from './interface';
 export * from './lib';
 export { default as locales } from './locales';
 export * from './widgets';
+export { useTheme };
 
 const CMS = {
   ...Registry,
@@ -44,6 +46,7 @@ if (typeof window !== 'undefined') {
   window.useUUID = window.useUUID || useUUID;
   window.useData = window.useData || useData;
   window.useNavigate = window.useNavigate || useNavigate;
+  window.useTheme = window.useTheme || useTheme;
 }
 
 export default CMS;

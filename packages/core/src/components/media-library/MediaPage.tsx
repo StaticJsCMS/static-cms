@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
-import { translate } from 'react-polyglot';
 
 import { loadMedia } from '@staticcms/core/actions/mediaLibrary';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { useAppDispatch } from '@staticcms/core/store/hooks';
 import MainView from '../MainView';
 import MediaLibrary from './common/MediaLibrary';
 
 import type { FC } from 'react';
-import type { TranslateProps } from 'react-polyglot';
 
-const MediaPage: FC<TranslateProps> = ({ t }) => {
+const MediaPage: FC = () => {
+  const t = useTranslate();
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -29,4 +30,4 @@ const MediaPage: FC<TranslateProps> = ({ t }) => {
   );
 };
 
-export default translate()(MediaPage) as FC;
+export default MediaPage;

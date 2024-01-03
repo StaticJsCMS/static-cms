@@ -3,7 +3,7 @@
  */
 import '@testing-library/jest-dom';
 import { act, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 
 import { mockStringField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
@@ -89,7 +89,7 @@ describe(StringControl.name, () => {
     expect(input).not.toHaveFocus();
 
     await act(async () => {
-      const field = getByTestId('field');
+      const field = getByTestId('field-Mock Widget');
       await userEvent.click(field);
     });
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import type { ValueOrNestedValue } from '@staticcms/core/interface';
+import type { ValueOrNestedValue } from '@staticcms/core';
 
 export default function useData<I extends ValueOrNestedValue, O extends ValueOrNestedValue>(
   value: O,

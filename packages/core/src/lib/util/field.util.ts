@@ -7,14 +7,17 @@ import { entryMatchesFieldRule } from './filter.util';
 
 import type {
   BaseField,
-  Collection,
+  CollectionWithDefaults,
   Entry,
   Field,
   ValueOrNestedValue,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { t } from 'react-polyglot';
 
-export function selectField<EF extends BaseField>(collection: Collection<EF>, key: string) {
+export function selectField<EF extends BaseField>(
+  collection: CollectionWithDefaults<EF>,
+  key: string,
+) {
   const array = keyToPathArray(key);
   let name: string | undefined;
   let field: Field<EF> | undefined;
@@ -64,7 +67,10 @@ function findField(field: Field | undefined, path: string[]): Field | null {
   );
 }
 
-export function getField(field: Field | Field[], path: string): Field | null {
+export function getField(
+  field: Field | Field[] | undefined,
+  path: string | undefined | null,
+): Field | null {
   return findField(
     Array.isArray(field)
       ? {
@@ -73,7 +79,7 @@ export function getField(field: Field | Field[], path: string): Field | null {
           fields: field,
         }
       : field,
-    path.split('.'),
+    (path ?? '').split('.'),
   );
 }
 

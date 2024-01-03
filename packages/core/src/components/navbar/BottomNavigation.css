@@ -1,12 +1,12 @@
 .CMS_BottomNavigation_root {
+  background: var(--background-main);
+
   @apply fixed
     bottom-0
     left-0
     right-0
     h-16
     shadow-bottom-navigation
-    bg-gray-50
-    dark:bg-gray-800
     flex
     px-6
     py-1

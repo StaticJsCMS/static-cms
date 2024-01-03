@@ -23,13 +23,15 @@ import AuthenticationPage from './AuthenticationPage';
 import type {
   BackendClass,
   BackendEntry,
-  Config,
+  ConfigWithDefaults,
   Credentials,
   DisplayURL,
   ImplementationFile,
+  ImplementationMediaFile,
   PersistOptions,
+  UnpublishedEntry,
   User,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { AsyncLock } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { Semaphore } from 'semaphore';
@@ -60,7 +62,7 @@ export default class Gitea implements BackendClass {
   };
   _mediaDisplayURLSem?: Semaphore;
 
-  constructor(config: Config, options = {}) {
+  constructor(config: ConfigWithDefaults, options = {}) {
     this.options = {
       proxied: false,
       API: null,
@@ -82,11 +84,6 @@ export default class Gitea implements BackendClass {
     this.mediaFolder = config.media_folder;
     this.lock = asyncLock();
   }
-
-  isGitBackend() {
-    return true;
-  }
-
   async status() {
     const auth =
       (await this.api
@@ -404,5 +401,37 @@ export default class Gitea implements BackendClass {
       entries,
       cursor: result.cursor,
     };
+  }
+
+  async unpublishedEntries(): Promise<string[]> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async unpublishedEntry(): Promise<UnpublishedEntry> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async unpublishedEntryDataFile(): Promise<string> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async unpublishedEntryMediaFile(): Promise<ImplementationMediaFile> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async updateUnpublishedEntryStatus(): Promise<void> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async publishUnpublishedEntry(): Promise<void> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async deleteUnpublishedEntry(): Promise<void> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
+  }
+
+  async getDeployPreview(): Promise<{ url: string; status: string } | null> {
+    throw new Error('Editorial workflow is not yet available for Gitea');
   }
 }

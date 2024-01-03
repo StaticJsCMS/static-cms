@@ -3,14 +3,14 @@
  */
 import '@testing-library/jest-dom';
 import { act, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 
-import { configLoaded } from '@staticcms/core/actions/config';
+import { applyDefaults, configLoaded } from '@staticcms/core/actions/config';
 import * as backend from '@staticcms/core/backend';
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { store } from '@staticcms/core/store';
-import { createMockCollection } from '@staticcms/test/data/collections.mock';
-import { createMockConfig } from '@staticcms/test/data/config.mock';
+import { createMockFolderCollection } from '@staticcms/test/data/collections.mock';
+import { createNoDefaultsMockConfig } from '@staticcms/test/data/config.mock';
 import { createMockEntry } from '@staticcms/test/data/entry.mock';
 import { mockRelationField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
@@ -18,14 +18,17 @@ import RelationControl from '../RelationControl';
 
 import type {
   Collection,
+  CollectionWithDefaults,
   Config,
+  ConfigWithDefaults,
   DateTimeField,
   Entry,
   ListField,
   ObjectField,
   RelationField,
-  StringOrTextField,
-} from '@staticcms/core/interface';
+  TextField,
+} from '@staticcms/core';
+import type { WidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 
 jest.mock('@staticcms/core/backend');
 
@@ -69,14 +72,14 @@ const coAuthorsField: ListField = {
   ],
 };
 
-const bodyField: StringOrTextField = {
+const bodyField: TextField = {
   widget: 'text',
   name: 'body',
 };
 
-const config = createMockConfig({
+const originalConfig = createNoDefaultsMockConfig({
   collections: [
-    createMockCollection(
+    createMockFolderCollection(
       {
         name: 'posts',
       },
@@ -89,18 +92,27 @@ const config = createMockConfig({
   ],
 });
 
-const searchCollection = config.collections[0];
+let config: ConfigWithDefaults<RelationField>;
+let searchCollection: CollectionWithDefaults<RelationField>;
 
 describe(RelationControl.name, () => {
-  const renderControl = createWidgetControlHarness(RelationControl, {
-    field: mockRelationField,
-    config,
-  });
+  let renderControl: WidgetControlHarness<string | string[], RelationField>;
   let currentBackendSpy: jest.SpyInstance;
   let mockListAllEntries: jest.Mock;
 
   beforeEach(() => {
-    store.dispatch(configLoaded(config as unknown as Config));
+    config = applyDefaults(originalConfig);
+
+    renderControl = createWidgetControlHarness(RelationControl, {
+      field: mockRelationField,
+      config,
+    });
+
+    searchCollection = config.collections[0];
+
+    store.dispatch(
+      configLoaded(config as unknown as ConfigWithDefaults, originalConfig as unknown as Config),
+    );
 
     const mockEntries: Entry[] = [
       createMockEntry({
@@ -238,7 +250,7 @@ describe(RelationControl.name, () => {
     const response = renderControl(options);
 
     expect(currentBackendSpy).toHaveBeenCalledWith(config);
-    expect(mockListAllEntries).toHaveBeenCalledWith(searchCollection);
+    expect(mockListAllEntries).toHaveBeenCalledWith(searchCollection, config);
 
     const { expectedValue = '', expectedText } = relationOptions ?? {};
 
@@ -340,7 +352,7 @@ describe(RelationControl.name, () => {
     const input = getByTestId('autocomplete-input');
     expect(input).not.toHaveFocus();
 
-    const field = getByTestId('field');
+    const field = getByTestId('field-Mock Widget');
 
     await act(async () => {
       await userEvent.click(field);

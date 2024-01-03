@@ -8,7 +8,7 @@ import Label from '@staticcms/core/components/common/field/Label';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import widgetListClasses from '../ListControl.classes';
 
-import type { FieldError, ListField } from '@staticcms/core/interface';
+import type { FieldError, ListField } from '@staticcms/core';
 import type { FC, ReactNode } from 'react';
 
 export interface ListFieldWrapperProps {
@@ -44,12 +44,12 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
 
   return (
     <div
-      data-testid="list-field"
+      data-testid={`list-field-${openLabel?.trim()}`}
       className={classNames(
         widgetListClasses.root,
         disabled && widgetListClasses.disabled,
         field.required !== false && widgetListClasses.required,
-        hasErrors && widgetListClasses.error,
+        (hasErrors || hasChildErrors) && widgetListClasses.error,
         forSingleList && widgetListClasses['for-single-list'],
         open && widgetListClasses.open,
       )}
@@ -68,7 +68,7 @@ const ListFieldWrapper: FC<ListFieldWrapperProps> = ({
             variant="inline"
             disabled={disabled}
           >
-            {open ? openLabel : closedLabel}
+            {open ? openLabel.trim() : closedLabel.trim()}
           </Label>
           <ChevronRightIcon className={widgetListClasses['expand-button-icon']} />
         </button>

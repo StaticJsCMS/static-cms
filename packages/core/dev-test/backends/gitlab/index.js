@@ -24,27 +24,6 @@ const PostDateFieldPreview = ({ value }) => {
   );
 };
 
-const PostDraftFieldPreview = ({ value }) => {
-  return h(
-    'div',
-    {
-      style: {
-        backgroundColor: value === true ? 'rgb(37 99 235)' : 'rgb(22 163 74)',
-        color: 'white',
-        border: 'none',
-        padding: '2px 6px',
-        textAlign: 'center',
-        textDecoration: 'none',
-        display: 'inline-block',
-        cursor: 'pointer',
-        borderRadius: '4px',
-        fontSize: '14px',
-      },
-    },
-    value === true ? 'Draft' : 'Published',
-  );
-};
-
 const GeneralPreview = ({ widgetsFor, entry, collection }) => {
   const title = entry.data.site_title;
   const posts = entry.data.posts;
@@ -88,38 +67,16 @@ const AuthorsPreview = ({ widgetsFor }) => {
   );
 };
 
-const RelationKitchenSinkPostPreview = ({ fieldsMetaData }) => {
-  // When a post is selected from the relation field, all of it's data
-  // will be available in the field's metadata nested under the collection
-  // name, and then further nested under the value specified in `value_field`.
-  // In this case, the post would be nested under "posts" and then under
-  // the title of the selected post, since our `value_field` in the config
-  // is "title".
-  const post = fieldsMetaData && fieldsMetaData.posts.value;
-  const style = { border: '2px solid #ccc', borderRadius: '8px', padding: '20px' };
-  return post
-    ? h(
-        'div',
-        { style: style },
-        h('h2', {}, 'Related Post'),
-        h('h3', {}, post.title),
-        h('img', { src: post.image }),
-        h('p', {}, (post.body ?? '').slice(0, 100) + '...'),
-      )
-    : null;
-};
-
 const CustomPage = () => {
   return h('div', {}, 'I am a custom page!');
 };
 
 CMS.registerPreviewTemplate('posts', PostPreview);
 CMS.registerFieldPreview('posts', 'date', PostDateFieldPreview);
-CMS.registerFieldPreview('posts', 'draft', PostDraftFieldPreview);
 CMS.registerPreviewTemplate('general', GeneralPreview);
 CMS.registerPreviewTemplate('authors', AuthorsPreview);
 // Pass the name of a registered control to reuse with a new widget preview.
-CMS.registerWidget('relationKitchenSinkPost', 'relation', RelationKitchenSinkPostPreview);
+CMS.registerWidget('relationKitchenSinkPost', 'relation');
 CMS.registerAdditionalLink({
   id: 'example',
   title: 'Example.com',
@@ -152,7 +109,9 @@ CMS.registerShortcode('youtube', {
   toArgs: ({ src }) => {
     return [src];
   },
-  control: ({ src, onChange, theme }) => {
+  control: ({ src, onChange }) => {
+    const theme = useTheme();
+
     return h('span', {}, [
       h('input', {
         key: 'control-input',
@@ -162,8 +121,8 @@ CMS.registerShortcode('youtube', {
         },
         style: {
           width: '100%',
-          backgroundColor: theme === 'dark' ? 'rgb(30, 41, 59)' : 'white',
-          color: theme === 'dark' ? 'white' : 'black',
+          backgroundColor: theme.common.gray,
+          color: theme.text.primary,
           padding: '4px 8px',
         },
       }),

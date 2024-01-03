@@ -14,7 +14,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
   i18n: {
     structure: 'multiple_files',
     locales: ['en', 'de', 'fr'],
-    defaultLocale: 'en',
+    default_locale: 'en',
   },
   collections: [
     {
@@ -25,7 +25,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
         'The description is a great place for tone setting, high level information, and editing guidelines that are specific to a collection.',
       folder: '_posts',
       slug: '{{year}}-{{month}}-{{day}}-{{slug}}',
-      summary_fields: ['title', 'date', 'draft'],
+      summary_fields: ['title', 'date'],
       sortable_fields: {
         fields: ['title', 'date'],
         default: {
@@ -33,45 +33,38 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
         },
       },
       create: true,
-      view_filters: [
-        {
-          label: 'Posts With Index',
-          field: 'title',
-          pattern: 'This is post #',
-        },
-        {
-          label: 'Posts Without Index',
-          field: 'title',
-          pattern: 'front matter post',
-        },
-        {
-          label: 'Drafts',
-          field: 'draft',
-          pattern: true,
-        },
-      ],
-      view_groups: [
-        {
-          label: 'Year',
-          field: 'date',
-          pattern: '\\d{4}',
-        },
-        {
-          label: 'Drafts',
-          field: 'draft',
-        },
-      ],
+      view_filters: {
+        default: 'posts-without-index',
+        filters: [
+          {
+            name: 'posts-with-index',
+            label: 'Posts With Index',
+            field: 'title',
+            pattern: 'This is post #',
+          },
+          {
+            name: 'posts-without-index',
+            label: 'Posts Without Index',
+            field: 'title',
+            pattern: 'front matter post',
+          },
+        ],
+      },
+      view_groups: {
+        groups: [
+          {
+            name: 'by-year',
+            label: 'Year',
+            field: 'date',
+            pattern: '\\d{4}',
+          },
+        ],
+      },
       fields: [
         {
           label: 'Title',
           name: 'title',
           widget: 'string',
-        },
-        {
-          label: 'Draft',
-          name: 'draft',
-          widget: 'boolean',
-          default: false,
         },
         {
           label: 'Publish Date',
@@ -91,7 +84,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
           label: 'Body',
           name: 'body',
           widget: 'markdown',
-          hint: 'Main content goes here.',
+          hint: '*Main* __content__ __*goes*__ [here](https://example.com/).',
         },
       ],
     },
@@ -1173,13 +1166,6 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
           },
           fields: [
             {
-              label: 'Number of posts on frontpage',
-              name: 'front_limit',
-              widget: 'number',
-              min: 1,
-              max: 10,
-            },
-            {
               label: 'Global title',
               name: 'site_title',
               widget: 'string',
@@ -1800,7 +1786,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
       i18n: {
         structure: 'multiple_folders',
         locales: ['en', 'de', 'fr'],
-        defaultLocale: 'en',
+        default_locale: 'en',
       },
       folder: 'packages/core/dev-test/backends/proxy/_i18n_playground_multiple_folders',
       identifier_field: 'slug',
@@ -1831,7 +1817,7 @@ const testConfig: Config<RelationKitchenSinkPostField> = {
       i18n: {
         structure: 'single_file',
         locales: ['en', 'de', 'fr'],
-        defaultLocale: 'en',
+        default_locale: 'en',
       },
       folder: 'packages/core/dev-test/backends/proxy/_i18n_playground_single_file',
       identifier_field: 'slug',

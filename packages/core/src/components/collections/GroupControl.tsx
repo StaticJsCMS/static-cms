@@ -1,13 +1,13 @@
 import { Check as CheckIcon } from '@styled-icons/material/Check';
 import React, { useCallback, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 
-import type { GroupMap, TranslatedProps, ViewGroup } from '@staticcms/core/interface';
+import type { GroupMap, ViewGroup } from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 
 import './GroupControl.css';
@@ -30,13 +30,14 @@ export interface GroupControlProps {
   onGroupClick: ((viewGroup: ViewGroup) => void) | undefined;
 }
 
-const GroupControl = ({
+const GroupControl: FC<GroupControlProps> = ({
   viewGroups = [],
   group = {},
   variant = 'menu',
   onGroupClick,
-  t,
-}: TranslatedProps<GroupControlProps>) => {
+}) => {
+  const t = useTranslate();
+
   const activeGroup = useMemo(() => Object.values(group).find(f => f.active === true), [group]);
 
   const handleGroupClick = useCallback(
@@ -76,8 +77,11 @@ const GroupControl = ({
   return (
     <Menu
       label={t('collection.collectionTop.groupBy')}
+      color={activeGroup ? 'primary' : 'secondary'}
       variant={activeGroup ? 'contained' : 'outlined'}
       rootClassName={classes.root}
+      aria-label="group by options dropdown"
+      data-testid="group-by"
     >
       <MenuGroup>
         {viewGroups.map(viewGroup => (
@@ -85,7 +89,8 @@ const GroupControl = ({
             key={viewGroup.id}
             onClick={() => onGroupClick?.(viewGroup)}
             endIcon={viewGroup.id === activeGroup?.id ? CheckIcon : undefined}
-            className={classes.option}
+            rootClassName={classes.option}
+            data-testid={`group-by-option-${viewGroup.label}`}
           >
             {viewGroup.label}
           </MenuItemButton>
@@ -95,4 +100,4 @@ const GroupControl = ({
   );
 };
 
-export default translate()(GroupControl) as FC<GroupControlProps>;
+export default GroupControl;

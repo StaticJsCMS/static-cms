@@ -1,11 +1,16 @@
 import { useMemo } from 'react';
 
-import type { Collection, CollectionFile, Config, MediaField } from '@staticcms/core/interface';
+import type {
+  CollectionFileWithDefaults,
+  CollectionWithDefaults,
+  ConfigWithDefaults,
+  MediaField,
+} from '@staticcms/core';
 
 interface UseFolderSupportProps {
-  config?: Config;
-  collection?: Collection;
-  collectionFile?: CollectionFile;
+  config?: ConfigWithDefaults;
+  collection?: CollectionWithDefaults;
+  collectionFile?: CollectionFileWithDefaults;
   field?: MediaField;
 }
 

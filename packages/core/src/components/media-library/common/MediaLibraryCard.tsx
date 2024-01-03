@@ -2,10 +2,10 @@ import { Delete as DeleteIcon } from '@styled-icons/material/Delete';
 import { Download as DownloadIcon } from '@styled-icons/material/Download';
 import { FolderOpen as FolderOpenIcon } from '@styled-icons/material/FolderOpen';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 
 import { MAX_LINK_DISPLAY_LENGTH } from '@staticcms/core/constants/mediaLibrary';
 import useMediaAsset from '@staticcms/core/lib/hooks/useMediaAsset';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { selectEditingDraft } from '@staticcms/core/reducers/selectors/entryDraft';
 import { useAppSelector } from '@staticcms/core/store/hooks';
@@ -15,14 +15,7 @@ import Image from '../../common/image/Image';
 import Pill from '../../common/pill/Pill';
 import CopyToClipBoardButton from './CopyToClipBoardButton';
 
-import type {
-  BaseField,
-  Collection,
-  MediaField,
-  MediaLibraryDisplayURL,
-  TranslatedProps,
-  UnknownField,
-} from '@staticcms/core/interface';
+import type { CollectionWithDefaults, MediaField, MediaLibraryDisplayURL } from '@staticcms/core';
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
 
 import './MediaLibraryCard.css';
@@ -47,7 +40,7 @@ export const classes = generateClassNames('MediaLibraryCard', [
   'file',
 ]);
 
-interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = UnknownField> {
+interface MediaLibraryCardProps {
   isSelected?: boolean;
   displayURL: MediaLibraryDisplayURL;
   path: string;
@@ -57,8 +50,8 @@ interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = Unk
   isViewableImage: boolean;
   isDraft?: boolean;
   isDirectory?: boolean;
-  collection?: Collection<EF>;
-  field?: T;
+  collection?: CollectionWithDefaults;
+  field?: MediaField;
   currentFolder?: string;
   hasSelection: boolean;
   allowMultiple: boolean;
@@ -68,7 +61,7 @@ interface MediaLibraryCardProps<T extends MediaField, EF extends BaseField = Unk
   onDelete: () => void;
 }
 
-const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownField>({
+const MediaLibraryCard: FC<MediaLibraryCardProps> = ({
   isSelected = false,
   displayURL,
   path,
@@ -87,8 +80,9 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   onDirectoryOpen,
   loadDisplayURL,
   onDelete,
-  t,
-}: TranslatedProps<MediaLibraryCardProps<T, EF>>) => {
+}) => {
+  const t = useTranslate();
+
   const entry = useAppSelector(selectEditingDraft);
   const url = useMediaAsset(path, collection, field, entry, currentFolder, isDirectory);
 
@@ -217,4 +211,4 @@ const MediaLibraryCard = <T extends MediaField, EF extends BaseField = UnknownFi
   );
 };
 
-export default translate()(MediaLibraryCard) as FC<MediaLibraryCardProps<MediaField, UnknownField>>;
+export default MediaLibraryCard;

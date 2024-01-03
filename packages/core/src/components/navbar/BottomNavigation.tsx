@@ -13,7 +13,7 @@ import IconButton from '../common/button/IconButton';
 import NavigationDrawer from './NavigationDrawer';
 import QuickCreate from './QuickCreate';
 
-import type { Collection } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './BottomNavigation.css';
@@ -31,7 +31,7 @@ export const classes = generateClassNames('BottomNavigation', [
 ]);
 
 export interface BottomNavigationProps {
-  collection: Collection | undefined;
+  collection: CollectionWithDefaults | undefined;
 }
 
 const BottomNavigation: FC<BottomNavigationProps> = ({ collection }) => {
@@ -49,13 +49,23 @@ const BottomNavigation: FC<BottomNavigationProps> = ({ collection }) => {
   return (
     <>
       <div className={classes.root}>
-        <IconButton variant="text" className={classes['menu-button']} onClick={toggleMobileMenu}>
-          <MenuIcon className={classes['menu-button-icon']} />
-        </IconButton>
+        <IconButton
+          icon={MenuIcon}
+          variant="text"
+          onClick={toggleMobileMenu}
+          rootClassName={classes['menu-button']}
+          iconClassName={classes['menu-button-icon']}
+          aria-label="toggle menu"
+        />
         {isNotEmpty(newEntryUrl) ? (
-          <IconButton to={newEntryUrl} variant="text" className={classes['add-button']}>
-            <AddIcon className={classes['add-button-icon']} />
-          </IconButton>
+          <IconButton
+            icon={AddIcon}
+            to={newEntryUrl}
+            variant="text"
+            rootClassName={classes['add-button']}
+            iconClassName={classes['add-button-icon']}
+            aria-label="create entry"
+          />
         ) : (
           <QuickCreate
             key="quick-create"
@@ -67,9 +77,14 @@ const BottomNavigation: FC<BottomNavigationProps> = ({ collection }) => {
           />
         )}
         {displayUrl ? (
-          <IconButton variant="text" className={classes['site-url-button']} href={displayUrl}>
-            <OpenInNewIcon className={classes['site-url-button-icon']} />
-          </IconButton>
+          <IconButton
+            icon={OpenInNewIcon}
+            variant="text"
+            href={displayUrl}
+            rootClassName={classes['site-url-button']}
+            iconClassName={classes['site-url-button-icon']}
+            aria-label="go to site"
+          />
         ) : null}
       </div>
       <NavigationDrawer mobileOpen={mobileOpen} onMobileOpenToggle={toggleMobileMenu} />

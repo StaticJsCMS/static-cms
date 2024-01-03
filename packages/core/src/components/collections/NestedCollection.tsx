@@ -10,9 +10,9 @@ import { getTreeData } from '@staticcms/core/lib/util/nested.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import NavLink from '../navbar/NavLink';
 
-import type { Collection, Entry } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry } from '@staticcms/core';
 import type { TreeNodeData } from '@staticcms/core/lib/util/nested.util';
-import type { MouseEvent } from 'react';
+import type { FC, MouseEvent } from 'react';
 
 import './NestedCollection.css';
 
@@ -38,7 +38,7 @@ function getNodeTitle(node: TreeNodeData) {
 }
 
 interface TreeNodeProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   treeData: TreeNodeData[];
   rootIsActive: boolean;
   path: string;
@@ -46,14 +46,14 @@ interface TreeNodeProps {
   onToggle: ({ node, expanded }: { node: TreeNodeData; expanded: boolean }) => void;
 }
 
-const TreeNode = ({
+const TreeNode: FC<TreeNodeProps> = ({
   collection,
   treeData,
   rootIsActive,
   path,
   depth = 0,
   onToggle,
-}: TreeNodeProps) => {
+}) => {
   const collectionName = collection.name;
 
   const handleClick = useCallback(
@@ -184,18 +184,18 @@ export function updateNode(
 }
 
 export interface NestedCollectionProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   filterTerm: string;
 }
 
-const NestedCollection = ({ collection, filterTerm }: NestedCollectionProps) => {
+const NestedCollection: FC<NestedCollectionProps> = ({ collection, filterTerm }) => {
   const entries = useEntries(collection);
 
   const [treeData, setTreeData] = useState<TreeNodeData[]>(getTreeData(collection, entries));
   const [useFilter, setUseFilter] = useState(true);
 
   const [prevRootIsActive, setPrevRootIsActive] = useState(false);
-  const [prevCollection, setPrevCollection] = useState<Collection | null>(null);
+  const [prevCollection, setPrevCollection] = useState<CollectionWithDefaults | null>(null);
   const [prevEntries, setPrevEntries] = useState<Entry[] | null>(null);
   const [prevPath, setPrevPath] = useState<string | null>(null);
 

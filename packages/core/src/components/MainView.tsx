@@ -7,8 +7,8 @@ import BottomNavigation from './navbar/BottomNavigation';
 import Navbar from './navbar/Navbar';
 import Sidebar from './navbar/Sidebar';
 
-import type { ReactNode } from 'react';
-import type { Breadcrumb, Collection } from '../interface';
+import type { FC, ReactNode } from 'react';
+import type { Breadcrumb, CollectionWithDefaults } from '../interface';
 
 import './MainView.css';
 
@@ -37,10 +37,10 @@ interface MainViewProps {
   noMargin?: boolean;
   noScroll?: boolean;
   children: ReactNode;
-  collection?: Collection;
+  collection?: CollectionWithDefaults;
 }
 
-const MainView = ({
+const MainView: FC<MainViewProps> = ({
   children,
   breadcrumbs,
   showQuickCreate = false,
@@ -49,7 +49,7 @@ const MainView = ({
   noScroll = false,
   navbarActions,
   collection,
-}: MainViewProps) => {
+}) => {
   return (
     <>
       <Navbar
@@ -66,6 +66,7 @@ const MainView = ({
             showLeftNav && classes['show-left-nav'],
             noMargin && classes['no-margin'],
             noScroll && classes['no-scroll'],
+            'CMS_Scrollbar_root',
           )}
         >
           {children}

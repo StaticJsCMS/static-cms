@@ -92,10 +92,13 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
     }
 
     const callback: IntersectionObserverCallback = headings => {
-      headingElementsRef.current = headings.reduce((map, headingElement) => {
-        map[headingElement.target.id] = headingElement;
-        return map;
-      }, headingElementsRef.current as Record<string, IntersectionObserverEntry>);
+      headingElementsRef.current = headings.reduce(
+        (map, headingElement) => {
+          map[headingElement.target.id] = headingElement;
+          return map;
+        },
+        headingElementsRef.current as Record<string, IntersectionObserverEntry>,
+      );
 
       // Get all headings that are currently visible on the page
       const visibleHeadings: IntersectionObserverEntry[] = [];
@@ -147,6 +150,11 @@ const StyledNav = styled('nav')(
     max-height: calc(100dvh - 72px);
     overflow-y: auto;
     top: 16px;
+
+    &:hover {
+      overflow-y: auto;
+      padding-right: 0;
+    }
 
     ${theme.breakpoints.between('md', 'lg')} {
       top: 24px;

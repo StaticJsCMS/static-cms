@@ -10,7 +10,7 @@ import './Button.css';
 
 export interface BaseBaseProps {
   variant?: 'contained' | 'outlined' | 'text';
-  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning';
+  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info';
   size?: 'medium' | 'small';
   rounded?: boolean | 'no-padding';
   className?: string;

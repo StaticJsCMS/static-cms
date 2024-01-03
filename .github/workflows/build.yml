@@ -23,7 +23,7 @@ jobs:
             packages/app/yarn.lock
             packages/core/yarn.lock
             packages/docs/yarn.lock
-          node-version: 16
+          node-version: 18
 
       - name: Install
         run: |
@@ -50,7 +50,7 @@ jobs:
             packages/app/yarn.lock
             packages/core/yarn.lock
             packages/docs/yarn.lock
-          node-version: 16
+          node-version: 18
 
       - name: Install
         run: |
@@ -75,7 +75,7 @@ jobs:
             packages/app/yarn.lock
             packages/core/yarn.lock
             packages/docs/yarn.lock
-          node-version: 16
+          node-version: 18
 
       - name: Install
         run: |
@@ -105,7 +105,7 @@ jobs:
             packages/app/yarn.lock
             packages/core/yarn.lock
             packages/docs/yarn.lock
-          node-version: 16
+          node-version: 18
 
       - name: Install
         run: |

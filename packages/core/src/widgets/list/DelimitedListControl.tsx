@@ -6,7 +6,7 @@ import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import widgetListClasses from './ListControl.classes';
 
-import type { ListField, ValueOrNestedValue, WidgetControlProps } from '@staticcms/core/interface';
+import type { ListField, ValueOrNestedValue, WidgetControlProps } from '@staticcms/core';
 import type { ChangeEvent, FC } from 'react';
 
 const DelimitedListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = ({

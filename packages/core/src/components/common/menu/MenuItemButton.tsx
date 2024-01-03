@@ -24,7 +24,8 @@ export interface MenuItemButtonProps {
   active?: boolean;
   onClick: (event: MouseEvent) => void;
   children: ReactNode;
-  className?: string;
+  rootClassName?: string;
+  contentClassName?: string;
   disabled?: boolean;
   startIcon?: FC<{ className?: string }>;
   endIcon?: FC<{ className?: string }>;
@@ -32,23 +33,24 @@ export interface MenuItemButtonProps {
   'data-testid'?: string;
 }
 
-const MenuItemButton = ({
+const MenuItemButton: FC<MenuItemButtonProps> = ({
   active = false,
   onClick,
   children,
-  className,
+  rootClassName,
+  contentClassName,
   disabled = false,
   startIcon: StartIcon,
   endIcon: EndIcon,
   color = 'default',
   'data-testid': dataTestId,
-}: MenuItemButtonProps) => {
+}) => {
   return (
     <MenuItem
       slotProps={{
         root: {
           className: classNames(
-            className,
+            rootClassName,
             classes.root,
             disabled && classes.disabled,
             active && classes.active,
@@ -62,7 +64,7 @@ const MenuItemButton = ({
       disabled={disabled}
       data-testid={dataTestId}
     >
-      <div className={classes.content}>
+      <div className={classNames(contentClassName, classes.content)}>
         {StartIcon ? <StartIcon className={classes['start-icon']} /> : null}
         {children}
       </div>

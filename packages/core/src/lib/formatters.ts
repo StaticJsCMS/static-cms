@@ -2,8 +2,8 @@ import get from 'lodash/get';
 
 import { COMMIT_AUTHOR, COMMIT_DATE } from '../constants/commitProps';
 import { sanitizeSlug } from './urlHelper';
-import { selectIdentifier, selectInferredField } from './util/collection.util';
-import { selectField } from './util/field.util';
+import { getFields, selectIdentifier, selectInferredField } from './util/collection.util';
+import { getField, selectField } from './util/field.util';
 import set from './util/set.util';
 import { isEmpty } from './util/string.util';
 import {
@@ -15,10 +15,11 @@ import {
 
 import type {
   BaseField,
-  Collection,
-  Config,
+  CollectionWithDefaults,
+  ConfigWithDefaults,
   Entry,
   EntryData,
+  Field,
   Slug,
   UnknownField,
 } from '../interface';
@@ -29,6 +30,7 @@ const commitMessageTemplates = {
   delete: 'Delete {{collection}} “{{slug}}”',
   uploadMedia: 'Upload “{{path}}”',
   deleteMedia: 'Delete “{{path}}”',
+  openAuthoring: '{{message}}',
 } as const;
 
 const variableRegex = /\{\{([^}]+)\}\}/g;
@@ -36,19 +38,20 @@ const variableRegex = /\{\{([^}]+)\}\}/g;
 type Options<EF extends BaseField> = {
   slug?: string;
   path?: string;
-  collection?: Collection<EF>;
+  collection?: CollectionWithDefaults<EF>;
   authorLogin?: string;
   authorName?: string;
 };
 
 export function commitMessageFormatter<EF extends BaseField>(
   type: keyof typeof commitMessageTemplates,
-  config: Config<EF>,
+  config: ConfigWithDefaults<EF>,
   { slug, path, collection, authorLogin, authorName }: Options<EF>,
+  isOpenAuthoring?: boolean,
 ) {
   const templates = { ...commitMessageTemplates, ...(config.backend.commit_messages || {}) };
 
-  return templates[type].replace(variableRegex, (_, variable) => {
+  const commitMessage = templates[type].replace(variableRegex, (_, variable) => {
     switch (variable) {
       case 'slug':
         return slug || '';
@@ -67,6 +70,26 @@ export function commitMessageFormatter<EF extends BaseField>(
         return '';
     }
   });
+
+  if (!isOpenAuthoring) {
+    return commitMessage;
+  }
+
+  const message = templates.openAuthoring?.replace(variableRegex, (_, variable: string) => {
+    switch (variable) {
+      case 'message':
+        return commitMessage;
+      case 'author-login':
+        return authorLogin || '';
+      case 'author-name':
+        return authorName || '';
+      default:
+        console.warn(`Ignoring unknown variable “${variable}” in open authoring message template.`);
+        return '';
+    }
+  });
+
+  return message;
 }
 
 export function prepareSlug(slug: string) {
@@ -92,9 +115,10 @@ export function getProcessSegment(slugConfig?: Slug, ignoreValues?: string[]) {
 }
 
 export function slugFormatter<EF extends BaseField = UnknownField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   entryData: EntryData,
-  slugConfig?: Slug,
+  slugConfig: Slug | undefined,
+  fields: Field[] | undefined,
 ): string {
   if (!('fields' in collection)) {
     return '';
@@ -116,13 +140,20 @@ export function slugFormatter<EF extends BaseField = UnknownField>(
 
   const processSegment = getProcessSegment(slugConfig);
   const date = new Date();
-  const slug = compileStringTemplate(slugTemplate, date, identifier, entryData, processSegment);
+  const slug = compileStringTemplate(
+    slugTemplate,
+    date,
+    identifier,
+    entryData,
+    fields,
+    processSegment,
+  );
 
   if (!('path' in collection)) {
     return slug;
   } else {
     const pathTemplate = prepareSlug(collection.path as string);
-    return compileStringTemplate(pathTemplate, date, slug, entryData, (value: string) =>
+    return compileStringTemplate(pathTemplate, date, slug, entryData, fields, (value: string) =>
       value === slug ? value : processSegment(value),
     );
   }
@@ -131,13 +162,18 @@ export function slugFormatter<EF extends BaseField = UnknownField>(
 export function summaryFormatter<EF extends BaseField>(
   summaryTemplate: string,
   entry: Entry,
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   slugConfig?: Slug,
 ) {
-  const slug = slugFormatter(collection, entry.data, slugConfig);
+  const collectionFields = getFields(collection, entry.slug) as Field[];
+
+  const slug = slugFormatter(collection, entry.data, slugConfig, collectionFields);
 
   let entryData = entry.data;
-  const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
+
+  const dateFieldName = selectInferredField(collection, 'date');
+  const dateField = getField(collectionFields, dateFieldName);
+  const date = parseDateFromEntry(entry, dateFieldName, dateField) || null;
 
   entryData =
     addFileTemplateFields(entry.path, entryData, 'folder' in collection ? collection.folder : '') ??
@@ -150,13 +186,13 @@ export function summaryFormatter<EF extends BaseField>(
     entryData = set(entryData, COMMIT_DATE, entry.updatedOn);
   }
 
-  return compileStringTemplate(summaryTemplate, date, slug, entryData);
+  return compileStringTemplate(summaryTemplate, date, slug, entryData, collectionFields);
 }
 
 export function folderFormatter<EF extends BaseField>(
   folderTemplate: string,
   entry: Entry | null | undefined,
-  collection: Collection<EF> | undefined,
+  collection: CollectionWithDefaults<EF> | undefined,
   defaultFolder: string,
   folderKey: string,
   slugConfig?: Slug,
@@ -172,9 +208,22 @@ export function folderFormatter<EF extends BaseField>(
     'folder' in collection ? collection.folder : '',
   );
 
-  const date = parseDateFromEntry(entry, selectInferredField(collection, 'date')) || null;
+  const collectionFields = getFields(collection, entry.slug) as Field[];
+
+  const dateFieldName = selectInferredField(collection, 'date');
+  const dateField = getField(collectionFields, dateFieldName);
+  const date = parseDateFromEntry(entry, dateFieldName, dateField) || null;
 
   const processSegment = getProcessSegment(slugConfig, [defaultFolder, fields?.dirname as string]);
 
-  return compileStringTemplate(folderTemplate, date, entry.slug, fields, processSegment);
+  const mediaFolder = compileStringTemplate(
+    folderTemplate,
+    date,
+    entry.slug,
+    fields,
+    collectionFields,
+    processSegment,
+  );
+
+  return mediaFolder;
 }

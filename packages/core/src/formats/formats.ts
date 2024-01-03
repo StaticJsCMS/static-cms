@@ -3,7 +3,7 @@ import TomlFormatter from './TomlFormatter';
 import YamlFormatter from './YamlFormatter';
 import { FrontmatterInfer, frontmatterJSON, frontmatterTOML, frontmatterYAML } from './frontmatter';
 
-import type { BaseField, Collection, Entry, Format } from '../interface';
+import type { BaseField, CollectionWithDefaults, Entry, Format } from '../interface';
 import type FileFormatter from './FileFormatter';
 import type { Delimiter } from './frontmatter';
 
@@ -47,7 +47,7 @@ function formatByName(name: Format, customDelimiter?: Delimiter): FileFormatter 
 }
 
 export function resolveFormat<EF extends BaseField>(
-  collection: Collection<EF>,
+  collection: CollectionWithDefaults<EF>,
   entry: Entry,
 ): FileFormatter | undefined {
   // Check for custom delimiter

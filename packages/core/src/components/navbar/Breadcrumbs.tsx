@@ -1,11 +1,11 @@
 import { ArrowBack as ArrowBackIcon } from '@styled-icons/material/ArrowBack';
 import React, { Fragment, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { Breadcrumb } from '@staticcms/core/interface';
+import type { Breadcrumb } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './Breadcrumbs.css';
@@ -29,6 +29,9 @@ export interface BreadcrumbsProps {
 }
 
 const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) => {
+  const [searchParams] = useSearchParams();
+  const backTo = searchParams.get('backTo') as string | undefined;
+
   const finalNonEditorBreadcrumb = useMemo(() => {
     const nonEditorBreadcrumbs = breadcrumbs.filter(b => !b.editor);
     if (nonEditorBreadcrumbs.length === 0) {
@@ -49,6 +52,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
                 {breadcrumb.to ? (
                   <Link
                     key={`link-${index}`}
+                    data-testid="breadcrumb-link"
                     className={classNames(
                       classes['breadcrumb-link'],
                       index + 1 === breadcrumbs.length && classes['breadcrumb-truncated'],
@@ -74,11 +78,12 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ breadcrumbs, inEditor = false }) =>
         </div>
       </div>
       {finalNonEditorBreadcrumb ? (
-        finalNonEditorBreadcrumb.to ? (
+        finalNonEditorBreadcrumb.to || backTo ? (
           <Link
             key="final-non-editor-breadcrumb-link"
             className={classes['mobile-current-breadcrumb-link']}
-            to={finalNonEditorBreadcrumb.to}
+            data-testid="breadcrumb-link"
+            to={backTo ? backTo : finalNonEditorBreadcrumb.to!}
           >
             {inEditor ? <ArrowBackIcon className={classes['mobile-backlink']} /> : null}
             {finalNonEditorBreadcrumb.name}

@@ -2,14 +2,14 @@ import React from 'react';
 
 import cardClasses from './Card.classes';
 
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 interface CardContentProps {
   children: ReactNode;
 }
 
-const CardContent = ({ children }: CardContentProps) => {
-  return <p className={cardClasses.content}>{children}</p>;
+const CardContent: FC<CardContentProps> = ({ children }) => {
+  return <div className={cardClasses.content}>{children}</div>;
 };
 
 export default CardContent;

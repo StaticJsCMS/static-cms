@@ -3,7 +3,7 @@ import React from 'react';
 import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { ListField, ValueOrNestedValue, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { ListField, ValueOrNestedValue, WidgetPreviewProps } from '@staticcms/core';
 import type { FC, ReactNode } from 'react';
 
 const classes = generateClassNames('WidgetListPreview', ['root']);
@@ -55,9 +55,7 @@ const ListPreview: FC<WidgetPreviewProps<ValueOrNestedValue[], ListField>> = ({ 
         !['object', 'list'].includes(field.fields[0].widget)) ||
       (!field.fields && !field.types) ? (
         <ul style={{ marginTop: 0 }}>
-          {value?.map((item, index) => (
-            <li key={index}>{String(item)}</li>
-          ))}
+          {value?.map((item, index) => <li key={index}>{String(item)}</li>)}
         </ul>
       ) : (
         renderNestedList(value)

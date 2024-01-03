@@ -1,6 +1,7 @@
 import { cloneElement, createElement, isValidElement } from 'react';
 
-import type { WidgetPreviewComponent, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { WidgetPreviewComponent, WidgetPreviewProps } from '@staticcms/core';
+import type { FC } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface PreviewHOCProps extends Omit<WidgetPreviewProps, 'widgetFor'> {
@@ -8,7 +9,7 @@ interface PreviewHOCProps extends Omit<WidgetPreviewProps, 'widgetFor'> {
   previewComponent: WidgetPreviewComponent;
 }
 
-const PreviewHOC = ({ previewComponent, ...props }: PreviewHOCProps) => {
+const PreviewHOC: FC<PreviewHOCProps> = ({ previewComponent, ...props }) => {
   if (!previewComponent) {
     return null;
   } else if (isValidElement(previewComponent)) {

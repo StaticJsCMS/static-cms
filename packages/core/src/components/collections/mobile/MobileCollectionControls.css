@@ -14,6 +14,8 @@
 }
 
 .CMS_MobileCollectionControls_content {
+  background: var(--background-main);
+
   @apply px-5
     py-4
     flex
@@ -21,17 +23,10 @@
     gap-6
     h-full
     w-full
-    overflow-y-auto
-    bg-white
-    dark:bg-slate-800;
+    overflow-y-auto;
 }
 
 .CMS_MobileCollectionControls_toggle {
   @apply flex
     lg:!hidden;
-}
-
-.CMS_MobileCollectionControls_toggle-icon {
-  @apply w-5
-    h-5;
 }

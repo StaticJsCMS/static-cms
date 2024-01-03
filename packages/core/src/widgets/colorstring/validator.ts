@@ -2,7 +2,7 @@ import validateColor from 'validate-color';
 
 import ValidationErrorTypes from '@staticcms/core/constants/validationErrorTypes';
 
-import type { ColorField, FieldValidationMethod } from '@staticcms/core/interface';
+import type { ColorField, FieldValidationMethod } from '@staticcms/core';
 
 const validator: FieldValidationMethod<string, ColorField> = ({ value, t }) => {
   if (typeof value !== 'string') {

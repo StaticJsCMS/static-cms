@@ -6,7 +6,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { buttonClasses } from '../common/button/useButtonClassNames';
 
-import type { MouseEventHandler, ReactNode } from 'react';
+import type { FC, MouseEventHandler, ReactNode } from 'react';
 
 import './NavLink.css';
 
@@ -16,7 +16,6 @@ export const classes = generateClassNames('NavLink', [
   'external',
   'external-content',
   'external-icon',
-  'active',
   'content',
   'icon',
   'label',
@@ -26,6 +25,7 @@ export interface BaseNavLinkProps {
   icon?: ReactNode;
   children: ReactNode;
   className?: string;
+  'data-testid'?: string;
   onClick?: MouseEventHandler;
 }
 
@@ -39,9 +39,14 @@ export interface NavInternalLinkProps extends BaseNavLinkProps {
 
 export type NavLinkProps = NavExternalLinkProps | NavInternalLinkProps;
 
-const linkClassNames = `${buttonClasses.root} ${buttonClasses['text-primary']} ${classes.link}`;
-
-const NavLink = ({ icon, children, className, onClick, ...otherProps }: NavLinkProps) => {
+const NavLink: FC<NavLinkProps> = ({
+  icon,
+  children,
+  className,
+  'data-testid': dataTestId,
+  onClick,
+  ...otherProps
+}) => {
   const content = useMemo(
     () => (
       <div className={classes.content}>
@@ -61,7 +66,8 @@ const NavLink = ({ icon, children, className, onClick, ...otherProps }: NavLinkP
           href={otherProps.href}
           target="_blank"
           rel="noreferrer"
-          className={linkClassNames}
+          className={classNames(buttonClasses.root, buttonClasses['text-secondary'], classes.link)}
+          data-testid={dataTestId}
           onClick={onClick}
         >
           <div className={classes.external}>
@@ -77,7 +83,14 @@ const NavLink = ({ icon, children, className, onClick, ...otherProps }: NavLinkP
     <li className={classNames(classes.root, className)}>
       <BaseNavLink
         to={otherProps.to}
-        className={classNames(linkClassNames, pathname === otherProps.to && classes.active)}
+        className={classNames(
+          buttonClasses.root,
+          pathname === otherProps.to
+            ? buttonClasses['contained-primary']
+            : buttonClasses['text-secondary'],
+          classes.link,
+        )}
+        data-testid={dataTestId}
         onClick={onClick}
       >
         {content}

@@ -7,16 +7,21 @@ import useDebounce from './useDebounce';
 
 import type {
   BaseField,
-  Collection,
+  CollectionWithDefaults,
   Entry,
   MediaField,
+  ObjectValue,
   UnknownField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 
-export function useGetMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
-  collection?: Collection<EF>,
+export function useGetMediaAsset<
+  T extends MediaField,
+  EF extends BaseField = UnknownField,
+  D = ObjectValue,
+>(
+  collection?: CollectionWithDefaults<EF>,
   field?: T,
-  entry?: Entry,
+  entry?: Entry<D>,
   currentFolder?: string,
   isDirectory = false,
 ): (url: string | undefined | null) => Promise<string | undefined | null> {
@@ -30,21 +35,29 @@ export function useGetMediaAsset<T extends MediaField, EF extends BaseField = Un
         return url;
       }
 
-      const asset = await dispatch(getAsset<T, EF>(collection, entry, url, field, currentFolder));
+      const asset = await dispatch(
+        getAsset<T, EF>(collection, entry as Entry, url, field, currentFolder),
+      );
 
       if (asset !== emptyAsset) {
         return asset?.toString() ?? '';
       }
+
+      return '';
     },
     [collection, currentFolder, dispatch, entry, field, isDirectory],
   );
 }
 
-export default function useMediaAsset<T extends MediaField, EF extends BaseField = UnknownField>(
+export default function useMediaAsset<
+  T extends MediaField,
+  EF extends BaseField = UnknownField,
+  D = ObjectValue,
+>(
   url: string | undefined | null,
-  collection?: Collection<EF>,
+  collection?: CollectionWithDefaults<EF>,
   field?: T,
-  entry?: Entry,
+  entry?: Entry<D>,
   currentFolder?: string,
   isDirectory?: boolean,
 ): string {
@@ -62,16 +75,23 @@ export default function useMediaAsset<T extends MediaField, EF extends BaseField
       return;
     }
 
+    let alive = true;
+
     const fetchMedia = async () => {
       const asset = await dispatch(
-        getAsset<T, EF>(collection, entry, debouncedUrl, field, currentFolder),
+        getAsset<T, EF>(collection, entry as Entry, debouncedUrl, field, currentFolder),
       );
-      if (asset !== emptyAsset) {
+
+      if (alive) {
         setAssetSource(asset?.toString() ?? '');
       }
     };
 
     fetchMedia();
+
+    return () => {
+      alive = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedUrl]);
 

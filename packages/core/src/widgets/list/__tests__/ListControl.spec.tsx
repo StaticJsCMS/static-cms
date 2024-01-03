@@ -4,14 +4,14 @@
 import { DndContext } from '@dnd-kit/core';
 import '@testing-library/jest-dom';
 import { act, getByTestId, queryByTestId, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import React from 'react';
 
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import ListControl from '../ListControl';
 
 import type { DragEndEvent } from '@dnd-kit/core';
-import type { ListField, ValueOrNestedValue } from '@staticcms/core/interface';
+import type { ListField, ValueOrNestedValue } from '@staticcms/core';
 
 jest.unmock('uuid');
 

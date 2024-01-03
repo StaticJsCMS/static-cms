@@ -2,14 +2,14 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { act, waitFor } from '@testing-library/react';
 
 import { mockSelectField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import SelectControl from '../SelectControl';
 
-import type { SelectField } from '@staticcms/core/interface';
+import type { SelectField } from '@staticcms/core';
 
 describe(SelectControl.name, () => {
   const renderControl = createWidgetControlHarness(SelectControl, { field: mockSelectField });
@@ -33,7 +33,7 @@ describe(SelectControl.name, () => {
     });
 
     await act(async () => {
-      const field = getByTestId('field');
+      const field = getByTestId('field-Mock Widget');
       await userEvent.click(field);
     });
 
@@ -43,7 +43,7 @@ describe(SelectControl.name, () => {
     });
 
     await act(async () => {
-      const field = getByTestId('field');
+      const field = getByTestId('field-Mock Widget');
       await userEvent.click(field);
     });
 

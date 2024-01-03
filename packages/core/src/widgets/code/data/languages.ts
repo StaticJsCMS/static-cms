@@ -1,4 +1,4 @@
-import type { ProcessedCodeLanguage } from '@staticcms/core/interface';
+import type { ProcessedCodeLanguage } from '@staticcms/core';
 
 const languages: ProcessedCodeLanguage[] = [
   {

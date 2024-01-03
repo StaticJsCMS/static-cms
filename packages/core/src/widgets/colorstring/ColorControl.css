@@ -17,7 +17,8 @@
 }
 
 .CMS_WidgetColor_content {
-  @apply flex
+  @apply relative
+    flex
     items-center
     pt-2
     px-3
@@ -38,7 +39,7 @@
 
 .CMS_WidgetColor_color-picker-wrapper {
   @apply absolute
-    bottom-0;
+    -bottom-0.5;
 }
 
 .CMS_WidgetColor_color-picker-backdrop {
@@ -50,16 +51,11 @@
 .CMS_WidgetColor_color-picker {
   @apply absolute
     z-20
-    -top-3;
+    top-0;
 }
 
 .CMS_WidgetColor_input {
 }
 
 .CMS_WidgetColor_clear-button {
-}
-
-.CMS_WidgetColor_clear-button-icon {
-  @apply w-5
-    h-5;
 }

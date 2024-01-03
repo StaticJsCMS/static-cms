@@ -5,7 +5,7 @@ import { LIST_TYPES, MarkNodeTypes, NodeTypes } from './ast-types';
 import { autoLinkToSlate } from './autoLinkUrls';
 import { processShortcodeConfigsToSlate } from './processShortcodeConfig';
 
-import type { ShortcodeConfig } from '@staticcms/core/interface';
+import type { ShortcodeConfig } from '@staticcms/core';
 import type { MdBlockElement } from '@staticcms/markdown';
 import type {
   AlignMdxMdastNodeAttribute,

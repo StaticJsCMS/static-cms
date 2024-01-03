@@ -27,7 +27,7 @@ import type {
   ObjectValue,
   ValueOrNestedValue,
   WidgetControlProps,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 
 import './ListControl.css';
@@ -361,10 +361,12 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
           {types && types.length ? (
             <Menu
               label={t('editor.editorWidgets.list.addType', { item: label })}
+              color="secondary"
               variant="outlined"
               buttonClassName={widgetListClasses['add-types-button']}
               data-testid="list-type-add"
               disabled={disabled}
+              aria-label="add type options dropdown"
             >
               <MenuGroup>
                 {types.map((type, idx) =>
@@ -382,6 +384,7 @@ const ListControl: FC<WidgetControlProps<ValueOrNestedValue[], ListField>> = pro
             </Menu>
           ) : (
             <Button
+              color="secondary"
               variant="outlined"
               onClick={handleAdd}
               className={widgetListClasses['add-button']}

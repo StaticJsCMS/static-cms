@@ -19,6 +19,7 @@ const classes = generateClassNames('WidgetMarkdown_ToolbarButton', [
 ]);
 
 export interface ToolbarButtonProps {
+  id: string;
   label?: string;
   tooltip: string;
   active?: boolean;
@@ -31,6 +32,7 @@ export interface ToolbarButtonProps {
 }
 
 const ToolbarButton: FC<ToolbarButtonProps> = ({
+  id,
   icon: Icon,
   tooltip,
   label,
@@ -79,9 +81,10 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({
     <Button
       key="button"
       aria-label={label ?? tooltip}
+      color="secondary"
       title={label ?? tooltip}
       variant="text"
-      data-testid={`toolbar-button-${label ?? tooltip}`.replace(' ', '-').toLowerCase()}
+      data-testid={`toolbar-button-${id}`}
       onClick={handleOnClick}
       className={classNames(
         classes.root,

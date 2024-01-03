@@ -2,14 +2,14 @@ import React, { useCallback, useEffect } from 'react';
 
 import Login from '@staticcms/core/components/login/Login';
 
-import type { AuthenticationPageProps, TranslatedProps } from '@staticcms/core/interface';
-import type { MouseEvent } from 'react';
+import type { AuthenticationPageProps } from '@staticcms/core';
+import type { FC, MouseEvent } from 'react';
 
-const AuthenticationPage = ({
+const AuthenticationPage: FC<AuthenticationPageProps> = ({
   inProgress = false,
   config,
   onLogin,
-}: TranslatedProps<AuthenticationPageProps>) => {
+}) => {
   useEffect(() => {
     /**
      * Allow login screen to be skipped for demo purposes.

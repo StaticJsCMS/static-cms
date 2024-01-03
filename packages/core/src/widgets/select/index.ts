@@ -3,7 +3,7 @@ import controlComponent from './SelectControl';
 import previewComponent from './SelectPreview';
 import validator from './validator';
 
-import type { SelectField, WidgetParam } from '@staticcms/core/interface';
+import type { SelectField, WidgetParam } from '@staticcms/core';
 
 const SelectWidget = (): WidgetParam<string | number | (string | number)[], SelectField> => {
   return {

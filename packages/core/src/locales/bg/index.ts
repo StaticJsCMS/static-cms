@@ -22,10 +22,12 @@ const bg: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Съдържание',
+      workflow: 'Работен процес',
       media: 'Мултимедийни файлове',
       quickAdd: 'Бързо добавяне',
     },
     app: {
+      loading: undefined, // English translation: 'Loading...'
       errorHeader: 'Грешка при зареждането на конфигурацията на CMS',
       configErrors: 'Грешки в конфигурацията',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -95,8 +97,8 @@ const bg: LocalePhrasesRoot = {
         max: '%{fieldLabel} трябва да бъде %{maxValue} или по-малко.',
         rangeCount: '%{fieldLabel} трябва да има между %{minCount} и %{maxCount} елемент(и).',
         rangeCountExact: '%{fieldLabel} трябва да има точно %{count} елемент(и).',
-        rangeMin: undefined, // English translation: '%{fieldLabel} must have at least %{minCount} item(s).'
-        rangeMax: undefined, // English translation: '%{fieldLabel} must have %{maxCount} or less item(s).'
+        rangeMin: '%{fieldLabel} трябва да бъде поне %{minCount} елемент(и).',
+        rangeMax: '%{fieldLabel} трябва да бъде %{maxCount} или по-малко елемент(и).',
         invalidPath: "'%{path}' не е валиден път",
         pathExists: "Пътят '%{path}' вече съществува",
         invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
@@ -104,15 +106,36 @@ const bg: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Писане на %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Наистина ли искате да напуснете тази страница?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'Имате незапазени промени, моля, запазете преди актуализиране на състоянието.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody:
+        'Моля, актуализирайте състоянието на „Готово“, преди да публикувате',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        'Имате незапазени промени, моля, запазете преди публикуване.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Наистина ли искате да публикувате този запис?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'Наистина ли искате да прекратите публикуването на този запис?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Наистина ли искате да изтриете този публикуван запис, както и незаписаните промени от текущата сесия?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Наистина ли искате да изтриете този публикуван запис?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Това ще изтрие всички непубликувани промени в този запис, както и незаписаните ви промени от текущата сесия. Все още ли искате да изтриете?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Всички непубликувани промени в този запис ще бъдат изтрити. Все още ли искате да изтриете?',
       loadingEntry: 'Зареждане на запис...',
     },
     editorInterface: {
@@ -123,13 +146,35 @@ const bg: LocalePhrasesRoot = {
       toggleScrollSync: 'Синхронизирай превъртане',
     },
     editorToolbar: {
+      publishing: 'Публикуване...',
       publish: 'Публикувай',
       published: 'Публикуван',
+      unpublish: 'Непубликувай',
       duplicate: 'Дублирай',
+      unpublishing: 'Непубликуване...',
       publishAndCreateNew: 'Публикувай и създай нов',
       publishAndDuplicate: 'Публикувай и дублирай',
+      deleteUnpublishedChanges: 'Изтриване на непубликувани промени',
+      deleteUnpublishedEntry: 'Изтрий непубликувани записи',
+      deletePublishedEntry: 'Изтрий публикувани записи',
       deleteEntry: 'Изтрий запис',
+      saving: 'Запазване...',
+      save: 'Запази',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: 'Изтриване...',
+      updating: 'Актуализиране...',
+      status: 'Cъстояние: %{status}',
+      backCollection: 'Записване в %{collectionLabel} колекция',
+      unsavedChanges: 'Незапазени Промени',
+      changesSaved: 'Запазени промени',
+      draft: 'Чернова',
+      inReview: 'В ревю',
+      ready: 'Готово',
       publishNow: 'Публикувай сега',
+      deployPreviewPendingButtonLabel: 'Проверете  визуализацията',
+      deployPreviewButtonLabel: 'Визуализация',
+      deployButtonLabel: 'Изглед',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +183,35 @@ const bg: LocalePhrasesRoot = {
       markdown: {
         bold: 'Удебелен',
         italic: 'Курсив',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'Код',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Връзка',
-        linkPrompt: 'Моля, въведете URL на връзката',
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Заглавия',
         quote: 'Цитат',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'Маркиран Списък',
         numberedList: 'Номериран Списък',
         addComponent: 'Добави Компонент',
         richText: 'Форматиране на текст',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Избери изображение',
@@ -212,6 +275,10 @@ const bg: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -233,10 +300,10 @@ const bg: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Зареждане...',
       noResults: 'Няма резултати.',
       noAssetsFound: 'Няма намерени ресурси.',
       noImagesFound: 'Няма намерени изображения.',
+      private: 'Частен ',
       images: 'Изображения',
       mediaAssets: 'Медийни ресурси',
       search: 'Търсене...',
@@ -253,6 +320,7 @@ const bg: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -263,6 +331,7 @@ const bg: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Обратно към сайта',
@@ -284,11 +353,12 @@ const bg: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Изход',
     },
     toast: {
       onFailToLoadEntries: 'Неуспешно зареждане на записа: %{details}',
+      onFailToLoadDeployPreview: 'Неуспешно зареждане на визуализация: %{details}',
       onFailToPersist: 'Неуспешно запазване на записа: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Неуспешно изтриване на записа: %{details}',
@@ -297,12 +367,52 @@ const bg: LocalePhrasesRoot = {
       missingRequiredField:
         'Извинете, пропуснахте задължително поле. Моля, попълнете преди запазване.',
       entrySaved: 'Записът е запазен',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Записът е публикуван',
+      entryUnpublished: 'Записът е непубликуван',
       onFailToPublishEntry: 'Неуспешно публикуване на запис: %{details}',
+      onFailToUnpublishEntry: 'Неуспешно премахване на публикацията на записа: %{details}',
       entryUpdated: 'Статусът на записа е актуализиран',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Непубликуваните промени са изтрити',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Излезли сте. Моля, запазете всички данни и влезте отново',
       onBackendDown: 'Има прекъсване в работата на бекенда. Виж детайлите %{details}',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Зареждане на редакционни записи',
+      workflowHeading: 'Редакционен работен процес',
+      newPost: 'Нова публикация',
+      description:
+        'Броят на записите, които очакват проверка -% {smart_count}, готови за публикуване -% {readyCount}. |||| Броят на записите, които очакват проверка -% {smart_count}, готови за публикуване -% {readyCount}. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date}, %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: '%{author}',
+      deleteChanges: 'Изтриване на промените',
+      deleteNewEntry: 'Изтриване на нов запис',
+      publishChanges: 'Публикуване на промени',
+      publishNewEntry: 'Публикуване на нов запис',
+    },
+    workflowList: {
+      onDeleteEntry: 'Наистина ли искате да изтриете този запис?',
+      onPublishingNotReadyEntry:
+        'Могат да се публикуват само елементи със статус "Готов". Плъзенете картата в колоната "Готов" за да активирате публикуването.',
+      onPublishEntry: 'Наистина ли искате да публикувате този запис?',
+      draft: 'Чернови',
+      pending_review: 'В Ревю',
+      pending_publish: 'Готов',
+      currentEntries: '%{smart_count} запис |||| %{smart_count} записи',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'undefined'
+      forkRepo: undefined, // English translation: 'undefined'
+      markReadyForReview: undefined, // English translation: 'undefined'
     },
   },
 };

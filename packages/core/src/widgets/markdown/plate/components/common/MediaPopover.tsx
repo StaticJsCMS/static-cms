@@ -9,11 +9,11 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   FileOrImageField,
   MarkdownField,
   MediaPath,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { MouseEvent } from 'react';
 
 import './MediaPopover.css';
@@ -30,7 +30,7 @@ export interface MediaPopoverProps<T extends FileOrImageField | MarkdownField> {
   url: string;
   text?: string;
   forImage?: boolean;
-  collection: Collection<T>;
+  collection: CollectionWithDefaults<T>;
   field: T;
   onMediaToggle?: (open: boolean) => void;
   onMediaChange: (newValue: MediaPath<string>) => void;
@@ -101,16 +101,16 @@ const MediaPopover = <T extends FileOrImageField | MarkdownField>({
       className={classes.root}
     >
       <div key="edit-content" contentEditable={false} className={classes.content}>
-        <Button onClick={handleOpenMediaLibrary} variant="text" size="small">
+        <Button onClick={handleOpenMediaLibrary} color="secondary" variant="text" size="small">
           {forImage ? 'Edit Image' : 'Edit Link'}
         </Button>
         <div className={classes.divider} />
         {!forImage ? (
-          <Button href={url} variant="text" size="small" onClick={noop}>
+          <Button href={url} color="secondary" variant="text" size="small" onClick={noop}>
             <OpenInNewIcon className={classes.icon} title="Open In New Tab" />
           </Button>
         ) : null}
-        <Button onClick={onRemove} variant="text" size="small">
+        <Button onClick={onRemove} color="secondary" variant="text" size="small">
           <DeleteForeverIcon className={classes.icon} title="Delete" />
         </Button>
       </div>

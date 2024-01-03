@@ -1,30 +1,23 @@
+import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import formatDate from 'date-fns/format';
 import parse from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';
-import TextField from '@staticcms/core/components/common/text-field/TextField';
 import classNames from '@staticcms/core/lib/util/classNames.util';
-import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import NowButton from './components/NowButton';
-import {
-  DEFAULT_DATETIME_FORMAT,
-  DEFAULT_DATE_FORMAT,
-  DEFAULT_TIMEZONE_FORMAT,
-  DEFAULT_TIME_FORMAT,
-} from './constants';
+import { DEFAULT_DATETIME_FORMAT } from './constants';
+import { useDatetimeFormats } from './datetime.util';
 import { localToUTC } from './utc.util';
 
-import type { TextFieldProps as MuiTextFieldProps } from '@mui/material/TextField';
-import type { TextFieldProps } from '@staticcms/core/components/common/text-field/TextField';
-import type { DateTimeField, WidgetControlProps } from '@staticcms/core/interface';
+import type { DateTimeField, WidgetControlProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 import './DateTimeControl.css';
@@ -36,27 +29,10 @@ export const classes = generateClassNames('WidgetDateTime', [
   'disabled',
   'for-single-list',
   'wrapper',
-  'date-input',
-  'time-input',
-  'datetime-input',
+  'inputs',
+  'input-wrapper',
+  'input',
 ]);
-
-function convertMuiTextFieldProps({
-  inputProps,
-  disabled,
-  onClick,
-}: MuiTextFieldProps): TextFieldProps {
-  const value: string = inputProps?.value ?? '';
-
-  return {
-    type: 'text',
-    value,
-    disabled,
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onChange: () => {},
-    onClick,
-  };
-}
 
 const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
   field,
@@ -67,7 +43,6 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
   errors,
   hasErrors,
   forSingleList,
-  t,
   onChange,
 }) => {
   const ref = useRef<HTMLInputElement | null>(null);
@@ -80,72 +55,16 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
     setOpen(false);
   }, []);
 
-  const timezoneExtra = useMemo(
-    () => (field.picker_utc ? '' : DEFAULT_TIMEZONE_FORMAT),
-    [field.picker_utc],
-  );
-
-  const { format, dateFormat, timeFormat } = useMemo(() => {
-    // dateFormat and timeFormat are strictly for modifying input field with the date/time pickers
-    const dateFormat: string | boolean = field.date_format ?? true;
-    // show time-picker? false hides it, true shows it using default format
-    const timeFormat: string | boolean = field.time_format ?? true;
-
-    let finalFormat = field.format;
-    if (timeFormat === false) {
-      finalFormat = field.format ?? DEFAULT_DATE_FORMAT;
-    } else if (dateFormat === false) {
-      finalFormat = field.format ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
-    } else {
-      finalFormat = field.format ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
-    }
-
-    return {
-      format: finalFormat,
-      dateFormat,
-      timeFormat,
-    };
-  }, [field.date_format, field.format, field.time_format, timezoneExtra]);
-
-  const inputFormat = useMemo(() => {
-    if (typeof dateFormat === 'string' || typeof timeFormat === 'string') {
-      const formatParts: string[] = [];
-      if (typeof dateFormat === 'string' && isNotEmpty(dateFormat)) {
-        formatParts.push(dateFormat);
-      } else if (dateFormat !== false) {
-        formatParts.push(DEFAULT_DATE_FORMAT);
-      }
-
-      if (typeof timeFormat === 'string' && isNotEmpty(timeFormat)) {
-        formatParts.push(timeFormat);
-      } else if (timeFormat !== false) {
-        formatParts.push(`${DEFAULT_TIME_FORMAT}${timezoneExtra}`);
-      }
-
-      if (formatParts.length > 0) {
-        return formatParts.join(' ');
-      }
-    }
-
-    if (timeFormat === false) {
-      return format ?? DEFAULT_DATE_FORMAT;
-    }
-
-    if (dateFormat === false) {
-      return format ?? `${DEFAULT_TIME_FORMAT}${timezoneExtra}`;
-    }
-
-    return format ?? `${DEFAULT_DATETIME_FORMAT}${timezoneExtra}`;
-  }, [dateFormat, format, timeFormat, timezoneExtra]);
+  const { storageFormat, dateFormat, timeFormat, displayFormat } = useDatetimeFormats(field);
 
   const defaultValue = useMemo(() => {
     const today = field.picker_utc ? localToUTC(new Date()) : new Date();
     return field.default === undefined
-      ? format
-        ? formatDate(today, format)
+      ? storageFormat
+        ? formatDate(today, storageFormat)
         : formatDate(today, DEFAULT_DATETIME_FORMAT)
       : field.default;
-  }, [field.default, field.picker_utc, format]);
+  }, [field.default, field.picker_utc, storageFormat]);
 
   const [internalRawValue, setInternalValue] = useState(value);
   const internalValue = useMemo(
@@ -163,12 +82,12 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
       return valueToParse;
     }
 
-    return format ? parse(valueToParse, format, new Date()) : parseISO(valueToParse);
-  }, [defaultValue, format, internalValue]);
+    return storageFormat ? parse(valueToParse, storageFormat, new Date()) : parseISO(valueToParse);
+  }, [defaultValue, storageFormat, internalValue]);
 
   const handleChange = useCallback(
     (datetime: Date | null) => {
-      if (datetime === null) {
+      if (datetime === null || isNaN(datetime.getTime())) {
         setInternalValue(defaultValue);
         onChange(defaultValue);
         return;
@@ -176,121 +95,96 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
 
       const adjustedValue = field.picker_utc ? localToUTC(datetime) : datetime;
 
-      const formattedValue = formatDate(adjustedValue, format);
+      const formattedValue = formatDate(adjustedValue, storageFormat);
       setInternalValue(formattedValue);
       onChange(formattedValue);
     },
-    [defaultValue, field.picker_utc, format, onChange],
+    [defaultValue, field.picker_utc, storageFormat, onChange],
   );
+
+  const inputRef = useRef<HTMLInputElement>();
+  const rootRef = useForkRef(ref, inputRef);
 
   const dateTimePicker = useMemo(() => {
     if (dateFormat && !timeFormat) {
       return (
-        <MobileDatePicker
-          key="mobile-date-picker"
-          inputFormat={inputFormat}
-          label={label}
+        <DatePicker
+          key="date-picker"
+          format={displayFormat}
           value={dateValue}
           disabled={disabled}
           onChange={handleChange}
           onOpen={handleOpen}
           onClose={handleClose}
-          renderInput={props => (
-            <>
-              <TextField
-                key="mobile-date-input"
-                data-testid="date-input"
-                {...convertMuiTextFieldProps(props)}
-                inputRef={ref}
-                cursor="pointer"
-                inputClassName={classes['date-input']}
-              />
-              <NowButton
-                key="mobile-date-now"
-                t={t}
-                handleChange={v => handleChange(v)}
-                disabled={disabled}
-              />
-            </>
-          )}
+          className={classes['input-wrapper']}
+          inputRef={rootRef}
+          slotProps={{
+            textField: {
+              inputProps: {
+                'data-testid': 'date-input',
+                className: classes.input,
+              },
+            },
+          }}
         />
       );
     }
 
     if (!dateFormat && timeFormat) {
       return (
-        <MobileTimePicker
+        <TimePicker
           key="time-picker"
-          label={label}
-          inputFormat={inputFormat}
+          format={displayFormat}
           value={dateValue}
           disabled={disabled}
           onChange={handleChange}
           onOpen={handleOpen}
           onClose={handleClose}
-          renderInput={props => (
-            <>
-              <TextField
-                key="mobile-time-input"
-                data-testid="time-input"
-                {...convertMuiTextFieldProps(props)}
-                inputRef={ref}
-                cursor="pointer"
-                inputClassName={classes['time-input']}
-              />
-              <NowButton
-                key="mobile-date-now"
-                t={t}
-                handleChange={v => handleChange(v)}
-                disabled={disabled}
-              />
-            </>
-          )}
+          className={classes['input-wrapper']}
+          inputRef={rootRef}
+          slotProps={{
+            textField: {
+              inputProps: {
+                'data-testid': 'time-input',
+                className: classes.input,
+              },
+            },
+          }}
         />
       );
     }
 
     return (
-      <MobileDateTimePicker
-        key="mobile-date-time-picker"
-        inputFormat={inputFormat}
-        label={label}
+      <DateTimePicker
+        key="date-time-picker"
+        format={displayFormat}
         value={dateValue}
         disabled={disabled}
         onChange={handleChange}
         onOpen={handleOpen}
         onClose={handleClose}
-        renderInput={props => (
-          <>
-            <TextField
-              key="mobile-date-time-input"
-              data-testid="date-time-input"
-              {...convertMuiTextFieldProps(props)}
-              inputRef={ref}
-              cursor="pointer"
-              inputClassName={classes['datetime-input']}
-            />
-            <NowButton
-              key="mobile-date-now"
-              t={t}
-              handleChange={v => handleChange(v)}
-              disabled={disabled}
-            />
-          </>
-        )}
+        className={classes['input-wrapper']}
+        inputRef={rootRef}
+        slotProps={{
+          textField: {
+            inputProps: {
+              'data-testid': 'date-time-input',
+              className: classes.input,
+            },
+          },
+        }}
       />
     );
   }, [
     dateFormat,
-    dateValue,
-    handleChange,
-    handleClose,
-    handleOpen,
-    inputFormat,
-    disabled,
-    label,
-    t,
     timeFormat,
+    displayFormat,
+    dateValue,
+    disabled,
+    handleChange,
+    handleOpen,
+    handleClose,
+    rootRef,
   ]);
 
   return (
@@ -300,7 +194,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
       errors={errors}
       hint={field.hint}
       forSingleList={forSingleList}
-      cursor="pointer"
+      cursor="text"
       disabled={disabled}
       rootClassName={classNames(
         classes.root,
@@ -311,9 +205,17 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
       )}
       wrapperClassName={classes.wrapper}
     >
-      <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
-        {dateTimePicker}
-      </LocalizationProvider>
+      <div className={classes['inputs']}>
+        <LocalizationProvider key="localization-provider" dateAdapter={AdapterDateFns}>
+          {dateTimePicker}
+        </LocalizationProvider>
+        <NowButton
+          key="date-now"
+          field={field}
+          handleChange={v => handleChange(v)}
+          disabled={disabled}
+        />
+      </div>
     </Field>
   );
 };

@@ -15,7 +15,7 @@ import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import MediaPopover from '../../common/MediaPopover';
 
-import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, MarkdownField, MediaPath } from '@staticcms/core';
 import type { MdLinkElement, MdValue } from '@staticcms/markdown';
 import type { PlateRenderElementProps, TText } from '@udecode/plate';
 import type { FC, MouseEvent } from 'react';
@@ -25,7 +25,7 @@ import './LinkElement.css';
 const classes = generateClassNames('WidgetMarkdown_Link', ['root']);
 
 export interface WithLinkElementProps {
-  collection: Collection<MarkdownField>;
+  collection: CollectionWithDefaults<MarkdownField>;
   field: MarkdownField;
 }
 

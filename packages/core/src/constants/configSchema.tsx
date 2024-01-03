@@ -39,7 +39,7 @@ const i18n = {
       items: localeType,
       uniqueItems: true,
     },
-    defaultLocale: localeType,
+    default_locale: localeType,
   },
 };
 
@@ -89,6 +89,90 @@ const filterRules = {
   ],
 };
 
+const themeColor = (required: boolean) => ({
+  type: 'object',
+  properties: {
+    main: { type: 'string' },
+    light: { type: 'string' },
+    dark: { type: 'string' },
+    contrastColor: { type: 'string' },
+  },
+  required: required ? ['main', 'light', 'dark', 'contrastColor'] : [],
+});
+
+const theme = (required: boolean) => ({
+  type: 'object',
+  properties: {
+    name: { type: 'string' },
+    ...(required ? {} : { extends: { type: 'string' } }),
+    text: {
+      type: 'object',
+      properties: {
+        primary: { type: 'string' },
+        secondary: { type: 'string' },
+        disabled: { type: 'string' },
+      },
+      required: required ? ['primary', 'secondary', 'disabled'] : [],
+    },
+    background: {
+      type: 'object',
+      properties: {
+        main: { type: 'string' },
+        light: { type: 'string' },
+        dark: { type: 'string' },
+        divider: { type: 'string' },
+      },
+      required: required ? ['main', 'light', 'dark', 'divider'] : [],
+    },
+    scrollbar: {
+      type: 'object',
+      properties: {
+        main: { type: 'string' },
+        light: { type: 'string' },
+      },
+      required: required ? ['main', 'light'] : [],
+    },
+    button: {
+      type: 'object',
+      properties: {
+        disabled: { type: 'string' },
+      },
+      required: required ? ['disabled'] : [],
+    },
+    primary: themeColor(required),
+    error: themeColor(required),
+    warning: themeColor(required),
+    info: themeColor(required),
+    success: themeColor(required),
+    codemirror: {
+      type: 'object',
+      properties: {
+        theme: {
+          type: 'string',
+          examples: ['light', 'dark'],
+          enum: ['light', 'dark'],
+        },
+      },
+      required: required ? ['theme'] : [],
+    },
+  },
+  required: required
+    ? [
+        'name',
+        'text',
+        'background',
+        'scrollbar',
+        'button',
+        'primary',
+        'error',
+        'warning',
+        'info',
+        'success',
+        'codemirror',
+      ]
+    : ['name', 'extends'],
+});
+
 /**
  * Config for fields in both file and folder collections.
  */
@@ -135,6 +219,7 @@ const viewFilters = {
   items: {
     type: 'object',
     properties: {
+      name: { type: 'string' },
       label: { type: 'string' },
       field: { type: 'string' },
       pattern: {
@@ -149,7 +234,7 @@ const viewFilters = {
         ],
       },
     },
-    required: ['label', 'field', 'pattern'],
+    required: ['name', 'label', 'field', 'pattern'],
   },
 };
 
@@ -159,11 +244,12 @@ const viewGroups = {
   items: {
     type: 'object',
     properties: {
+      name: { type: 'string' },
       label: { type: 'string' },
       field: { type: 'string' },
       pattern: { type: 'string' },
     },
-    required: ['label', 'field'],
+    required: ['name', 'label', 'field'],
   },
 };
 
@@ -213,6 +299,13 @@ function getConfigSchema() {
             },
           },
           use_large_media_transforms_in_media_library: { type: 'boolean' },
+          /**
+           * Editorial Workflow
+           */
+          always_fork: { type: 'boolean' },
+          open_authoring: { type: 'boolean' },
+          squash_merges: { type: 'boolean' },
+          cms_label_prefix: { type: 'string' },
         },
         required: ['name'],
       },
@@ -260,8 +353,26 @@ function getConfigSchema() {
               },
               required: ['fields'],
             },
-            view_filters: viewFilters,
-            view_groups: viewGroups,
+            view_filters: {
+              type: 'object',
+              properties: {
+                default: {
+                  type: 'string',
+                },
+                filters: viewFilters,
+              },
+              required: ['filters'],
+            },
+            view_groups: {
+              type: 'object',
+              properties: {
+                default: {
+                  type: 'string',
+                },
+                groups: viewGroups,
+              },
+              required: ['groups'],
+            },
             i18n: i18nCollection,
             hide: { type: 'boolean' },
             editor: {
@@ -383,9 +494,15 @@ function getConfigSchema() {
       media_library: {
         type: 'object',
         properties: {
+          display_in_navigation: { type: 'boolean' },
           max_file_size: { type: 'number' },
           folder_support: { type: 'boolean' },
         },
+      },
+      publish_mode: {
+        type: 'string',
+        enum: ['simple', 'editorial_workflow'],
+        examples: ['editorial_workflow'],
       },
       slug: {
         type: 'object',
@@ -420,16 +537,30 @@ function getConfigSchema() {
         },
       },
       search: { type: 'boolean' },
+      theme: {
+        type: 'object',
+        properties: {
+          defaultTheme: { type: 'string' },
+          includeStandardThemes: { type: 'boolean' },
+          themes: {
+            type: 'array',
+            items: { oneOf: [theme(true), theme(false)] },
+          },
+        },
+      },
     },
     required: ['backend', 'collections', 'media_folder'],
   };
 }
 
 function getWidgetSchemas() {
-  const schemas = getWidgets().reduce((acc, widget) => {
-    acc[widget.name] = widget.schema ?? {};
-    return acc;
-  }, {} as Record<string, unknown>);
+  const schemas = getWidgets().reduce(
+    (acc, widget) => {
+      acc[widget.name] = widget.schema ?? {};
+      return acc;
+    },
+    {} as Record<string, unknown>,
+  );
   return { ...schemas };
 }
 

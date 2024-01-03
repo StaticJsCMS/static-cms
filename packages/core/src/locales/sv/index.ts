@@ -22,10 +22,12 @@ const sv: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Innehåll',
+      workflow: 'Arbetsflöde',
       media: 'Media',
       quickAdd: 'Snabbt tillägg',
     },
     app: {
+      loading: 'Hämtar...',
       errorHeader: 'Ett fel uppstod vid hämtning av CMS-konfigurationen',
       configErrors: 'Konfigurationsfel',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -104,15 +106,35 @@ const sv: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Skriver i %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Är du säker på att du vill lämna sidan?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'Du har osparade ändringar, vänligen spara dem innan du uppdaterar status.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'Vänligen uppdatera status till "Redo" innan du publicerar.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        'Du har osparade ändringar, vänligen spara innan du publicerar.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Är du säker på att du vill publicera det här inlägget?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'Är du säker på att du vill avpublicera det här inlägget?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Är du säker på att du vill radera det här publicerade inlägget, inklusive dina osparade ändringar från nuvarande session?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Är du säker på att du vill radera det här publicerade inlägget?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Du är på väg att radera alla opublicerade ändringar för det här inlägget, inklusive dina osparade ändringar från nuvarande session. Vill du fortfarande radera?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Alla opublicerade ändringar kommer raderas. Vill du fortfarande radera?',
       loadingEntry: 'Hämtar inlägg...',
     },
     editorInterface: {
@@ -123,13 +145,35 @@ const sv: LocalePhrasesRoot = {
       toggleScrollSync: 'Synka scrollning',
     },
     editorToolbar: {
+      publishing: 'Publicerar...',
       publish: 'Publicera',
       published: 'Publicerad',
+      unpublish: 'Avpublicera',
       duplicate: 'Duplicera',
+      unpublishing: 'Avpublicerar...',
       publishAndCreateNew: 'Publicera och skapa ny',
       publishAndDuplicate: 'Publicera och duplicera',
+      deleteUnpublishedChanges: 'Radera opublicerade ändringar',
+      deleteUnpublishedEntry: 'Radera opublicerat inlägg',
+      deletePublishedEntry: 'Radera publicerat inlägg',
       deleteEntry: 'Radera inlägg',
+      saving: 'Sparar...',
+      save: 'Spara',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: 'Raderar...',
+      updating: 'Updaterar...',
+      status: 'Status: %{status}',
+      backCollection: ' Redigerar i samlingen %{collectionLabel}',
+      unsavedChanges: 'Osparade ändringar',
+      changesSaved: 'Ändringar sparade',
+      draft: 'Utkast',
+      inReview: 'Under granskning',
+      ready: 'Redo',
       publishNow: 'Publicera nu',
+      deployPreviewPendingButtonLabel: 'Kontrollera förhandsvisning',
+      deployPreviewButtonLabel: 'Visa förhandsvisning',
+      deployButtonLabel: 'Visa Live',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +182,35 @@ const sv: LocalePhrasesRoot = {
       markdown: {
         bold: 'Fetstil',
         italic: 'Kursiv',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'Kod',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Länk',
-        linkPrompt: 'Ange en URL för länken',
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Rubriker',
         quote: 'Citat',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'Punktlista',
         numberedList: 'Numrerad lista',
         addComponent: 'Lägg till komponent',
         richText: 'Rich Text',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Välj en bild',
@@ -212,6 +274,10 @@ const sv: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -233,10 +299,10 @@ const sv: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Hämtar...',
       noResults: 'Inga resultat.',
       noAssetsFound: 'Hittade inga mediaobjekt.',
       noImagesFound: 'Hittade inga bilder.',
+      private: 'Privat ',
       images: 'Bilder',
       mediaAssets: 'Mediaobjekt',
       search: 'Sök...',
@@ -253,6 +319,7 @@ const sv: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -263,6 +330,7 @@ const sv: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Tillbaka till sida',
@@ -284,11 +352,12 @@ const sv: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Logga ut',
     },
     toast: {
       onFailToLoadEntries: 'Kunde inte hämta inlägg: %{details}',
+      onFailToLoadDeployPreview: 'Kunde inte ladda förhandsvisning: %{details}',
       onFailToPersist: 'Kunde inte spara inlägg: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Kunde inte radera inlägg: %{details}',
@@ -297,13 +366,53 @@ const sv: LocalePhrasesRoot = {
       missingRequiredField:
         'Oops, du har missat ett obligatoriskt fält. Vänligen fyll i det innan du sparar.',
       entrySaved: 'Inlägg sparat',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Inlägg publicerat',
+      entryUnpublished: 'Inlägg avpublicerat',
       onFailToPublishEntry: 'Kunde inte publicera: %{details}',
+      onFailToUnpublishEntry: 'Kunde inte avpublicera inlägg: %{details}',
       entryUpdated: 'Inläggsstatus uppdaterad',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Opublicerade ändringar raderade',
       onFailToAuth: '%{details}',
       onLoggedOut:
         'Du har blivit utloggad, vänligen spara en kopia av eventuella ändringar och logga in på nytt',
       onBackendDown: 'Tjänsten är drabbad av en störning. Se %{details} för mer information',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Hämtar inlägg för redaktionellt arbetsflöde',
+      workflowHeading: 'Redaktionellt arbetsflöde',
+      newPost: 'Nytt inlägg',
+      description:
+        '%{smart_count} inlägg väntar på granskning, %{readyCount} redo att publiceras. |||| %{smart_count} inlägg väntar på granskning, %{readyCount} redo att publiceras. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} av %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'av %{author}',
+      deleteChanges: 'Radera ändringar',
+      deleteNewEntry: 'Radera nytt inlägg',
+      publishChanges: 'Publicera ändringar',
+      publishNewEntry: 'Publicera nytt inlägg',
+    },
+    workflowList: {
+      onDeleteEntry: 'Är du säker på att du vill radera det här inlägget?',
+      onPublishingNotReadyEntry:
+        'Bara inlägg med statusen "Redo" kan publiceras. Vänligen dra kortet till "Redo"-kolumnen för att möjliggöra publicering',
+      onPublishEntry: 'Är du säker på att du vill publicera det här inlägget?',
+      draft: 'Utkast',
+      pending_review: 'Under granskning',
+      pending_publish: 'Redo',
+      currentEntries: '%{smart_count} inlägg |||| %{smart_count} inlägg',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

@@ -3,27 +3,30 @@ import orderBy from 'lodash/orderBy';
 import { useMemo } from 'react';
 
 import { SORT_DIRECTION_ASCENDING } from '@staticcms/core/constants';
-import { selectEntriesSortField } from '@staticcms/core/reducers/selectors/entries';
+import { selectEntriesSelectedSort } from '@staticcms/core/reducers/selectors/entries';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import { selectSortDataPath } from '../util/sort.util';
 import useFilters from './useFilters';
 import usePublishedEntries from './usePublishedEntries';
+import useUnpublishedEntries from './useUnpublishedEntries';
 
-import type { Collection } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core';
 
-export default function useEntries(collection: Collection) {
-  const entries = usePublishedEntries(collection.name);
+export default function useEntries(collection: CollectionWithDefaults) {
+  const publishedEntries = usePublishedEntries(collection.name);
+  const unpublishedEntries = useUnpublishedEntries(collection.name);
 
-  const entriesSortFieldSelector = useMemo(
-    () => selectEntriesSortField(collection.name),
-    [collection.name],
+  const filteredPublishedEntries = useMemo(
+    () => publishedEntries.filter(entry => !unpublishedEntries.find(e => e.slug === entry.slug)),
+    [publishedEntries, unpublishedEntries],
   );
-  const sortField = useAppSelector(entriesSortFieldSelector);
+
+  const sortField = useAppSelector(state => selectEntriesSelectedSort(state, collection.name));
 
   const filters = useFilters(collection.name);
 
   return useMemo(() => {
-    let finalEntries = [...entries];
+    let finalEntries = [...unpublishedEntries, ...filteredPublishedEntries];
 
     if (sortField) {
       const key = selectSortDataPath(collection, sortField.key);
@@ -36,7 +39,7 @@ export default function useEntries(collection: Collection) {
         const allMatched = filters.every(f => {
           const pattern = f.pattern;
           const field = f.field;
-          const data = e!.data || {};
+          const data = e.data || {};
           const toMatch = get(data, field);
           const matched =
             toMatch !== undefined && new RegExp(String(pattern)).test(String(toMatch));
@@ -47,5 +50,5 @@ export default function useEntries(collection: Collection) {
     }
 
     return finalEntries;
-  }, [collection, entries, filters, sortField]);
+  }, [collection, filters, filteredPublishedEntries, sortField, unpublishedEntries]);
 }

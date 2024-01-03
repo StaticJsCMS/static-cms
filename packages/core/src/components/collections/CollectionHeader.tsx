@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import { translate } from 'react-polyglot';
 import { useParams } from 'react-router-dom';
 
 import useEntries from '@staticcms/core/lib/hooks/useEntries';
 import useIcon from '@staticcms/core/lib/hooks/useIcon';
 import useNewEntryUrl from '@staticcms/core/lib/hooks/useNewEntryUrl';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import {
   selectEntryCollectionTitle,
   selectFolderEntryExtension,
@@ -14,14 +14,16 @@ import { addFileTemplateFields } from '@staticcms/core/lib/widgets/stringTemplat
 import Button from '../common/button/Button';
 import collectionClasses from './Collection.classes';
 
-import type { Collection, Entry, TranslatedProps } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, Entry } from '@staticcms/core';
 import type { FC } from 'react';
 
 interface CollectionHeaderProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
 }
 
-const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collection, t }) => {
+const CollectionHeader: FC<CollectionHeaderProps> = ({ collection }) => {
+  const t = useTranslate();
+
   const collectionLabel = collection.label;
   const collectionLabelSingular = collection.label_singular;
 
@@ -35,10 +37,13 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
 
   const pluralLabel = useMemo(() => {
     if ('nested' in collection && collection.nested?.path && filterTerm) {
-      const entriesByPath = entries.reduce((acc, entry) => {
-        acc[entry.path] = entry;
-        return acc;
-      }, {} as Record<string, Entry>);
+      const entriesByPath = entries.reduce(
+        (acc, entry) => {
+          acc[entry.path] = entry;
+          return acc;
+        },
+        {} as Record<string, Entry>,
+      );
 
       if (isNotEmpty(filterTerm)) {
         const extension = selectFolderEntryExtension(collection);
@@ -72,7 +77,7 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
       {newEntryUrl ? (
         <Button to={newEntryUrl} className={collectionClasses['new-entry-button']}>
           {t('collection.collectionTop.newButton', {
-            collectionLabel: collectionLabelSingular || pluralLabel,
+            collectionLabel: collectionLabelSingular ?? pluralLabel,
           })}
         </Button>
       ) : null}
@@ -80,4 +85,4 @@ const CollectionHeader: FC<TranslatedProps<CollectionHeaderProps>> = ({ collecti
   );
 };
 
-export default translate()(CollectionHeader) as FC<CollectionHeaderProps>;
+export default CollectionHeader;

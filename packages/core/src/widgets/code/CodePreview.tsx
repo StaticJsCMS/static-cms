@@ -3,7 +3,7 @@ import React from 'react';
 
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { CodeField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { CodeField, WidgetPreviewProps } from '@staticcms/core';
 import type { FC } from 'react';
 
 const classes = generateClassNames('WidgetCodePreview', ['root']);

@@ -10,7 +10,7 @@ import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { createEmptyPair } from './util';
 
-import type { KeyValueField, WidgetControlProps } from '@staticcms/core/interface';
+import type { KeyValueField, WidgetControlProps } from '@staticcms/core';
 import type { ChangeEvent, FC, MouseEvent } from 'react';
 import type { Pair } from './types';
 
@@ -28,7 +28,6 @@ const classes = generateClassNames('WidgetKeyValue', [
   'header-action-cell-content',
   'row',
   'delete-button',
-  'delete-button-icon',
   'actions',
   'add-button',
 ]);
@@ -159,19 +158,20 @@ const StringControl: FC<WidgetControlProps<Pair[], KeyValueField>> = ({
             variant="contained"
           />
           <IconButton
+            icon={CloseIcon}
             data-testid={`remove-button-${index}`}
             size="small"
             variant="text"
             onClick={handleRemove(index)}
             disabled={disabled}
-            className={classes['delete-button']}
-          >
-            <CloseIcon className={classes['delete-button-icon']} />
-          </IconButton>
+            rootClassName={classes['delete-button']}
+            aria-label="delete"
+          />
         </div>
       ))}
       <div className={classes.actions}>
         <Button
+          color="secondary"
           variant="outlined"
           onClick={handleAdd}
           className={classes['add-button']}

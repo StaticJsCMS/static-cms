@@ -1,13 +1,14 @@
 const withPWA = require('next-pwa')({
   publicExcludes: ['!bulletins/**/*'],
-  dest: 'public'
+  dest: 'public',
 });
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true'
+  enabled: process.env.ANALYZE === 'true',
 });
 
 const redirects = [
+  { source: '/docs', destination: '/docs/intro', permanent: true },
   { source: '/chat', destination: 'https://discord.gg/ZWJM9pBMjj', permanent: true },
 ];
 
@@ -28,7 +29,7 @@ let config = {
       },
     ],
   },
-}
+};
 
 if (process.env.NODE_ENV === 'production') {
   config = withPWA(config);
@@ -36,4 +37,4 @@ if (process.env.NODE_ENV === 'production') {
   config = withBundleAnalyzer(config);
 }
 
-module.exports = config
+module.exports = config;

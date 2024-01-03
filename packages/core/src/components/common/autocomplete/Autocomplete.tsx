@@ -12,7 +12,7 @@ import { isNullish } from '@staticcms/core/lib/util/null.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import IconButton from '../button/IconButton';
 
-import type { MouseEvent, ReactNode, Ref } from 'react';
+import type { FC, MouseEvent, ReactNode, Ref } from 'react';
 
 import './Autocomplete.css';
 
@@ -27,6 +27,7 @@ export const classes = generateClassNames('Autocomplete', [
   'button-icon',
   'options',
   'nothing',
+  'popper',
   'option',
   'option-selected',
   'option-label',
@@ -62,7 +63,7 @@ export interface AutocompleteProps {
   onChange: (value: string | string[] | undefined) => void;
 }
 
-const Autocomplete = ({
+const Autocomplete: FC<AutocompleteProps> = ({
   label,
   value,
   options,
@@ -72,7 +73,7 @@ const Autocomplete = ({
   endAdornment,
   onChange,
   onQuery,
-}: AutocompleteProps) => {
+}) => {
   const [inputValue, setInputValue] = useState('');
 
   const debouncedOnQuery = useDebouncedCallback(onQuery, 200);
@@ -120,11 +121,14 @@ const Autocomplete = ({
   const finalOptions = useMemo(() => options.map(getOptionLabelAndValue), [options]);
   const optionsByValue = useMemo(
     () =>
-      finalOptions.reduce((acc, option) => {
-        acc[option.value] = option;
+      finalOptions.reduce(
+        (acc, option) => {
+          acc[option.value] = option;
 
-        return acc;
-      }, {} as Record<string, Option>),
+          return acc;
+        },
+        {} as Record<string, Option>,
+      ),
     [finalOptions],
   );
 
@@ -202,29 +206,31 @@ const Autocomplete = ({
         <div className={classes['button-wrapper']}>
           {endAdornment}
           <IconButton
+            icon={KeyboardArrowDownIcon}
             variant="text"
             size="small"
             disabled={disabled}
-            className={classes.button}
             onClick={handleDropdownButtonClick}
-          >
-            <KeyboardArrowDownIcon className={classes['button-icon']} aria-hidden="true" />
-          </IconButton>
+            rootClassName={classes.button}
+            iconClassName={classes['button-icon']}
+            aria-label="open options"
+          />
           {!required ? (
             <IconButton
+              icon={CloseIcon}
               variant="text"
               size="small"
               disabled={disabled}
-              className={classes.button}
               onClick={clear}
-            >
-              <CloseIcon className={classes['button-icon']} aria-hidden="true" />
-            </IconButton>
+              rootClassName={classes.button}
+              iconClassName={classes['button-icon']}
+              aria-label="clear"
+            />
           ) : null}
         </div>
       </div>
       {anchorEl && (
-        <Popper open={popupOpen} anchorEl={anchorEl} style={{ width }}>
+        <Popper open={popupOpen} anchorEl={anchorEl} style={{ width }} className={classes.popper}>
           <ul
             {...getListboxProps()}
             className={classNames(classes.options, 'CMS_Scrollbar_root', 'CMS_Scrollbar_secondary')}

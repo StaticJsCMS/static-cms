@@ -1,7 +1,4 @@
 .CMS_WidgetDateTime_NowButton_root {
-  @apply absolute
-    inset-y-1
-    right-3
-    flex
+  @apply flex
     items-center;
 }

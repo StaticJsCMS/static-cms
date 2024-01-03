@@ -3,7 +3,7 @@
  */
 import '@testing-library/jest-dom';
 import { act, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { v4, validate } from 'uuid';
 
 import { mockUUIDField } from '@staticcms/test/data/fields.mock';
@@ -159,7 +159,7 @@ describe(UUIDControl.name, () => {
     expect(input).not.toHaveFocus();
 
     await act(async () => {
-      const field = getByTestId('field');
+      const field = getByTestId('field-Mock Widget');
       await userEvent.click(field);
     });
 

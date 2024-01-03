@@ -1,24 +1,32 @@
 .CMS_WidgetList_root {
   &.CMS_WidgetList_disabled {
     & .CMS_WidgetList_expand-button-icon {
-      @apply text-slate-300
-        dark:text-slate-600;
+      color: var(--text-secondary);
+    }
+  }
+
+  &:not(.CMS_WidgetList_error) {
+    &:not(.CMS_WidgetList_disabled) {
+      &:hover,
+      &:focus-within {
+        & > .CMS_WidgetList_field-wrapper {
+          & > .CMS_WidgetList_expand-button {
+            & .CMS_WidgetList_summary {
+              color: var(--primary-main);
+            }
+          }
+        }
+      }
     }
   }
 
   &.CMS_WidgetList_error {
-    & .CMS_WidgetList_content {
-      @apply border-l-red-500;
-    }
-  }
-
-  &:not(.CMS_WidgetList_disabled) {
-    &:not(.CMS_WidgetList_error) {
-      &:hover,
-      &:focus-with {
-        & .CMS_WidgetList_summary,
-        & .CMS_WidgetList_expand-button-icon {
-          @apply text-blue-500;
+    &:not(.CMS_WidgetList_disabled) {
+      & > .CMS_WidgetList_field-wrapper {
+        & > .CMS_WidgetList_expand-button {
+          & .CMS_WidgetList_summary {
+            color: var(--error-main);
+          }
         }
       }
     }
@@ -39,13 +47,12 @@
 }
 
 .CMS_WidgetList_field-wrapper {
+  border-color: var(--background-divider);
+
   @apply relative
     flex
     flex-col
-    border-b
-    border-slate-400
-    focus-within:border-blue-800
-    dark:focus-within:border-blue-100;
+    border-b;
 }
 
 .CMS_WidgetList_field {
@@ -67,7 +74,6 @@
     focus:outline-none
     focus-visible:ring
     gap-2
-    focus-visible:ring-opacity-75
     items-center;
 }
 
@@ -78,8 +84,9 @@
 }
 
 .CMS_WidgetList_content {
-  @apply text-sm
-    text-gray-500;
+  color: var(--text-secondary);
+
+  @apply text-sm;
 }
 
 .CMS_WidgetList_error-message {

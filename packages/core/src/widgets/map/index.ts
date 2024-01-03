@@ -2,7 +2,7 @@ import previewComponent from './MapPreview';
 import schema from './schema';
 import withMapControl from './withMapControl';
 
-import type { MapField, WidgetParam } from '@staticcms/core/interface';
+import type { MapField, WidgetParam } from '@staticcms/core';
 
 const controlComponent = withMapControl();
 

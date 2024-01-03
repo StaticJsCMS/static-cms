@@ -17,6 +17,7 @@ weight: 9
 | files or folder       | [Collection Files](/docs/collection-types#file-collections)<br />\| [Collection Folder](/docs/collection-types#folder-collections) |             | **Requires one of these**: Specifies the collection type and location; details in [collection types](/docs/collection-types)                                                                 |
 | filter                | FilterRule<br />\| List of FilterRules                                                                                             |             | _Optional_. Field and file filter for [Folder Collections](/docs/collection-types#folder-collections). See [filtered folder collections](/docs/collection-types#filtered-folder-collections) |
 | create                | boolean                                                                                                                            | `false`     | _Optional_. **For [Folder Collections](/docs/collection-types#folder-collections) only**<br />`true` - Allows users to create new items in the collection                                    |
+| publish               | boolean                                                                                                                            | `true`      | _Optional_ For `publish_mode: editorial_workflow` only;<br />`false` hides UI publishing controls for a collection                                                                           |
 | hide                  | boolean                                                                                                                            | `false`     | _Optional_. `true` hides a collection in the Static CMS UI. Useful when using the relation widget to hide referenced collections                                                             |
 | delete                | boolean                                                                                                                            | `true`      | _Optional_. `false` prevents users from deleting items in a collection                                                                                                                       |
 | extension             | string                                                                                                                             |             | _Optional_. See [extension and format](#extension-and-format) below                                                                                                                          |
@@ -66,7 +67,7 @@ You may also specify a custom `extension` not included in the list above, as lon
 - `yml` or `yaml`: parses and saves files as YAML-formatted data files; saves with `yml` extension by default
 - `json`: parses and saves files as JSON-formatted data files; saves with `json` extension by default
 - `toml`: parses and saves files as TOML-formatted data files; saves with `toml` extension by default
-- `frontmatter`: parses files and saves files with data frontmatter followed by an unparsed body text (edited using a `body` field); saves with `md` extension by default; default for collections that can't be inferred. Collections with `frontmatter` format (either inferred or explicitly set) can parse files with frontmatter in YAML or JSON format. However, they will be saved with YAML frontmatter.
+- `frontmatter`: parses files and saves files with data frontmatter followed by an unparsed body text (edited using a `body` field); saves with `md` extension by default; default for collections that cannot be inferred. Collections with `frontmatter` format (either inferred or explicitly set) can parse files with frontmatter in YAML or JSON format. However, they will be saved with YAML frontmatter.
 - `yaml-frontmatter`: same as the `frontmatter` format above, except frontmatter will be both parsed and saved only as YAML, followed by unparsed body text. The default delimiter for this option is `---`.
 - `json-frontmatter`: same as the `frontmatter` format above, except frontmatter will be both parsed and saved as JSON, followed by unparsed body text. The default delimiter for this option is `{` `}`.
 - `toml-frontmatter`: same as the `frontmatter` format above, except frontmatter will be both parsed and saved only as TOML, followed by unparsed body text. The default delimiter for this option is `+++`.
@@ -219,6 +220,55 @@ summary: 'Version: {{version}} - {{title}}',
 
 </CodeTabs>
 
+### Template Transformations
+
+You can apply transformations on fields in a summary string template using filter notation syntax.
+
+Example config:
+
+<CodeTabs>
+```yaml
+collections:
+  - name: 'posts'
+    label: 'Posts'
+    folder: '_posts'
+    summary: "{{title | upper}} - {{date | date('yyyy-MM-dd')}} - {{body | truncate(20, '***')}}"
+    fields:
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
+```
+
+```js
+collections: [
+  {
+    name: 'posts',
+    label: 'Posts',
+    folder: '_posts',
+    summary: "{{title | upper}} - {{date | date('yyyy-MM-dd')}} - {{body | truncate(20, '***')}}",
+    fields: [
+      { label: 'Title', name: 'title', widget: 'string' },
+      { label: 'Publish Date', name: 'date', widget: 'datetime' },
+      { label: 'Body', name: 'body', widget: 'markdown' },
+    ],
+  },
+],
+```
+
+</CodeTabs>
+
+The above config will transform the title field to uppercase and format the date field using `yyyy-MM-dd` format.
+Available transformations are:
+
+| Name     | Format                                                     | Description                                                                                                                     |
+| -------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| upper    | `upper`                                                    | Transforms the value to uppercase                                                                                               |
+| lower    | `lower`                                                    | Transforms the value to lowercase                                                                                               |
+| date     | `date('<format>')`                                         | Formats a date string in the provided format. Accepts [date-fns tokens](https://date-fns.org/docs/format)                       |
+| default  | `default('defaultValue')`                                  | Provides default value if no field value                                                                                        |
+| ternary  | `ternary('valueForTrue','valueForFalse')`                  | <ul><li>If field has value, show `valueForTrue`</li><li>If field does not have a value, show `valueForFalse`</li></ul>          |
+| truncate | `truncate(<number>)`<br />`truncate(<number>, '<string>')` | Truncates text to a specified length. An optional replacement string for the omitted text can be provided as a second parameter |
+
 ## Sortable Fields
 
 The `sortable_fields` setting is an optional object with the following options:
@@ -230,7 +280,7 @@ The `sortable_fields` setting is an optional object with the following options:
 
 Defaults to inferring `title`, `date`, `author` and `description` fields and will also show `Update On` sort field in git based backends.
 
-When `author` field can't be inferred commit author will be used.
+When `author` field cannot be inferred commit author will be used.
 
 <CodeTabs>
 ```yaml
@@ -280,79 +330,122 @@ sortable_fields: {
 
 ## View Filters
 
-The `view_filters` setting is an optional list of predefined view filters to show in the UI.
-
-Defaults to an empty list.
+The `view_filters` setting is an optional property which takes a list of predefined view filters to show in the UI and an optional default view filter.
 
 <CodeTabs>
 ```yaml
 view_filters:
-  - label: "Alice's and Bob's Posts"
-    field: author
-    pattern: 'Alice|Bob'
-  - label: 'Posts published in 2020'
-    field: date
-    pattern: '2020'
-  - label: Drafts
-    field: draft
-    pattern: true
+  default: drafts
+  filters:
+    - name: alice-and-bob
+      label: "Alice's and Bob's Posts"
+      field: author
+      pattern: 'Alice|Bob'
+    - name: posts-2020
+      label: 'Posts published in 2020'
+      field: date
+      pattern: '2020'
+    - name: drafts
+      label: Drafts
+      field: draft
+      pattern: true
 ```
 
 ```js
-view_filters: [
-  {
-    label: "Alice's and Bob's Posts",
-    field: 'author',
-    pattern: 'Alice|Bob',
-  },
-  {
-    label: 'Posts published in 2020',
-    field: 'date',
-    pattern: '2020',
-  },
-  {
-    label: 'Drafts',
-    field: 'draft',
-    pattern: true,
-  },
-],
+view_filters: {
+  default: 'drafts',
+  filters: [
+    {
+      name: 'alice-and-bob',
+      label: "Alice's and Bob's Posts",
+      field: 'author',
+      pattern: 'Alice|Bob',
+    },
+    {
+      name: 'posts-2020',
+      label: 'Posts published in 2020',
+      field: 'date',
+      pattern: '2020',
+    },
+    {
+      name: 'drafts',
+      label: 'Drafts',
+      field: 'draft',
+      pattern: true,
+    },
+  ],
+},
 ```
 
 </CodeTabs>
 
 ## View Groups
 
-The `view_groups` setting is an optional list of predefined view groups to show in the UI.
-
-Defaults to an empty list.
+The `view_groups` setting is an optional property which takes a list of predefined view groups to show in the UI and an optional default view group.
 
 <CodeTabs>
 ```yaml
 view_groups:
-  - label: Year
-    field: date
-    # groups items based on the value matched by the pattern
-    pattern: \d{4}
-  - label: Drafts
-    field: draft
+  default: by-year
+  groups:
+    - name: by-year
+      label: Year
+      field: date
+      # groups items based on the value matched by the pattern
+      pattern: \d{4}
+    - name: drafts
+      label: Drafts
+      field: draft
 ```
 
 ```js
-view_groups: [
-  {
-    label: 'Year',
-    field: 'date',
-    pattern: '\\d{4}',
-  },
-  {
-    label: 'Drafts',
-    field: 'draft',
-  },
-],
+view_groups: {
+  default: by-year
+  groups: [
+    {
+      name: 'by-year',
+      label: 'Year',
+      field: 'date',
+      pattern: '\\d{4}',
+    },
+    {
+      name: 'drafts',
+      label: 'Drafts',
+      field: 'draft',
+    },
+  ],
+},
 ```
 
 </CodeTabs>
 
 ## Media Library
 
-The `media_library` settings allows customization of the media library at the collection level. See [Media Library](/docs/configuration-options#media-library) for more details.
+The `media_library` settings allows customization of the media library at the collection level.
+
+### Options
+
+| Name                  | Type    | Default  | Description                                                                            |
+| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------- |
+| max_file_size         | number  | `512000` | _Optional_. The max size, in bytes, of files that can be uploaded to the media library |
+| folder_support        | boolean | `false`  | _Optional_. Enables directory navigation and folder creation in your media library     |
+
+### Example
+
+<CodeTabs>
+```yaml
+media_library:
+  max_file_size: 512000
+  folder_support: true
+```
+
+```js
+{
+  media_library: {
+    max_file_size: 512000,
+    folder_support: true
+  }
+}
+```
+
+</CodeTabs>

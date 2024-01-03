@@ -43,9 +43,10 @@ export interface MenuProps {
   disabled?: boolean;
   keepMounted?: boolean;
   'data-testid'?: string;
+  'aria-label': string;
 }
 
-const Menu = ({
+const Menu: FC<MenuProps> = ({
   label,
   startIcon: StartIcon,
   variant = 'contained',
@@ -63,7 +64,8 @@ const Menu = ({
   disabled = false,
   keepMounted = false,
   'data-testid': dataTestId,
-}: MenuProps) => {
+  'aria-label': ariaLabel,
+}) => {
   const calculatedButtonClassName = useButtonClassNames(variant, color, size, rounded);
 
   const menuButtonClassNames = useMemo(
@@ -87,6 +89,7 @@ const Menu = ({
           data-testid={dataTestId}
           className={menuButtonClassNames}
           disabled={disabled}
+          aria-label={ariaLabel}
         >
           {StartIcon ? (
             <StartIcon className={classNames(classes['dropdown-start-icon'], iconClassName)} />

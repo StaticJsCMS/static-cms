@@ -1,35 +1,45 @@
 ---
 group: Migration
-title: Decap CMS Migration Guide
+title: Decap / Netlify Migration Guide
 weight: 190
 ---
 
-Static CMS is a fork of [Decap](https://github.com/decaporg/decap-cms) (previously Netlify CMS) . Many changes have been made, some big, some small.
+Static CMS is a fork of [Decap](https://github.com/decaporg/decap-cms) (previously Netlify CMS). Many changes have been made, some big, some small.
 
-In this guide, we will walk you through the steps of migrating from Decap to Static CMS.
+In this guide, we will walk you through the steps of migrating from Decap or Netlify to Static CMS.
 
 ## How to Migrate
 
-Start by replacing Decap with Static CMS, then address the changes below.
+Start by replacing Decap / Netlify with Static CMS, then address the changes below.
 
 ### CDN
 
-Decap:
+Decap (_remove_):
+
+```html
+<script src="https://unpkg.com/netlify-cms@^3.0.0/dist/decap-cms.js"></script>
+```
+
+Netlify (_remove_):
 
 ```html
 <script src="https://unpkg.com/netlify-cms@^3.0.0/dist/netlify-cms.js"></script>
 ```
 
-Static CMS:
+Static CMS (_add_):
 
 ```html
-<script src="https://unpkg.com/@staticcms/app@^3.0.0/dist/static-cms-app.js"></script>
+<script src="https://unpkg.com/@staticcms/app@^4.0.0/dist/static-cms-app.js"></script>
 ```
 
 ### Bundling
 
 ```bash
 # Uninstall Decap
+npm uninstall decap-cms-app
+npm uninstall decap-cms-core
+
+# Uninstall Netlify
 npm uninstall netlify-cms-app
 npm uninstall netlify-cms-core
 
@@ -39,13 +49,19 @@ npm install @staticcms/core
 
 #### Change your imports
 
-Decap:
+Decap (_remove_):
+
+```js
+import CMS from 'decap-cms-app';
+```
+
+Netlify (_remove_):
 
 ```js
 import CMS from 'netlify-cms-app';
 ```
 
-Static CMS:
+Static CMS (_add_):
 
 ```js
 import CMS from '@staticcms/core';
@@ -81,7 +97,7 @@ However, the Gitlab, Client-Side Implicit Grant has been removed as a method of 
 
 ### Dates
 
-[Moment](https://momentjs.com/) has been dropped as the date library used. Instead we are now using [date-fns](https://date-fns.org/). Date formats in your configuration will need to be updated. See [format docs](https://date-fns.org/v2.29.3/docs/format).
+[Moment](https://momentjs.com/) has been dropped as the date library used. Instead we are now using [date-fns](https://date-fns.org/). Date formats in your configuration will need to be updated. See [format docs](https://date-fns.org/docs/format).
 
 ### Initializing Static CMS
 
@@ -93,19 +109,151 @@ A [new markdown editor](/docs/widget-markdown) has been added. It comes with a n
 
 ### Sortable Fields
 
-The `sortable_fields` configuration option has been slightly changed, as we now allow a [default sorting option](/docs/collection-overview#sortable_fields).
+The `sortable_fields` configuration option has been slightly changed, as we now allow a [default sorting option](/docs/collection-overview#default-sort).
 
-**Decap**:
+**Decap / Netlify**:
 
 ```yaml
-sortable_fields: - field1 - field2
+sortable_fields:
+  - field1
+  - field2
 ```
 
 **Static CMS**:
 
+<CodeTabs>
 ```yaml
-sortable_fields: fields: - field1 - field2
+sortable_fields:
+  fields:
+    - field1
+    - field2
 ```
+
+```js
+sortable_fields: {
+  fields: ['field1', 'field2'];
+}
+```
+
+</CodeTabs>
+
+### View Filters
+
+The `view_filters` configuration option has been slightly changed, as we now allow a [default filter option](/docs/collection-overview#view-filters). Also each filter now requires a unique name.
+
+**Decap / Netlify**:
+
+```yaml
+view_filters:
+  - label: "Alice's and Bob's Posts"
+    field: author
+    pattern: 'Alice|Bob'
+  - label: 'Posts published in 2020'
+    field: date
+    pattern: '2020'
+  - label: Drafts
+    field: draft
+    pattern: true
+```
+
+**Static CMS**:
+
+<CodeTabs>
+```yaml
+view_filters:
+  fields:
+    - name: alice-and-bob
+      label: "Alice's and Bob's Posts"
+      field: author
+      pattern: 'Alice|Bob'
+    - name: posts-2020
+      label: 'Posts published in 2020'
+      field: date
+      pattern: '2020'
+    - name: drafts
+      label: Drafts
+      field: draft
+      pattern: true
+```
+
+```js
+view_filters: {
+  fields: [
+    {
+      name: 'alice-and-bob',
+      label: "Alice's and Bob's Posts",
+      field: 'author',
+      pattern: 'Alice|Bob',
+    },
+    {
+      name: 'posts-2020',
+      label: 'Posts published in 2020',
+      field: 'date',
+      pattern: '2020',
+    },
+    {
+      name: 'drafts',
+      label: 'Drafts',
+      field: 'draft',
+      pattern: true,
+    },
+  ];
+}
+```
+
+</CodeTabs>
+
+### View Groups
+
+The `view_groups` configuration option has been slightly changed, as we now allow a [default grouping option](/docs/collection-overview#view-groups). Also each group now requires a unique name.
+
+**Decap / Netlify**:
+
+```yaml
+view_groups:
+  - label: Year
+    field: date
+    # groups items based on the value matched by the pattern
+    pattern: \d{4}
+  - label: Drafts
+    field: draft
+```
+
+**Static CMS**:
+
+<CodeTabs>
+```yaml
+view_groups:
+  groups:
+    - name: by-year
+      label: Year
+      field: date
+      # groups items based on the value matched by the pattern
+      pattern: \d{4}
+    - name: drafts
+      label: Drafts
+      field: draft
+```
+
+```js
+view_groups: {
+  groups: [
+    {
+      name: "by-year",
+      label: "Year",
+      field: "date",
+      pattern: "\\d{4}
+    },
+    {
+      name: "drafts",
+      label: "Drafts",
+      field: "draft"
+    }
+  ]
+}
+```
+
+</CodeTabs>
 
 ### List Widget
 
@@ -146,7 +294,7 @@ The `getAsset` method has been removed, the new `useMediaAsset` hook should be u
 
 ### Beta Features
 
-The following beta features from Decap have been dropped:
+The following beta features from Decap / Netlify have been dropped:
 
 - GraphQL support for GitHub and GitLab
 - Remark plugins (new markdown editor has its own plugin system)
@@ -226,7 +374,7 @@ collections:
 If you are using Gatsby you will need to change out your CMS plugin.
 
 ```bash
-# Uninstall Decap plugin
+# Uninstall Decap / Netlify plugin
 npm uninstall gatsby-plugin-netlify-cms
 
 # Install Static CMS plugin
@@ -237,13 +385,19 @@ npm install gatsby-plugin-static-cms
 
 If you are using the local backend you will need to switch the proxy server package you are using.
 
-Decap:
+Decap (_remove_):
+
+```bash
+npx decap-server
+```
+
+Netlify (_remove_):
 
 ```bash
 npx netlify-cms-proxy-server
 ```
 
-Static CMS:
+Static CMS (_add_):
 
 ```bash
 npx @staticcms/proxy-server

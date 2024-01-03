@@ -20,12 +20,22 @@ import {
   ENTRY_PERSIST_REQUEST,
   ENTRY_PERSIST_SUCCESS,
   REMOVE_DRAFT_ENTRY_MEDIA_FILE,
+  UNPUBLISHED_ENTRY_PERSIST_FAILURE,
+  UNPUBLISHED_ENTRY_PERSIST_REQUEST,
+  UNPUBLISHED_ENTRY_PERSIST_SUCCESS,
+  UNPUBLISHED_ENTRY_PUBLISH_FAILURE,
+  UNPUBLISHED_ENTRY_PUBLISH_REQUEST,
+  UNPUBLISHED_ENTRY_PUBLISH_SUCCESS,
+  UNPUBLISHED_ENTRY_STATUS_CHANGE_FAILURE,
+  UNPUBLISHED_ENTRY_STATUS_CHANGE_REQUEST,
+  UNPUBLISHED_ENTRY_STATUS_CHANGE_SUCCESS,
 } from '../constants';
 import { duplicateI18nFields, getDataPath } from '../lib/i18n';
 import { fileForEntry } from '../lib/util/collection.util';
 import { applyDefaultsToDraftData } from '../lib/util/entry.util';
 import set from '../lib/util/set.util';
 
+import type { EditorialWorkflowAction } from '../actions/editorialWorkflow';
 import type { EntriesAction } from '../actions/entries';
 import type { Entry, FieldsErrors } from '../interface';
 
@@ -48,7 +58,7 @@ const initialState: EntryDraftState = {
 
 function entryDraftReducer(
   state: EntryDraftState = initialState,
-  action: EntriesAction,
+  action: EntriesAction | EditorialWorkflowAction,
 ): EntryDraftState {
   switch (action.type) {
     case DRAFT_CREATE_FROM_ENTRY: {
@@ -139,6 +149,7 @@ function entryDraftReducer(
         original: cloneDeep(entry),
         fieldsErrors: {},
         hasChanged: true,
+        key: uuid(),
       };
     }
     case DRAFT_DISCARD:
@@ -266,7 +277,8 @@ function entryDraftReducer(
       };
     }
 
-    case ENTRY_PERSIST_REQUEST: {
+    case ENTRY_PERSIST_REQUEST:
+    case UNPUBLISHED_ENTRY_PERSIST_REQUEST: {
       if (!state.entry) {
         return state;
       }
@@ -280,7 +292,8 @@ function entryDraftReducer(
       };
     }
 
-    case ENTRY_PERSIST_FAILURE: {
+    case ENTRY_PERSIST_FAILURE:
+    case UNPUBLISHED_ENTRY_PERSIST_FAILURE: {
       if (!state.entry) {
         return state;
       }
@@ -294,7 +307,62 @@ function entryDraftReducer(
       };
     }
 
-    case ENTRY_PERSIST_SUCCESS: {
+    case UNPUBLISHED_ENTRY_STATUS_CHANGE_REQUEST:
+      if (!state.entry) {
+        return state;
+      }
+
+      return {
+        ...state,
+        entry: {
+          ...state.entry,
+          isUpdatingStatus: true,
+        },
+      };
+
+    case UNPUBLISHED_ENTRY_STATUS_CHANGE_FAILURE:
+    case UNPUBLISHED_ENTRY_STATUS_CHANGE_SUCCESS:
+      if (!state.entry) {
+        return state;
+      }
+
+      return {
+        ...state,
+        entry: {
+          ...state.entry,
+          isUpdatingStatus: false,
+        },
+      };
+
+    case UNPUBLISHED_ENTRY_PUBLISH_REQUEST:
+      if (!state.entry) {
+        return state;
+      }
+
+      return {
+        ...state,
+        entry: {
+          ...state.entry,
+          isPublishing: true,
+        },
+      };
+
+    case UNPUBLISHED_ENTRY_PUBLISH_SUCCESS:
+    case UNPUBLISHED_ENTRY_PUBLISH_FAILURE:
+      if (!state.entry) {
+        return state;
+      }
+
+      return {
+        ...state,
+        entry: {
+          ...state.entry,
+          isPublishing: false,
+        },
+      };
+
+    case ENTRY_PERSIST_SUCCESS:
+    case UNPUBLISHED_ENTRY_PERSIST_SUCCESS: {
       if (!state.entry) {
         return state;
       }

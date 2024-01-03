@@ -41,11 +41,11 @@ import ValidationErrorTypes from '../constants/validationErrorTypes';
 import { hasI18n, serializeI18n } from '../lib/i18n';
 import { serializeValues } from '../lib/serializeEntryValues';
 import { Cursor } from '../lib/util';
-import { selectFields, updateFieldByKey } from '../lib/util/collection.util';
+import { getFields, updateFieldByKey } from '../lib/util/collection.util';
 import { createEmptyDraftData, createEmptyDraftI18nData } from '../lib/util/entry.util';
 import { selectCollectionEntriesCursor } from '../reducers/selectors/cursors';
 import {
-  selectEntriesSortField,
+  selectEntriesSelectedSort,
   selectIsFetching,
   selectPublishedSlugs,
 } from '../reducers/selectors/entries';
@@ -54,7 +54,6 @@ import { createAssetProxy } from '../valueObjects/AssetProxy';
 import createEntry from '../valueObjects/createEntry';
 import { addAssets, getAsset } from './media';
 import { loadMedia } from './mediaLibrary';
-import { waitUntil } from './waitUntil';
 
 import type { NavigateFunction } from 'react-router-dom';
 import type { AnyAction } from 'redux';
@@ -62,7 +61,8 @@ import type { ThunkDispatch } from 'redux-thunk';
 import type { Backend } from '../backend';
 import type { ViewStyle } from '../constants/views';
 import type {
-  Collection,
+  CollectionWithDefaults,
+  ConfigWithDefaults,
   Entry,
   EntryData,
   EntryDraft,
@@ -82,7 +82,7 @@ import type AssetProxy from '../valueObjects/AssetProxy';
  * Simple Action Creators (Internal)
  * We still need to export them for tests
  */
-export function entryLoading(collection: Collection, slug: string) {
+export function entryLoading(collection: CollectionWithDefaults, slug: string) {
   return {
     type: ENTRY_REQUEST,
     payload: {
@@ -92,7 +92,7 @@ export function entryLoading(collection: Collection, slug: string) {
   } as const;
 }
 
-export function entryLoaded(collection: Collection, entry: Entry) {
+export function entryLoaded(collection: CollectionWithDefaults, entry: Entry) {
   return {
     type: ENTRY_SUCCESS,
     payload: {
@@ -102,7 +102,7 @@ export function entryLoaded(collection: Collection, entry: Entry) {
   } as const;
 }
 
-export function entryLoadError(error: Error, collection: Collection, slug: string) {
+export function entryLoadError(error: Error, collection: CollectionWithDefaults, slug: string) {
   return {
     type: ENTRY_FAILURE,
     payload: {
@@ -113,7 +113,7 @@ export function entryLoadError(error: Error, collection: Collection, slug: strin
   } as const;
 }
 
-export function entriesLoading(collection: Collection) {
+export function entriesLoading(collection: CollectionWithDefaults) {
   return {
     type: ENTRIES_REQUEST,
     payload: {
@@ -122,7 +122,7 @@ export function entriesLoading(collection: Collection) {
   } as const;
 }
 
-export function filterEntriesRequest(collection: Collection, filter: ViewFilter) {
+export function filterEntriesRequest(collection: CollectionWithDefaults, filter: ViewFilter) {
   return {
     type: FILTER_ENTRIES_REQUEST,
     payload: {
@@ -132,7 +132,11 @@ export function filterEntriesRequest(collection: Collection, filter: ViewFilter)
   } as const;
 }
 
-export function filterEntriesSuccess(collection: Collection, filter: ViewFilter, entries: Entry[]) {
+export function filterEntriesSuccess(
+  collection: CollectionWithDefaults,
+  filter: ViewFilter,
+  entries: Entry[],
+) {
   return {
     type: FILTER_ENTRIES_SUCCESS,
     payload: {
@@ -143,7 +147,11 @@ export function filterEntriesSuccess(collection: Collection, filter: ViewFilter,
   } as const;
 }
 
-export function filterEntriesFailure(collection: Collection, filter: ViewFilter, error: unknown) {
+export function filterEntriesFailure(
+  collection: CollectionWithDefaults,
+  filter: ViewFilter,
+  error: unknown,
+) {
   return {
     type: FILTER_ENTRIES_FAILURE,
     payload: {
@@ -154,7 +162,7 @@ export function filterEntriesFailure(collection: Collection, filter: ViewFilter,
   } as const;
 }
 
-export function groupEntriesRequest(collection: Collection, group: ViewGroup) {
+export function groupEntriesRequest(collection: CollectionWithDefaults, group: ViewGroup) {
   return {
     type: GROUP_ENTRIES_REQUEST,
     payload: {
@@ -164,7 +172,11 @@ export function groupEntriesRequest(collection: Collection, group: ViewGroup) {
   } as const;
 }
 
-export function groupEntriesSuccess(collection: Collection, group: ViewGroup, entries: Entry[]) {
+export function groupEntriesSuccess(
+  collection: CollectionWithDefaults,
+  group: ViewGroup,
+  entries: Entry[],
+) {
   return {
     type: GROUP_ENTRIES_SUCCESS,
     payload: {
@@ -175,7 +187,11 @@ export function groupEntriesSuccess(collection: Collection, group: ViewGroup, en
   } as const;
 }
 
-export function groupEntriesFailure(collection: Collection, group: ViewGroup, error: unknown) {
+export function groupEntriesFailure(
+  collection: CollectionWithDefaults,
+  group: ViewGroup,
+  error: unknown,
+) {
   return {
     type: GROUP_ENTRIES_FAILURE,
     payload: {
@@ -186,7 +202,11 @@ export function groupEntriesFailure(collection: Collection, group: ViewGroup, er
   } as const;
 }
 
-export function sortEntriesRequest(collection: Collection, key: string, direction: SortDirection) {
+export function sortEntriesRequest(
+  collection: CollectionWithDefaults,
+  key: string,
+  direction: SortDirection,
+) {
   return {
     type: SORT_ENTRIES_REQUEST,
     payload: {
@@ -198,7 +218,7 @@ export function sortEntriesRequest(collection: Collection, key: string, directio
 }
 
 export function sortEntriesSuccess(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   key: string,
   direction: SortDirection,
   entries: Entry[],
@@ -215,7 +235,7 @@ export function sortEntriesSuccess(
 }
 
 export function sortEntriesFailure(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   key: string,
   direction: SortDirection,
   error: unknown,
@@ -232,7 +252,7 @@ export function sortEntriesFailure(
 }
 
 export function entriesLoaded(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   entries: Entry[],
   pagination: number | null,
   cursor: Cursor,
@@ -250,7 +270,7 @@ export function entriesLoaded(
   } as const;
 }
 
-export function entriesFailed(collection: Collection, error: Error) {
+export function entriesFailed(collection: CollectionWithDefaults, error: Error) {
   return {
     type: ENTRIES_FAILURE,
     error: 'Failed to load entries',
@@ -261,18 +281,18 @@ export function entriesFailed(collection: Collection, error: Error) {
   } as const;
 }
 
-async function getAllEntries(state: RootState, collection: Collection) {
+async function getAllEntries(state: RootState, collection: CollectionWithDefaults) {
   const configState = state.config;
   if (!configState.config) {
     throw new Error('Config not loaded');
   }
 
   const backend = currentBackend(configState.config);
-  return backend.listAllEntries(collection);
+  return backend.listAllEntries(collection, configState.config);
 }
 
 export function sortByField(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   key: string,
   direction: SortDirection = SORT_DIRECTION_ASCENDING,
 ) {
@@ -295,7 +315,7 @@ export function sortByField(
   };
 }
 
-export function filterByField(collection: Collection, filter: ViewFilter) {
+export function filterByField(collection: CollectionWithDefaults, filter: ViewFilter) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     // if we're already fetching we update the filter key, but skip loading entries
@@ -314,7 +334,7 @@ export function filterByField(collection: Collection, filter: ViewFilter) {
   };
 }
 
-export function groupByField(collection: Collection, group: ViewGroup) {
+export function groupByField(collection: CollectionWithDefaults, group: ViewGroup) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const isFetching = selectIsFetching(state, collection.name);
@@ -354,7 +374,7 @@ export function changeViewStyle(viewStyle: ViewStyle) {
   } as const;
 }
 
-export function entryPersisting(collection: Collection, entry: Entry) {
+export function entryPersisting(collection: CollectionWithDefaults, entry: Entry) {
   return {
     type: ENTRY_PERSIST_REQUEST,
     payload: {
@@ -364,7 +384,7 @@ export function entryPersisting(collection: Collection, entry: Entry) {
   } as const;
 }
 
-export function entryPersisted(collection: Collection, entry: Entry, slug: string) {
+export function entryPersisted(collection: CollectionWithDefaults, entry: Entry, slug: string) {
   return {
     type: ENTRY_PERSIST_SUCCESS,
     payload: {
@@ -379,7 +399,7 @@ export function entryPersisted(collection: Collection, entry: Entry, slug: strin
   } as const;
 }
 
-export function entryPersistFail(collection: Collection, entry: Entry, error: Error) {
+export function entryPersistFail(collection: CollectionWithDefaults, entry: Entry, error: Error) {
   return {
     type: ENTRY_PERSIST_FAILURE,
     error: 'Failed to persist entry',
@@ -391,7 +411,7 @@ export function entryPersistFail(collection: Collection, entry: Entry, error: Er
   } as const;
 }
 
-export function entryDeleting(collection: Collection, slug: string) {
+export function entryDeleting(collection: CollectionWithDefaults, slug: string) {
   return {
     type: ENTRY_DELETE_REQUEST,
     payload: {
@@ -401,7 +421,7 @@ export function entryDeleting(collection: Collection, slug: string) {
   } as const;
 }
 
-export function entryDeleted(collection: Collection, slug: string) {
+export function entryDeleted(collection: CollectionWithDefaults, slug: string) {
   return {
     type: ENTRY_DELETE_SUCCESS,
     payload: {
@@ -411,7 +431,7 @@ export function entryDeleted(collection: Collection, slug: string) {
   } as const;
 }
 
-export function entryDeleteFail(collection: Collection, slug: string, error: Error) {
+export function entryDeleteFail(collection: CollectionWithDefaults, slug: string, error: Error) {
   return {
     type: ENTRY_DELETE_FAILURE,
     payload: {
@@ -431,20 +451,10 @@ export function emptyDraftCreated(entry: Entry) {
 /*
  * Exported simple Action Creators
  */
-export function createDraftFromEntry(collection: Collection, entry: Entry) {
+export function createDraftFromEntry(collection: CollectionWithDefaults, entry: Entry) {
   return {
     type: DRAFT_CREATE_FROM_ENTRY,
     payload: { collection, entry },
-  } as const;
-}
-
-export function draftDuplicateEntry(entry: Entry) {
-  return {
-    type: DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
-    payload: createEntry(entry.collection, '', '', {
-      data: entry.data,
-      mediaFiles: entry.mediaFiles,
-    }),
   } as const;
 }
 
@@ -528,7 +538,18 @@ export function removeDraftEntryMediaFile({ id }: { id: string }) {
   return { type: REMOVE_DRAFT_ENTRY_MEDIA_FILE, payload: { id } } as const;
 }
 
-export function persistLocalBackup(entry: Entry, collection: Collection) {
+export function loadBackup() {
+  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
+    const state = getState();
+    if (!state.entryDraft.localBackup) {
+      return;
+    }
+
+    dispatch(loadLocalBackup());
+  };
+}
+
+export function persistLocalBackup(entry: Entry, collection: CollectionWithDefaults) {
   return (_dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const configState = state.config;
@@ -538,22 +559,21 @@ export function persistLocalBackup(entry: Entry, collection: Collection) {
 
     const backend = currentBackend(configState.config);
 
-    return backend.persistLocalDraftBackup(entry, collection);
+    return backend.persistLocalDraftBackup(entry, collection, configState.config);
   };
 }
 
 export function createDraftDuplicateFromEntry(entry: Entry) {
-  return (dispatch: ThunkDispatch<RootState, {}, AnyAction>) => {
-    dispatch(
-      waitUntil({
-        predicate: ({ type }) => type === DRAFT_CREATE_EMPTY,
-        run: () => dispatch(draftDuplicateEntry(entry)),
-      }),
-    );
-  };
+  return {
+    type: DRAFT_CREATE_DUPLICATE_FROM_ENTRY,
+    payload: createEntry(entry.collection, '', '', {
+      data: entry.data,
+      mediaFiles: entry.mediaFiles,
+    }),
+  } as const;
 }
 
-export function retrieveLocalBackup(collection: Collection, slug: string) {
+export function retrieveLocalBackup(collection: CollectionWithDefaults, slug: string) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const configState = state.config;
@@ -562,7 +582,7 @@ export function retrieveLocalBackup(collection: Collection, slug: string) {
     }
 
     const backend = currentBackend(configState.config);
-    const { entry } = await backend.getLocalDraftBackup(collection, slug);
+    const { entry } = await backend.getLocalDraftBackup(collection, configState.config, slug);
 
     if (entry) {
       // load assets from backup
@@ -590,7 +610,7 @@ export function retrieveLocalBackup(collection: Collection, slug: string) {
   };
 }
 
-export function deleteLocalBackup(collection: Collection, slug: string) {
+export function deleteLocalBackup(collection: CollectionWithDefaults, slug: string) {
   return (_dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const configState = state.config;
@@ -607,7 +627,7 @@ export function deleteLocalBackup(collection: Collection, slug: string) {
  * Exported Thunk Action Creators
  */
 
-export function loadEntry(collection: Collection, slug: string, silent = false) {
+export function loadEntry(collection: CollectionWithDefaults, slug: string, silent = false) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     if (!silent) {
       dispatch(entryLoading(collection, slug));
@@ -638,14 +658,18 @@ export function loadEntry(collection: Collection, slug: string, silent = false) 
   };
 }
 
-export async function tryLoadEntry(state: RootState, collection: Collection, slug: string) {
+export async function tryLoadEntry(
+  state: RootState,
+  collection: CollectionWithDefaults,
+  slug: string,
+) {
   const configState = state.config;
   if (!configState.config) {
     throw new Error('Config not loaded');
   }
 
   const backend = currentBackend(configState.config);
-  return backend.getEntry(state, collection, slug);
+  return backend.getEntry(state, collection, configState.config, slug);
 }
 
 interface AppendAction {
@@ -669,13 +693,13 @@ function addAppendActionsToCursor(cursor: Cursor) {
   }));
 }
 
-export function loadEntries(collection: Collection, page = 0) {
+export function loadEntries(collection: CollectionWithDefaults, page = 0) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     if (collection.isFetching) {
       return;
     }
     const state = getState();
-    const sortField = selectEntriesSortField(collection.name)(state);
+    const sortField = selectEntriesSelectedSort(state, collection.name);
     if (sortField) {
       return dispatch(sortByField(collection, sortField.key, sortField.direction));
     }
@@ -698,8 +722,10 @@ export function loadEntries(collection: Collection, page = 0) {
         entries: Entry[];
       } = await (loadAllEntries
         ? // nested collections require all entries to construct the tree
-          backend.listAllEntries(collection).then((entries: Entry[]) => ({ entries }))
-        : backend.listEntries(collection));
+          backend
+            .listAllEntries(collection, configState.config)
+            .then((entries: Entry[]) => ({ entries }))
+        : backend.listEntries(collection, configState.config));
 
       const cleanResponse = {
         ...response,
@@ -745,14 +771,19 @@ export function loadEntries(collection: Collection, page = 0) {
   };
 }
 
-function traverseCursor(backend: Backend, cursor: Cursor, action: string) {
+function traverseCursor(
+  backend: Backend,
+  cursor: Cursor,
+  action: string,
+  config: ConfigWithDefaults,
+) {
   if (!cursor.actions!.has(action)) {
     throw new Error(`The current cursor does not support the pagination action "${action}".`);
   }
-  return backend.traverseCursor(cursor, action);
+  return backend.traverseCursor(cursor, action, config);
 }
 
-export function traverseCollectionCursor(collection: Collection, action: string) {
+export function traverseCollectionCursor(collection: CollectionWithDefaults, action: string) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const collectionName = collection.name;
@@ -783,7 +814,12 @@ export function traverseCollectionCursor(collection: Collection, action: string)
 
     try {
       dispatch(entriesLoading(collection));
-      const { entries, cursor: newCursor } = await traverseCursor(backend, cursor, realAction);
+      const { entries, cursor: newCursor } = await traverseCursor(
+        backend,
+        cursor,
+        realAction,
+        configState.config,
+      );
 
       const pagination = newCursor.meta?.page as number | null;
       return dispatch(
@@ -831,7 +867,7 @@ function processValue(unsafe: string) {
   return escapeHtml(unsafe);
 }
 
-export function createEmptyDraft(collection: Collection, search: string) {
+export function createEmptyDraft(collection: CollectionWithDefaults, search: string) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     if ('files' in collection) {
       return;
@@ -886,12 +922,12 @@ export function getMediaAssets({ entry }: { entry: Entry }) {
   return assets;
 }
 
-export function getSerializedEntry(collection: Collection, entry: Entry): Entry {
+export function getSerializedEntry(collection: CollectionWithDefaults, entry: Entry): Entry {
   /**
    * Serialize the values of any fields with registered serializers, and
    * update the entry and entryDraft with the serialized values.
    */
-  const fields = selectFields(collection, entry.slug);
+  const fields = getFields(collection, entry.slug);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function serializeData(data: any) {
@@ -911,7 +947,7 @@ export function getSerializedEntry(collection: Collection, entry: Entry): Entry 
 }
 
 export function persistEntry(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   rootSlug: string | undefined,
   navigate: NavigateFunction,
 ) {
@@ -919,7 +955,7 @@ export function persistEntry(
     const state = getState();
     const entryDraft = state.entryDraft;
     const fieldsErrors = entryDraft.fieldsErrors;
-    const usedSlugs = selectPublishedSlugs(collection.name)(state);
+    const usedSlugs = selectPublishedSlugs(state, collection.name);
 
     // Early return if draft contains validation errors
     if (Object.keys(fieldsErrors).length > 0) {
@@ -983,6 +1019,7 @@ export function persistEntry(
         entryDraft: newEntryDraft,
         assetProxies,
         usedSlugs,
+        status: entry.status,
       })
       .then(async (newSlug: string) => {
         dispatch(
@@ -1027,7 +1064,7 @@ export function persistEntry(
   };
 }
 
-export function deleteEntry(collection: Collection, slug: string) {
+export function deleteEntry(collection: CollectionWithDefaults, slug: string) {
   return (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const configState = state.config;
@@ -1077,7 +1114,7 @@ export type EntriesAction = ReturnType<
   | typeof entryDeleteFail
   | typeof emptyDraftCreated
   | typeof createDraftFromEntry
-  | typeof draftDuplicateEntry
+  | typeof createDraftDuplicateFromEntry
   | typeof discardDraft
   | typeof updateDraft
   | typeof changeDraftField

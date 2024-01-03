@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { translate } from 'react-polyglot';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import ConfirmEvent from '@staticcms/core/lib/util/events/ConfirmEvent';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import { useWindowEvent } from '@staticcms/core/lib/util/window.util';
 import Button from '../button/Button';
 import Modal from '../modal/Modal';
 
-import type { TranslateProps } from 'react-polyglot';
+import type { FC } from 'react';
 
 import './Confirm.css';
 
@@ -32,7 +32,9 @@ export interface ConfirmDialogProps extends ConfirmProps {
   resolve: (value: boolean | PromiseLike<boolean>) => void;
 }
 
-const ConfirmDialog = ({ t }: TranslateProps) => {
+const ConfirmDialog: FC = () => {
+  const t = useTranslate();
+
   const [detail, setDetail] = useState<ConfirmDialogProps | null>(null);
   const {
     resolve,
@@ -107,6 +109,7 @@ const ConfirmDialog = ({ t }: TranslateProps) => {
           variant="text"
           color="secondary"
           className={classes['cancel-button']}
+          data-testid="cancel-button"
         >
           {cancel}
         </Button>
@@ -115,6 +118,7 @@ const ConfirmDialog = ({ t }: TranslateProps) => {
           variant="contained"
           color={color}
           className={classes['confirm-button']}
+          data-testid="confirm-button"
         >
           {confirm}
         </Button>
@@ -123,7 +127,7 @@ const ConfirmDialog = ({ t }: TranslateProps) => {
   );
 };
 
-export const Confirm = translate()(ConfirmDialog);
+export const Confirm = ConfirmDialog;
 
 const confirm = (props: ConfirmProps) => {
   return new Promise<boolean>(resolve => {

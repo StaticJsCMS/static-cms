@@ -34,9 +34,6 @@ module.exports = {
       },
     ],
     'no-duplicate-imports': 'error',
-    '@emotion/no-vanilla': 'off',
-    '@emotion/import-from-emotion': 'error',
-    '@emotion/styled-import': 'error',
     'require-atomic-updates': [0],
     'object-shorthand': ['error', 'always'],
     'prefer-const': [
@@ -57,7 +54,7 @@ module.exports = {
     ],
     'import/prefer-default-export': 'error',
   },
-  plugins: ['babel', '@emotion', 'cypress', 'unicorn', 'react-hooks'],
+  plugins: ['babel', 'cypress', 'unicorn', 'react-hooks'],
   settings: {
     react: {
       version: 'detect',
@@ -97,7 +94,6 @@ module.exports = {
         '@typescript-eslint/consistent-type-imports': 'error',
         '@typescript-eslint/explicit-function-return-type': [0],
         '@typescript-eslint/explicit-module-boundary-types': [0],
-        '@typescript-eslint/no-duplicate-imports': 'error',
         '@typescript-eslint/no-use-before-define': [
           'error',
           { functions: false, classes: true, variables: true },

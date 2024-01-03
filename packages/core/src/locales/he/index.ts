@@ -22,10 +22,12 @@ const he: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'תוכן',
+      workflow: 'ניהול אייטמים לפני הפרסום',
       media: 'מדיה',
       quickAdd: 'הוספה מהירה',
     },
     app: {
+      loading: 'טעינה...',
       errorHeader: 'אירעה שגיאה בטעינת הגדרות מערכת ניהול התוכן',
       configErrors: 'שגיאות בהגדרות',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -104,15 +106,34 @@ const he: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'כתיבה בשפה ה%{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'האם ברצונך לעבור לעמוד אחר ללא שמירה?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני עדכון מצב האייטם.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'נא לשנות את מצב האייטם ל״מוכן לפרסום״ לפני הפרסום.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody: 'בוצעו שינויים שלא נשמרו. יש לבצע שמירה לפני הפרסום.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'האם ברצונך לפרסם את האייטם?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'האם ברצונך לבטל את פרסום האייטם?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'האם ברצונך למחוק את האייטם הזה לפני פרסומו, וכן את השינויים שבוצעו כעת וטרם נשמרו?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'האם ברצונך למחוק את האייטם הזה לאחר פרסומו?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'פעולה זו תמחק את כל השינויים שבוצעו באייטם זה ולא פורסמו, וכן את השינויים שבוצעו כעת וטרם נשמרו. האם ברצונך למחוק?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'כל השינויים שבוצעו באייטם זה ולא פורסמו יימחקו. האם ברצונך למחוק אותו?',
       loadingEntry: 'טעינת אייטם...',
     },
     editorInterface: {
@@ -123,13 +144,37 @@ const he: LocalePhrasesRoot = {
       toggleScrollSync: 'סנכרון הגלילה',
     },
     editorToolbar: {
+      publishing: 'פרסום...',
       publish: 'פרסום',
       published: 'פורסם',
+      unpublish: 'ביטול הפרסום',
       duplicate: 'שכפול',
+      unpublishing: 'ביטול הפרסום...',
       publishAndCreateNew: 'פרסום ויצירת אייטם חדש',
       publishAndDuplicate: 'פרסום ושכפול',
+      deleteUnpublishedChanges: 'מחיקת השינויים שלא פורסמו',
+      deleteUnpublishedEntry: 'מחיקת אייטם שטרם פורסם',
+      deletePublishedEntry: 'מחיקת אייטם שפורסם',
       deleteEntry: 'מחיקת האייטם',
+      saving: 'שמירה...',
+      save: 'שמירה',
+      statusInfoTooltipDraft:
+        'האייטם מוגדר כטיוטה. כדי להשלים את הפעולה ולהעביר אותו למצב ״ממתין לאישור״ יש להעביר אותו למצב ״ממתין לאישור״',
+      statusInfoTooltipInReview:
+        'האייטם ממתין לאישור - לא נדרשת פעולה נוספת. ניתן עדיין לבצע שינויים בעת שהאייטם ממתין לאישור.',
+      deleting: 'מחיקה...',
+      updating: 'עדכון...',
+      status: 'מצב: %{status}',
+      backCollection: 'כתיבה בקטגוריית %{collectionLabel}',
+      unsavedChanges: 'שינויים לא שמורים',
+      changesSaved: 'השינויים נשמרו',
+      draft: 'טיוטה',
+      inReview: 'ממתין לאישור',
+      ready: 'מוכן לפרסום',
       publishNow: 'פרסום מיידי',
+      deployPreviewPendingButtonLabel: 'בדיקת תצוגה מקדימה',
+      deployPreviewButtonLabel: 'צפייה בתצוגה מקדימה',
+      deployButtonLabel: 'צפייה באתר',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +183,35 @@ const he: LocalePhrasesRoot = {
       markdown: {
         bold: 'מודגש',
         italic: 'נטוי',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'קוד',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'קישור',
-        linkPrompt: 'נא להקליד את הכתובת לקישור',
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'כותרת',
         quote: 'ציטוט',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'רשימה לא-ממוספרת',
         numberedList: 'רשימה ממוספרת',
         addComponent: 'הוספת רכיב',
         richText: 'טקסט עשיר',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'בחירת תמונה',
@@ -212,6 +275,10 @@ const he: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -232,10 +299,10 @@ const he: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'טעינה...',
       noResults: 'לא נמצאו תוצאות.',
       noAssetsFound: 'לא נמצאו קבצים.',
       noImagesFound: 'לא נמצאו תמונות.',
+      private: 'פרטי ',
       images: 'תמונות',
       mediaAssets: 'קבצי מדיה',
       search: 'חיפוש...',
@@ -252,6 +319,7 @@ const he: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -262,6 +330,7 @@ const he: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'בחזרה לאתר',
@@ -283,11 +352,12 @@ const he: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'התנתקות',
     },
     toast: {
       onFailToLoadEntries: 'טעינת האייטם %{details} נכשלה',
+      onFailToLoadDeployPreview: 'טעינת התצוגה המקדימה של האייטם %{details} נכשלה',
       onFailToPersist: 'אחסון האייטם %{details} נכשל',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'מחיקת האייטם %{details} נכשלה',
@@ -295,12 +365,52 @@ const he: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'עדכון מצב האייטם %{details} נכשל',
       missingRequiredField: 'אופס, שכחת למלא שדה חובה. נא להשלים את המידע החסר לפני השמירה',
       entrySaved: 'האייטם נשמר',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'האייטם פורסם',
+      entryUnpublished: 'האייטם הועבר לטיוטות',
       onFailToPublishEntry: 'פרסום האייטם %{details} נכשל',
+      onFailToUnpublishEntry: 'ביטול פרסום האייטם %{details} נכשל',
       entryUpdated: 'מצב האייטם עודכן',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'השינויים שלא פורסמו נמחקו',
       onFailToAuth: '%{details}',
       onLoggedOut: 'נותקת מהמערכת. יש לגבות מידע לא שמור ולהתחבר שוב',
       onBackendDown: 'ה-backend המוגדר אינו זמין. ראו %{details} למידע נוסף',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'טעינת אייטמים',
+      workflowHeading: 'ניהול אייטמים לפני הפרסום',
+      newPost: 'אייטם חדש',
+      description:
+        '%אייטם {smart_count} ממתין לאישור, אייטם %{readyCount} מוכן לפרסום |||| %{smart_count} אייטמים ממתינים לאישור, %{readyCount} מוכנים לפרסום',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} מאת %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'מאת %{author}',
+      deleteChanges: 'למחוק את השינויים',
+      deleteNewEntry: 'למחוק אייטם חדש',
+      publishChanges: 'פרסום השינויים',
+      publishNewEntry: 'פרסום אייטם חדש',
+    },
+    workflowList: {
+      onDeleteEntry: 'האם ברצונך למחוק אייטם זה?',
+      onPublishingNotReadyEntry:
+        'ניתן לפרסם רק אייטמים שנמצאים במצב ״מוכן לפרסום״. נא לגרור את האייטם לטור ״מוכן לפרסום״ כדי לפרסם.',
+      onPublishEntry: 'האם ברצונך לפרסם אייטם זה?',
+      draft: 'טיוטות',
+      pending_review: 'ממתין לאישור',
+      pending_publish: 'מוכן לפרסום',
+      currentEntries: 'אייטם %{smart_count} |||| %{smart_count} אייטמים',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

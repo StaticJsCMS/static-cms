@@ -3,6 +3,7 @@ import { ELEMENT_UL } from '@udecode/plate';
 import React from 'react';
 
 import ListToolbarButton from './common/ListToolbarButton';
+import { useTranslate } from '@staticcms/core/lib';
 
 import type { FC } from 'react';
 
@@ -12,9 +13,12 @@ export interface UnorderedListToolbarButtonProps {
 }
 
 const UnorderedListToolbarButton: FC<UnorderedListToolbarButtonProps> = ({ disabled, variant }) => {
+  const t = useTranslate();
+
   return (
     <ListToolbarButton
-      tooltip="List"
+      id="bulleted-list"
+      tooltip={t('editor.editorWidgets.markdown.bulletedList')}
       type={ELEMENT_UL}
       icon={FormatListBulletedIcon}
       disabled={disabled}

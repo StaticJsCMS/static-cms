@@ -3,10 +3,10 @@ import { useMemo } from 'react';
 import { getNewEntryUrl } from '../urlHelper';
 import { isNotEmpty } from '../util/string.util';
 
-import type { Collection } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core';
 
 export default function useNewEntryUrl(
-  collection: Collection | undefined,
+  collection: CollectionWithDefaults | undefined,
   filterTerm: string | undefined,
 ) {
   return useMemo(() => {

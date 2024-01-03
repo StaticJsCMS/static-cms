@@ -22,10 +22,12 @@ const ko: LocalePhrasesRoot = {
   app: {
     header: {
       content: '콘텐츠',
+      workflow: '워크플로우',
       media: '미디어',
       quickAdd: '빠른 추가',
     },
     app: {
+      loading: '불러오는 중...',
       errorHeader: 'CMS 구성을 불러오는 중 오류가 발생했습니다.',
       configErrors: '구성 오류',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -53,7 +55,7 @@ const ko: LocalePhrasesRoot = {
       searchResults: '"%{searchTerm}"에 대한 검색결과',
       searchResultsInCollection: '%{collection} 컬랙션에서 "%{searchTerm}"에 대한 검색결과',
       filterBy: '필터 기준',
-      groupBy: undefined, // English translation: 'Group by'
+      groupBy: '그룹화 기준',
     },
     entries: {
       loadingEntries: '항목 불러오는 중...',
@@ -62,8 +64,8 @@ const ko: LocalePhrasesRoot = {
       noEntries: '항목 없음',
     },
     groups: {
-      other: undefined, // English translation: 'Other'
-      negateLabel: undefined, // English translation: 'Not %{label}'
+      other: '다른 그룹',
+      negateLabel: '%{label} 제외',
     },
     table: {
       summary: undefined, // English translation: 'Summary'
@@ -103,74 +105,135 @@ const ko: LocalePhrasesRoot = {
         invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
       },
       i18n: {
-        writingInLocale: undefined, // English translation: 'Writing in %{locale}'
+        writingInLocale: '%{locale}로 작성 중',
+        copyFromLocale: '다른 로케일로부터 채우기',
+        copyFromLocaleConfirm:
+          '%{locale} 로케일로부터 데이터를 채우시겠습니까?\n모든 기존 내용을 덮어쓰기 합니다.',
       },
     },
     editor: {
       onLeavePage: '이 페이지를 떠나시겠습니까?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        '저장하지 않은 변경사항이 있습니다. 상태 업데이트 전 먼저 저장하세요.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: '게시 하기 앞서 상태를 "준비됨" 으로 업데이트 하세요.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        '저장하지 않은 변경사항이 있습니다, 게시하기 전 먼저 저장하세요.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: '이 항목을 게시하시곘습니까?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: '이 항목을 게시 철회 하시겠습니까?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         '현재 세션에서의 저장되지 않은 변경사항과 이 게시된 항목을 삭제하시겠습니까?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: '이 게시된 항목을 삭제하시겠습니까?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        '이 항목의 게시되지 않은 모든 변경사항과 현재 세션의 저장되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        '이 항목에 대해 게시되지 않은 변경사항이 삭제됩니다. 정말로 삭제하시겠습니까?',
       loadingEntry: '항목 불러오는 중...',
     },
     editorInterface: {
       sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
       preview: undefined, // English translation: 'Preview'
-      toggleI18n: undefined, // English translation: 'Toggle i18n'
-      togglePreview: undefined, // English translation: 'Toggle preview'
-      toggleScrollSync: undefined, // English translation: 'Sync scrolling'
+      toggleI18n: '국제화(i18n) 토글',
+      togglePreview: '미리보기 토글',
+      toggleScrollSync: '스크롤 동기화',
     },
     editorToolbar: {
+      publishing: '게시 중...',
       publish: '게시',
       published: '게시됨',
+      unpublish: '게시 철회',
       duplicate: '복제',
+      unpublishing: '게시 철회 중...',
       publishAndCreateNew: '게시하고 새로 만들기',
       publishAndDuplicate: '게시하고 복제',
+      deleteUnpublishedChanges: '게시 안된 변경사항 삭제',
+      deleteUnpublishedEntry: '게시 안된 항목 삭제',
+      deletePublishedEntry: '게시된 항목 삭제',
       deleteEntry: '항목 삭제',
+      saving: '저장 중...',
+      save: '저장',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: '삭제 중...',
+      updating: '업데이트 중...',
+      status: '상태: %{status}',
+      backCollection: '%{collectionLabel} 컬랙션에 작성하는 중',
+      unsavedChanges: '변경사항 저장되지 않음',
+      changesSaved: '변경사항 저장됨',
+      draft: '초안',
+      inReview: '검토중',
+      ready: '준비됨',
       publishNow: '지금 게시',
+      deployPreviewPendingButtonLabel: '미리보기 확인',
+      deployPreviewButtonLabel: '미리보기 보기',
+      deployButtonLabel: '라이브 보기',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
     },
     editorWidgets: {
       markdown: {
-        bold: undefined, // English translation: 'Bold'
-        italic: undefined, // English translation: 'Italic'
-        code: undefined, // English translation: 'Code'
-        link: undefined, // English translation: 'Link'
-        linkPrompt: undefined, // English translation: 'Enter the URL of the link'
-        headings: undefined, // English translation: 'Headings'
-        quote: undefined, // English translation: 'Quote'
-        bulletedList: undefined, // English translation: 'Bulleted List'
-        numberedList: undefined, // English translation: 'Numbered List'
-        addComponent: undefined, // English translation: 'Add Component'
+        bold: '굵은체',
+        italic: '기울임체',
+        strikethrough: undefined, // English translation: 'Strikethrough'
+        code: '코드',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
+        link: '링크',
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
+        headings: '제목',
+        quote: '인용',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
+        bulletedList: '글머리 기호 목록',
+        numberedList: '번호 매기기 목록',
+        addComponent: '구성요소 추가',
         richText: '리치 텍스트',
         markdown: '마크다운',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: '이미지 선택',
-        chooseMultiple: undefined, // English translation: 'Choose images'
-        chooseUrl: undefined, // English translation: 'Insert from URL'
-        replaceUrl: undefined, // English translation: 'Replace with URL'
-        promptUrl: undefined, // English translation: 'Enter the URL of the image'
+        chooseMultiple: '이미지 여러개 선택',
+        chooseUrl: 'URL에서 삽입',
+        replaceUrl: 'URL 변경',
+        promptUrl: '이미지 URL을 입력하세요',
         chooseDifferent: '다른 이미지 선택',
-        addMore: undefined, // English translation: 'Add more images'
+        addMore: '더 많은 이미지 추가',
         remove: '이미지 삭제',
-        removeAll: undefined, // English translation: 'Remove all images'
+        removeAll: '모든 이미지 삭제',
       },
       file: {
         choose: '파일 선택',
-        chooseUrl: undefined, // English translation: 'Insert from URL'
-        chooseMultiple: undefined, // English translation: 'Choose files'
-        replaceUrl: undefined, // English translation: 'Replace with URL'
-        promptUrl: undefined, // English translation: 'Enter the URL of the file'
+        chooseUrl: 'URL에서 삽입',
+        chooseMultiple: '파일 여러개 선택',
+        replaceUrl: 'URL 변경',
+        promptUrl: '파일 URL을 입력하세요',
         chooseDifferent: '다른 파일 선택',
-        addMore: undefined, // English translation: 'Add more files'
+        addMore: '더 많은 파일 추가',
         remove: '파일 삭제',
-        removeAll: undefined, // English translation: 'Remove all files'
+        removeAll: '모든 파일 삭제',
       },
       folder: {
         choose: undefined, // English translation: 'Choose a folder'
@@ -184,7 +247,7 @@ const ko: LocalePhrasesRoot = {
         removeAll: undefined, // English translation: 'Remove all folders'
       },
       unknownControl: {
-        noControl: "'%{widget}' 위젝에 대한 컨트롤이 없습니다.",
+        noControl: "'%{widget}' 위젯에 대한 컨트롤이 없습니다.",
       },
       unknownPreview: {
         noPreview: "'%{widget}' 위젯에 대한 미리보기가 없습니다.",
@@ -203,8 +266,8 @@ const ko: LocalePhrasesRoot = {
         invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
       },
       list: {
-        add: undefined, // English translation: 'Add %{item}'
-        addType: undefined, // English translation: 'Add %{item}'
+        add: '%{item} 추가',
+        addType: '%{item} 추가',
         noValue: undefined, // English translation: 'No value'
       },
       keyvalue: {
@@ -212,16 +275,20 @@ const ko: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
     mediaLibraryCard: {
       draft: '초안',
-      copy: undefined, // English translation: 'Copy'
-      copyUrl: undefined, // English translation: 'Copy URL'
-      copyPath: undefined, // English translation: 'Copy Path'
-      copyName: undefined, // English translation: 'Copy Name'
-      copied: undefined, // English translation: 'Copied'
+      copy: '복사',
+      copyUrl: 'URL 복사',
+      copyPath: '경로 복사',
+      copyName: '이름 복사',
+      copied: '복사됨',
     },
     mediaLibrary: {
       onDeleteTitle: undefined, // English translation: 'Delete selected media?'
@@ -233,10 +300,10 @@ const ko: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: '불러오는 중...',
       noResults: '일치 항목 없음.',
       noAssetsFound: '발견된 에셋 없음.',
       noImagesFound: '발견된 이미지 없음.',
+      private: '개인 ',
       images: '이미지',
       mediaAssets: '미디어 에셋',
       search: '검색...',
@@ -253,6 +320,7 @@ const ko: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -263,6 +331,7 @@ const ko: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: '사이트로 돌아가기',
@@ -284,11 +353,12 @@ const ko: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: '로그아웃',
     },
     toast: {
       onFailToLoadEntries: '항목 불러오기 실패: %{details}',
+      onFailToLoadDeployPreview: '미리보기 불러오기 실패: %{details}',
       onFailToPersist: '항목 저장 실패: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: '항목 삭제 실패: %{details}',
@@ -296,13 +366,53 @@ const ko: LocalePhrasesRoot = {
       onFailToUpdateStatus: '상태 업데이트 실패: %{details}',
       missingRequiredField: '이런! 필수 필드를 놓치셨습니다. 저장하기 전에 먼저 채우세요.',
       entrySaved: '항목 저장됨',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: '항목 게시됨',
+      entryUnpublished: '항목 게시 철회됨',
       onFailToPublishEntry: '게시 실패: %{details}',
+      onFailToUnpublishEntry: '항목 게시 철회 실해: %{details}',
       entryUpdated: '항목 상태 업데이트됨',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: '게시되지 않은 변경사항 삭제됨',
       onFailToAuth: '%{details}',
       onLoggedOut: '로그아웃 하셨습니다, 데티어를 백업하시고 다시 로그인 하세요.',
       onBackendDown:
         '백엔드 서비스가 장애를 겪고 있습니다. 자세한 사항은 %{details} 을(를) 참고하세요.',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: '편집 워크플로우의 항목을 불러오는 중',
+      workflowHeading: '편집 워크플로우',
+      newPost: '새 게시물',
+      description:
+        '%{smart_count}개 항목 검토 대기중, %{readyCount}개 항목 게시 준비 완료됨. |||| %{smart_count}개 항목 검토 대기중, %{readyCount}개 항목 게시 준비 완료됨. ',
+      dateFormat: 'M월 D일',
+    },
+    workflowCard: {
+      lastChange: '%{date} by %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'by %{author}',
+      deleteChanges: '변경사항 삭제',
+      deleteNewEntry: '새 항목 삭제',
+      publishChanges: '변경사항 게시',
+      publishNewEntry: '새 항목 게시',
+    },
+    workflowList: {
+      onDeleteEntry: '정말로 이 항목을 삭제하시겠습니까?',
+      onPublishingNotReadyEntry:
+        '"준비됨" 상태의 항목만 게시할 수 있습니다. 게시를 활성화 하려면 카드를 "준비됨" 열에 끌어 놓으세요.',
+      onPublishEntry: '이 항목을 게시하시곘습니까?',
+      draft: '초안',
+      pending_review: '검토 진행중',
+      pending_publish: '준비됨',
+      currentEntries: '%{smart_count}개 항목 |||| %{smart_count}개 항목',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

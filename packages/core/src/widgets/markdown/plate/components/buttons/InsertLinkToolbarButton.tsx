@@ -12,13 +12,14 @@ import {
 } from '@udecode/plate';
 import React, { useCallback, useMemo } from 'react';
 
+import { useTranslate } from '@staticcms/core/lib';
 import useMediaInsert from '@staticcms/core/lib/hooks/useMediaInsert';
 import useUUID from '@staticcms/core/lib/hooks/useUUID';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { useMdPlateEditorState } from '@staticcms/markdown/plate/plateTypes';
 import ToolbarButton from './common/ToolbarButton';
 
-import type { Collection, MarkdownField, MediaPath } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, MarkdownField, MediaPath } from '@staticcms/core';
 import type { MdLinkElement } from '@staticcms/markdown/plate/plateTypes';
 import type { TText } from '@udecode/plate';
 import type { FC } from 'react';
@@ -27,7 +28,7 @@ import type { Location } from 'slate';
 export interface InsertLinkToolbarButtonProps {
   variant: 'button' | 'menu';
   currentValue?: { url: string; alt?: string };
-  collection: Collection<MarkdownField>;
+  collection: CollectionWithDefaults<MarkdownField>;
   field: MarkdownField;
   disabled: boolean;
 }
@@ -39,6 +40,8 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
   currentValue,
   disabled,
 }) => {
+  const t = useTranslate();
+
   const editor = useMdPlateEditorState();
   const handleInsert = useCallback(
     ({ path: newUrl, alt: newText }: MediaPath<string>) => {
@@ -107,8 +110,9 @@ const InsertLinkToolbarButton: FC<InsertLinkToolbarButtonProps> = ({
 
   return !isLink ? (
     <ToolbarButton
-      label="Link"
-      tooltip="Insert link"
+      id="link"
+      label={t('editor.editorWidgets.markdown.link')}
+      tooltip={t('editor.editorWidgets.markdown.insertLink')}
       icon={LinkIcon}
       onClick={handleOpenMediaLibrary}
       disabled={disabled}

@@ -4,7 +4,7 @@ import { API as GithubAPI } from '../github';
 import type { FetchError } from '@staticcms/core/lib/util';
 import type { Config as GitHubConfig } from '../github/API';
 
-type Config = GitHubConfig & {
+export type GitHubApiOptions = GitHubConfig & {
   apiRoot: string;
   tokenPromise: () => Promise<string>;
   commitAuthor: { name: string };
@@ -16,12 +16,12 @@ export default class API extends GithubAPI {
   commitAuthor: { name: string };
   isLargeMedia: (filename: string) => Promise<boolean>;
 
-  constructor(config: Config) {
-    super(config);
-    this.apiRoot = config.apiRoot;
-    this.tokenPromise = config.tokenPromise;
-    this.commitAuthor = config.commitAuthor;
-    this.isLargeMedia = config.isLargeMedia;
+  constructor(options: GitHubApiOptions) {
+    super(options);
+    this.apiRoot = options.apiRoot;
+    this.tokenPromise = options.tokenPromise;
+    this.commitAuthor = options.commitAuthor;
+    this.isLargeMedia = options.isLargeMedia;
     this.repoURL = '';
     this.originRepoURL = '';
   }

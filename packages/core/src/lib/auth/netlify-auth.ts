@@ -1,7 +1,7 @@
 import trim from 'lodash/trim';
 import trimEnd from 'lodash/trimEnd';
 
-import type { User, AuthenticatorConfig } from '@staticcms/core/interface';
+import type { User, AuthenticatorConfig } from '@staticcms/core';
 
 const NETLIFY_API = 'https://api.netlify.com';
 const AUTH_ENDPOINT = 'auth';

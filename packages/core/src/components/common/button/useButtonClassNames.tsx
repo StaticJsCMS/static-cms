@@ -39,6 +39,7 @@ const classes: Record<
     success: 'CMS_Button_contained-success',
     error: 'CMS_Button_contained-error',
     warning: 'CMS_Button_contained-warning',
+    info: 'CMS_Button_contained-info',
   },
   outlined: {
     primary: 'CMS_Button_outlined-primary',
@@ -46,6 +47,7 @@ const classes: Record<
     success: 'CMS_Button_outlined-success',
     error: 'CMS_Button_outlined-error',
     warning: 'CMS_Button_outlined-warning',
+    info: 'CMS_Button_outlined-info',
   },
   text: {
     primary: 'CMS_Button_text-primary',
@@ -53,6 +55,7 @@ const classes: Record<
     success: 'CMS_Button_text-success',
     error: 'CMS_Button_text-error',
     warning: 'CMS_Button_text-warning',
+    info: 'CMS_Button_text-info',
   },
 };
 

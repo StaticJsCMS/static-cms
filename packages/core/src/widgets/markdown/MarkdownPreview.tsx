@@ -10,7 +10,7 @@ import withShortcodeMdxComponent from './mdx/withShortcodeMdxComponent';
 import useMdx from './plate/hooks/useMdx';
 import { processShortcodeConfigToMdx } from './plate/serialization/slate/processShortcodeConfig';
 
-import type { MarkdownField, WidgetPreviewProps } from '@staticcms/core/interface';
+import type { MarkdownField, WidgetPreviewProps } from '@staticcms/core';
 import type { FC } from 'react';
 import type { UseMdxState } from './plate/hooks/useMdx';
 

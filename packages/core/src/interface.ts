@@ -2,12 +2,21 @@ import type { LanguageName } from '@uiw/codemirror-extensions-langs';
 import type { PropertiesSchema } from 'ajv/dist/types/json-schema';
 import type {
   ComponentType,
+  FC,
   FunctionComponent,
   JSXElementConstructor,
   ReactElement,
   ReactNode,
 } from 'react';
 import type { TranslateProps as ReactPolyglotTranslateProps, t } from 'react-polyglot';
+import type {
+  CreateNodeOptions,
+  DocumentOptions,
+  ParseOptions,
+  SchemaOptions,
+  ToJSOptions,
+  ToStringOptions,
+} from 'yaml';
 import type { MediaFile as BackendMediaFile } from './backend';
 import type { EditorControlProps } from './components/entry-editor/editor-control-pane/EditorControl';
 import type {
@@ -15,6 +24,7 @@ import type {
   SORT_DIRECTION_DESCENDING,
   SORT_DIRECTION_NONE,
 } from './constants';
+import type { Workflow, WorkflowStatus } from './constants/publishModes';
 import type {
   BLOCKQUOTE_TOOLBAR_BUTTON,
   BOLD_TOOLBAR_BUTTON,
@@ -50,8 +60,14 @@ import type {
 import type Cursor from './lib/util/Cursor';
 import type AssetProxy from './valueObjects/AssetProxy';
 
+export interface Page {
+  isFetching?: boolean;
+  page?: number;
+  ids: string[];
+}
+
 export interface Pages {
-  [collection: string]: { isFetching?: boolean; page?: number; ids: string[] };
+  [collection: string]: Page;
 }
 
 export type SortableField<EF extends BaseField = UnknownField> =
@@ -117,11 +133,14 @@ export interface Entry<T = ObjectValue> {
   mediaFiles: MediaFile[];
   author: string;
   updatedOn: string;
-  status?: string;
+  status?: WorkflowStatus;
   newRecord?: boolean;
+  openAuthoring?: boolean;
   isFetching?: boolean;
   isPersisting?: boolean;
   isDeleting?: boolean;
+  isPublishing?: boolean;
+  isUpdatingStatus?: boolean;
   error?: string;
   i18n?: {
     [locale: string]: {
@@ -133,7 +152,7 @@ export interface Entry<T = ObjectValue> {
   };
 }
 
-export type Entities = Record<string, Entry>;
+export type Entries = Record<string, Entry>;
 
 export interface FieldError {
   type: string;
@@ -183,7 +202,7 @@ export interface BaseFieldFilterRule {
 }
 
 export interface FieldPatternFilterRule extends BaseFieldFilterRule {
-  pattern: string;
+  pattern: string | RegExp;
 }
 
 export interface FieldValueFilterRule extends BaseFieldFilterRule {
@@ -194,7 +213,7 @@ export interface FieldValueFilterRule extends BaseFieldFilterRule {
 export type FieldFilterRule = FieldPatternFilterRule | FieldValueFilterRule;
 
 export interface FileNameFilterRule {
-  pattern: string;
+  pattern: string | RegExp;
 }
 
 export type FilterRule = FieldFilterRule | FileNameFilterRule;
@@ -225,8 +244,14 @@ export interface CollectionFile<EF extends BaseField = UnknownField> {
   media_folder?: string;
   public_folder?: string;
   media_library?: MediaLibraryConfig;
-  i18n?: boolean | I18nInfo;
+  i18n?: boolean | Partial<I18nInfo>;
   editor?: EditorConfig;
+  publish?: boolean;
+}
+
+export interface CollectionFileWithDefaults<EF extends BaseField = UnknownField>
+  extends Omit<CollectionFile<EF>, 'i18n'> {
+  i18n?: I18nInfo;
 }
 
 interface Nested {
@@ -247,8 +272,8 @@ export interface I18nSettings {
 export type Format = keyof typeof formatExtensions;
 
 export interface i18nCollection<EF extends BaseField = UnknownField>
-  extends Omit<Collection<EF>, 'i18n'> {
-  i18n: Required<Collection<EF>>['i18n'];
+  extends Omit<CollectionWithDefaults<EF>, 'i18n'> {
+  i18n: Required<CollectionWithDefaults<EF>>['i18n'];
 }
 
 export interface BaseCollection {
@@ -262,9 +287,9 @@ export interface BaseCollection {
   label_singular?: string;
   label: string;
   sortable_fields?: SortableFields;
-  view_filters?: ViewFilter[];
-  view_groups?: ViewGroup[];
-  i18n?: boolean | I18nInfo;
+  view_filters?: ViewFilters;
+  view_groups?: ViewGroups;
+  i18n?: boolean | Partial<I18nInfo>;
   hide?: boolean;
   editor?: EditorConfig;
   identifier_field?: string;
@@ -278,23 +303,51 @@ export interface BaseCollection {
   media_library?: MediaLibraryConfig;
 }
 
+export interface BaseCollectionWithDefaults extends Omit<BaseCollection, 'i18n'> {
+  i18n?: I18nInfo;
+}
+
 export interface FilesCollection<EF extends BaseField = UnknownField> extends BaseCollection {
   files: CollectionFile<EF>[];
 }
 
-export interface FolderCollection<EF extends BaseField = UnknownField> extends BaseCollection {
+export interface FilesCollectionWithDefaults<EF extends BaseField = UnknownField>
+  extends BaseCollectionWithDefaults {
+  files: CollectionFileWithDefaults<EF>[];
+}
+
+export interface BaseFolderCollection<EF extends BaseField = UnknownField> {
   folder: string;
   fields: Field<EF>[];
   create?: boolean;
+  publish?: boolean;
   delete?: boolean;
   nested?: Nested;
+  meta?: {
+    path: string;
+  };
 }
+
+export type FolderCollection<EF extends BaseField = UnknownField> = BaseCollection &
+  BaseFolderCollection<EF>;
+
+export type FolderCollectionWithDefaults<EF extends BaseField = UnknownField> =
+  BaseCollectionWithDefaults & BaseFolderCollection<EF>;
 
 export type Collection<EF extends BaseField = UnknownField> =
   | FilesCollection<EF>
   | FolderCollection<EF>;
 
+export type CollectionWithDefaults<EF extends BaseField = UnknownField> =
+  | FilesCollectionWithDefaults<EF>
+  | FolderCollectionWithDefaults<EF>;
+
 export type Collections<EF extends BaseField = UnknownField> = Record<string, Collection<EF>>;
+
+export type CollectionsWithDefaults<EF extends BaseField = UnknownField> = Record<
+  string,
+  CollectionWithDefaults<EF>
+>;
 
 export type MediaFile = BackendMediaFile & { key?: string };
 
@@ -312,9 +365,9 @@ export interface MediaPath<T = string | string[]> {
 }
 
 export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = ObjectValue> {
-  collection: Collection<F>;
-  collectionFile: CollectionFile<F> | undefined;
-  config: Config<F>;
+  collection: CollectionWithDefaults<F>;
+  collectionFile: CollectionFileWithDefaults<F> | undefined;
+  config: ConfigWithDefaults<F>;
   entry: Entry<EV>;
   field: F;
   fieldsErrors: FieldsErrors;
@@ -335,17 +388,15 @@ export interface WidgetControlProps<T, F extends BaseField = UnknownField, EV = 
   query: EditorControlProps['query'];
   t: t;
   value: T | undefined | null;
-  theme: 'dark' | 'light';
   controlled: boolean;
 }
 
 export interface WidgetPreviewProps<T = unknown, F extends BaseField = UnknownField> {
-  config: Config<F>;
-  collection: Collection<F>;
+  config: ConfigWithDefaults<F>;
+  collection: CollectionWithDefaults<F>;
   entry: Entry;
   field: RenderedField<F>;
   value: T | undefined | null;
-  theme: 'dark' | 'light';
 }
 
 export type WidgetPreviewComponent<T = unknown, F extends BaseField = UnknownField> =
@@ -368,14 +419,13 @@ export type WidgetsFor<P = ObjectValue> = <K extends keyof P>(
     };
 
 export interface TemplatePreviewProps<T = ObjectValue, EF extends BaseField = UnknownField> {
-  collection: Collection<EF>;
+  collection: CollectionWithDefaults<EF>;
   fields: Field<EF>[];
   entry: Entry<T>;
   document: Document | undefined | null;
   window: Window | undefined | null;
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
-  theme: 'dark' | 'light';
 }
 
 export type TemplatePreviewComponent<
@@ -384,12 +434,12 @@ export type TemplatePreviewComponent<
 > = ComponentType<TemplatePreviewProps<T, EF>>;
 
 export interface TemplatePreviewCardProps<T = EntryData, EF extends BaseField = UnknownField> {
-  collection: Collection<EF>;
+  collection: CollectionWithDefaults<EF>;
   fields: Field<EF>[];
   entry: Entry<T>;
+  status?: WorkflowStatus | 'published';
   widgetFor: WidgetFor<T>;
   widgetsFor: WidgetsFor<T>;
-  theme: 'dark' | 'light';
   hasLocalBackup: boolean;
 }
 
@@ -399,10 +449,9 @@ export type TemplatePreviewCardComponent<
 > = ComponentType<TemplatePreviewCardProps<T, EF>>;
 
 export interface FieldPreviewProps<T = unknown, F extends BaseField = UnknownField> {
-  collection: Collection<F>;
+  collection: CollectionWithDefaults<F>;
   field: Field<F>;
   value: T;
-  theme: 'dark' | 'light';
 }
 
 export type FieldPreviewComponent<T = unknown, F extends BaseField = UnknownField> = ComponentType<
@@ -442,17 +491,24 @@ export interface PersistOptions {
   newEntry?: boolean;
   commitMessage: string;
   collectionName?: string;
-  status?: string;
+  status?: WorkflowStatus;
+
+  /**
+   * Editorial Workflow
+   */
+  useWorkflow?: boolean;
+  unpublished?: boolean;
 }
 
 export interface PersistArgs {
-  config: Config;
+  config: ConfigWithDefaults;
   rootSlug: string | undefined;
-  collection: Collection;
+  collection: CollectionWithDefaults;
   entryDraft: EntryDraft;
   assetProxies: AssetProxy[];
   usedSlugs: string[];
-  status?: string;
+  status?: WorkflowStatus;
+  unpublished?: boolean;
 }
 
 export interface ImplementationEntry {
@@ -501,6 +557,7 @@ export type User = Credentials & {
   login?: string;
   name?: string;
   avatar_url?: string;
+  useOpenAuthoring?: boolean;
 };
 
 export interface ImplementationFile {
@@ -521,9 +578,9 @@ export interface AuthenticatorConfig {
 
 export abstract class BackendClass {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor(_config: Config, _options: BackendInitializerOptions) {}
+  constructor(_config: ConfigWithDefaults, _options: BackendInitializerOptions) {}
 
-  abstract authComponent(): (props: TranslatedProps<AuthenticationPageProps>) => JSX.Element;
+  abstract authComponent(): FC<AuthenticationPageProps>;
   abstract restoreUser(user: User): Promise<User>;
 
   abstract authenticate(credentials: Credentials): Promise<User>;
@@ -561,11 +618,43 @@ export abstract class BackendClass {
     action: string,
   ): Promise<{ entries: ImplementationEntry[]; cursor: Cursor }>;
 
-  abstract isGitBackend(): boolean;
   abstract status(): Promise<{
     auth: { status: boolean };
     api: { status: boolean; statusPage: string };
   }>;
+
+  /**
+   * Editorial Workflow
+   */
+  abstract unpublishedEntries: () => Promise<string[]>;
+  abstract unpublishedEntry: (args: {
+    id?: string;
+    collection?: string;
+    slug?: string;
+  }) => Promise<UnpublishedEntry>;
+  abstract unpublishedEntryDataFile: (
+    collection: string,
+    slug: string,
+    path: string,
+    id: string,
+  ) => Promise<string>;
+  abstract unpublishedEntryMediaFile: (
+    collection: string,
+    slug: string,
+    path: string,
+    id: string,
+  ) => Promise<ImplementationMediaFile>;
+  abstract updateUnpublishedEntryStatus: (
+    collection: string,
+    slug: string,
+    newStatus: WorkflowStatus,
+  ) => Promise<void>;
+  abstract publishUnpublishedEntry: (collection: string, slug: string) => Promise<void>;
+  abstract deleteUnpublishedEntry: (collection: string, slug: string) => Promise<void>;
+  abstract getDeployPreview: (
+    collectionName: string,
+    slug: string,
+  ) => Promise<{ url: string; status: string } | null>;
 }
 
 export type CustomIcon = FunctionComponent;
@@ -583,6 +672,10 @@ export interface MediaLibraryInitOptions {
 export interface MediaLibraryConfig {
   max_file_size?: number;
   folder_support?: boolean;
+}
+
+export interface RootMediaLibraryConfig extends MediaLibraryConfig {
+  display_in_navigation?: boolean;
 }
 
 export type BackendType =
@@ -633,6 +726,9 @@ export interface MediaField extends BaseField {
 export interface BooleanField extends BaseField {
   widget: 'boolean';
   default?: boolean;
+
+  prefix?: string;
+  suffix?: string;
 }
 
 export interface CodeField extends BaseField {
@@ -777,6 +873,9 @@ export interface NumberField extends BaseField {
   max?: number;
 
   step?: number;
+
+  prefix?: string;
+  suffix?: string;
 }
 
 export interface SelectField extends BaseField {
@@ -809,8 +908,15 @@ export interface HiddenField extends BaseField {
   default?: ValueOrNestedValue;
 }
 
-export interface StringOrTextField extends BaseField {
-  widget: 'string' | 'text';
+export interface StringField extends BaseField {
+  widget: 'string';
+  default?: string;
+  prefix?: string;
+  suffix?: string;
+}
+
+export interface TextField extends BaseField {
+  widget: 'text';
   default?: string;
 }
 
@@ -839,22 +945,35 @@ export type Field<EF extends BaseField = UnknownField> =
   | RelationField
   | SelectField
   | HiddenField
-  | StringOrTextField
+  | StringField
+  | TextField
   | UUIDField
   | EF;
 
 export interface ViewFilter {
   id?: string;
+  name: string;
   label: string;
   field: string;
   pattern: string | boolean | number;
 }
 
+export interface ViewFilters {
+  default?: string;
+  filters: ViewFilter[];
+}
+
 export interface ViewGroup {
   id?: string;
+  name: string;
   label: string;
   field: string;
   pattern?: string;
+}
+
+export interface ViewGroups {
+  default?: string;
+  groups: ViewGroup[];
 }
 
 export type SortDirection =
@@ -894,8 +1013,18 @@ export interface Backend {
     delete?: string;
     uploadMedia?: string;
     deleteMedia?: string;
+    openAuthoring?: string;
   };
   use_large_media_transforms_in_media_library?: boolean;
+
+  /**
+   * Editorial Workflow
+   */
+  always_fork?: boolean;
+  open_authoring?: boolean;
+  squash_merges?: boolean;
+  cms_label_prefix?: string;
+  preview_context?: string;
 }
 
 export interface Slug {
@@ -921,25 +1050,89 @@ export interface Config<EF extends BaseField = UnknownField> {
   media_folder?: string;
   public_folder?: string;
   media_folder_relative?: boolean;
-  media_library?: MediaLibraryConfig;
+  media_library?: RootMediaLibraryConfig;
+  publish_mode?: Workflow;
   slug?: Slug;
   i18n?: I18nInfo;
   local_backend?: boolean | LocalBackend;
   disable_local_backup?: boolean;
   editor?: EditorConfig;
   search?: boolean;
+  theme?: Themes;
+  yaml?: {
+    documentOptions?: DocumentOptions;
+    schemaOptions?: SchemaOptions;
+    createNodeOptions?: CreateNodeOptions;
+    parseOptions?: ParseOptions;
+    toJsOptions?: ToJSOptions;
+    toStringOptions?: ToStringOptions;
+  };
 }
 
-export interface InitOptions<EF extends BaseField = UnknownField> {
-  config: Config<EF>;
+export interface ConfigWithDefaults<EF extends BaseField = UnknownField>
+  extends Omit<Config<EF>, 'collections'> {
+  collections: CollectionWithDefaults<EF>[];
+}
+
+export interface ThemeColor {
+  main: string;
+  light: string;
+  dark: string;
+  contrastColor: string;
+}
+
+export interface Theme {
+  name: string;
+  common: {
+    gray: string;
+  };
+  text: {
+    primary: string;
+    secondary: string;
+    disabled: string;
+  };
+  background: {
+    main: string;
+    light: string;
+    dark: string;
+    divider: string;
+  };
+  scrollbar: {
+    main: string;
+    light: string;
+  };
+  primary: ThemeColor;
+  error: ThemeColor;
+  warning: ThemeColor;
+  info: ThemeColor;
+  success: ThemeColor;
+  codemirror: {
+    theme: 'light' | 'dark';
+  };
+}
+
+export interface PartialTheme extends DeepPartial<Omit<Theme, 'name'>> {
+  name: string;
+  extends: 'light' | 'dark';
+}
+
+export interface Themes {
+  default_theme?: string;
+  include_built_in_themes?: boolean;
+  themes?: (Theme | PartialTheme)[];
 }
 
 export interface BackendInitializerOptions {
   updateUserCredentials: (credentials: Credentials) => void;
+  /**
+   * Editorial Workflow
+   */
+  useWorkflow: boolean;
+  initialWorkflowStatus: WorkflowStatus;
 }
 
 export interface BackendInitializer<EF extends BaseField = UnknownField> {
-  init: (config: Config<EF>, options: BackendInitializerOptions) => BackendClass;
+  init: (config: ConfigWithDefaults<EF>, options: BackendInitializerOptions) => BackendClass;
 }
 
 export interface AuthorData {
@@ -952,21 +1145,48 @@ export interface EventData {
   author: AuthorData;
 }
 
-export interface PreSaveEventListener {
-  name: 'preSave';
-  collection: string;
+export interface PrePublishEventListener {
+  name: 'prePublish';
+  collection?: string;
   file?: string;
   handler: (event: {
     data: EventData;
     collection: string;
+    file: string | undefined;
+  }) => void | Promise<void>;
+}
+
+export interface PostPublishEventListener {
+  name: 'postPublish';
+  collection?: string;
+  file?: string;
+  handler: (event: {
+    data: EventData;
+    collection: string;
+    file: string | undefined;
+  }) => void | Promise<void>;
+}
+
+export interface PreSaveEventListener {
+  name: 'preSave';
+  collection?: string;
+  file?: string;
+  handler: (event: {
+    data: EventData;
+    collection: string;
+    file: string | undefined;
   }) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
 }
 
 export interface PostSaveEventListener {
   name: 'postSave';
-  collection: string;
+  collection?: string;
   file?: string;
-  handler: (event: { data: EventData; collection: string }) => void | Promise<void>;
+  handler: (event: {
+    data: EventData;
+    collection: string;
+    file: string | undefined;
+  }) => void | Promise<void>;
 }
 
 export interface MountedEventListener {
@@ -976,9 +1196,7 @@ export interface MountedEventListener {
 
 export interface LoginEventListener {
   name: 'login';
-  handler: (event: {
-    author: AuthorData;
-  }) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
+  handler: (event: { author: AuthorData }) => void | Promise<void>;
 }
 
 export interface LogoutEventListener {
@@ -988,17 +1206,20 @@ export interface LogoutEventListener {
 
 export interface ChangeEventListener {
   name: 'change';
-  collection: string;
+  collection?: string;
   file?: string;
-  field: string;
+  field?: string;
   handler: (event: {
     data: EntryData;
     collection: string;
+    file: string | undefined;
     field: string;
   }) => EntryData | undefined | null | void | Promise<EntryData | undefined | null | void>;
 }
 
 export type EventListener =
+  | PrePublishEventListener
+  | PostPublishEventListener
   | PreSaveEventListener
   | PostSaveEventListener
   | ChangeEventListener
@@ -1023,7 +1244,7 @@ export interface AuthenticationPageProps {
   base_url?: string;
   siteId?: string;
   authEndpoint?: string;
-  config: Config;
+  config: ConfigWithDefaults;
   error?: string | undefined;
   clearHash?: () => void;
 }
@@ -1061,8 +1282,8 @@ export type I18nField =
 
 export interface I18nInfo {
   locales: string[];
-  defaultLocale: string;
-  structure?: I18nStructure;
+  default_locale?: string;
+  structure: I18nStructure;
 }
 
 export interface ProcessedCodeLanguage {
@@ -1087,7 +1308,7 @@ export interface PreviewStyle {
 }
 
 export interface MarkdownPluginFactoryProps {
-  config: Config<MarkdownField>;
+  config: ConfigWithDefaults<MarkdownField>;
   field: MarkdownField;
   mode: 'editor' | 'preview';
 }
@@ -1116,7 +1337,6 @@ export interface MarkdownEditorOptions {
 export type ShortcodeControlProps<P = {}> = P & {
   onChange: (props: P) => void;
   controlProps: WidgetControlProps<string, MarkdownField>;
-  theme: 'dark' | 'light';
 };
 
 export type ShortcodePreviewProps<P = {}> = P & {
@@ -1132,11 +1352,6 @@ export interface ShortcodeConfig<P = {}> {
   toArgs?: (props: P) => string[];
   control: ComponentType<ShortcodeControlProps>;
   preview: ComponentType<ShortcodePreviewProps>;
-}
-
-export enum CollectionType {
-  FOLDER,
-  FILES,
 }
 
 export type DeepPartial<T> = T extends object
@@ -1183,10 +1398,45 @@ export interface BackupEntry {
 }
 
 export interface CollectionEntryData {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   imageFieldName: string | null | undefined;
+  descriptionFieldName: string | null | undefined;
+  dateFieldName: string | null | undefined;
+  dateFormats: DateTimeFormats | undefined;
   viewStyle: ViewStyle;
   entry: Entry;
   key: string;
   collectionLabel?: string;
+}
+
+export interface DateTimeFormats {
+  storageFormat: string;
+  dateFormat: string | boolean;
+  timeFormat: string | boolean;
+  displayFormat: string;
+  timezoneExtra: string;
+}
+
+/**
+ * Editorial Workflow
+ */
+export interface UnpublishedEntry {
+  pullRequestAuthor?: string;
+  slug: string;
+  collection: string;
+  status: WorkflowStatus;
+  diffs: UnpublishedEntryDiff[];
+  updatedAt: string;
+  openAuthoring: boolean;
+}
+
+export interface UnpublishedEntryDiff {
+  id: string;
+  path: string;
+  newFile: boolean;
+}
+
+export interface UnpublishedEntryMediaFile {
+  id: string;
+  path: string;
 }

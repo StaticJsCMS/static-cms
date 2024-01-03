@@ -22,10 +22,12 @@ const nl: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Inhoud',
+      workflow: 'Workflow',
       media: 'Media',
       quickAdd: 'Snel toevoegen',
     },
     app: {
+      loading: 'Laden...',
       errorHeader: 'Fout bij het laden van de CMS configuratie',
       configErrors: 'configuratiefouten',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -104,15 +106,35 @@ const nl: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: '%{locale} aan het bewerken',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Weet je zeker dat je deze pagina wilt verlaten?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'Er zijn nog niet-opgeslagen wijzigingen. Bewaar ze voordat u de status bijwerkt.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'Stel de status in op "Voltooid" voordat u publiceert.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        'Er zijn nog niet-opgeslagen wijzigingen. Bewaar deze voordat u publiceert.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Weet u zeker dat u dit item wil publiceren?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'Weet u zeker dat u de publicatie voor dit item ongedaan wilt maken?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Weet u zeker dat u dit gepubliceerde item en uw niet-opgeslagen wijzigingen uit de huidige sessie wilt verwijderen?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Weet u zeker dat u dit gepubliceerde item wilt verwijderen?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Alle niet-gepubliceerde wijzigingen in dit item worden verwijderd, evenals uw niet-opgeslagen wijzigingen uit de huidige sessie. Wilt u nog steeds verwijderen?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Alle niet-gepubliceerde wijzigingen in dit item worden verwijderd. Wilt u nog steeds verwijderen?',
       loadingEntry: 'Item laden...',
     },
     editorInterface: {
@@ -123,13 +145,35 @@ const nl: LocalePhrasesRoot = {
       toggleScrollSync: 'Synchroniseer scrollen',
     },
     editorToolbar: {
+      publishing: 'Publiceren...',
       publish: 'Publiceer',
       published: 'Gepubliceerd',
+      unpublish: 'Publicatie terugtrekken',
       duplicate: 'Dupliceren',
+      unpublishing: 'Publicatie ongedaan maken...',
       publishAndCreateNew: 'Publiceer en maak nieuw item aan',
       publishAndDuplicate: 'Publiceer en dupliceer item',
+      deleteUnpublishedChanges: 'Verwijder niet-gepubliceerde wijzigingen',
+      deleteUnpublishedEntry: 'Niet-gepubliceerd item verwijderen',
+      deletePublishedEntry: 'Gepubliceerd item verwijderen',
       deleteEntry: 'Item verwijderen',
+      saving: 'Opslaan...',
+      save: 'Opslaan',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: 'Verwijderen...',
+      updating: 'Bijwerken...',
+      status: 'Status: %{status}',
+      backCollection: ' Terug naar %{collectionLabel}',
+      unsavedChanges: 'Niet-opgeslagen wijzigingen',
+      changesSaved: 'Wijzigingen opgeslagen',
+      draft: 'Concept',
+      inReview: 'Wordt beoordeeld',
+      ready: 'Klaar',
       publishNow: 'Publiceer nu',
+      deployPreviewPendingButtonLabel: 'Controleer of voorvertoning geladen is',
+      deployPreviewButtonLabel: 'Bekijk voorvertoning',
+      deployButtonLabel: 'Bekijk Live',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +182,35 @@ const nl: LocalePhrasesRoot = {
       markdown: {
         bold: 'Vet',
         italic: 'Cursief',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'Code',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Link',
-        linkPrompt: 'Voer de URL in',
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Hoofdtekst',
         quote: 'Quote',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'Lijst met opsommingstekens',
         numberedList: 'Genummerde lijst',
         addComponent: 'Voeg component toe',
         richText: 'Rijke tekst',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Kies een afbeelding',
@@ -212,6 +274,10 @@ const nl: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -233,10 +299,10 @@ const nl: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Laden...',
       noResults: 'Geen resultaten.',
       noAssetsFound: 'Geen media gevonden.',
       noImagesFound: 'Geen afbeeldingen gevonden.',
+      private: 'Privé',
       images: 'Afbeeldingen',
       mediaAssets: 'Media',
       search: 'Zoeken...',
@@ -253,6 +319,7 @@ const nl: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -263,6 +330,7 @@ const nl: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Ga terug naar site',
@@ -284,11 +352,12 @@ const nl: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Uitloggen',
     },
     toast: {
       onFailToLoadEntries: 'Kan item niet laden: %{details}',
+      onFailToLoadDeployPreview: 'Kan voorvertoning niet laden: %{details}',
       onFailToPersist: 'Kan item niet opslaan: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Kan item niet verwijderen: %{details}',
@@ -296,13 +365,53 @@ const nl: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Kan status niet updaten: %{details}',
       missingRequiredField: 'Oeps, sommige verplichte velden zijn niet ingevuld.',
       entrySaved: 'Item opgeslagen',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Item gepubliceerd',
+      entryUnpublished: 'Publicatie teruggetrokken',
       onFailToPublishEntry: 'Kan item niet publiceren: %{details}',
+      onFailToUnpublishEntry: 'Kan item niet terugtrekken: %{details}',
       entryUpdated: 'Status van item geüpdatet',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Niet-gepubliceerde wijzigingen verwijderd',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Je bent uitgelogd, back-up alstublieft uw data log daarna in',
       onBackendDown:
         'De backend-service ondervindt een storing. Zie% {details} voor meer informatie',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Redactionele Workflow items laden',
+      workflowHeading: 'Redactionele Workflow',
+      newPost: 'Nieuw bericht',
+      description:
+        '%{smart_count} item wacht op beoordeling, %{readyCount} klaar om live te gaan. |||| %{smart_count} items wachten op beoordeling, %{readyCount} klaar om live te gaan. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} door %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'door %{author}',
+      deleteChanges: 'Verwijder wijzigingen',
+      deleteNewEntry: 'Verwijder nieuw item',
+      publishChanges: 'Publiceer wijzigingen',
+      publishNewEntry: 'Publiceer nieuw item',
+    },
+    workflowList: {
+      onDeleteEntry: 'Weet u zeker dat u dit item wilt verwijderen?',
+      onPublishingNotReadyEntry:
+        'Alleen items met de status "Gereed" kunnen worden gepubliceerd. Sleep de kaart naar de kolom "Gereed" om publiceren mogelijk te maken.',
+      onPublishEntry: 'Weet u zeker dat u dit item wilt publiceren?',
+      draft: 'Concepten',
+      pending_review: 'Wordt beoordeeld',
+      pending_publish: 'Klaar',
+      currentEntries: '%{smart_count} item |||| %{smart_count} items',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

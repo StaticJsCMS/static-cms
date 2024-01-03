@@ -1,9 +1,9 @@
 import Cursor, { CURSOR_COMPATIBILITY_SYMBOL } from '@staticcms/core/lib/util/Cursor';
 import GitHubImplementation from '../implementation';
 
-import type { Config, UnknownField } from '@staticcms/core';
-import type API from '../API';
+import type { ConfigWithDefaults, UnknownField } from '@staticcms/core';
 import type { AssetProxy } from '@staticcms/core/valueObjects';
+import type API from '../API';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const global: any;
@@ -14,7 +14,7 @@ describe('github backend implementation', () => {
       repo: 'owner/repo',
       api_root: 'https://api.github.com',
     },
-  } as Config<UnknownField>;
+  } as ConfigWithDefaults<UnknownField>;
 
   const createObjectURL = jest.fn();
   global.URL = {
@@ -97,6 +97,44 @@ describe('github backend implementation', () => {
       expect(createObjectURL).toHaveBeenCalledTimes(0);
       expect(console.error).toHaveBeenCalledTimes(1);
       expect(console.error).toHaveBeenCalledWith(error);
+    });
+  });
+
+  describe('unpublishedEntry', () => {
+    const generateContentKey = jest.fn();
+    const retrieveUnpublishedEntryData = jest.fn();
+
+    const mockAPI = {
+      generateContentKey,
+      retrieveUnpublishedEntryData,
+    } as unknown as API;
+
+    it('should return unpublished entry data', async () => {
+      const gitHubImplementation = new GitHubImplementation(config);
+      gitHubImplementation.api = mockAPI;
+
+      generateContentKey.mockReturnValue('contentKey');
+
+      const data = {
+        collection: 'collection',
+        slug: 'slug',
+        status: 'draft',
+        diffs: [],
+        updatedAt: 'updatedAt',
+      };
+      retrieveUnpublishedEntryData.mockResolvedValue(data);
+
+      const collection = 'posts';
+      const slug = 'slug';
+      await expect(gitHubImplementation.unpublishedEntry({ collection, slug })).resolves.toEqual(
+        data,
+      );
+
+      expect(generateContentKey).toHaveBeenCalledTimes(1);
+      expect(generateContentKey).toHaveBeenCalledWith('posts', 'slug');
+
+      expect(retrieveUnpublishedEntryData).toHaveBeenCalledTimes(1);
+      expect(retrieveUnpublishedEntryData).toHaveBeenCalledWith('contentKey');
     });
   });
 

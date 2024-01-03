@@ -1,6 +1,4 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { translate } from 'react-polyglot';
 import { connect } from 'react-redux';
 import {
   Navigate,
@@ -17,25 +15,32 @@ import TopBarProgress from 'react-topbar-progress-indicator';
 import { loginUser as loginUserAction } from '@staticcms/core/actions/auth';
 import { discardDraft } from '@staticcms/core/actions/entries';
 import { currentBackend } from '@staticcms/core/backend';
+import { loadUnpublishedEntries } from '../actions/editorialWorkflow';
 import { changeTheme } from '../actions/globalUI';
+import useDefaultPath from '../lib/hooks/useDefaultPath';
+import useTranslate from '../lib/hooks/useTranslate';
 import { invokeEvent } from '../lib/registry';
-import { getDefaultPath } from '../lib/util/collection.util';
+import { isNotNullish } from '../lib/util/null.util';
+import { isEmpty } from '../lib/util/string.util';
 import { generateClassNames } from '../lib/util/theming.util';
-import { selectTheme } from '../reducers/selectors/globalUI';
+import { selectUseWorkflow } from '../reducers/selectors/config';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import NotFoundPage from './NotFoundPage';
 import CollectionRoute from './collections/CollectionRoute';
 import { Alert } from './common/alert/Alert';
 import { Confirm } from './common/confirm/Confirm';
 import Loader from './common/progress/Loader';
 import EditorRoute from './entry-editor/EditorRoute';
 import MediaPage from './media-library/MediaPage';
-import NotFoundPage from './NotFoundPage';
 import Page from './page/Page';
 import Snackbars from './snackbar/Snackbars';
+import ThemeManager from './theme/ThemeManager';
+import useTheme from './theme/hooks/useTheme';
+import Dashboard from './workflow/Dashboard';
 
-import type { Credentials, TranslatedProps } from '@staticcms/core/interface';
+import type { Credentials } from '@staticcms/core';
 import type { RootState } from '@staticcms/core/store';
-import type { ComponentType } from 'react';
+import type { FC } from 'react';
 import type { ConnectedProps } from 'react-redux';
 
 import './App.css';
@@ -65,38 +70,21 @@ function EditEntityRedirect() {
   return <Navigate to={`/collections/${name}/entries/${params['*']}`} />;
 }
 
-const App = ({
+const App: FC<AppProps> = ({
   auth,
   user,
   config,
   collections,
   loginUser,
   isFetching,
-  t,
   scrollSyncEnabled,
-}: TranslatedProps<AppProps>) => {
+}) => {
+  const t = useTranslate();
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const mode = useAppSelector(selectTheme);
-
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-          primary: {
-            main: 'rgb(37 99 235)',
-          },
-          ...(mode === 'dark' && {
-            background: {
-              paper: 'rgb(15 23 42)',
-            },
-          }),
-        },
-      }),
-    [mode],
-  );
+  const theme = useTheme();
 
   const configError = useCallback(
     (error?: string) => {
@@ -154,12 +142,12 @@ const App = ({
         authEndpoint={config.config.backend.auth_endpoint}
         config={config.config}
         clearHash={() => navigate('/', { replace: true })}
-        t={t}
       />
     );
   }, [AuthComponent, auth.error, auth.isFetching, config.config, handleLogin, navigate, t]);
 
-  const defaultPath = useMemo(() => getDefaultPath(collections), [collections]);
+  const useWorkflow = useAppSelector(selectUseWorkflow);
+  const defaultPath = useDefaultPath(collections);
 
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
@@ -176,19 +164,12 @@ const App = ({
   }, [dispatch, pathname, searchParams]);
 
   useEffect(() => {
-    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-    if (
-      localStorage.getItem('color-theme') === 'dark' ||
-      (!('color-theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      document.documentElement.classList.add('dark');
-      dispatch(changeTheme('dark'));
-    } else {
-      document.documentElement.classList.remove('dark');
-      dispatch(changeTheme('light'));
+    if (!user || !useWorkflow) {
+      return;
     }
-  }, [dispatch]);
+
+    dispatch(loadUnpublishedEntries(collections));
+  }, [collections, dispatch, useWorkflow, user]);
 
   const [prevUser, setPrevUser] = useState(user);
   useEffect(() => {
@@ -214,6 +195,10 @@ const App = ({
         {isFetching && <TopBarProgress />}
         <Routes>
           <Route path="/" element={<Navigate to={defaultPath} />} />
+          <Route
+            path="/dashboard"
+            element={useWorkflow ? <Dashboard /> : <Navigate to={defaultPath} />}
+          />
           <Route path="/search" element={<Navigate to={defaultPath} />} />
           <Route path="/collections/:name/search/" element={<CollectionSearchRedirect />} />
           <Route
@@ -247,13 +232,27 @@ const App = ({
         </Routes>
       </>
     );
-  }, [authenticationPage, collections, defaultPath, isFetching, user]);
+  }, [authenticationPage, collections, defaultPath, isFetching, useWorkflow, user]);
 
   useEffect(() => {
     setTimeout(() => {
       invokeEvent({ name: 'mounted' });
     });
   }, []);
+
+  useEffect(() => {
+    const defaultTheme = config.config?.theme?.default_theme;
+    if (isEmpty(defaultTheme)) {
+      return;
+    }
+
+    const themeName = localStorage.getItem('color-theme');
+    if (isNotNullish(themeName)) {
+      return;
+    }
+
+    dispatch(changeTheme(defaultTheme));
+  }, [config.config?.theme?.default_theme, dispatch]);
 
   if (!config.config) {
     return configError(t('app.app.configNotFound'));
@@ -268,7 +267,7 @@ const App = ({
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeManager theme={theme} element={document.documentElement}>
       <ScrollSync key="scroll-sync" enabled={scrollSyncEnabled}>
         <>
           <div key="back-to-top-anchor" id="back-to-top-anchor" />
@@ -282,7 +281,7 @@ const App = ({
           </div>
         </>
       </ScrollSync>
-    </ThemeProvider>
+    </ThemeManager>
   );
 };
 
@@ -308,4 +307,4 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export type AppProps = ConnectedProps<typeof connector>;
 
-export default connector(translate()(App) as ComponentType<AppProps>);
+export default connector(App);

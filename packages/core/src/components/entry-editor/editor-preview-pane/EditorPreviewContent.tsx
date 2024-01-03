@@ -5,7 +5,7 @@ import type {
   TemplatePreviewComponent,
   TemplatePreviewProps,
   UnknownField,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { FC } from 'react';
 
 interface EditorPreviewContentProps {

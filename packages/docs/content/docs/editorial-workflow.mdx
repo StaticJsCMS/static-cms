@@ -1,0 +1,35 @@
+---
+group: Workflow
+weight: 10
+title: Editorial Workflow
+beta: true
+---
+
+<Alert severity="warning">
+  Editorial Workflow is not available for the Gitea backend.
+</Alert>
+
+By default, all entries created or edited in Static CMS are committed directly into the main repository branch.
+
+The `publish_mode` option allows you to enable "Editorial Workflow" mode for more control over the content publishing phases. The unpublished entries will be arranged on a dashboard, in Static CMS, according to their status (Draft, Ready for Review, Ready To Publish). This allows for quick access to unpublished entries, allowing them to be reviewed and edited before going live.
+
+You can enable the Editorial Workflow with the following line in your `config.yml` file:
+
+<CodeTabs>
+```yaml
+publish_mode: editorial_workflow
+```
+
+```js
+publish_mode: 'editorial_workflow';
+```
+
+</CodeTabs>
+
+From a technical perspective, the workflow translates editor UI actions into common Git commands:
+
+| Actions in Netlify UI     | Perform these Git actions                                                                                               |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Save draft                | Commits to a new branch (named according to the pattern `cms/collectionName/entrySlug`), and opens a pull/merge request |
+| Edit draft                | Pushes another commit to the draft branch and pull/merge request                                                        |
+| Approve and publish draft | Merges pull/merge request and deletes branch                                                                            |

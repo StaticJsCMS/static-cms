@@ -1,7 +1,7 @@
 import transform from './deserializeMarkdown';
 
-import type { ShortcodeConfig } from '@staticcms/core/interface';
-import type { Compiler, Plugin } from 'unified';
+import type { ShortcodeConfig } from '@staticcms/core';
+import type { Plugin, Compiler } from 'unified';
 import type { MdastNode } from './ast-types';
 
 export interface ToSlatePluginOptions {

@@ -41,6 +41,7 @@ const ColorButton: FC<ColorButtonProps> = ({
         onClick={handleOnClick}
         sx={{ p: 0 }}
         className={classNames(classes.root, isBrightColor && classes['is-bright-color'])}
+        aria-label={value}
       >
         <Avatar
           alt={name}

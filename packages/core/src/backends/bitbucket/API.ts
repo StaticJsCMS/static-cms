@@ -1,12 +1,15 @@
+import { oneLine } from 'common-tags';
 import flow from 'lodash/flow';
 import get from 'lodash/get';
 import { dirname } from 'path';
 import { parse } from 'what-the-diff';
 
+import { PreviewState } from '@staticcms/core/constants/enums';
 import {
   APIError,
   basename,
   Cursor,
+  EditorialWorkflowError,
   localForage,
   readFile,
   readFileMetadata,
@@ -16,8 +19,20 @@ import {
   throwOnConflictingBranches,
   unsentRequest,
 } from '@staticcms/core/lib/util';
+import {
+  branchFromContentKey,
+  CMS_BRANCH_PREFIX,
+  DEFAULT_PR_BODY,
+  generateContentKey,
+  isCMSLabel,
+  labelToStatus,
+  MERGE_COMMIT_MESSAGE,
+  parseContentKey,
+  statusToLabel,
+} from '@staticcms/core/lib/util/APIUtils';
 
-import type { DataFile, PersistOptions } from '@staticcms/core/interface';
+import type { DataFile, PersistOptions, UnpublishedEntry } from '@staticcms/core';
+import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 
@@ -28,12 +43,105 @@ interface Config {
   repo?: string;
   requestFunction?: (req: ApiRequest) => Promise<Response>;
   hasWriteAccess?: () => Promise<boolean>;
+  squashMerges: boolean;
+  initialWorkflowStatus: WorkflowStatus;
+  cmsLabelPrefix: string;
 }
 
 interface CommitAuthor {
   name: string;
   email: string;
 }
+
+enum BitBucketPullRequestState {
+  MERGED = 'MERGED',
+  SUPERSEDED = 'SUPERSEDED',
+  OPEN = 'OPEN',
+  DECLINED = 'DECLINED',
+}
+
+type BitBucketPullRequest = {
+  description: string;
+  id: number;
+  title: string;
+  state: BitBucketPullRequestState;
+  updated_on: string;
+  summary: {
+    raw: string;
+  };
+  source: {
+    commit: {
+      hash: string;
+    };
+    branch: {
+      name: string;
+    };
+  };
+  destination: {
+    commit: {
+      hash: string;
+    };
+    branch: {
+      name: string;
+    };
+  };
+  author: BitBucketUser;
+};
+
+type BitBucketPullRequests = {
+  size: number;
+  page: number;
+  pagelen: number;
+  next: string;
+  preview: string;
+  values: BitBucketPullRequest[];
+};
+
+type BitBucketPullComment = {
+  content: {
+    raw: string;
+  };
+};
+
+type BitBucketPullComments = {
+  size: number;
+  page: number;
+  pagelen: number;
+  next: string;
+  preview: string;
+  values: BitBucketPullComment[];
+};
+
+enum BitBucketPullRequestStatusState {
+  Successful = 'SUCCESSFUL',
+  Failed = 'FAILED',
+  InProgress = 'INPROGRESS',
+  Stopped = 'STOPPED',
+}
+
+type BitBucketPullRequestStatus = {
+  uuid: string;
+  name: string;
+  key: string;
+  refname: string;
+  url: string;
+  description: string;
+  state: BitBucketPullRequestStatusState;
+};
+
+type BitBucketPullRequestStatues = {
+  size: number;
+  page: number;
+  pagelen: number;
+  next: string;
+  preview: string;
+  values: BitBucketPullRequestStatus[];
+};
+
+type DeleteEntry = {
+  path: string;
+  delete: true;
+};
 
 type BitBucketFile = {
   id: string;
@@ -81,6 +189,8 @@ type BitBucketCommit = {
 
 export const API_NAME = 'Bitbucket';
 
+const APPLICATION_JSON = 'application/json; charset=utf-8';
+
 function replace404WithEmptyResponse(err: FetchError) {
   if (err && err.status === 404) {
     console.info('[StaticCMS] This 404 was expected and handled appropriately.');
@@ -97,6 +207,9 @@ export default class API {
   requestFunction: (req: ApiRequest) => Promise<Response>;
   repoURL: string;
   commitAuthor?: CommitAuthor;
+  mergeStrategy: string;
+  initialWorkflowStatus: WorkflowStatus;
+  cmsLabelPrefix: string;
 
   constructor(config: Config) {
     this.apiRoot = config.apiRoot || 'https://api.bitbucket.org/2.0';
@@ -106,6 +219,9 @@ export default class API {
     // Allow overriding this.hasWriteAccess
     this.hasWriteAccess = config.hasWriteAccess || this.hasWriteAccess;
     this.repoURL = this.repo ? `/repositories/${this.repo}` : '';
+    this.mergeStrategy = config.squashMerges ? 'squash' : 'merge_commit';
+    this.initialWorkflowStatus = config.initialWorkflowStatus;
+    this.cmsLabelPrefix = config.cmsLabelPrefix;
   }
 
   buildRequest = (req: ApiRequest) => {
@@ -231,7 +347,7 @@ export default class API {
   }
 
   async isShaExistsInBranch(branch: string, sha: string) {
-    const { values }: { values: BitBucketCommit[] } = await this.requestJSON({
+    const response: { values: BitBucketCommit[] } = await this.requestJSON({
       url: `${this.repoURL}/commits`,
       params: { include: branch, pagelen: '100' },
     }).catch(e => {
@@ -239,7 +355,7 @@ export default class API {
       return [];
     });
 
-    return values.some(v => v.hash === sha);
+    return response?.values?.some(v => v.hash === sha);
   }
 
   getEntriesAndCursor = (jsonResponse: BitBucketSrcResult) => {
@@ -359,7 +475,11 @@ export default class API {
                 branch: filesBranch,
                 parseText: false,
               });
-        formData.append(file.path.replace(sourceDir, destDir), content, basename(file.path));
+        formData.append(
+          file.path.replace(sourceDir, destDir),
+          content as Blob,
+          basename(file.path),
+        );
       }
     }
 
@@ -412,6 +532,11 @@ export default class API {
     options: PersistOptions,
   ) {
     const files = [...dataFiles, ...mediaFiles];
+    if (options.useWorkflow) {
+      const slug = dataFiles[0].slug;
+      return this.editorialWorkflowGit(files as (DataFile | AssetProxy)[], slug, options);
+    }
+
     return this.uploadFiles(files, { commitMessage: options.commitMessage, branch: this.branch });
   }
 
@@ -460,4 +585,248 @@ export default class API {
       unsentRequest.withBody(body, unsentRequest.withMethod('POST', `${this.repoURL}/src`)),
     );
   };
+
+  /**
+   * Editorial Workflow
+   */
+  async listUnpublishedBranches() {
+    console.info(
+      '%c Checking for Unpublished entries',
+      'line-height: 30px;text-align: center;font-weight: bold',
+    );
+
+    const pullRequests = await this.getPullRequests();
+    const branches = pullRequests.map(mr => mr.source.branch.name);
+
+    return branches;
+  }
+
+  async getPullRequestLabel(id: number) {
+    const comments: BitBucketPullComments = await this.requestJSON({
+      url: `${this.repoURL}/pullrequests/${id}/comments`,
+      params: {
+        pagelen: '100',
+      },
+    });
+    return comments.values.map(c => c.content.raw)[comments.values.length - 1];
+  }
+
+  async getPullRequests(sourceBranch?: string) {
+    const sourceQuery = sourceBranch
+      ? `source.branch.name = "${sourceBranch}"`
+      : `source.branch.name ~ "${CMS_BRANCH_PREFIX}/"`;
+
+    const pullRequests: BitBucketPullRequests = await this.requestJSON({
+      url: `${this.repoURL}/pullrequests`,
+      params: {
+        pagelen: '50',
+        q: oneLine`
+        source.repository.full_name = "${this.repo}"
+        AND state = "${BitBucketPullRequestState.OPEN}"
+        AND destination.branch.name = "${this.branch}"
+        AND comment_count > 0
+        AND ${sourceQuery}
+        `,
+      },
+    });
+
+    const labels = await Promise.all(
+      pullRequests.values.map(pr => this.getPullRequestLabel(pr.id)),
+    );
+
+    return pullRequests.values.filter((_, index) => isCMSLabel(labels[index], this.cmsLabelPrefix));
+  }
+
+  async getBranchPullRequest(branch: string) {
+    const pullRequests = await this.getPullRequests(branch);
+    if (pullRequests.length <= 0) {
+      throw new EditorialWorkflowError('content is not under editorial workflow', true);
+    }
+
+    return pullRequests[0];
+  }
+
+  async retrieveUnpublishedEntryData(contentKey: string): Promise<UnpublishedEntry> {
+    const { collection, slug } = parseContentKey(contentKey);
+    const branch = branchFromContentKey(contentKey);
+    const pullRequest = await this.getBranchPullRequest(branch);
+    const diffs = await this.getDifferences(branch);
+    const label = await this.getPullRequestLabel(pullRequest.id);
+    const status = labelToStatus(label, this.cmsLabelPrefix);
+    const updatedAt = pullRequest.updated_on;
+    const pullRequestAuthor = pullRequest.author.display_name;
+    return {
+      collection,
+      slug,
+      status,
+      // TODO: get real id
+      diffs: diffs
+        .filter(d => d.status !== 'deleted')
+        .map(d => ({ path: d.path, newFile: d.newFile, id: '' })),
+      updatedAt,
+      pullRequestAuthor,
+      openAuthoring: false,
+    };
+  }
+
+  async addPullRequestComment(pullRequest: BitBucketPullRequest, comment: string) {
+    await this.requestJSON({
+      method: 'POST',
+      url: `${this.repoURL}/pullrequests/${pullRequest.id}/comments`,
+      headers: { 'Content-Type': APPLICATION_JSON },
+      body: JSON.stringify({
+        content: {
+          raw: comment,
+        },
+      }),
+    });
+  }
+
+  async updateUnpublishedEntryStatus(collection: string, slug: string, newStatus: WorkflowStatus) {
+    const contentKey = generateContentKey(collection, slug);
+    const branch = branchFromContentKey(contentKey);
+    const pullRequest = await this.getBranchPullRequest(branch);
+
+    await this.addPullRequestComment(pullRequest, statusToLabel(newStatus, this.cmsLabelPrefix));
+  }
+
+  async declinePullRequest(pullRequest: BitBucketPullRequest) {
+    await this.requestJSON({
+      method: 'POST',
+      url: `${this.repoURL}/pullrequests/${pullRequest.id}/decline`,
+    });
+  }
+
+  async deleteBranch(branch: string) {
+    await this.request({
+      method: 'DELETE',
+      url: `${this.repoURL}/refs/branches/${branch}`,
+    });
+  }
+
+  async deleteUnpublishedEntry(collectionName: string, slug: string) {
+    const contentKey = generateContentKey(collectionName, slug);
+    const branch = branchFromContentKey(contentKey);
+    const pullRequest = await this.getBranchPullRequest(branch);
+
+    await this.declinePullRequest(pullRequest);
+    await this.deleteBranch(branch);
+  }
+
+  async mergePullRequest(pullRequest: BitBucketPullRequest) {
+    await this.requestJSON({
+      method: 'POST',
+      url: `${this.repoURL}/pullrequests/${pullRequest.id}/merge`,
+      headers: { 'Content-Type': APPLICATION_JSON },
+      body: JSON.stringify({
+        message: MERGE_COMMIT_MESSAGE,
+        close_source_branch: true,
+        merge_strategy: this.mergeStrategy,
+      }),
+    });
+  }
+
+  async publishUnpublishedEntry(collectionName: string, slug: string) {
+    const contentKey = generateContentKey(collectionName, slug);
+    const branch = branchFromContentKey(contentKey);
+    const pullRequest = await this.getBranchPullRequest(branch);
+
+    await this.mergePullRequest(pullRequest);
+  }
+
+  async getPullRequestStatuses(pullRequest: BitBucketPullRequest) {
+    const statuses: BitBucketPullRequestStatues = await this.requestJSON({
+      url: `${this.repoURL}/pullrequests/${pullRequest.id}/statuses`,
+      params: {
+        pagelen: '100',
+      },
+    });
+
+    return statuses.values;
+  }
+
+  async getStatuses(collectionName: string, slug: string) {
+    const contentKey = generateContentKey(collectionName, slug);
+    const branch = branchFromContentKey(contentKey);
+    const pullRequest = await this.getBranchPullRequest(branch);
+    const statuses = await this.getPullRequestStatuses(pullRequest);
+
+    return statuses.map(({ key, state, url }) => ({
+      context: key,
+      state:
+        state === BitBucketPullRequestStatusState.Successful
+          ? PreviewState.Success
+          : PreviewState.Other,
+      target_url: url,
+    }));
+  }
+
+  async createPullRequest(branch: string, commitMessage: string, status: WorkflowStatus) {
+    const pullRequest: BitBucketPullRequest = await this.requestJSON({
+      method: 'POST',
+      url: `${this.repoURL}/pullrequests`,
+      headers: { 'Content-Type': APPLICATION_JSON },
+      body: JSON.stringify({
+        title: commitMessage,
+        source: {
+          branch: {
+            name: branch,
+          },
+        },
+        destination: {
+          branch: {
+            name: this.branch,
+          },
+        },
+        description: DEFAULT_PR_BODY,
+        close_source_branch: true,
+      }),
+    });
+    // use comments for status labels
+    await this.addPullRequestComment(pullRequest, statusToLabel(status, this.cmsLabelPrefix));
+  }
+
+  async editorialWorkflowGit(
+    files: (DataFile | AssetProxy)[],
+    slug: string,
+    options: PersistOptions,
+  ) {
+    const contentKey = generateContentKey(options.collectionName as string, slug);
+    const branch = branchFromContentKey(contentKey);
+    const unpublished = options.unpublished || false;
+    if (!unpublished) {
+      const defaultBranchSha = await this.branchCommitSha(this.branch);
+      await this.uploadFiles(files, {
+        commitMessage: options.commitMessage,
+        branch,
+        parentSha: defaultBranchSha,
+      });
+      await this.createPullRequest(
+        branch,
+        options.commitMessage,
+        options.status || this.initialWorkflowStatus,
+      );
+    } else {
+      // mark files for deletion
+      const diffs = await this.getDifferences(branch);
+      const toDelete: DeleteEntry[] = [];
+      for (const diff of diffs.filter(d => d.binary && d.status !== 'deleted')) {
+        if (!files.some(file => file.path === diff.path)) {
+          toDelete.push({ path: diff.path, delete: true });
+        }
+      }
+
+      await this.uploadFiles([...files, ...toDelete], {
+        commitMessage: options.commitMessage,
+        branch,
+      });
+    }
+  }
+
+  async getUnpublishedEntrySha(collection: string, slug: string) {
+    const contentKey = generateContentKey(collection, slug);
+    const branch = branchFromContentKey(contentKey);
+    const pullRequest = await this.getBranchPullRequest(branch);
+    return pullRequest.destination.commit.hash;
+  }
 }

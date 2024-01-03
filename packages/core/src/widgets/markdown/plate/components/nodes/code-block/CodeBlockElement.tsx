@@ -108,7 +108,7 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
       >
         <input
           id={id}
-          value={lang}
+          value={lang ?? ''}
           onChange={event => {
             const value = event.target.value;
             const path = findNodePath(editor, element);
@@ -129,7 +129,7 @@ const CodeBlockElement: FC<PlateRenderElementProps<MdValue, MdCodeBlockElement>>
             }}
             initialContent={initialFrameContent}
           >
-            <CodeBlockFrame id={id} code={code} lang={lang} theme={theme} />
+            <CodeBlockFrame id={id} code={code} lang={lang} />
           </Frame>
         </div>
         <div>{children}</div>

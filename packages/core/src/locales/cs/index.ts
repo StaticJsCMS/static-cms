@@ -22,10 +22,12 @@ const cs: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Obsah',
+      workflow: 'Workflow',
       media: 'Média',
       quickAdd: 'Přidat',
     },
     app: {
+      loading: 'Načítání…',
       errorHeader: 'Chyba při načítání CMS konfigurace',
       configErrors: 'Chyba konfigurace',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -104,15 +106,35 @@ const cs: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Psát v %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Chcete opravdu opustit tuto stránku?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'Máte neuložené změny. Uložte je prosím před změnou statusu.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'Změňte stav na „Připraveno“ před publikováním.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        'Máte neuložené změny, prosím uložte je před publikováním.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Chcete opravdu publikovat tento záznam?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'Chcete opravdu zrušit publikování tohoto záznamu?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Chcete opravdu vymazat tento publikovaný záznam a všechny neuložené změny z této relace?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Chcete opravdu smazat tento publikovaný záznam?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Tato akce vymaže všechny nepublikované změny v tomto záznamu a také všechny neuložené změny z této relace. Chcete záznam skutečně vymazat?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Všechny nepublivkoané změny v tomto záznamu budou vymazány. Chcete ho skuteně vymazat?',
       loadingEntry: 'Načítání záznamu…',
     },
     editorInterface: {
@@ -123,13 +145,35 @@ const cs: LocalePhrasesRoot = {
       toggleScrollSync: 'Sladit skrolování',
     },
     editorToolbar: {
+      publishing: 'Publikování…',
       publish: 'Publikovat',
       published: 'Publikovaný',
+      unpublish: 'Zrušit publikování',
       duplicate: 'Duplikovat',
+      unpublishing: 'Rušení publikování…',
       publishAndCreateNew: 'Publikovat a vytvořit nový',
       publishAndDuplicate: 'Publikovat a duplikovat',
+      deleteUnpublishedChanges: 'Vymazat nepublikované změny',
+      deleteUnpublishedEntry: 'Vymazat nepublikovaný záznam',
+      deletePublishedEntry: 'Vymazat publikovaný záznam',
       deleteEntry: 'Vymazat záznam',
+      saving: 'Ukládání…',
+      save: 'Uložit',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: 'Vymazávání…',
+      updating: 'Aktualizace…',
+      status: 'Status: %{status}',
+      backCollection: ' Píšete v kolekci %{collectionLabel}',
+      unsavedChanges: 'Neuložené změny',
+      changesSaved: 'Změny uloženy',
+      draft: 'Koncept',
+      inReview: 'V revizi',
+      ready: 'Připraveno',
       publishNow: 'Publikovat teď',
+      deployPreviewPendingButtonLabel: 'Zkontrolovat náhled',
+      deployPreviewButtonLabel: 'Zobrazit náhled',
+      deployButtonLabel: 'Zobrazit na webu',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +182,35 @@ const cs: LocalePhrasesRoot = {
       markdown: {
         bold: 'Tučně',
         italic: 'Kurzíva',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'Kód',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Odkaz',
-        linkPrompt: 'Zadejte URL odkazu',
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Nadpisy',
         quote: 'Citovat',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'Odrážkový seznam',
         numberedList: 'Číslovaný seznam',
         addComponent: 'Přidat součástku',
         richText: 'Rich Text',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Vyberte obrázek',
@@ -212,6 +274,10 @@ const cs: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -232,10 +298,10 @@ const cs: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Načítání…',
       noResults: 'Nic nenalezeno.',
       noAssetsFound: 'Média nenalezena.',
       noImagesFound: 'Obrázky nenalezeny.',
+      private: 'Soukromé ',
       images: 'Obrázky',
       mediaAssets: 'Média',
       search: 'Hledat…',
@@ -252,6 +318,7 @@ const cs: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -262,6 +329,7 @@ const cs: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Vrátit se na stránku',
@@ -283,11 +351,12 @@ const cs: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Odhlásit',
     },
     toast: {
       onFailToLoadEntries: 'Chyba při načítání záznamu: %{details}',
+      onFailToLoadDeployPreview: 'Chyba při načítání náhledu: %{details}',
       onFailToPersist: 'Chyba při ukládání záznamu: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Chyba při vymazávání záznamu: %{details}',
@@ -295,12 +364,52 @@ const cs: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Chyba při změně stavu záznamu: %{details}',
       missingRequiredField: 'Vynechali jste povinné pole. Prosím vyplňte ho.',
       entrySaved: 'Záznam uložen',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Záznam publikován',
+      entryUnpublished: 'Publikování záznamu zrušeno',
       onFailToPublishEntry: 'Chyba při publikování záznamu: %{details}',
+      onFailToUnpublishEntry: 'Chyba při rušení publikování záznamu: %{details}',
       entryUpdated: 'Stav záznamu byl změněn',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Nepublikované změny byly smazány',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Byli jste odhlášeni, prosím zálohujte všechna data a znova se přihlašte',
       onBackendDown: 'Backend zaznamenal výpadek. Podívejte se do %{details} pro více informací.',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Načítání workflow záznamů',
+      workflowHeading: 'Schvalovací Workflow',
+      newPost: 'Nový post',
+      description:
+        '%{smart_count} záznam čeká na schválení, %{readyCount} připraven k publikaci. |||| %{smart_count} čeká na schválení, %{readyCount} připraveno k publikaci. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} (%{author})',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: '%{author}',
+      deleteChanges: 'Vymazat změny',
+      deleteNewEntry: 'Vymazat nový záznam',
+      publishChanges: 'Publikovat změny',
+      publishNewEntry: 'Publikovat nový záznam',
+    },
+    workflowList: {
+      onDeleteEntry: 'Opravdu chcete smazat tento záznam?',
+      onPublishingNotReadyEntry:
+        'Pouze položky se statusem "Připraveno" mohou být publikováno. Pro umožnění publikace musíte přetáhnout kartu do sloupce "Připraveno"',
+      onPublishEntry: 'Opravdu chcete publikovat tento záznam?',
+      draft: 'Koncepty',
+      pending_review: 'V revizi',
+      pending_publish: 'Připraveno',
+      currentEntries: '%{smart_count} záznam |||| %{smart_count} záznamů',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

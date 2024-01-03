@@ -1,7 +1,7 @@
 import deepmerge from 'deepmerge';
 import * as fuzzy from 'fuzzy';
 
-import type { Entry, ObjectValue, ValueOrNestedValue } from '@staticcms/core/interface';
+import type { Entry, ObjectValue, ValueOrNestedValue } from '@staticcms/core';
 
 function filter(
   value: ValueOrNestedValue,

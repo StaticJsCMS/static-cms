@@ -3,10 +3,13 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import Field from '@staticcms/core/components/common/field/Field';
 import Switch from '@staticcms/core/components/common/switch/Switch';
 import classNames from '@staticcms/core/lib/util/classNames.util';
+import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { BooleanField, WidgetControlProps } from '@staticcms/core/interface';
+import type { BooleanField, WidgetControlProps } from '@staticcms/core';
 import type { ChangeEvent, FC } from 'react';
+
+import './BooleanControl.css';
 
 const classes = generateClassNames('WidgetBoolean', [
   'root',
@@ -15,6 +18,9 @@ const classes = generateClassNames('WidgetBoolean', [
   'disabled',
   'for-single-list',
   'input',
+  'content',
+  'prefix',
+  'suffix',
 ]);
 
 const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
@@ -43,6 +49,9 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
     [onChange],
   );
 
+  const prefix = useMemo(() => field.prefix ?? '', [field.prefix]);
+  const suffix = useMemo(() => field.suffix ?? '', [field.suffix]);
+
   return (
     <Field
       inputRef={ref}
@@ -61,13 +70,17 @@ const BooleanControl: FC<WidgetControlProps<boolean, BooleanField>> = ({
         forSingleList && classes['for-single-list'],
       )}
     >
-      <Switch
-        ref={ref}
-        value={internalValue}
-        disabled={disabled}
-        onChange={handleChange}
-        rootClassName={classes.input}
-      />
+      <div className={classes.content}>
+        {isNotEmpty(prefix) ? <div className={classes.prefix}>{prefix}</div> : null}
+        <Switch
+          ref={ref}
+          value={internalValue}
+          disabled={disabled}
+          onChange={handleChange}
+          rootClassName={classes.input}
+        />
+        {isNotEmpty(suffix) ? <div className={classes.suffix}>{suffix}</div> : null}
+      </div>
     </Field>
   );
 };

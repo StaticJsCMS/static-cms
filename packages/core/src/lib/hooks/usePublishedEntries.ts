@@ -7,12 +7,7 @@ import {
 import { useAppSelector } from '@staticcms/core/store/hooks';
 
 export default function usePublishedEntries(collectionName: string) {
-  const publishedSlugsSelector = useMemo(
-    () => selectPublishedSlugs(collectionName),
-    [collectionName],
-  );
-
-  const slugs = useAppSelector(publishedSlugsSelector);
+  const slugs = useAppSelector(state => selectPublishedSlugs(state, collectionName));
   const entries = useAppSelector(selectEntriesBySlugs);
 
   return useMemo(

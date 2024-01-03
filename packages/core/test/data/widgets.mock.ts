@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
-import { createMockCollection } from './collections.mock';
+import { applyDefaults } from '@staticcms/core/actions/config';
+import { createMockFolderCollection } from './collections.mock';
 import { createMockConfig } from './config.mock';
 import { createMockEntry } from './entry.mock';
 
@@ -34,7 +35,7 @@ export const createMockWidgetControlProps = <T, F extends BaseField = UnknownFie
 
   const value = rawValue ?? null;
 
-  const collection = rawCollection ?? createMockCollection({}, options.field);
+  const collection = rawCollection ?? createMockFolderCollection({}, options.field);
   const config = rawConfig ?? createMockConfig({ collections: [collection] });
   const entry = rawEntry ?? createMockEntry({ data: { [options.field.name]: value } });
 
@@ -44,10 +45,12 @@ export const createMockWidgetControlProps = <T, F extends BaseField = UnknownFie
     rawFieldsErrors ?? (rawErrors ? { [`${path}.${options.field.name}`]: errors } : {});
   const hasErrors = Boolean(rawErrors && rawErrors.length > 0);
 
+  const configWithDefaults = applyDefaults(config);
+
   return {
     label: 'Mock Widget',
-    config,
-    collection,
+    config: configWithDefaults,
+    collection: configWithDefaults.collections[0],
     collectionFile: undefined,
     entry,
     value,
@@ -64,7 +67,6 @@ export const createMockWidgetControlProps = <T, F extends BaseField = UnknownFie
     i18n: undefined,
     duplicate: false,
     controlled: false,
-    theme: 'light',
     onChange: jest.fn(),
     clearChildValidation: jest.fn(),
     query: jest.fn(),

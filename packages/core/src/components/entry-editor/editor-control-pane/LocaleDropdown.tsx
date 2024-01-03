@@ -13,7 +13,7 @@ import Menu from '../../common/menu/Menu';
 import MenuGroup from '../../common/menu/MenuGroup';
 import MenuItemButton from '../../common/menu/MenuItemButton';
 
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import './LocaleDropdown.css';
 
@@ -34,7 +34,7 @@ interface LocaleDropdownProps {
   excludeLocales?: string[];
 }
 
-const LocaleDropdown = ({
+const LocaleDropdown: FC<LocaleDropdownProps> = ({
   locale,
   locales,
   defaultLocale,
@@ -96,7 +96,11 @@ const LocaleDropdown = ({
 
   return (
     <div className={classes.root}>
-      <Menu label={dropdownText} rootClassName={classes.dropdown}>
+      <Menu
+        label={dropdownText}
+        rootClassName={classes.dropdown}
+        aria-label="locale options dropdown"
+      >
         <MenuGroup>
           {locales
             .filter(locale => !excludeLocales.includes(locale))

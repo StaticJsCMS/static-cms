@@ -3,7 +3,7 @@ import React from 'react';
 
 import mediaLibraryClasses from './MediaLibrary.classes';
 
-import type { ChangeEventHandler, KeyboardEventHandler } from 'react';
+import type { ChangeEventHandler, FC, KeyboardEventHandler } from 'react';
 
 export interface MediaLibrarySearchProps {
   value?: string;
@@ -13,13 +13,13 @@ export interface MediaLibrarySearchProps {
   disabled?: boolean;
 }
 
-const MediaLibrarySearch = ({
+const MediaLibrarySearch: FC<MediaLibrarySearchProps> = ({
   value = '',
   onChange,
   onKeyDown,
   placeholder,
   disabled,
-}: MediaLibrarySearchProps) => {
+}) => {
   return (
     <form className={mediaLibraryClasses['search-form']}>
       <label htmlFor="default-search" className={mediaLibraryClasses['search-label']}>

@@ -14,10 +14,10 @@
 }
 
 .CMS_FolderCreationDialog_title {
+  color: var(--text-primary);
+
   @apply text-xl
-    font-semibold
-    text-gray-800
-    dark:text-white;
+    font-semibold;
 }
 
 .CMS_FolderCreationDialog_close-button-icon {

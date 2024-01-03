@@ -22,10 +22,12 @@ const hr: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Sadržaj',
+      workflow: 'Tijek rada',
       media: 'Mediji',
       quickAdd: 'Dodaj',
     },
     app: {
+      loading: 'Učitavanje...',
       errorHeader: 'Greška pri učitavanju CMS konfiguracije',
       configErrors: 'Greška u konfiguraciji',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -104,15 +106,35 @@ const hr: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Pisanje na %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Jeste li sigurni da želite napustiti stranicu?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'Imate nespremljene promjene, molimo spremite prije ažuriranja statusa.',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'Molimo ažurirajte status na "Spremno" prije objavljivanja.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        'Imate nespremljene promjene, molimo spremite prije objavljivanja.',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Jeste li sigurni da želite objaviti ovaj unos?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'Jeste li sigurni da želite maknuti objavu za ovaj unos?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Jeste li sigurni da želite obrisati objavljeni unos, te nespremljene promjene u trenutnoj sesiji?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Jeste li sigurni da želite obrisati ovaj objavljeni unos?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'Obrisat ćete sve neobjavljene promjene na ovom unosu, te sve nespremljene promjene u trenutnoj sesiji. Želite li i dalje obrisati?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Sve nespremljene promjene na ovom unosu će biti obrisane. Želite li i dalje obrisati?',
       loadingEntry: 'Učitavanje unosa...',
     },
     editorInterface: {
@@ -123,13 +145,35 @@ const hr: LocalePhrasesRoot = {
       toggleScrollSync: undefined, // English translation: 'Sync scrolling'
     },
     editorToolbar: {
+      publishing: 'Objavljivanje...',
       publish: 'Objavi',
       published: 'Objavljeno',
+      unpublish: 'Obriši iz objava',
       duplicate: 'Dupliciraj',
+      unpublishing: 'Brisanje iz objava...',
       publishAndCreateNew: 'Objavi i kreiraj novo',
       publishAndDuplicate: 'Objavi i dupliciraj',
+      deleteUnpublishedChanges: 'Obriši neobjavljene promjene',
+      deleteUnpublishedEntry: 'Obriši neobjavljene unose',
+      deletePublishedEntry: 'Obriši objavljeni unos',
       deleteEntry: 'Obriši unos',
+      saving: 'Spremanje...',
+      save: 'Spremi',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: 'Brisanje...',
+      updating: 'Ažuriranje...',
+      status: 'Status: %{status}',
+      backCollection: 'Pisanje u %{collectionLabel} zbirci',
+      unsavedChanges: 'Nespremljene promjene',
+      changesSaved: 'Promjene spremljene',
+      draft: 'Skica',
+      inReview: 'Osvrt',
+      ready: 'Spremno',
       publishNow: 'Objavi sad',
+      deployPreviewPendingButtonLabel: 'Provjeri za osvrt',
+      deployPreviewButtonLabel: 'Pogledaj osvrt',
+      deployButtonLabel: 'Pogledaj na produkciji',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +182,35 @@ const hr: LocalePhrasesRoot = {
       markdown: {
         bold: 'Podebljano',
         italic: 'Kurziv',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'Kod',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Link',
-        linkPrompt: 'Unesi URL linka',
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Naslovi',
         quote: 'Citat',
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'Nabrajan popis',
         numberedList: 'Numeriran popis',
         addComponent: 'Dodaj komponentu',
         richText: 'Bogati tekst',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Odaberi sliku',
@@ -212,6 +274,10 @@ const hr: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -233,10 +299,10 @@ const hr: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Učitavanje...',
       noResults: 'Nema rezultata.',
       noAssetsFound: 'Sredstva nisu pronađena.',
       noImagesFound: 'Slike nisu pronađene.',
+      private: 'Privatno ',
       images: 'Slike',
       mediaAssets: 'Medijska sredstva',
       search: 'Pretraži...',
@@ -253,6 +319,7 @@ const hr: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -263,6 +330,7 @@ const hr: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Povratak na stranicu',
@@ -284,11 +352,12 @@ const hr: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Odjava',
     },
     toast: {
       onFailToLoadEntries: 'Neuspjelo dohvaćanje unosa: %{details}',
+      onFailToLoadDeployPreview: 'Neuspjelo dohvaćanje pregleda: %{details}',
       onFailToPersist: 'Neuspjelo spremanje unosa: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'Neuspjelo brisanje unosa: %{details}',
@@ -296,12 +365,52 @@ const hr: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'Neuspjelo ažuriranje statusa: %{details}',
       missingRequiredField: 'Uups, preskočili ste obvezno polje. Molimo popunite prije spremanja.',
       entrySaved: 'Unos spremljen',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Unos objavljen',
+      entryUnpublished: 'Unos obrisan',
       onFailToPublishEntry: 'Neuspjelo objavljivanje unosa: %{details}',
+      onFailToUnpublishEntry: 'Neuspjelo brisanje unosa: %{details}',
       entryUpdated: 'Status unosa ažuriran',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Otkrivene neobjavljene objave',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Odjavljeni ste, molimo spremite sve podatke i prijavite se ponovno',
       onBackendDown: 'Backend servis ima prekid rada. Pogledaj %{details} za više informacija',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Učitavanje unosa uredničkog tijeka rada',
+      workflowHeading: 'Urednički tijek rada',
+      newPost: 'Nova objava',
+      description:
+        '%{smart_count} unos čeka pregled, %{readyCount} unos spreman za produkciju. |||| %{smart_count} unosa čeka pregled, %{readyCount} unosa spremno za produkciju. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} od strane %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'od strane %{author}',
+      deleteChanges: 'Obriši promjene',
+      deleteNewEntry: 'Obriši novi unos',
+      publishChanges: 'Objavi promjene',
+      publishNewEntry: 'Objavi novi unos',
+    },
+    workflowList: {
+      onDeleteEntry: 'Jeste li sigurni da želite obrisati unos?',
+      onPublishingNotReadyEntry:
+        'Samo promjene sa statusom "Spremno" mogu biti objavljene. Molimo povucite karticu u kolumnu "Spremno" prije objavljivanja.',
+      onPublishEntry: 'Jeste li sigurni da želite objaviti unos?',
+      draft: 'Skice',
+      pending_review: 'U osvrtu',
+      pending_publish: 'Spremno',
+      currentEntries: '%{smart_count} unos |||| %{smart_count} unosa',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

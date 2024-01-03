@@ -8,7 +8,7 @@ import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Image from '@staticcms/core/components/common/image/Image';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { Collection, FileOrImageField } from '@staticcms/core/interface';
+import type { CollectionWithDefaults, FileOrImageField } from '@staticcms/core';
 import type { FC, MouseEventHandler } from 'react';
 
 import './SortableImage.css';
@@ -21,7 +21,6 @@ const classes = generateClassNames('WidgetFileImage_SortableImage', [
   'controls',
   'replace-button',
   'remove-button',
-  'button-icon',
   'content',
   'image',
 ]);
@@ -29,7 +28,7 @@ const classes = generateClassNames('WidgetFileImage_SortableImage', [
 export interface SortableImageProps {
   id: string;
   itemValue: string;
-  collection: Collection<FileOrImageField>;
+  collection: CollectionWithDefaults<FileOrImageField>;
   field: FileOrImageField;
   onRemove?: MouseEventHandler;
   onReplace?: MouseEventHandler;
@@ -98,24 +97,24 @@ const SortableImage: FC<SortableImageProps> = ({
           <div className={classes.controls}>
             {onReplace ? (
               <IconButton
+                icon={CameraAltIcon}
                 key="replace"
                 variant="text"
                 onClick={handleReplace}
-                className={classes['replace-button']}
-              >
-                <CameraAltIcon className={classes['button-icon']} />
-              </IconButton>
+                rootClassName={classes['replace-button']}
+                aria-label="replace image"
+              />
             ) : null}
             {onRemove ? (
               <IconButton
+                icon={DeleteIcon}
                 key="remove"
                 variant="text"
                 color="error"
                 onClick={handleRemove}
-                className={classes['remove-button']}
-              >
-                <DeleteIcon className={classes['button-icon']} />
-              </IconButton>
+                rootClassName={classes['remove-button']}
+                aria-label="remove image"
+              />
             ) : null}
           </div>
         </div>

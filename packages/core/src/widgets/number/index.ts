@@ -3,7 +3,7 @@ import previewComponent from './NumberPreview';
 import schema from './schema';
 import validator from './validator';
 
-import type { NumberField, WidgetParam } from '@staticcms/core/interface';
+import type { NumberField, WidgetParam } from '@staticcms/core';
 
 const NumberWidget = (): WidgetParam<string | number, NumberField> => {
   return {

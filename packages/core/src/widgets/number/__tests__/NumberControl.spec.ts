@@ -3,13 +3,13 @@
  */
 import '@testing-library/jest-dom';
 import { act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 
 import { mockNumberField } from '@staticcms/test/data/fields.mock';
 import { createWidgetControlHarness } from '@staticcms/test/harnesses/widget.harness';
 import NumberControl from '../NumberControl';
 
-import type { NumberField } from '@staticcms/core/interface';
+import type { NumberField } from '@staticcms/core';
 
 describe(NumberControl.name, () => {
   const renderControl = createWidgetControlHarness(NumberControl, { field: mockNumberField });
@@ -81,7 +81,7 @@ describe(NumberControl.name, () => {
     const input = inputWrapper.getElementsByTagName('input')[0];
     expect(input).not.toHaveFocus();
 
-    const field = getByTestId('field');
+    const field = getByTestId('field-Mock Widget');
 
     await act(async () => {
       await userEvent.click(field);

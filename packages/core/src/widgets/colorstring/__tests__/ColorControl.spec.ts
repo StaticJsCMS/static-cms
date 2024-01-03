@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { act } from '@testing-library/react';
 
 import { mockColorField } from '@staticcms/test/data/fields.mock';
@@ -196,7 +196,7 @@ describe(ColorControl.name, () => {
       expect(input).not.toHaveFocus();
 
       await act(async () => {
-        const field = getByTestId('field');
+        const field = getByTestId('field-Mock Widget');
         await userEvent.click(field);
       });
 

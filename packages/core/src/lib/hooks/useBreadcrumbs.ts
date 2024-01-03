@@ -5,21 +5,22 @@ import { useAppDispatch } from '@staticcms/core/store/hooks';
 import { selectEntryCollectionTitle, selectFolderEntryExtension } from '../util/collection.util';
 import { addFileTemplateFields } from '../widgets/stringTemplate';
 import useEntries from './useEntries';
+import useTranslate from './useTranslate';
 
-import type { Breadcrumb, Collection, Entry } from '@staticcms/core/interface';
-import type { t } from 'react-polyglot';
+import type { Breadcrumb, CollectionWithDefaults, Entry } from '@staticcms/core';
 
 interface EntryDetails {
   isNewEntry: boolean;
   summary: string;
-  t: t;
 }
 
 export default function useBreadcrumbs(
-  collection: Collection,
+  collection: CollectionWithDefaults,
   filterTerm: string | undefined | null,
   entryDetails?: EntryDetails,
 ) {
+  const t = useTranslate();
+
   const entries = useEntries(collection);
   const dispatch = useAppDispatch();
 
@@ -39,10 +40,13 @@ export default function useBreadcrumbs(
     ];
 
     if ('nested' in collection && collection.nested?.path && filterTerm) {
-      const entriesByPath = entries.reduce((acc, entry) => {
-        acc[entry.path] = entry;
-        return acc;
-      }, {} as Record<string, Entry>);
+      const entriesByPath = entries.reduce(
+        (acc, entry) => {
+          acc[entry.path] = entry;
+          return acc;
+        },
+        {} as Record<string, Entry>,
+      );
 
       const path = filterTerm.split('/');
       if (path.length > 0) {
@@ -76,7 +80,7 @@ export default function useBreadcrumbs(
     }
 
     if (entryDetails) {
-      const { isNewEntry, summary, t } = entryDetails;
+      const { isNewEntry, summary } = entryDetails;
       crumbs.push({
         name: isNewEntry
           ? t('collection.collectionTop.newButton', {
@@ -88,5 +92,5 @@ export default function useBreadcrumbs(
     }
 
     return crumbs;
-  }, [collection, entries, entryDetails, filterTerm]);
+  }, [collection, entries, entryDetails, filterTerm, t]);
 }

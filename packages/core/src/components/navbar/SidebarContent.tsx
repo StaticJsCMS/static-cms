@@ -1,33 +1,45 @@
+import { Dashboard as DashboardIcon } from '@styled-icons/material/Dashboard';
 import { Photo as PhotoIcon } from '@styled-icons/material/Photo';
 import React, { useCallback, useMemo } from 'react';
-import { translate } from 'react-polyglot';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getIcon } from '@staticcms/core/lib/hooks/useIcon';
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getAdditionalLinks } from '@staticcms/core/lib/registry';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { selectCollections } from '@staticcms/core/reducers/selectors/collections';
-import { selectIsSearchEnabled } from '@staticcms/core/reducers/selectors/config';
+import {
+  selectIsMediaLinkEnabled,
+  selectIsSearchEnabled,
+  selectUseWorkflow,
+} from '@staticcms/core/reducers/selectors/config';
 import { useAppSelector } from '@staticcms/core/store/hooks';
 import CollectionSearch from '../collections/CollectionSearch';
 import NestedCollection from '../collections/NestedCollection';
 import NavLink from './NavLink';
 import sidebarClasses from './Sidebar.classes';
 
-import type { Collection } from '@staticcms/core/interface';
+import type { CollectionWithDefaults } from '@staticcms/core';
 import type { FC } from 'react';
-import type { TranslateProps } from 'react-polyglot';
 
-const SidebarContent: FC<TranslateProps> = ({ t }) => {
+export interface SidebarContentProps {
+  isMobile?: boolean;
+}
+
+const SidebarContent: FC<SidebarContentProps> = ({ isMobile = false }) => {
+  const t = useTranslate();
+
   const { name, searchTerm, ...params } = useParams();
   const filterTerm = useMemo(() => params['*'] ?? '', [params]);
 
   const navigate = useNavigate();
   const isSearchEnabled = useAppSelector(selectIsSearchEnabled);
+  const isMediaLinkEnabled = useAppSelector(selectIsMediaLinkEnabled);
   const collections = useAppSelector(selectCollections);
+  const useWorkflow = useAppSelector(selectUseWorkflow);
 
   const collection = useMemo(
-    () => (name ? collections[name] : collections[0]) as Collection | undefined,
+    () => (name ? collections[name] : collections[0]) as CollectionWithDefaults | undefined,
     [collections, name],
   );
 
@@ -51,12 +63,19 @@ const SidebarContent: FC<TranslateProps> = ({ t }) => {
           }
 
           return (
-            <NavLink key={collectionName} to={`/collections/${collectionName}`} icon={icon}>
+            <NavLink
+              key={collectionName}
+              to={`/collections/${collectionName}`}
+              icon={icon}
+              data-testid={`${isMobile ? 'mobile-collection-nav' : 'sidebar-collection-nav'}-${
+                collection.label
+              }`}
+            >
               {collection.label}
             </NavLink>
           );
         }),
-    [collections, filterTerm],
+    [collections, filterTerm, isMobile],
   );
 
   const additionalLinks = useMemo(() => getAdditionalLinks(), []);
@@ -67,17 +86,27 @@ const SidebarContent: FC<TranslateProps> = ({ t }) => {
           const icon = getIcon(iconName);
 
           return typeof data === 'string' ? (
-            <NavLink key={title} href={data} icon={icon}>
+            <NavLink
+              key={title}
+              href={data}
+              icon={icon}
+              data-testid={`${isMobile ? 'mobile-external-nav' : 'sidebar-external-nav'}-${title}`}
+            >
               {title}
             </NavLink>
           ) : (
-            <NavLink key={title} to={`/page/${id}`} icon={icon}>
+            <NavLink
+              key={title}
+              to={`/page/${id}`}
+              icon={icon}
+              data-testid={`${isMobile ? 'mobile-page-nav' : 'sidebar-page-nav'}-${title}`}
+            >
               {title}
             </NavLink>
           );
         },
       ),
-    [additionalLinks],
+    [additionalLinks, isMobile],
   );
 
   const searchCollections = useCallback(
@@ -96,7 +125,13 @@ const SidebarContent: FC<TranslateProps> = ({ t }) => {
   );
 
   return (
-    <div className={classNames(sidebarClasses.content, 'CMS_Scrollbar_root')}>
+    <div
+      className={classNames(
+        sidebarClasses.content,
+        'CMS_Scrollbar_root',
+        'CMS_Scrollbar_secondary',
+      )}
+    >
       <ul className={sidebarClasses.items}>
         {isSearchEnabled && (
           <CollectionSearch
@@ -106,18 +141,31 @@ const SidebarContent: FC<TranslateProps> = ({ t }) => {
             onSubmit={(query: string, collection?: string) => searchCollections(query, collection)}
           />
         )}
+        {useWorkflow ? (
+          <NavLink
+            key="Dashboard"
+            to="/dashboard"
+            icon={<DashboardIcon className={sidebarClasses['icon']} />}
+            data-testid={`${isMobile ? 'mobile-nav' : 'sidebar-nav'}-Dashboard`}
+          >
+            {t('workflow.workflow.dashboard')}
+          </NavLink>
+        ) : null}
         {collectionLinks}
         {links}
-        <NavLink
-          key="Media"
-          to="/media"
-          icon={<PhotoIcon className={sidebarClasses['media-icon']} />}
-        >
-          {t('app.header.media')}
-        </NavLink>
+        {isMediaLinkEnabled ? (
+          <NavLink
+            key="Media"
+            to="/media"
+            icon={<PhotoIcon className={sidebarClasses['icon']} />}
+            data-testid={`${isMobile ? 'mobile-nav' : 'sidebar-nav'}-Media`}
+          >
+            {t('app.header.media')}
+          </NavLink>
+        ) : null}
       </ul>
     </div>
   );
 };
 
-export default translate()(SidebarContent) as FC;
+export default SidebarContent;

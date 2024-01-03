@@ -64,6 +64,7 @@ export async function parseResponse<T extends keyof typeof responseFormatters = 
   { expectingOk = true, format = 'text', apiName = '' }: ParseResponseOptions,
 ): Promise<Awaited<ReturnType<(typeof responseFormatters)[T]>>> {
   let body: Awaited<ReturnType<(typeof responseFormatters)[T]>>;
+
   try {
     const formatter = responseFormatters[format] ?? false;
     if (!formatter) {

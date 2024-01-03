@@ -121,6 +121,7 @@ export function searchEntries(searchTerm: string, searchCollections: string[], p
           .filter(([key, _value]) => allCollections.indexOf(key) !== -1)
           .map(([_key, value]) => value),
         searchTerm,
+        configState.config,
       );
 
       return dispatch(searchSuccess(response.entries, page));
@@ -163,6 +164,7 @@ export function query(
     try {
       const response: SearchQueryResponse = await backend.query(
         collection,
+        configState.config,
         searchFields,
         searchTerm,
         file,

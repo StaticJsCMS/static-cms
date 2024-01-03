@@ -22,10 +22,12 @@ const ca: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'Contingut',
+      workflow: 'Flux Editorial',
       media: 'Multimèdia',
       quickAdd: 'Afegir',
     },
     app: {
+      loading: 'Carregant...',
       errorHeader: 'Error al carregar la configuració del CMS',
       configErrors: 'Errors de configuració',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -104,15 +106,35 @@ const ca: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'Escriure en %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'Estàs segur que vols deixar aquesta pàgina?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        "Tens canvis no guardats, si us plau, guarda'ls abans d'actualitzar l'estat.",
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'Si us plau, actualitza l\'estat a "Llest" abans de publicar.',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        "Tens canvis no guardats, si us plau, guarda'ls abans de publicar-los.",
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'Estàs segur que vols publicar aquesta entrada?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'Estàs segur que vols esborrar aquesta entrada?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'Està segur que vol eliminar aquesta entrada publicada, així com els canvis no guardats de la sessió actual?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'Està segur que vol eliminar aquesta entrada publicada?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        "Això eliminarà tots els canvis no publicats d'aquesta entrada així com els canvis no guardats de la sessió actual. Encara vol procedir?",
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'Tots els canvis no publicats en aquesta entrada seràn esborrats. Encara els vol eliminar?',
       loadingEntry: 'Carregant entrada...',
     },
     editorInterface: {
@@ -123,13 +145,35 @@ const ca: LocalePhrasesRoot = {
       toggleScrollSync: undefined, // English translation: 'Sync scrolling'
     },
     editorToolbar: {
+      publishing: 'Publicant...',
       publish: 'Publicar',
       published: 'Publicat',
+      unpublish: 'Despublicar',
       duplicate: 'Duplicar',
+      unpublishing: 'Despublicant...',
       publishAndCreateNew: 'Publicar i crear de nou',
       publishAndDuplicate: 'Publica i duplica',
+      deleteUnpublishedChanges: 'Eliminar canvis no publicats',
+      deleteUnpublishedEntry: 'Eliminar entrada no publicada',
+      deletePublishedEntry: 'Eliminar entrada publicada',
       deleteEntry: 'Eliminar entrada',
+      saving: 'Guardant...',
+      save: 'Guardar',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: 'Eliminant...',
+      updating: 'Actualizant...',
+      status: 'Estat: %{status}',
+      backCollection: 'Escrivint a la colecció %{collectionLabel}',
+      unsavedChanges: 'Canvis no guardats',
+      changesSaved: 'Canvis guardats',
+      draft: 'Esborrany',
+      inReview: 'En revisió',
+      ready: 'Llest',
       publishNow: 'Publicar ara',
+      deployPreviewPendingButtonLabel: 'Comprovar Vista Prèvia',
+      deployPreviewButtonLabel: 'Veure Vista Prèvia',
+      deployButtonLabel: 'Veure publicació',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +182,35 @@ const ca: LocalePhrasesRoot = {
       markdown: {
         bold: 'Negreta',
         italic: 'Cursiva',
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: 'Codi',
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: 'Enllaç',
-        linkPrompt: "Introdueix l'URL de l'enllaç",
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: 'Encapçalaments',
         quote: undefined, // English translation: 'Quote'
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: 'Llista',
         numberedList: 'Llista numèrica',
         addComponent: 'Afegir component',
         richText: 'Text enriquit',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'Escull una imatge',
@@ -212,6 +274,10 @@ const ca: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -233,10 +299,10 @@ const ca: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'Carregant...',
       noResults: 'Sense resultats.',
       noAssetsFound: 'Arxius no trobats.',
       noImagesFound: 'Imatges no trobades.',
+      private: 'Privat',
       images: 'Imatges',
       mediaAssets: 'Arxius multimèdia',
       search: 'Buscar...',
@@ -253,6 +319,7 @@ const ca: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -263,6 +330,7 @@ const ca: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'Torna enrere al lloc',
@@ -284,11 +352,12 @@ const ca: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'Tancar sessió',
     },
     toast: {
       onFailToLoadEntries: "No s'ha ha pogut carregar l'entrada: %{details}",
+      onFailToLoadDeployPreview: "No s'ha pogut carregar la vista prèvia: %{details}",
       onFailToPersist: "No s'ha pogut guardar l'entrada: %{details}",
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: "No s'ha pogut eliminar l'entrada: %{details}",
@@ -297,12 +366,52 @@ const ca: LocalePhrasesRoot = {
       missingRequiredField:
         "Ups, no ha omplert un camp obligatori. Si us plau,  ompli'l abans de guardar.",
       entrySaved: 'Entrada guardada',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'Entrada publicada',
+      entryUnpublished: 'Entrada despublicada',
       onFailToPublishEntry: "No s'ha pogut publicar: %{details}",
+      onFailToUnpublishEntry: "No s'ha pogut despublicar l'entrada: %{details}",
       entryUpdated: "Estat de l'entrada actualitzat",
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'Canvis no publicats eliminats',
       onFailToAuth: '%{details}',
       onLoggedOut: 'La teva sessió ha estat tancada. Si us plau, torna a iniciar-la',
       onBackendDown: 'El servidor està patint problemes. Consulta %{details} per a més informació',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'Carregant Entradas del Flux Editorial',
+      workflowHeading: 'Flux Editorial',
+      newPost: 'Nou article',
+      description:
+        '%{smart_count} entrada esperant revisió, %{readyCount} llesta per a publicar |||| %{smart_count} entrades esperant revisió, %{readyCount} llestes per a publicar. ',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} per %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'per %{author}',
+      deleteChanges: 'Eliminar canvis',
+      deleteNewEntry: 'Eliminar nova entrada',
+      publishChanges: 'Publicar canvis',
+      publishNewEntry: 'Publicar nova entrada',
+    },
+    workflowList: {
+      onDeleteEntry: 'Està segur que vol borrar aquesta entrada?',
+      onPublishingNotReadyEntry:
+        'Només es poden publicar elements amb estat "Llest". Si us plau, arrossegui la targeta fins la columna "Llest" per a permetre\'n la publicació',
+      onPublishEntry: 'Està segur que vol publicar aquesta entrada?',
+      draft: 'Esborranys',
+      pending_review: 'En revisió',
+      pending_publish: 'Llest',
+      currentEntries: '%{smart_count} entrada |||| %{smart_count} entrades',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

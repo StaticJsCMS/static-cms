@@ -22,10 +22,12 @@ const th: LocalePhrasesRoot = {
   app: {
     header: {
       content: 'เนื้อหา',
+      workflow: 'ขั้นตอนการทำงาน',
       media: 'มีเดีย',
       quickAdd: 'เพิ่มเนื้อหา อย่างเร็ว',
     },
     app: {
+      loading: 'กำลังโหลด...',
       errorHeader: 'เกิดข้อผิดพลาดในการโหลดการตั้งค่า CMS',
       configErrors: 'คอนฟิกมีข้อผิดพลาด',
       configNotFound: undefined, // English translation: 'Config not found'
@@ -104,15 +106,35 @@ const th: LocalePhrasesRoot = {
       },
       i18n: {
         writingInLocale: 'เขียนด้วยภาษา %{locale}',
+        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
+        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
       },
     },
     editor: {
       onLeavePage: 'คุณแน่ใจหรือว่าจะออกจากหน้านี้?',
+      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesBody:
+        'คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก โปรดบันทึกก่อนอัปเดตสถานะ',
+      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyBody: 'โปรดอัปเดตสถานะเป็น "พร้อม" ก่อนจะเผยแพร่',
+      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesBody:
+        'คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก โปรดบันทึกก่อนจะเผยแพร่',
+      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingBody: 'คุณแน่ใจหรือว่าจะเผยแพร่เนื้อหานี้?',
+      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingBody: 'คุณแน่ใจหรือว่าจะไม่ต้องการเผยแพร่เนื้อหานี้?',
       onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
       onDeleteWithUnsavedChangesBody:
         'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้ รวมถึงการเปลี่ยนแปลงที่ยังไม่ได้บันทึก?',
       onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
       onDeletePublishedEntryBody: 'คุณแน่ใจหรือว่าจะต้องการลบการเผยแพร่เนื้อหานี้?',
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesBody:
+        'คุณแน่ใจหรือว่าจะต้องการลบเนื้อหาที่ยังไม่ได้เผยแพร่ทั้งหมดนี้ รวมถึงการเปลี่ยนแปลงที่ยังไม่ได้บันทึก?',
+      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesBody:
+        'คุณแน่ใจหรือว่าจะต้องการลบเนื้อหาที่ยังไม่ได้เผยแพร่ทั้งหมดนี้?',
       loadingEntry: 'กำลังโหลดเนื้อหา...',
     },
     editorInterface: {
@@ -123,13 +145,35 @@ const th: LocalePhrasesRoot = {
       toggleScrollSync: undefined, // English translation: 'Sync scrolling'
     },
     editorToolbar: {
+      publishing: 'กำลังเผยแพร่...',
       publish: 'เผยแพร่',
       published: 'เผยแพร่แล้ว',
+      unpublish: 'ไม่ได้เผยแพร่',
       duplicate: 'ทำซ้ำ',
+      unpublishing: 'ไม่ทำการเผยแพร่...',
       publishAndCreateNew: 'เผยแพร่ และ สร้างใหม่',
       publishAndDuplicate: 'เผยแพร่ และ ทำซ้ำ',
+      deleteUnpublishedChanges: 'ลบการเปลี่ยแปลงเนื้อหาที่ยังไม่ได้เผยแพร่',
+      deleteUnpublishedEntry: 'ลบเนื้อหาที่ยังไม่ได้เผยแพร่',
+      deletePublishedEntry: 'ลบเนื้อหาที่เผยแพร่',
       deleteEntry: 'ลบเนื้อหา',
+      saving: 'กำลังบันทึก...',
+      save: 'บันทึก',
+      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
+      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      deleting: 'กำลังลบ...',
+      updating: 'กำลังอัปเดต...',
+      status: 'สถานะ: %{status}',
+      backCollection: ' เขียนในกลุ่ม %{collectionLabel}',
+      unsavedChanges: 'การเปลี่ยนแปลงยังไม่ได้บันทึก',
+      changesSaved: 'การเปลี่ยนเปลงถูกบันทึกแล้ว',
+      draft: 'ร่าง',
+      inReview: 'อยู่ระหว่างการตรวจสอบ',
+      ready: 'พร้อม',
       publishNow: 'เผยแพร่ตอนนี้',
+      deployPreviewPendingButtonLabel: 'ตรวจสอบตัวอย่าง',
+      deployPreviewButtonLabel: 'ดูตัวอย่าง',
+      deployButtonLabel: 'ดูตัวอย่างจากหน้าจริง',
       discardChanges: undefined, // English translation: 'Discard changes'
       discardChangesTitle: undefined, // English translation: 'Discard changes'
       discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
@@ -138,17 +182,35 @@ const th: LocalePhrasesRoot = {
       markdown: {
         bold: undefined, // English translation: 'Bold'
         italic: undefined, // English translation: 'Italic'
+        strikethrough: undefined, // English translation: 'Strikethrough'
         code: undefined, // English translation: 'Code'
+        codeBlock: undefined, // English translation: 'Code block'
+        insertCodeBlock: undefined, // English translation: 'Insert code block'
         link: undefined, // English translation: 'Link'
-        linkPrompt: undefined, // English translation: 'Enter the URL of the link'
+        insertLink: undefined, // English translation: 'Insert link'
+        paragraph: undefined, // English translation: 'Paragraph'
         headings: undefined, // English translation: 'Headings'
         quote: undefined, // English translation: 'Quote'
+        insertQuote: undefined, // English translation: 'Insert blockquote'
         bulletedList: undefined, // English translation: 'Bulleted List'
         numberedList: undefined, // English translation: 'Numbered List'
         addComponent: undefined, // English translation: 'Add Component'
         richText: 'Rich Text',
         markdown: 'Markdown',
         type: undefined, // English translation: 'Type...'
+        decreaseIndent: undefined, // English translation: 'Decrease indent'
+        increaseIndent: undefined, // English translation: 'Increase indent'
+        image: undefined, // English translation: 'Image'
+        insertImage: undefined, // English translation: 'Insert image'
+        table: {
+          table: undefined, // English translation: 'Table'
+          deleteColumn: undefined, // English translation: 'Delete column'
+          deleteRow: undefined, // English translation: 'Delete row'
+          deleteTable: undefined, // English translation: 'Delete table'
+          insertColumn: undefined, // English translation: 'Insert column'
+          insertRow: undefined, // English translation: 'Insert row'
+          insertTable: undefined, // English translation: 'Insert table'
+        },
       },
       image: {
         choose: 'เลือกรูปภาพ',
@@ -212,6 +274,10 @@ const th: LocalePhrasesRoot = {
         value: undefined, // English translation: 'Value'
         uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
       },
+      code: {
+        language: undefined, // English translation: 'Language'
+        selectLanguage: undefined, // English translation: 'Select language'
+      },
     },
   },
   mediaLibrary: {
@@ -232,10 +298,10 @@ const th: LocalePhrasesRoot = {
       alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
     },
     mediaLibraryModal: {
-      loading: 'กำลังโหลด...',
       noResults: 'ไม่มีผลลัพธ์',
       noAssetsFound: 'ไม่พบข้อมูล',
       noImagesFound: 'ไม่พบรูปภาพ',
+      private: 'ส่วนตัว ',
       images: 'รูปภาพ',
       mediaAssets: 'ข้อมูลมีเดีย',
       search: 'ค้นหา...',
@@ -252,6 +318,7 @@ const th: LocalePhrasesRoot = {
       newFolder: undefined, // English translation: 'New folder'
       createNewFolder: undefined, // English translation: 'Create new folder'
       enterFolderName: undefined, // English translation: 'Enter folder name...'
+      create: undefined, // English translation: 'Create'
       home: undefined, // English translation: 'Home'
       up: undefined, // English translation: 'Up'
       upToFolder: undefined, // English translation: 'Up to %{folder}'
@@ -262,6 +329,7 @@ const th: LocalePhrasesRoot = {
       yes: undefined, // English translation: 'Yes'
       no: undefined, // English translation: 'No'
       okay: undefined, // English translation: 'OK'
+      cancel: undefined, // English translation: 'Cancel'
     },
     default: {
       goBackToSite: 'กลับไปยังเว็บไซต์',
@@ -283,11 +351,12 @@ const th: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      darkMode: undefined, // English translation: 'Dark Mode'
+      theme: undefined, // English translation: 'Theme'
       logOut: 'ออกจากระบบ',
     },
     toast: {
       onFailToLoadEntries: 'ล้มเหลวในการโหลดเนื้อหา: %{details}',
+      onFailToLoadDeployPreview: 'ล้มเหลวในการโหลดตัวอย่าง: %{details}',
       onFailToPersist: 'ล้มเหลวในการยืนยันเนื้อหา: %{details}',
       onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
       onFailToDelete: 'ล้มเหลวในการลบเนื้อหา: %{details}',
@@ -295,12 +364,51 @@ const th: LocalePhrasesRoot = {
       onFailToUpdateStatus: 'ล้มเหลวในการอัปเดตสถานะ: %{details}',
       missingRequiredField: 'คุณไม่ได้ใส่ข้อมูลในช่องที่ต้องการ กรุณาใส่ข้อมูลก่อนบันทึก',
       entrySaved: 'เนื้อหาถูกบันทึก',
+      entryDeleted: undefined, // English translation: 'Entry delete'
       entryPublished: 'เนื้อหาถูกเผยแพร่',
+      entryUnpublished: 'เนื้อหาไม่ได้ถูกเผยแพร่',
       onFailToPublishEntry: 'ล้มเหลวในการเผยแพร่เนื้อหา: %{details}',
+      onFailToUnpublishEntry: 'ล้มเหลวในการไม่เผยแพร่เนื้อหา: %{details}',
       entryUpdated: 'สถานะเนื้อหาถูกอัปเดต',
+      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeleteUnpublishedChanges: 'การเปลี่ยนแปลงเนื้อหาไม่ถูกเผยแพร่ได้ถูกลบ',
       onFailToAuth: '%{details}',
       onLoggedOut: 'คุณได้ออกจากระบบ โปรดสำรองข้อมูลแล้วเข้าสู่ระบบอีกครั้ง',
       onBackendDown: 'บริการแบ็กเอนด์เกิดการขัดข้อง ดู %{details} สำหรับข้อมูลเพิ่มเติม',
+    },
+  },
+  workflow: {
+    workflow: {
+      dashboard: undefined, // English translation: 'Dashboard'
+      loading: 'กำลังโหลดเนื้อหาขั้นตอนการทำงานของบรรณาธิการ',
+      workflowHeading: 'ขั้นตอนการทำงานของบรรณาธิการ',
+      newPost: 'สร้างโพสต์ใหม่',
+      description: '%{smart_count} เนื้อหารอการตรวจสอบ, %{readyCount} พร้อมที่จะเผยแพร่ ่',
+      dateFormat: 'MMMM D',
+    },
+    workflowCard: {
+      lastChange: '%{date} โดย %{author}',
+      lastChangeNoAuthor: '%{date}',
+      lastChangeNoDate: 'โดย %{author}',
+      deleteChanges: 'ลบการเปลี่ยนแปลง',
+      deleteNewEntry: 'ลบเนื้อหาใหม่',
+      publishChanges: 'เผยแพร่การเปลี่ยนแปลง',
+      publishNewEntry: 'เผยแพร่เนื้อหาใหม่',
+    },
+    workflowList: {
+      onDeleteEntry: 'คุณแน่ใจหรือว่าจะต้องการลบเนื้อหานี้?',
+      onPublishingNotReadyEntry:
+        'เฉพาะรายการที่มีสถานะ "พร้อม" สามารถทำการเผยแพร่ โปรดลากเนื้อหาไปยังช่อง "พร้อม" เพื่อจะทำการเผยแพร่.',
+      onPublishEntry: 'คุณแน่ใจหรือว่าจะต้องการเผยแพร่เนื้อหานี้?',
+      draft: 'ร่าง',
+      pending_review: 'อยู่ในการตรวจสอบ',
+      pending_publish: 'พร้อม',
+      currentEntries: '%{smart_count} เนื้อหา',
+    },
+    openAuthoring: {
+      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
+      forkRepo: undefined, // English translation: 'Fork the repo'
+      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
     },
   },
 };

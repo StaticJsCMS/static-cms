@@ -10,7 +10,7 @@ import PlateEditor from './plate/PlateEditor';
 import useMarkdownToSlate from './plate/hooks/useMarkdownToSlate';
 import serializeMarkdown from './plate/serialization/serializeMarkdown';
 
-import type { MarkdownField, WidgetControlProps } from '@staticcms/core/interface';
+import type { MarkdownField, WidgetControlProps } from '@staticcms/core';
 import type { ChangeEvent, FC } from 'react';
 import type { MdValue } from './plate/plateTypes';
 
@@ -169,18 +169,22 @@ const withMarkdownControl = ({ useMdx }: WithMarkdownControlProps) => {
             <Button
               data-testid="rich-editor"
               size="small"
+              color={!showRaw ? 'primary' : 'secondary'}
               variant={!showRaw ? 'contained' : 'outlined'}
               onClick={handleShowRich}
               disabled={disabled}
+              aria-label="toggle to rich text mode"
             >
               {t('editor.editorWidgets.markdown.richText')}
             </Button>
             <Button
               data-testid="rich-editor"
               size="small"
+              color={showRaw ? 'primary' : 'secondary'}
               variant={showRaw ? 'contained' : 'outlined'}
               onClick={handleShowRaw}
               disabled={disabled}
+              aria-label="toggle to markdown mode"
             >
               {t('editor.editorWidgets.markdown.markdown')}
             </Button>

@@ -3,7 +3,7 @@ import trimEnd from 'lodash/trimEnd';
 
 import { createNonce, isInsecureProtocol, validateNonce } from './utils';
 
-import type { User, AuthenticatorConfig } from '@staticcms/core/interface';
+import type { User, AuthenticatorConfig } from '@staticcms/core';
 import type { NetlifyError } from './netlify-auth';
 
 async function sha256(text: string) {
@@ -95,10 +95,13 @@ export default class PkceAuthenticator {
   async completeAuth(cb: (error: Error | NetlifyError | null, data?: User) => void) {
     const searchParams = new URLSearchParams(document.location.search);
 
-    const params = [...searchParams.entries()].reduce((acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>);
+    const params = [...searchParams.entries()].reduce(
+      (acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
 
     // Remove code from url
     window.history.replaceState(null, '', document.location.pathname);

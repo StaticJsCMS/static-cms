@@ -1,31 +1,53 @@
-import { parse } from 'path';
 import get from 'lodash/get';
+import { parse } from 'path';
 
-import type { Entry, FieldFilterRule, FilterRule } from '@staticcms/core/interface';
+import { isNullish } from './null.util';
+
+import type { Entry, FieldFilterRule, FilterRule, ValueOrNestedValue } from '@staticcms/core';
+
+function valueToString(value: ValueOrNestedValue) {
+  if (Array.isArray(value) || (typeof value === 'object' && !(value instanceof Date))) {
+    return JSON.stringify(value);
+  }
+
+  if (isNullish(value)) {
+    return '';
+  }
+
+  return String(value);
+}
 
 export function entryMatchesFieldRule(
   entry: Entry,
   filterRule: FieldFilterRule,
   listItemPath: string | undefined,
 ): boolean {
-  const fieldValue = get(
-    entry.data,
-    listItemPath ? `${listItemPath}.${filterRule.field}` : filterRule.field,
-  );
-  if ('pattern' in filterRule) {
-    if (Array.isArray(fieldValue)) {
-      return Boolean(fieldValue.find(v => new RegExp(filterRule.pattern).test(String(v))));
-    }
+  const searchInArray = /\.\*$/.test(filterRule.field);
 
-    return new RegExp(filterRule.pattern).test(String(fieldValue));
+  let field = filterRule.field;
+  if (searchInArray) {
+    field = field.replace(/\.\*$/, '');
   }
 
-  if (Array.isArray(fieldValue)) {
+  const fieldValue = get(entry.data, listItemPath ? `${listItemPath}.${field}` : field);
+  if ('pattern' in filterRule) {
+    if (Array.isArray(fieldValue) && searchInArray) {
+      return Boolean(
+        fieldValue.find(v => {
+          return new RegExp(filterRule.pattern).test(valueToString(v));
+        }),
+      );
+    }
+
+    return new RegExp(filterRule.pattern).test(valueToString(fieldValue));
+  }
+
+  if (Array.isArray(fieldValue) && searchInArray) {
     if (Array.isArray(filterRule.value)) {
       if (filterRule.matchAll) {
         return Boolean(
           filterRule.value.every(ruleValue =>
-            fieldValue.find(v => String(v) === String(ruleValue)),
+            fieldValue.find(v => valueToString(v) === valueToString(ruleValue)),
           ),
         );
       }
@@ -34,25 +56,27 @@ export function entryMatchesFieldRule(
         fieldValue.find(v =>
           Boolean(
             (filterRule.value as string[]).find(
-              filterRuleValue => String(filterRuleValue) === String(v),
+              filterRuleValue => valueToString(filterRuleValue) === valueToString(v),
             ),
           ),
         ),
       );
     }
 
-    return Boolean(fieldValue.find(v => String(v) === String(filterRule.value)));
+    return Boolean(fieldValue.find(v => valueToString(v) === valueToString(filterRule.value)));
   }
 
   if (Array.isArray(filterRule.value)) {
     if (filterRule.matchAll) {
-      return Boolean(filterRule.value.every(ruleValue => String(fieldValue) === String(ruleValue)));
+      return Boolean(
+        filterRule.value.every(ruleValue => valueToString(fieldValue) === valueToString(ruleValue)),
+      );
     }
 
-    return Boolean(filterRule.value.find(v => String(v) === String(fieldValue)));
+    return Boolean(filterRule.value.find(v => valueToString(v) === valueToString(fieldValue)));
   }
 
-  return String(fieldValue) === String(filterRule.value);
+  return valueToString(fieldValue) === valueToString(filterRule.value);
 }
 
 function entryMatchesRule(entry: Entry, filterRule: FilterRule, listItemPath: string | undefined) {

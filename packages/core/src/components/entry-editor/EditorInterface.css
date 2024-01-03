@@ -1,56 +1,40 @@
+& .CMS_Editor_root {
+  @apply md:h-main
+    !hidden
+    lg:!flex;
+
+  &:not(.CMS_Editor_wrapper-i18n-side-by-side) {
+    @apply h-full;
+  }
+
+  &.CMS_Editor_wrapper-i18n-side-by-side {
+    @apply h-full;
+  }
+}
+
 .CMS_Editor_default {
   @apply w-full;
 
   &.CMS_Editor_split-view {
     @apply overflow-y-auto
-      h-main-mobile
       md:h-main;
   }
-
-  & .CMS_Editor_mobile-preview {
-    @apply hidden
-      lg:block;
-  }
 }
 
-& .CMS_Editor_i18n {
-  @apply hidden
-    w-full
-    overflow-y-auto
-    h-main-mobile
-    md:h-main;
+.CMS_Editor_i18n-panel {
+  border-color: var(--background-main);
+
+  @apply border-l;
+}
+
+.CMS_Editor_i18n {
+  @apply w-full
+    hidden;
 
   &.CMS_Editor_i18n-active {
-    @apply flex;
-  }
-}
-
-& .CMS_Editor_mobile-i18n {
-  @apply flex
-    w-full
-    overflow-y-auto
-    h-main-mobile;
-}
-
-& .CMS_Editor_root {
-  &:not(.CMS_Editor_wrapper-i18n-side-by-side) {
-    @apply grid
-      h-full;
-
-    &.CMS_Editor_compact {
-      @apply lg:grid-cols-editor;
-    }
-
-    &:not(.CMS_Editor_compact) {
-      @apply lg:grid-cols-2;
-    }
-  }
-
-  &.CMS_Editor_wrapper-i18n-side-by-side {
-    @apply grid-cols-2
-      h-full
-      hidden
-      lg:grid;
+    @apply flex
+      overflow-y-auto
+      h-main;
   }
 }
 
@@ -66,4 +50,77 @@
     @apply w-editor-only
       max-w-full;
   }
+}
+
+.CMS_Editor_resize-handle {
+  @apply bg-transparent
+    outline-none
+    flex-[0_0_1rem]
+    justify-stretch
+    m-1.5
+    flex
+    items-center
+    rounded
+    transition-colors;
+
+  &:hover {
+    background: color-mix(in srgb, var(--primary-main) 15%, transparent);
+
+    & .CMS_Editor_resize-handle-icon {
+      @apply opacity-100;
+    }
+  }
+}
+
+.CMS_Editor_resize-handle-icon {
+  color: var(--text-primary);
+
+  @apply w-4
+    h-4
+    rotate-90
+    transition-opacity
+    opacity-20;
+}
+
+.CMS_Editor_mobile-root {
+  @apply w-full
+    overflow-y-auto
+    h-main-mobile;
+
+  &.CMS_Editor_workflow {
+    @apply h-main-mobile-workflow;
+  }
+
+  &:not(.CMS_Editor_mobile-preview-active) {
+    & .CMS_Editor_mobile-preview {
+      @apply hidden;
+    }
+  }
+
+  &.CMS_Editor_mobile-preview-active {
+    & .CMS_Editor_i18n,
+    & .CMS_Editor_default {
+      @apply hidden;
+    }
+  }
+}
+
+.CMS_Editor_mobile-preview {
+  @apply flex
+    w-full
+    overflow-y-auto
+    h-main-mobile;
+}
+
+.CMS_Editor_mobile-workflow-controls {
+  background: color-mix(in srgb, var(--background-main) 75%, transparent);
+
+  @apply px-2
+    py-2.5
+    h-[50px]
+    flex
+    items-center
+    justify-between
+    drop-shadow-lg
+    md:hidden;
 }

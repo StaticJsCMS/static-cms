@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { getEntryDataPath } from '@staticcms/core/reducers/selectors/entryDraft';
 
-import type { FieldsErrors, I18nSettings } from '@staticcms/core/interface';
+import type { FieldsErrors, I18nSettings } from '@staticcms/core';
 
 export default function useHasChildErrors(
   path: string,

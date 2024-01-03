@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 
+import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
 import { getI18nInfo, hasI18n, isFieldTranslatable } from '@staticcms/core/lib/i18n';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { getFieldValue } from '@staticcms/core/lib/util/field.util';
@@ -11,14 +12,14 @@ import EditorControl from './EditorControl';
 import LocaleDropdown from './LocaleDropdown';
 
 import type {
-  Collection,
+  CollectionWithDefaults,
   Entry,
   Field,
   FieldsErrors,
   I18nSettings,
-  StringOrTextField,
-  TranslatedProps,
-} from '@staticcms/core/interface';
+  StringField,
+} from '@staticcms/core';
+import type { FC } from 'react';
 
 import './EditorControlPane.css';
 
@@ -29,7 +30,7 @@ export const classes = generateClassNames('EditorControlPane', [
 ]);
 
 export interface EditorControlPaneProps {
-  collection: Collection;
+  collection: CollectionWithDefaults;
   entry: Entry;
   fields: Field[];
   fieldsErrors: FieldsErrors;
@@ -42,9 +43,10 @@ export interface EditorControlPaneProps {
   allowDefaultLocale?: boolean;
   context?: 'default' | 'i18nSplit';
   listItemPath?: string;
+  disabled: boolean;
 }
 
-const EditorControlPane = ({
+const EditorControlPane: FC<EditorControlPaneProps> = ({
   collection,
   entry,
   fields,
@@ -58,8 +60,10 @@ const EditorControlPane = ({
   allowDefaultLocale = false,
   context = 'default',
   listItemPath,
-  t,
-}: TranslatedProps<EditorControlPaneProps>) => {
+  disabled,
+}) => {
+  const t = useTranslate();
+
   const pathField = useMemo(
     () =>
       ({
@@ -71,7 +75,7 @@ const EditorControlPane = ({
         widget: 'string',
         i18n: 'none',
         hint: ``,
-      } as StringOrTextField),
+      }) as StringField,
     [collection],
   );
 
@@ -84,11 +88,11 @@ const EditorControlPane = ({
 
   const i18n = useMemo(() => {
     if (hasI18n(collection)) {
-      const { locales, defaultLocale } = getI18nInfo(collection);
+      const { locales, default_locale } = getI18nInfo(collection);
       return {
-        currentLocale: locale ?? locales[0],
+        currentLocale: locale ?? locales?.[0],
         locales,
-        defaultLocale,
+        defaultLocale: default_locale,
       } as I18nSettings;
     }
 
@@ -135,6 +139,7 @@ const EditorControlPane = ({
           listItemPath={listItemPath}
           controlled
           isMeta
+          disabled={disabled}
         />
       ) : null}
       {fields.map(field => {
@@ -152,6 +157,7 @@ const EditorControlPane = ({
             parentPath=""
             i18n={i18n}
             listItemPath={listItemPath}
+            disabled={disabled}
           />
         );
       })}

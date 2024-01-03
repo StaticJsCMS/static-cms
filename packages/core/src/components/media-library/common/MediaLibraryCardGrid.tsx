@@ -17,12 +17,12 @@ import mediaLibraryClasses from './MediaLibrary.classes';
 import MediaLibraryCard from './MediaLibraryCard';
 
 import type {
-  Collection,
-  CollectionFile,
+  CollectionFileWithDefaults,
+  CollectionWithDefaults,
   MediaField,
   MediaFile,
   MediaLibraryDisplayURL,
-} from '@staticcms/core/interface';
+} from '@staticcms/core';
 import type { MediaLibraryState } from '@staticcms/core/reducers/mediaLibrary';
 import type { FC } from 'react';
 import type { GridChildComponentProps } from 'react-window';
@@ -53,8 +53,8 @@ export interface MediaLibraryCardGridProps {
   cardDraftText: string;
   loadDisplayURL: (asset: MediaFile) => void;
   displayURLs: MediaLibraryState['displayURLs'];
-  collection?: Collection;
-  collectionFile?: CollectionFile;
+  collection?: CollectionWithDefaults;
+  collectionFile?: CollectionFileWithDefaults;
   field?: MediaField;
   isDialog: boolean;
   onDelete: (file: MediaFile) => void;
@@ -67,7 +67,7 @@ export type CardGridItemData = MediaLibraryCardGridProps & {
   gutter: number;
 };
 
-const CardWrapper = ({
+const CardWrapper: FC<GridChildComponentProps<CardGridItemData>> = ({
   rowIndex,
   columnIndex,
   style,
@@ -87,7 +87,7 @@ const CardWrapper = ({
     hasSelection,
     allowMultiple,
   },
-}: GridChildComponentProps<CardGridItemData>) => {
+}) => {
   const left = useMemo(
     () =>
       parseFloat(

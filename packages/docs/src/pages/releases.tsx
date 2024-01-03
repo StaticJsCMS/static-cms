@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 import Container from '../components/layout/Container';
 import Page from '../components/layout/Page';
@@ -94,7 +95,33 @@ const StyledLink = styled(Link)(
   `,
 );
 
+function getVersionNumber(version: string): number {
+  return +version.replace('v', '');
+}
+
+function isNextVersion(latestMajorVersionNumber: number, version: string): boolean {
+  if (getVersionNumber(version) > latestMajorVersionNumber) {
+    return true;
+  }
+
+  return false;
+}
+
+function getMajorVersion(version: string): string {
+  return version.split('.')[0];
+}
+
 const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
+  const latestMajorVersion = useMemo(
+    () => getMajorVersion((releaseData.find(r => r.type === 'major') ?? releaseData[0]).version),
+    [],
+  );
+
+  const latestMajorVersionNumber = useMemo(
+    () => getVersionNumber(latestMajorVersion),
+    [latestMajorVersion],
+  );
+
   return (
     <Page url="/releases" docsGroups={docsGroups} searchablePages={searchablePages} fullWidth>
       <StyledReleaseContent>
@@ -125,31 +152,50 @@ const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
           </Container>
           <Container>
             <StyledReleaseLinksContent>
-              {releaseData.map(release => (
-                <StyledReleaseSection key={release.version}>
-                  <Typography variant="h3" color="primary.main">
-                    <strong>{release.version}</strong>
-                    &nbsp;&nbsp;
-                    <Box component="small" sx={{ fontSize: '16px', opacity: 0.75 }}>
-                      {format(parseISO(release.date), 'MMM dd, yyyy')}
-                    </Box>
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    component="div"
-                    color="inherit"
-                    sx={{ display: 'flex', flexDirection: 'column' }}
-                  >
-                    {isNotEmpty(release.description) ? release.description : null}
-                    <StyledLink
-                      href={`${config.repo_url}/releases/tag/${release.version}`}
-                      target="_blank"
+              {releaseData.map(release => {
+                const majorVersion = getMajorVersion(release.version);
+                const isNext = isNextVersion(latestMajorVersionNumber, majorVersion);
+
+                return (
+                  <StyledReleaseSection key={release.version}>
+                    <Typography variant="h3" color="primary.main">
+                      <strong>{release.version}</strong>
+                      &nbsp;&nbsp;
+                      <Box component="small" sx={{ fontSize: '16px', opacity: 0.75 }}>
+                        {format(parseISO(release.date), 'MMM dd, yyyy')}
+                      </Box>
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      component="div"
+                      color="inherit"
+                      sx={{ display: 'flex', flexDirection: 'column' }}
                     >
-                      Changelog
-                    </StyledLink>
-                  </Typography>
-                </StyledReleaseSection>
-              ))}
+                      {isNotEmpty(release.description) ? release.description : null}
+                      <Box sx={{ display: 'flex', gap: '8px' }}>
+                        <StyledLink
+                          href={`${config.repo_url}/releases/tag/${release.version}`}
+                          target="_blank"
+                        >
+                          Changelog
+                        </StyledLink>
+                        <StyledLink
+                          href={`https://${
+                            isNext
+                              ? 'next'
+                              : majorVersion !== latestMajorVersion
+                              ? majorVersion
+                              : 'www'
+                          }.staticcms.org/docs`}
+                          target={majorVersion !== latestMajorVersion ? '_blank' : undefined}
+                        >
+                          Docs
+                        </StyledLink>
+                      </Box>
+                    </Typography>
+                  </StyledReleaseSection>
+                );
+              })}
             </StyledReleaseLinksContent>
           </Container>
         </StyledReleaseLinks>
