@@ -4952,10 +4952,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/create-react-class@15.6.3":
-  version "15.6.3"
-  resolved "https://registry.yarnpkg.com/@types/create-react-class/-/create-react-class-15.6.3.tgz#d9a533441acd1532f2b97d55c24dfb87898d5cc2"
-  integrity sha512-SXf68tnBChYL/XOKrXsq85X8JZ3KUYtICwlnd3Y28BS41bcIlKSxxnoXSapl0/CSofVxjqqyFmu5e7GMU7lYHg==
+"@types/create-react-class@15.6.6":
+  version "15.6.6"
+  resolved "https://registry.yarnpkg.com/@types/create-react-class/-/create-react-class-15.6.6.tgz#08f53503d469bbf2e17991ee3612e3a16773a7cf"
+  integrity sha512-Jf9g3h/qeSZ678DVy0RD77fngh7+hX/AFGf+nLCvWwYS8IL4bJuK4+cnfbvdrOjEIkn4VIleLt+DrpqQyT9u5w==
   dependencies:
     "@types/react" "*"
 
