@@ -1,8 +1,23 @@
 {
   "releases": [
     {
+      "date": "2024-01-02T11:00:00.000Z",
+      "version": "v4.0.0-beta.17",
+      "type": "pre"
+    },
+    {
+      "date": "2024-01-02T10:00:00.000Z",
+      "version": "v3.4.8",
+      "type": "patch"
+    },
+    {
+      "date": "2023-12-21T10:00:00.000Z",
+      "version": "v4.0.0-beta.16",
+      "type": "pre"
+    },
+    {
       "date": "2023-12-13T10:00:00.000Z",
-      "version": "v4.0.0-beta.14",
+      "version": "v4.0.0-beta.15",
       "type": "pre"
     },
     {
