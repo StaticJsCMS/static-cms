@@ -59,12 +59,6 @@ The Static CMS can be used in two different ways.
 | [Preact](https://preactjs.com/) - [static-cms-preact-netlify-template](https://github.com/StaticJsCMS/static-cms-preact-netlify-template) | [preact.staticcms.org](https://preact.staticcms.org/) | [![Netlify Status](https://api.netlify.com/api/v1/badges/0cf054ad-1be4-4d93-8a3a-0841475e6032/deploy-status)](https://app.netlify.com/sites/static-cms-preact/deploys) |
 | [Eleventy](https://www.11ty.dev/) - [static-cms-eleventy-netlify-template](https://github.com/StaticJsCMS/static-cms-eleventy-netlify-template) | [eleventy.staticcms.org](https://eleventy.staticcms.org/) | [![Netlify Status](https://api.netlify.com/api/v1/badges/1880280d-def5-4773-9db3-d0315a986d45/deploy-status)](https://app.netlify.com/sites/static-cms-eleventy/deploys) |
 
-# Workflow Templates
-
-|Name|Demo|Status|
-|---|---|---|
-| [Editorial Workflow Template](https://github.com/StaticJsCMS/static-cms-next-netlify-editoral-template) | Production: [next-editorial.staticcms.org](https://next-editorial.staticcms.org/)<br />Staging: [next-editorial-staging.staticcms.org](https://next-editorial-staging.staticcms.org/) | [![Netlify Status](https://api.netlify.com/api/v1/badges/94f05f8f-379a-4dd5-885f-ac2a0cb8a012/deploy-status)](https://app.netlify.com/sites/static-cms-next-editorial/deploys)<br />[![Netlify Status](https://api.netlify.com/api/v1/badges/756ff279-59aa-4b7b-96a5-75b2b2a8552b/deploy-status)](https://app.netlify.com/sites/static-cms-next-editorial-staging/deploys) |
-
 # Other Projects
 
 |Name|Status|
