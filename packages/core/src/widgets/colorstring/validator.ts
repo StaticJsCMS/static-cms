@@ -1,4 +1,4 @@
-import validateColor from 'validate-color';
+import tinycolor from 'tinycolor2';
 
 import ValidationErrorTypes from '@staticcms/core/constants/validationErrorTypes';
 
@@ -9,7 +9,7 @@ const validator: FieldValidationMethod<string, ColorField> = ({ value, t }) => {
     return false;
   }
 
-  if (validateColor(value)) {
+  if (tinycolor(value).isValid()) {
     return false;
   }
 

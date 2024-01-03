@@ -1,7 +1,7 @@
 import { Close as CloseIcon } from '@styled-icons/material/Close';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ChromePicker } from 'react-color';
-import validateColor from 'validate-color';
+import tinycolor from 'tinycolor2';
 
 import IconButton from '@staticcms/core/components/common/button/IconButton';
 import Field from '@staticcms/core/components/common/field/Field';
@@ -124,8 +124,10 @@ const ColorControl: FC<WidgetControlProps<string, ColorField>> = ({
             data-testid="color-swatch"
             onClick={!disabled ? handleClick : undefined}
             style={{
-              background: validateColor(internalValue) ? internalValue : '#fff',
-              color: validateColor(internalValue) ? 'rgba(255, 255, 255, 0)' : 'rgb(150, 150, 150)',
+              background: tinycolor(internalValue).isValid() ? internalValue : '#fff',
+              color: tinycolor(internalValue).isValid()
+                ? 'rgba(255, 255, 255, 0)'
+                : 'rgb(150, 150, 150)',
             }}
             className={classes['color-swatch']}
           >
