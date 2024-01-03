@@ -1,7 +1,7 @@
 {
   "releases": [
     {
-      "date": "2024-01-03T10:00:00.000Z",
+      "date": "2024-01-03T11:00:00.000Z",
       "version": "v4.0.0",
       "type": "major",
       "description": "Editorial workflow, open authoring and theming"
