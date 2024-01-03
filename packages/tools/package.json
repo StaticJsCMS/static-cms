@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@types/common-tags": "1.8.1",
-    "@types/create-react-class": "15.6.3",
+    "@types/create-react-class": "15.6.6",
     "@types/fs-extra": "11.0.1",
     "@types/is-hotkey": "0.1.7",
     "@types/jest": "29.5.5",
