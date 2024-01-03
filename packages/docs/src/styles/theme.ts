@@ -58,7 +58,8 @@ const useCreateTheme = (mode: PaletteMode) => {
       createTheme({
         palette,
         typography: {
-          fontFamily: "'Roboto', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif",
+          fontFamily:
+            "'Roboto', system-ui, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif",
           h1: {
             fontSize: '42px',
             fontWeight: 'bold',

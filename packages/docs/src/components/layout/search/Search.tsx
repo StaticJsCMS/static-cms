@@ -65,7 +65,8 @@ const Search = ({ searchablePages }: SearchProps) => {
           variant="body2"
           color="inherit"
           sx={{
-            fontFamily: "'Roboto',-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif",
+            fontFamily:
+              "'Roboto',system-ui,-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif",
             fontWeight: 400,
             fontSize: '16px',
             opacity: 0.8,
