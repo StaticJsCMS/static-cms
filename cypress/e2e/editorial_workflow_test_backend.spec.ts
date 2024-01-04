@@ -1,4 +1,4 @@
-import { format } from 'date-fns/format';
+import format from 'date-fns/format';
 
 import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import { editorStatus, notifications, publishTypes } from '../utils/constants';
