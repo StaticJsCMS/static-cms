@@ -25,11 +25,11 @@ export type IconButtonInternalLinkProps = Omit<ButtonInternalLinkProps, 'childre
 export type IconButtonExternalLinkProps = Omit<ButtonExternalLinkProps, 'children' | 'className'> &
   BaseIconButtonProps;
 
-export type IconLinkProps = IconButtonInternalLinkProps | IconButtonExternalLinkProps;
+export type IconButtonLinkProps = IconButtonInternalLinkProps | IconButtonExternalLinkProps;
 
-export type IconButtonLinkProps = IconButtonProps | IconLinkProps;
+export type IconButtonOrIconButtonLinkProps = IconButtonProps | IconButtonLinkProps;
 
-const IconButton: FC<IconButtonLinkProps> = ({
+const IconButton: FC<IconButtonOrIconButtonLinkProps> = ({
   icon: Icon,
   size = 'medium',
   rootClassName,

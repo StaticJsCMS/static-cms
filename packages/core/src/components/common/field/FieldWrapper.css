@@ -1,4 +1,4 @@
-.CMS_Field_root {
+.CMS_FieldWrapper_root {
   border-color: var(--background-divider);
 
   @apply relative
@@ -7,26 +7,26 @@
     gap-2
     border-b;
 
-  &:not(.CMS_Field_error) {
-    &:not(.CMS_Field_disabled) {
+  &:not(.CMS_FieldWrapper_error) {
+    &:not(.CMS_FieldWrapper_disabled) {
       &:focus-within {
         border-color: var(--primary-dark);
       }
 
       &:focus-within {
-        & .CMS_Field_label,
-        & .CMS_Field_hint {
+        & .CMS_FieldWrapper_label,
+        & .CMS_FieldWrapper_hint {
           color: var(--primary-main);
         }
       }
 
-      &:not(.CMS_Field_no-highlight) {
+      &:not(.CMS_FieldWrapper_no-highlight) {
         &:hover,
         &:focus-within {
           background: var(--background-main);
 
-          & .CMS_Field_label,
-          & .CMS_Field_hint {
+          & .CMS_FieldWrapper_label,
+          & .CMS_FieldWrapper_hint {
             color: var(--primary-main);
           }
         }
@@ -34,51 +34,51 @@
     }
   }
 
-  &.CMS_Field_error {
-    & .CMS_Field_label,
-    & .CMS_Field_hint {
+  &.CMS_FieldWrapper_error {
+    & .CMS_FieldWrapper_label,
+    & .CMS_FieldWrapper_hint {
       color: var(--error-main);
     }
 
-    &:not(.CMS_Field_disabled) {
+    &:not(.CMS_FieldWrapper_disabled) {
       &:focus-within {
         border-color: var(--error-main);
       }
     }
   }
 
-  &:not(.CMS_Field_no-padding) {
+  &:not(.CMS_FieldWrapper_no-padding) {
     @apply pb-3;
 
-    & > .CMS_Field_end-adornment {
+    & > .CMS_FieldWrapper_end-adornment {
       @apply -mb-3;
     }
   }
 }
 
-.CMS_Field_cursor-pointer {
+.CMS_FieldWrapper_cursor-pointer {
   @apply cursor-pointer;
 }
 
-.CMS_Field_cursor-text {
+.CMS_FieldWrapper_cursor-text {
   @apply cursor-text;
 }
 
-.CMS_Field_cursor-default {
+.CMS_FieldWrapper_cursor-default {
   @apply cursor-default;
 }
 
-.CMS_Field_wrapper {
+.CMS_FieldWrapper_wrapper {
   @apply flex
     flex-col
     w-full;
 
-  &.CMS_Field_for-single-list {
+  &.CMS_FieldWrapper_for-single-list {
     @apply mr-14;
   }
 }
 
-.CMS_Field_inline-wrapper {
+.CMS_FieldWrapper_inline-wrapper {
   @apply flex
     items-center
     justify-center
@@ -86,6 +86,6 @@
     pb-0;
 }
 
-.CMS_Field_end-adornment {
+.CMS_FieldWrapper_end-adornment {
   @apply pr-2;
 }

@@ -26,12 +26,12 @@ export const classes = generateClassNames('Select', [
   'popper',
 ]);
 
-export interface Option {
+export interface SelectOption {
   label: string;
   value: number | string;
 }
 
-function getOptionLabelAndValue(option: number | string | Option): Option {
+function getOptionLabelAndValue(option: number | string | SelectOption): SelectOption {
   if (option && typeof option === 'object' && 'label' in option && 'value' in option) {
     return option;
   }
@@ -48,7 +48,7 @@ export interface SelectProps {
   label?: ReactNode | ReactNode[];
   placeholder?: string;
   value: number | string | (number | string)[];
-  options: (number | string)[] | Option[];
+  options: (number | string)[] | SelectOption[];
   required?: boolean;
   disabled?: boolean;
   rootClassName?: string;

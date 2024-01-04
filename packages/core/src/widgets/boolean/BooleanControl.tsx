@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import Field from '@staticcms/core/components/common/field/Field';
+import Field from '@staticcms/core/components/common/field/FieldWrapper';
 import Switch from '@staticcms/core/components/common/switch/Switch';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';

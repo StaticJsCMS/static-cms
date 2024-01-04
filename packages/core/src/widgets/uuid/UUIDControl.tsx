@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { v4 as uuid, validate } from 'uuid';
 
 import IconButton from '@staticcms/core/components/common/button/IconButton';
-import Field from '@staticcms/core/components/common/field/Field';
-import TextField from '@staticcms/core/components/common/text-field/TextField';
+import Field from '@staticcms/core/components/common/field/FieldWrapper';
+import TextField from '@staticcms/core/components/common/text-field/TextInput';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { isEmpty, isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';

@@ -8,7 +8,7 @@ import type { CSSProperties, FC, MouseEventHandler, ReactNode, Ref } from 'react
 
 import './Button.css';
 
-export interface BaseBaseProps {
+export interface ButtonBaseProps {
   variant?: 'contained' | 'outlined' | 'text';
   color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info';
   size?: 'medium' | 'small';
@@ -23,27 +23,27 @@ export interface BaseBaseProps {
   onClick?: MouseEventHandler;
 }
 
-export interface ButtonProps extends BaseBaseProps {
+export interface ButtonProps extends ButtonBaseProps {
   disabled?: boolean;
   buttonRef?: Ref<HTMLButtonElement>;
   'aria-label'?: string;
 }
 
-export interface ButtonInternalLinkProps extends BaseBaseProps {
+export interface ButtonInternalLinkProps extends ButtonBaseProps {
   to: string;
   linkRef?: Ref<HTMLAnchorElement>;
 }
 
-export interface ButtonExternalLinkProps extends BaseBaseProps {
+export interface ButtonExternalLinkProps extends ButtonBaseProps {
   href: string;
   linkRef?: Ref<HTMLAnchorElement>;
 }
 
-export type LinkProps = ButtonInternalLinkProps | ButtonExternalLinkProps;
+export type ButtonLinkProps = ButtonInternalLinkProps | ButtonExternalLinkProps;
 
-export type ButtonLinkProps = ButtonProps | LinkProps;
+export type ButtonOrButtonLinkProps = ButtonProps | ButtonLinkProps;
 
-const Button: FC<ButtonLinkProps> = ({
+const Button: FC<ButtonOrButtonLinkProps> = ({
   variant = 'contained',
   color = 'primary',
   size = 'medium',

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Button from '@staticcms/core/components/common/button/Button';
-import Field from '@staticcms/core/components/common/field/Field';
+import Field from '@staticcms/core/components/common/field/FieldWrapper';
 import TextArea from '@staticcms/core/components/common/text-field/TextArea';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import useDebounce from '../../lib/hooks/useDebounce';

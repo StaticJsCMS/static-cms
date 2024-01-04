@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import Field from '@staticcms/core/components/common/field/Field';
+import Field from '@staticcms/core/components/common/field/FieldWrapper';
 import Pill from '@staticcms/core/components/common/pill/Pill';
 import Select from '@staticcms/core/components/common/select/Select';
 import classNames from '@staticcms/core/lib/util/classNames.util';

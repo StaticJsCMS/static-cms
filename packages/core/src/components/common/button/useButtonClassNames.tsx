@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
-import type { BaseBaseProps } from './Button';
+import type { ButtonBaseProps } from './Button';
 
 export const buttonClasses = generateClassNames('Button', [
   'root-sm',
@@ -30,8 +30,8 @@ export const buttonClasses = generateClassNames('Button', [
 ]);
 
 const classes: Record<
-  Required<BaseBaseProps>['variant'],
-  Record<Required<BaseBaseProps>['color'], string>
+  Required<ButtonBaseProps>['variant'],
+  Record<Required<ButtonBaseProps>['color'], string>
 > = {
   contained: {
     primary: 'CMS_Button_contained-primary',
@@ -59,10 +59,10 @@ const classes: Record<
   },
 };
 
-export default function useButtonClassNames(
-  variant: Required<BaseBaseProps>['variant'],
-  color: Required<BaseBaseProps>['color'],
-  size: Required<BaseBaseProps>['size'],
+function useButtonClassNames(
+  variant: Required<ButtonBaseProps>['variant'],
+  color: Required<ButtonBaseProps>['color'],
+  size: Required<ButtonBaseProps>['size'],
   rounded: boolean | 'no-padding',
 ) {
   let mainClass = size === 'small' ? 'CMS_Button_root-sm' : 'CMS_Button_root';
@@ -74,3 +74,5 @@ export default function useButtonClassNames(
 
   return useMemo(() => `${mainClass} ${classes[variant][color]}`, [color, mainClass, variant]);
 }
+
+export default useButtonClassNames;

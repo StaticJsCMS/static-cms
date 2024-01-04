@@ -10,9 +10,9 @@ import Label from './Label';
 import type { FieldError } from '@staticcms/core';
 import type { FC, MouseEvent, ReactNode } from 'react';
 
-import './Field.css';
+import './FieldWrapper.css';
 
-export const classes = generateClassNames('Field', [
+export const classes = generateClassNames('FieldWrapper', [
   'root',
   'inline',
   'wrapper',
@@ -31,7 +31,7 @@ export const classes = generateClassNames('Field', [
   'label',
 ]);
 
-export interface FieldProps {
+export interface FieldWrapperProps {
   label?: string;
   inputRef?: React.MutableRefObject<HTMLElement | null>;
   children: ReactNode | ReactNode[];
@@ -49,7 +49,7 @@ export interface FieldProps {
   wrapperClassName?: string;
 }
 
-const Field: FC<FieldProps> = ({
+const FieldWrapper: FC<FieldWrapperProps> = ({
   inputRef,
   label,
   children,
@@ -173,4 +173,4 @@ const Field: FC<FieldProps> = ({
   );
 };
 
-export default Field;
+export default FieldWrapper;

@@ -3,10 +3,13 @@ import React from 'react';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import modalClasses from './Modal.classes';
 
-const Backdrop = React.forwardRef<
-  HTMLDivElement,
-  { open?: boolean; className: string; ownerState: unknown }
->((props, ref) => {
+export interface BackdropProps {
+  open?: boolean;
+  className: string;
+  ownerState: unknown;
+}
+
+const Backdrop = React.forwardRef<HTMLDivElement, BackdropProps>((props, ref) => {
   const { open, className, ownerState: _ownerState, ...other } = props;
   return (
     <div

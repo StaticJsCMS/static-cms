@@ -11,7 +11,7 @@ import type {
   UnknownField,
 } from '@staticcms/core';
 
-interface CardMediaProps<EF extends BaseField> {
+export interface CardMediaProps<EF extends BaseField> {
   image: string;
   width?: string | number;
   height?: string | number;

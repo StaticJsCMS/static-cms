@@ -1,13 +1,13 @@
-.CMS_TextField_root {
+.CMS_TextInput_root {
   @apply flex
     w-full;
 }
 
-.CMS_TextField_input {
+.CMS_TextInput_input {
   @apply w-full
     text-sm;
 
-  &.CMS_TextField_borderless {
+  &.CMS_TextInput_borderless {
     color: var(--text-primary);
 
     &:disabled {
@@ -21,7 +21,7 @@
       font-medium;
   }
 
-  &.CMS_TextField_contained {
+  &.CMS_TextInput_contained {
     color: var(--text-primary);
     background: var(--background-main);
     border-color: var(--background-light);
@@ -37,15 +37,15 @@
       p-2.5;
   }
 
-  &.CMS_TextField_cursor-pointer {
+  &.CMS_TextInput_cursor-pointer {
     @apply cursor-pointer;
   }
 
-  &.CMS_TextField_cursor-text {
+  &.CMS_TextInput_cursor-text {
     @apply cursor-text;
   }
 
-  &.CMS_TextField_cursor-default {
+  &.CMS_TextInput_cursor-default {
     @apply cursor-default;
   }
 }
