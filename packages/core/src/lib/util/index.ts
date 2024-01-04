@@ -13,6 +13,7 @@ export {
   parseResponse,
   responseParser,
 } from './backendUtil';
+export { default as classNames } from './classNames.util';
 export { default as getBlobSHA } from './getBlobSHA';
 export {
   createPointerFile,
@@ -34,6 +35,8 @@ export { default as loadScript } from './loadScript';
 export { default as localForage } from './localForage';
 export { basename, fileExtension, fileExtensionWithSeparator, isAbsolutePath } from './path';
 export { flowAsync, onlySuccessfulPromises, then } from './promise';
+export * from './string.util';
+export * from './theming.util';
 export { default as unsentRequest } from './unsentRequest';
 
 export type { ApiRequest, FetchError } from './API';
