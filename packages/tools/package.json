@@ -20,7 +20,7 @@
     "@types/common-tags": "1.8.4",
     "@types/create-react-class": "15.6.6",
     "@types/fs-extra": "11.0.1",
-    "@types/is-hotkey": "0.1.7",
+    "@types/is-hotkey": "0.1.10",
     "@types/jest": "29.5.5",
     "@types/js-yaml": "4.0.6",
     "@types/jwt-decode": "2.2.1",
