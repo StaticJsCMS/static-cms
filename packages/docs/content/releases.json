@@ -1,6 +1,11 @@
 {
   "releases": [
     {
+      "date": "2024-01-04T10:00:00.000Z",
+      "version": "v4.0.1",
+      "type": "minor"
+    },
+    {
       "date": "2024-01-03T11:00:00.000Z",
       "version": "v4.0.0",
       "type": "major",
