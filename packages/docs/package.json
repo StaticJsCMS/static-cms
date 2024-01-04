@@ -14,7 +14,7 @@
     "lint": "run-p -c --aggregate-output \"lint:*\""
   },
   "dependencies": {
-    "@emotion/react": "11.11.1",
+    "@emotion/react": "11.11.3",
     "@emotion/styled": "11.11.0",
     "@mui/icons-material": "5.15.3",
     "@mui/material": "5.15.3",
@@ -30,30 +30,30 @@
     "react-schemaorg": "2.0.0",
     "remark-gfm": "3.0.1",
     "schema-dts": "1.1.2",
-    "yaml": "2.3.2"
+    "yaml": "2.3.4"
   },
   "devDependencies": {
     "@babel/core": "7.23.7",
     "@babel/eslint-parser": "7.23.3",
     "@emotion/eslint-plugin": "11.11.0",
-    "@next/bundle-analyzer": "13.5.6",
-    "@next/eslint-plugin-next": "13.5.6",
+    "@next/bundle-analyzer": "14.0.4",
+    "@next/eslint-plugin-next": "14.0.4",
     "@types/js-yaml": "4.0.9",
-    "@types/node": "18.17.19",
+    "@types/node": "18.19.4",
     "@types/prismjs": "1.26.3",
-    "@types/react": "18.2.25",
-    "@types/react-dom": "18.2.10",
-    "@typescript-eslint/eslint-plugin": "6.7.4",
-    "@typescript-eslint/parser": "6.7.4",
-    "eslint": "8.50.0",
+    "@types/react": "18.2.46",
+    "@types/react-dom": "18.2.18",
+    "@typescript-eslint/eslint-plugin": "6.17.0",
+    "@typescript-eslint/parser": "6.17.0",
+    "eslint": "8.56.0",
     "eslint-config-next": "14.0.4",
-    "eslint-config-prettier": "9.0.0",
+    "eslint-config-prettier": "9.1.0",
     "eslint-plugin-babel": "5.3.1",
-    "eslint-plugin-unicorn": "48.0.1",
+    "eslint-plugin-unicorn": "50.0.1",
     "npm-run-all": "4.1.5",
-    "prettier": "3.0.3",
-    "typescript": "5.2.2",
-    "webpack": "5.88.2"
+    "prettier": "3.1.1",
+    "typescript": "5.3.3",
+    "webpack": "5.89.0"
   },
   "lint-staged": {
     "*.ts": "prettier --write",

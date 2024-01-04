@@ -184,8 +184,8 @@ const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
                             isNext
                               ? 'next'
                               : majorVersion !== latestMajorVersion
-                              ? majorVersion
-                              : 'www'
+                                ? majorVersion
+                                : 'www'
                           }.staticcms.org/docs`}
                           target={majorVersion !== latestMajorVersion ? '_blank' : undefined}
                         >

@@ -94,8 +94,8 @@ const EditorWorkflowToolbarButtons: FC<EditorWorkflowToolbarButtonsProps> = ({
               isUpdatingStatus
                 ? t('editor.editorToolbar.updating')
                 : isLoading
-                ? t('app.app.loading')
-                : t('editor.editorToolbar.status', { status: statusToTranslation[currentStatus] })
+                  ? t('app.app.loading')
+                  : t('editor.editorToolbar.status', { status: statusToTranslation[currentStatus] })
             }
             color="secondary"
             disabled={disabled}

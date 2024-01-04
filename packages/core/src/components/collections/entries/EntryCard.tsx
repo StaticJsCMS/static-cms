@@ -8,8 +8,8 @@ import { getPreviewCard } from '@staticcms/core/lib/registry';
 import { getEntryBackupKey } from '@staticcms/core/lib/util/backup.util';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import {
-  selectEntryCollectionTitle,
   getFields,
+  selectEntryCollectionTitle,
   selectTemplateName,
 } from '@staticcms/core/lib/util/collection.util';
 import localForage from '@staticcms/core/lib/util/localForage';

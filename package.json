@@ -33,15 +33,15 @@
     "all-contributors-cli": "6.26.1",
     "cypress-plugin-tab": "1.0.5",
     "cypress-real-events": "1.11.0",
-    "cypress": "13.4.0",
-    "execa": "5.1.1",
+    "cypress": "13.6.2",
+    "execa": "8.0.1",
     "husky": "8.0.3",
-    "lerna": "7.4.2",
-    "lint-staged": "14.0.1",
+    "lerna": "8.0.1",
+    "lint-staged": "15.2.0",
     "react-dom": "18.2.0",
     "react": "18.2.0",
     "rehype": "13.0.1",
-    "unist-util-visit": "4.1.2"
+    "unist-util-visit": "5.0.0"
   },
   "workspaces": [
     "packages/*"
