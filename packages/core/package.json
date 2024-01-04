@@ -203,7 +203,7 @@
     "@types/jest": "29.5.5",
     "@types/js-yaml": "4.0.6",
     "@types/jwt-decode": "2.2.1",
-    "@types/lodash": "4.14.194",
+    "@types/lodash": "4.14.202",
     "@types/minimatch": "5.1.2",
     "@types/node": "18.17.19",
     "@types/react": "18.2.25",
