@@ -4,8 +4,8 @@ import { ChromePicker } from 'react-color';
 import validateColor from 'validate-color';
 
 import IconButton from '@staticcms/core/components/common/button/IconButton';
-import Field from '@staticcms/core/components/common/field/Field';
-import TextField from '@staticcms/core/components/common/text-field/TextField';
+import Field from '@staticcms/core/components/common/field/FieldWrapper';
+import TextField from '@staticcms/core/components/common/text-field/TextInput';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 

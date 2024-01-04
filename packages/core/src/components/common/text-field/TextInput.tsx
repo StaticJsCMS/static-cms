@@ -7,9 +7,9 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 
 import type { ChangeEventHandler, FC, MouseEventHandler, ReactNode, Ref } from 'react';
 
-import './TextField.css';
+import './TextInput.css';
 
-export const classes = generateClassNames('TextField', [
+export const classes = generateClassNames('TextInput', [
   'root',
   'input',
   'borderless',
@@ -19,7 +19,7 @@ export const classes = generateClassNames('TextField', [
   'cursor-default',
 ]);
 
-export interface BaseTextFieldProps {
+export interface BaseTextInputProps {
   id?: string;
   readonly?: boolean;
   disabled?: boolean;
@@ -36,7 +36,7 @@ export interface BaseTextFieldProps {
   inputClassName?: string;
 }
 
-export interface NumberTextFieldProps extends BaseTextFieldProps {
+export interface NumberTextInputProps extends BaseTextInputProps {
   value: string | number;
   type: 'number';
   min?: string | number;
@@ -44,14 +44,14 @@ export interface NumberTextFieldProps extends BaseTextFieldProps {
   step?: string | number;
 }
 
-export interface TextTextFieldProps extends BaseTextFieldProps {
+export interface TextTextInputProps extends BaseTextInputProps {
   value: string;
   type: 'text';
 }
 
-export type TextFieldProps = TextTextFieldProps | NumberTextFieldProps;
+export type TextInputProps = TextTextInputProps | NumberTextInputProps;
 
-const TextField: FC<TextFieldProps> = ({
+const TextInput: FC<TextInputProps> = ({
   value,
   type,
   'data-testid': dataTestId,
@@ -104,4 +104,4 @@ const TextField: FC<TextFieldProps> = ({
   );
 };
 
-export default TextField;
+export default TextInput;

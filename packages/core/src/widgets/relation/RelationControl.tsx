@@ -9,7 +9,7 @@ import {
   mergeExpandedEntries,
 } from '@staticcms/core/backend';
 import Autocomplete from '@staticcms/core/components/common/autocomplete/Autocomplete';
-import Field from '@staticcms/core/components/common/field/Field';
+import Field from '@staticcms/core/components/common/field/FieldWrapper';
 import Pill from '@staticcms/core/components/common/pill/Pill';
 import CircularProgress from '@staticcms/core/components/common/progress/CircularProgress';
 import classNames from '@staticcms/core/lib/util/classNames.util';

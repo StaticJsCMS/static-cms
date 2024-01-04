@@ -5,7 +5,7 @@ import tableClasses from './Table.classes';
 
 import type { FC, ReactNode } from 'react';
 
-interface TableHeaderCellProps {
+export interface TableHeaderCellProps {
   children: ReactNode;
 }
 

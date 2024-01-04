@@ -7,12 +7,12 @@ import type { FC, ReactNode } from 'react';
 
 import './Table.css';
 
-interface TableCellProps {
+export interface TableProps {
   columns: ReactNode[];
   children: ReactNode[];
 }
 
-const TableCell: FC<TableCellProps> = ({ columns, children }) => {
+const TableCell: FC<TableProps> = ({ columns, children }) => {
   return (
     <div className={tableClasses.root}>
       <table className={tableClasses.table}>

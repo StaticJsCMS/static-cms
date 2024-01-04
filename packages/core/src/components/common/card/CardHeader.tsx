@@ -4,7 +4,7 @@ import cardClasses from './Card.classes';
 
 import type { FC, ReactNode } from 'react';
 
-interface CardHeaderProps {
+export interface CardHeaderProps {
   children: ReactNode;
 }
 

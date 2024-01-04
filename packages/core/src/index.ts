@@ -16,6 +16,7 @@ import Registry from './lib/registry';
 import useData from './live/useData';
 
 export * from './backends';
+export * from './components/common';
 export * from './interface';
 export * from './lib';
 export { default as locales } from './locales';

@@ -20,7 +20,7 @@ export const classes = generateClassNames('Confirm', [
   'cancel-button',
 ]);
 
-interface ConfirmProps {
+export interface ConfirmProps {
   title: string | { key: string; options?: Record<string, unknown> };
   body: string | { key: string; options?: Record<string, unknown> };
   cancel?: string | { key: string; options?: Record<string, unknown> };

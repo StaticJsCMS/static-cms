@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import Field from '@staticcms/core/components/common/field/Field';
+import Field from '@staticcms/core/components/common/field/FieldWrapper';
 import TextArea from '@staticcms/core/components/common/text-field/TextArea';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';

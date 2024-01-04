@@ -10,7 +10,7 @@ import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import Button from '@staticcms/core/components/common/button/Button';
-import Field from '@staticcms/core/components/common/field/Field';
+import Field from '@staticcms/core/components/common/field/FieldWrapper';
 import Image from '@staticcms/core/components/common/image/Image';
 import Link from '@staticcms/core/components/common/link/Link';
 import useDragHandlers from '@staticcms/core/lib/hooks/useDragHandlers';

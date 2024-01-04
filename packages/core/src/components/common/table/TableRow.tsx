@@ -6,7 +6,7 @@ import tableClasses from './Table.classes';
 
 import type { FC, KeyboardEvent, ReactNode } from 'react';
 
-interface TableRowProps {
+export interface TableRowProps {
   children: ReactNode;
   className?: string;
   to?: string;

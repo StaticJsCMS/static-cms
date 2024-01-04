@@ -19,7 +19,7 @@ export const classes = generateClassNames('Alert', [
   'confirm-button',
 ]);
 
-interface AlertProps {
+export interface AlertProps {
   title: string | { key: string; options?: Record<string, unknown> };
   body: string | { key: string; options?: Record<string, unknown> };
   okay?: string | { key: string; options?: Record<string, unknown> };

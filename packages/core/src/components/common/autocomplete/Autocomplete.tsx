@@ -35,12 +35,12 @@ export const classes = generateClassNames('Autocomplete', [
   'checkmark-icon',
 ]);
 
-export interface Option {
+export interface AutocompleteOption {
   label: string;
   value: string;
 }
 
-function getOptionLabelAndValue(option: string | Option): Option {
+function getOptionLabelAndValue(option: string | AutocompleteOption): AutocompleteOption {
   if (option && typeof option === 'object' && 'label' in option && 'value' in option) {
     return option;
   }
@@ -53,7 +53,7 @@ export type AutocompleteChangeEventHandler = (value: string | string[]) => void;
 export interface AutocompleteProps {
   label: ReactNode | ReactNode[];
   value: string | string[] | null;
-  options: string[] | Option[];
+  options: string[] | AutocompleteOption[];
   disabled?: boolean;
   required?: boolean;
   inputRef?: Ref<HTMLInputElement>;
@@ -87,7 +87,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
   );
 
   const handleChange = useCallback(
-    (selectedValue: Option | readonly Option[] | null) => {
+    (selectedValue: AutocompleteOption | readonly AutocompleteOption[] | null) => {
       if (selectedValue === null) {
         if (Array.isArray(value)) {
           onChange([]);
@@ -127,7 +127,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
 
           return acc;
         },
-        {} as Record<string, Option>,
+        {} as Record<string, AutocompleteOption>,
       ),
     [finalOptions],
   );
@@ -238,7 +238,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
             {groupedOptions.length > 0 ? (
               groupedOptions.map((option, index) => {
                 const { label: optionLabel, value: optionValue } = getOptionLabelAndValue(
-                  option as Option,
+                  option as AutocompleteOption,
                 );
 
                 const selected = Array.isArray(value)
@@ -248,7 +248,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
                 return (
                   <li
                     key={index}
-                    {...getOptionProps({ option: option as Option, index })}
+                    {...getOptionProps({ option: option as AutocompleteOption, index })}
                     className={classNames(classes.option, selected && classes['option-selected'])}
                     data-testid={`autocomplete-option-${optionValue}`}
                   >

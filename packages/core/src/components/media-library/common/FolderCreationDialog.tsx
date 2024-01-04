@@ -7,7 +7,7 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import Button from '../../common/button/Button';
 import IconButton from '../../common/button/IconButton';
 import Modal from '../../common/modal/Modal';
-import TextField from '../../common/text-field/TextField';
+import TextField from '../../common/text-field/TextInput';
 
 import type { ChangeEventHandler, FC } from 'react';
 

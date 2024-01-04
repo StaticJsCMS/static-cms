@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import Field from '@staticcms/core/components/common/field/Field';
-import TextField from '@staticcms/core/components/common/text-field/TextField';
+import Field from '@staticcms/core/components/common/field/FieldWrapper';
+import TextField from '@staticcms/core/components/common/text-field/TextInput';
 import useDebounce from '@staticcms/core/lib/hooks/useDebounce';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import widgetListClasses from './ListControl.classes';

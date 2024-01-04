@@ -6,16 +6,16 @@ import cardClasses from './Card.classes';
 
 import type { FC, MouseEvent, ReactNode } from 'react';
 
-interface BaseCardActionAreaProps {
+export interface BaseCardActionAreaProps {
   children: ReactNode;
   className?: string;
 }
 
-interface CardActionAreaPropsLink extends BaseCardActionAreaProps {
+export interface CardActionAreaPropsLink extends BaseCardActionAreaProps {
   to: string;
 }
 
-interface CardActionAreaPropsButton extends BaseCardActionAreaProps {
+export interface CardActionAreaPropsButton extends BaseCardActionAreaProps {
   onClick: (event: MouseEvent) => void;
 }
 

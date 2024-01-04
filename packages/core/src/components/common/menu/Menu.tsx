@@ -9,7 +9,7 @@ import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 import useButtonClassNames from '../button/useButtonClassNames';
 
 import type { FC, ReactNode } from 'react';
-import type { BaseBaseProps } from '../button/Button';
+import type { ButtonBaseProps } from '../button/Button';
 
 import './Menu.css';
 
@@ -28,9 +28,9 @@ export const classes = generateClassNames('Menu', [
 export interface MenuProps {
   label: ReactNode;
   startIcon?: FC<{ className?: string }>;
-  variant?: BaseBaseProps['variant'];
-  color?: BaseBaseProps['color'];
-  size?: BaseBaseProps['size'];
+  variant?: ButtonBaseProps['variant'];
+  color?: ButtonBaseProps['color'];
+  size?: ButtonBaseProps['size'];
   rounded?: boolean | 'no-padding';
   rootClassName?: string;
   iconClassName?: string;

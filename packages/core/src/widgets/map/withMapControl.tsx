@@ -8,7 +8,7 @@ import VectorSource from 'ol/source/Vector';
 import View from 'ol/View.js';
 import React, { useLayoutEffect, useRef } from 'react';
 
-import Field from '@staticcms/core/components/common/field/Field';
+import Field from '@staticcms/core/components/common/field/FieldWrapper';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import { generateClassNames } from '@staticcms/core/lib/util/theming.util';
 

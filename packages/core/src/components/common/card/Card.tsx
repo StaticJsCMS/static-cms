@@ -7,7 +7,7 @@ import type { FC, ReactNode } from 'react';
 
 import './Card.css';
 
-interface CardProps {
+export interface CardProps {
   children: ReactNode | ReactNode[];
   className?: string;
   title?: string;

@@ -13,12 +13,12 @@ import './ViewStyleControl.css';
 
 export const classes = generateClassNames('ViewStyleControl', ['root', 'button', 'icon']);
 
-interface ViewStyleControlPros {
+export interface ViewStyleControlProps {
   viewStyle: ViewStyle;
   onChangeViewStyle: (viewStyle: ViewStyle) => void;
 }
 
-const ViewStyleControl: FC<ViewStyleControlPros> = ({ viewStyle, onChangeViewStyle }) => {
+const ViewStyleControl: FC<ViewStyleControlProps> = ({ viewStyle, onChangeViewStyle }) => {
   return (
     <div className={classes.root}>
       <IconButton

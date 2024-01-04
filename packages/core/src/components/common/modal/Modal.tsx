@@ -9,7 +9,7 @@ import type { FC, ReactNode } from 'react';
 
 import './Modal.css';
 
-interface ModalProps {
+export interface ModalProps {
   open: boolean;
   children: ReactNode;
   className?: string;
