@@ -4,9 +4,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import formatDate from 'date-fns/format';
-import parse from 'date-fns/parse';
-import parseISO from 'date-fns/parseISO';
+import { format as formatDate } from 'date-fns/format';
+import { parse } from 'date-fns/parse';
+import { parseISO } from 'date-fns/parseISO';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Field from '@staticcms/core/components/common/field/Field';

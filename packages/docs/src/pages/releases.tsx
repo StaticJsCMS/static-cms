@@ -3,8 +3,8 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import format from 'date-fns/format';
-import parseISO from 'date-fns/parseISO';
+import { format } from 'date-fns/format';
+import { parseISO } from 'date-fns/parseISO';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
@@ -184,8 +184,8 @@ const Releases = ({ docsGroups, searchablePages }: DocsMenuProps) => {
                             isNext
                               ? 'next'
                               : majorVersion !== latestMajorVersion
-                              ? majorVersion
-                              : 'www'
+                                ? majorVersion
+                                : 'www'
                           }.staticcms.org/docs`}
                           target={majorVersion !== latestMajorVersion ? '_blank' : undefined}
                         >

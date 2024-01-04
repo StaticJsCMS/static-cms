@@ -1,31 +1,32 @@
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 
+import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
+import { editorStatus, notifications, publishTypes } from '../utils/constants';
 import {
-  login,
+  assertEntryDeleted,
+  assertFieldValidationError,
+  assertNotification,
+  assertOnCollectionsPage,
+  assertPublishedEntry,
+  assertWorkflowStatus,
+  assertWorkflowStatusInEditor,
   createPost,
   createPostAndExit,
-  exitEditor,
-  goToWorkflow,
-  updateWorkflowStatus,
-  publishWorkflowEntry,
-  assertWorkflowStatusInEditor,
-  assertPublishedEntry,
   deleteEntryInEditor,
-  assertOnCollectionsPage,
-  assertEntryDeleted,
-  assertWorkflowStatus,
-  updateWorkflowStatusInEditor,
-  unpublishEntry,
-  publishEntryInEditor,
   duplicateEntry,
+  exitEditor,
   goToEntry,
+  goToWorkflow,
+  login,
   populateEntry,
   publishAndCreateNewEntryInEditor,
   publishAndDuplicateEntryInEditor,
-  assertNotification,
-  assertFieldValidationError,
+  publishEntryInEditor,
+  publishWorkflowEntry,
+  unpublishEntry,
+  updateWorkflowStatus,
+  updateWorkflowStatusInEditor,
 } from '../utils/steps';
-import { editorStatus, publishTypes, notifications } from '../utils/constants';
 import {
   entry1,
   entry10,
@@ -43,7 +44,6 @@ import {
   entry8,
   entry9,
 } from './common/entries';
-import { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 
 describe('Test Backend Editorial Workflow', () => {
   after(() => {

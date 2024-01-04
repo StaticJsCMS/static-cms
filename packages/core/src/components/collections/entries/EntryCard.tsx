@@ -1,6 +1,6 @@
 import { Info as InfoIcon } from '@styled-icons/material-outlined/Info';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
+import { format } from 'date-fns/format';
+import { parse } from 'date-fns/parse';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
@@ -8,8 +8,8 @@ import { getPreviewCard } from '@staticcms/core/lib/registry';
 import { getEntryBackupKey } from '@staticcms/core/lib/util/backup.util';
 import classNames from '@staticcms/core/lib/util/classNames.util';
 import {
-  selectEntryCollectionTitle,
   getFields,
+  selectEntryCollectionTitle,
   selectTemplateName,
 } from '@staticcms/core/lib/util/collection.util';
 import localForage from '@staticcms/core/lib/util/localForage';

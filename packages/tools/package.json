@@ -12,9 +12,9 @@
   "dependencies": {
     "@staticcms/core": "^4.0.0-beta.0",
     "lodash": "4.17.21",
-    "prettier": "3.0.3",
+    "prettier": "3.1.1",
     "ts-node": "10.9.1",
-    "typescript": "5.2.2"
+    "typescript": "5.3.3"
   },
   "devDependencies": {
     "@types/common-tags": "1.8.4",
@@ -26,10 +26,10 @@
     "@types/jwt-decode": "2.2.1",
     "@types/lodash": "4.14.202",
     "@types/minimatch": "5.1.2",
-    "@types/node": "18.17.19",
-    "@types/react": "18.2.25",
+    "@types/node": "18.19.4",
+    "@types/react": "18.2.26",
     "@types/react-color": "3.0.11",
-    "@types/react-dom": "18.2.10",
+    "@types/react-dom": "18.2.18",
     "@types/react-virtualized-auto-sizer": "1.0.4",
     "@types/react-window": "1.8.6",
     "@types/url-join": "4.0.3",

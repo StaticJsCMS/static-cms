@@ -6,3 +6,4 @@ cypress/screenshots
 cypress/downloads
 .env
 .temp
+.nx

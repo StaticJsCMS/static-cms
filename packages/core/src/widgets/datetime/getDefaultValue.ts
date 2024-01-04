@@ -1,4 +1,4 @@
-import formatDate from 'date-fns/format';
+import { format } from 'date-fns/format';
 
 import { isNotNullish } from '@staticcms/core/lib/util/null.util';
 import { DEFAULT_DATETIME_FORMAT, DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT } from './constants';
@@ -29,7 +29,7 @@ const getDefaultValue: FieldGetDefaultMethod<string | Date, DateTimeField> = (
   }
 
   const today = field.picker_utc ? localToUTC(new Date()) : new Date();
-  return formatDate(today, finalFormat);
+  return format(today, finalFormat);
 };
 
 export default getDefaultValue;

@@ -1,6 +1,6 @@
-import addMinutes from 'date-fns/addMinutes';
-import format from 'date-fns/format';
-import parseISO from 'date-fns/parseISO';
+import { addMinutes } from 'date-fns/addMinutes';
+import { format } from 'date-fns/format';
+import { parseISO } from 'date-fns/parseISO';
 import { useEffect, useState } from 'react';
 
 function formatDate(date: Date, dateFormat: string) {
