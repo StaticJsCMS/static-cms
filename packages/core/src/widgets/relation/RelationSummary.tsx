@@ -84,8 +84,8 @@ const RelationSummary: FC<RelationSummaryProps> = ({ value, field, locale, entry
       const newFilteredValue = Array.isArray(value)
         ? value.filter(v => v && String(v) in byValue)
         : String(value) in byValue
-        ? [value]
-        : [];
+          ? [value]
+          : [];
 
       const newInitialOptions = newFilteredValue.map(v => byValue[String(v)]);
 

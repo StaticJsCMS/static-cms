@@ -176,8 +176,8 @@ const ListItem: FC<ListItemProps> = ({
         const labelReturn = summary
           ? handleSummary(summary, entry, String(labelFieldValue), objectValue, multiFields, t)
           : labelFieldValue
-          ? String(labelFieldValue)
-          : undefined;
+            ? String(labelFieldValue)
+            : undefined;
 
         return [labelReturn ?? t('editor.editorWidgets.list.noValue'), childObjectField];
       }

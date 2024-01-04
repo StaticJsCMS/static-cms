@@ -208,8 +208,8 @@ const MediaLibrary: FC<MediaLibraryProps> = ({ canInsert = false, isDialog = fal
         const newValue = Array.isArray(selectedFile)
           ? selectedFile
           : selectedFile
-          ? [selectedFile]
-          : [];
+            ? [selectedFile]
+            : [];
         if (newValue.includes(asset.path)) {
           return;
         }
@@ -226,8 +226,8 @@ const MediaLibrary: FC<MediaLibraryProps> = ({ canInsert = false, isDialog = fal
         const newValue = Array.isArray(selectedFile)
           ? [...selectedFile]
           : selectedFile
-          ? [selectedFile]
-          : [];
+            ? [selectedFile]
+            : [];
 
         const index = newValue.indexOf(asset.path);
         if (index < 0) {
