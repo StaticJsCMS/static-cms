@@ -90,7 +90,7 @@
     "postcss-loader": "7.3.3",
     "postcss-scss": "4.0.9",
     "prettier": "3.0.3",
-    "source-map-loader": "4.0.1",
+    "source-map-loader": "4.0.2",
     "style-loader": "3.3.3",
     "tailwindcss": "3.3.3",
     "to-string-loader": "1.2.0",
