@@ -5189,10 +5189,10 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.4.tgz#cd667bcfdd025213aafb7ca5915a932590acdcdc"
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
 
-"@types/react-color@3.0.7":
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/@types/react-color/-/react-color-3.0.7.tgz#2dae4e3f898397adcd54fb62e278fb64298249b5"
-  integrity sha512-IGZA7e8Oia0+Sb3/1KP0qTThGelZ9DRspfeLrFWQWv5vXHiYlJJQMC2kgQr75CtP4uL8/kvT8qBgrOVlxVoNTw==
+"@types/react-color@3.0.11":
+  version "3.0.11"
+  resolved "https://registry.yarnpkg.com/@types/react-color/-/react-color-3.0.11.tgz#65992e9fdfef70b2db939a98ce3d6a8b8456ecae"
+  integrity sha512-20m5GpzmdqwmSdnPeMs4UPPUuvkS4ESwakL6u2YN1hbo+ajWiiTwGYIMGhdcJFGeoLyAsr7TVonbZrMhU3+pdw==
   dependencies:
     "@types/react" "*"
     "@types/reactcss" "*"
