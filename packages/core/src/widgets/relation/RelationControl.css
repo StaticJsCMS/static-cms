@@ -3,11 +3,14 @@
 
 .CMS_WidgetRelation_values {
   @apply flex
-    flex-wrap
     gap-2
-    p-2
     pr-0
     min-w-0;
+
+  .CMS_Field_wrapper & {
+    @apply flex-wrap
+      p-2;
+  }
 }
 
 .CMS_WidgetRelation_loading {
