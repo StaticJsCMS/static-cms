@@ -1047,6 +1047,7 @@ export interface Config<EF extends BaseField = UnknownField> {
   display_url?: string;
   base_url?: string;
   logo_url?: string;
+  logo_link?: string;
   media_folder?: string;
   public_folder?: string;
   media_folder_relative?: boolean;

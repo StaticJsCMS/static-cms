@@ -76,10 +76,23 @@ const Navbar: FC<NavbarProps> = ({
           <div className={classes.breadcrumbs}>
             <div className={classes['logo-wrapper']}>
               {config?.logo_url ? (
-                <div
-                  className={classNames(classes.logo, classes['custom-logo'])}
-                  style={{ backgroundImage: `url('${config.logo_url}')` }}
-                />
+                config.logo_link ? (
+                  <a href={config.logo_link}>
+                    <div
+                      className={classNames(classes.logo, classes['custom-logo'])}
+                      style={{ backgroundImage: `url('${config.logo_url}')` }}
+                    />
+                  </a>
+                ) : (
+                  <div
+                    className={classNames(classes.logo, classes['custom-logo'])}
+                    style={{ backgroundImage: `url('${config.logo_url}')` }}
+                  />
+                )
+              ) : config?.logo_link ? (
+                <a href={config.logo_link}>
+                  <StaticCmsIcon className={classes.logo} />
+                </a>
               ) : (
                 <StaticCmsIcon className={classes.logo} />
               )}

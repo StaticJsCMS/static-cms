@@ -203,16 +203,19 @@ display_url: 'https://your-site.com',
 ## Custom Logo
 
 When the `logo_url` setting is specified, the Static CMS UI will change the logo displayed at the top of the login page, allowing you to brand Static CMS with your own logo. `logo_url` is assumed to be a URL to an image file.
+When the `logo_link` setting is specified, the Static CMS UI will wrap the logo in a link, allowing you to make the logo clickable. `logo_link` can be a URL to an external page or an address of one of Static CMS pages giving you a quick link to your favourite page.
 
 **Example:**
 
 <CodeTabs>
 ```yaml
 logo_url: https://your-site.com/images/logo.svg
+logo_link: https://your-site.com
 ```
 
 ```js
 logo_url: 'https://your-site.com/images/logo.svg',
+logo_link: 'https://your-site.com',
 ```
 
 </CodeTabs>
