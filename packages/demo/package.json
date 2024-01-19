@@ -32,7 +32,7 @@
     "postcss": "8.4.32",
     "postcss-scss": "4.0.9",
     "prettier": "3.1.1",
-    "vite": "5.0.10",
+    "vite": "5.0.12",
     "vite-plugin-svgr": "4.2.0",
     "webpack": "5.89.0"
   },
