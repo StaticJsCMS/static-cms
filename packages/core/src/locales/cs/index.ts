@@ -12,9 +12,9 @@ const cs: LocalePhrasesRoot = {
     errors: {
       email: 'Vyplňte e-mailovou adresu.',
       password: 'Vyplňte heslo.',
-      authTitle: undefined, // English translation: 'Error logging in'
+      authTitle: 'Chyba během přihlašování',
       authBody: '%{details}',
-      netlifyIdentityNotFound: undefined, // English translation: 'Netlify Identity plugin not found'
+      netlifyIdentityNotFound: 'Netlify Identity plugin nebyl nalezen',
       identitySettings:
         'Nastavení identity nenalezeno. Používáte-li git-gateway server nezapomeňte aktivovat službu Identity a Git Gateway.',
     },
@@ -30,7 +30,7 @@ const cs: LocalePhrasesRoot = {
       loading: 'Načítání…',
       errorHeader: 'Chyba při načítání CMS konfigurace',
       configErrors: 'Chyba konfigurace',
-      configNotFound: undefined, // English translation: 'Config not found'
+      configNotFound: 'Konfigurace nebyla nalezena',
       checkConfigYml: 'Zkontrolujte soubor config.yml.',
       loadingConfig: 'Načítání konfigurace…',
       waitingBackend: 'Čekání na server…',
@@ -68,8 +68,8 @@ const cs: LocalePhrasesRoot = {
       negateLabel: 'Není %{label}',
     },
     table: {
-      summary: undefined, // English translation: 'Summary'
-      collection: undefined, // English translation: 'Collection'
+      summary: 'Přehled',
+      collection: 'Kolekce',
     },
     defaultFields: {
       author: {
@@ -79,7 +79,7 @@ const cs: LocalePhrasesRoot = {
         label: 'Poslední aktualizace',
       },
     },
-    notFound: undefined, // English translation: 'Collection not found'
+    notFound: 'Kolekce nebyla nalezena',
   },
   editor: {
     editorControl: {
@@ -101,45 +101,46 @@ const cs: LocalePhrasesRoot = {
         rangeMax: '%{fieldLabel} musí mít %{maxCount} nebo méně položek.',
         invalidPath: "'%{path}' není platnou cestou.",
         pathExists: "Cesta '%{path}' už existuje.",
-        invalidColor: undefined, // English translation: 'Color '%{color}' is invalid.'
-        invalidHexCode: undefined, // English translation: 'Hex codes must start with a # sign.'
+        invalidColor: "Barva '%{color}' není platná.",
+        invalidHexCode: 'Hexadecimální barvy musí začínat znakem #',
       },
       i18n: {
         writingInLocale: 'Psát v %{locale}',
-        copyFromLocale: undefined, // English translation: 'Fill in from another locale'
-        copyFromLocaleConfirm: undefined, // English translation: 'Do you want to fill in data from %{locale} locale?\nAll existing content will be overwritten.'
+        copyFromLocale: 'Vyplnit z jiné lokalizace',
+        copyFromLocaleConfirm:
+          'Chcete vyplnit data z lokalizace %{locale}?\nVšechen existující obsah bude přepsán.',
       },
     },
     editor: {
       onLeavePage: 'Chcete opravdu opustit tuto stránku?',
-      onUpdatingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onUpdatingWithUnsavedChangesTitle: 'Neuložené změny',
       onUpdatingWithUnsavedChangesBody:
         'Máte neuložené změny. Uložte je prosím před změnou statusu.',
-      onPublishingNotReadyTitle: undefined, // English translation: 'Not ready to publish'
+      onPublishingNotReadyTitle: 'Není připraven k publikování',
       onPublishingNotReadyBody: 'Změňte stav na „Připraveno“ před publikováním.',
-      onPublishingWithUnsavedChangesTitle: undefined, // English translation: 'Unsaved changes'
+      onPublishingWithUnsavedChangesTitle: 'Neuložené změny',
       onPublishingWithUnsavedChangesBody:
         'Máte neuložené změny, prosím uložte je před publikováním.',
-      onPublishingTitle: undefined, // English translation: 'Publish entry?'
+      onPublishingTitle: 'Publikovat záznam?',
       onPublishingBody: 'Chcete opravdu publikovat tento záznam?',
-      onUnpublishingTitle: undefined, // English translation: 'Unpublish entry?'
+      onUnpublishingTitle: 'Zrušit publikování záznamu?',
       onUnpublishingBody: 'Chcete opravdu zrušit publikování tohoto záznamu?',
-      onDeleteWithUnsavedChangesTitle: undefined, // English translation: 'Delete this published entry?'
+      onDeleteWithUnsavedChangesTitle: 'Smazat publikovaný záznam?',
       onDeleteWithUnsavedChangesBody:
         'Chcete opravdu vymazat tento publikovaný záznam a všechny neuložené změny z této relace?',
-      onDeletePublishedEntryTitle: undefined, // English translation: 'Delete this published entry?'
+      onDeletePublishedEntryTitle: 'Smazat publikovaný záznam?',
       onDeletePublishedEntryBody: 'Chcete opravdu smazat tento publikovaný záznam?',
-      onDeleteUnpublishedChangesWithUnsavedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesWithUnsavedChangesTitle: 'Smazat nepublikované změny?',
       onDeleteUnpublishedChangesWithUnsavedChangesBody:
         'Tato akce vymaže všechny nepublikované změny v tomto záznamu a také všechny neuložené změny z této relace. Chcete záznam skutečně vymazat?',
-      onDeleteUnpublishedChangesTitle: undefined, // English translation: 'Delete unpublished changes?'
+      onDeleteUnpublishedChangesTitle: 'Smazat nepublikované změny?',
       onDeleteUnpublishedChangesBody:
-        'Všechny nepublivkoané změny v tomto záznamu budou vymazány. Chcete ho skuteně vymazat?',
+        'Všechny nepublikované změny v tomto záznamu budou vymazány. Chcete ho skuteně vymazat?',
       loadingEntry: 'Načítání záznamu…',
     },
     editorInterface: {
-      sideBySideI18n: undefined, // English translation: 'I18n Side by Side'
-      preview: undefined, // English translation: 'Preview'
+      sideBySideI18n: 'Lokalizace vedle sebe',
+      preview: 'Náhled',
       toggleI18n: 'Přepnout lokalizaci',
       togglePreview: 'Přepnout náhled',
       toggleScrollSync: 'Sladit skrolování',
@@ -159,8 +160,10 @@ const cs: LocalePhrasesRoot = {
       deleteEntry: 'Vymazat záznam',
       saving: 'Ukládání…',
       save: 'Uložit',
-      statusInfoTooltipDraft: undefined, // English translation: 'Entry status is set to draft. To finalize and submit it for review, set the status to �In review�'
-      statusInfoTooltipInReview: undefined, // English translation: 'Entry is being reviewed, no further actions are required. However, you can still make additional changes while it is being reviewed.'
+      statusInfoTooltipDraft:
+        "Status záznamu je nastavený na draft. Pro odeslání záznamu k revizi změňte status záznamu na 'Revize'",
+      statusInfoTooltipInReview:
+        'Záznam je v revizi, žádné další změny od vás nejsou vyžadovány, ale i přesto můžete záznam upravovat.',
       deleting: 'Vymazávání…',
       updating: 'Aktualizace…',
       status: 'Status: %{status}',
@@ -174,76 +177,76 @@ const cs: LocalePhrasesRoot = {
       deployPreviewPendingButtonLabel: 'Zkontrolovat náhled',
       deployPreviewButtonLabel: 'Zobrazit náhled',
       deployButtonLabel: 'Zobrazit na webu',
-      discardChanges: undefined, // English translation: 'Discard changes'
-      discardChangesTitle: undefined, // English translation: 'Discard changes'
-      discardChangesBody: undefined, // English translation: 'Are you sure you want to discard the unsaved changed?'
+      discardChanges: 'Zrušit změny',
+      discardChangesTitle: 'Zrušit změny',
+      discardChangesBody: 'Opravdu chcete zrušit všechny neuložené změny?',
     },
     editorWidgets: {
       markdown: {
         bold: 'Tučně',
         italic: 'Kurzíva',
-        strikethrough: undefined, // English translation: 'Strikethrough'
+        strikethrough: 'Přeškrtnuté',
         code: 'Kód',
-        codeBlock: undefined, // English translation: 'Code block'
-        insertCodeBlock: undefined, // English translation: 'Insert code block'
+        codeBlock: 'Blok kódu',
+        insertCodeBlock: 'Vložit blok kódu',
         link: 'Odkaz',
-        insertLink: undefined, // English translation: 'Insert link'
-        paragraph: undefined, // English translation: 'Paragraph'
+        insertLink: 'Vložit odkaz',
+        paragraph: 'Odstavec',
         headings: 'Nadpisy',
         quote: 'Citovat',
-        insertQuote: undefined, // English translation: 'Insert blockquote'
+        insertQuote: 'Vložit citaci',
         bulletedList: 'Odrážkový seznam',
         numberedList: 'Číslovaný seznam',
         addComponent: 'Přidat součástku',
         richText: 'Rich Text',
         markdown: 'Markdown',
-        type: undefined, // English translation: 'Type...'
-        decreaseIndent: undefined, // English translation: 'Decrease indent'
-        increaseIndent: undefined, // English translation: 'Increase indent'
-        image: undefined, // English translation: 'Image'
-        insertImage: undefined, // English translation: 'Insert image'
+        type: 'Pište...',
+        decreaseIndent: 'Snížit odsazení',
+        increaseIndent: 'Zvýšit odsazení',
+        image: 'Obrázek',
+        insertImage: 'Vložit obrázek',
         table: {
-          table: undefined, // English translation: 'Table'
-          deleteColumn: undefined, // English translation: 'Delete column'
-          deleteRow: undefined, // English translation: 'Delete row'
-          deleteTable: undefined, // English translation: 'Delete table'
-          insertColumn: undefined, // English translation: 'Insert column'
-          insertRow: undefined, // English translation: 'Insert row'
-          insertTable: undefined, // English translation: 'Insert table'
+          table: 'Tabulka',
+          deleteColumn: 'Smazat sloupec',
+          deleteRow: 'Smazat řádek',
+          deleteTable: 'Smazat tabulku',
+          insertColumn: 'Vložit sloupec',
+          insertRow: 'Vložit řádek',
+          insertTable: 'Vložit tabulku',
         },
       },
       image: {
         choose: 'Vyberte obrázek',
-        chooseMultiple: undefined, // English translation: 'Choose images'
+        chooseMultiple: 'Vyberte obrázky',
         chooseUrl: 'Přidat z URL',
         replaceUrl: 'Nahradit z URL',
         promptUrl: 'Zadejte URL obrázku',
         chooseDifferent: 'Vyberte jiný obrázek',
-        addMore: undefined, // English translation: 'Add more images'
-        remove: 'Odstranit obrázek',
-        removeAll: undefined, // English translation: 'Remove all images'
+        addMore: 'Přidat další obrázky',
+        remove: 'Odebrat obrázek',
+        removeAll: 'Odebrat všechny obrázky',
       },
       file: {
         choose: 'Vyberte soubor',
         chooseUrl: 'Přidat z URL',
-        chooseMultiple: undefined, // English translation: 'Choose files'
+        chooseMultiple: 'Vyberte soubory',
         replaceUrl: 'Nahradit z URL',
         promptUrl: 'Zadejte URL souboru',
         chooseDifferent: 'Vyberte jiný soubor',
-        addMore: undefined, // English translation: 'Add more files'
+        addMore: 'Přidat další soubory',
         remove: 'Odebrat soubor',
-        removeAll: undefined, // English translation: 'Remove all files'
+        removeAll: 'Odebrat všechny soubory',
       },
       folder: {
-        choose: undefined, // English translation: 'Choose a folder'
-        chooseUrl: undefined, // English translation: 'Insert folder path'
-        chooseMultiple: undefined, // English translation: 'Choose folders'
-        replaceUrl: undefined, // English translation: 'Replace with path'
-        promptUrl: undefined, // English translation: 'Enter path of the folder'
-        chooseDifferent: undefined, // English translation: 'Choose different folder'
-        addMore: undefined, // English translation: 'Add more folders'
-        remove: undefined, // English translation: 'Remove folder'
-        removeAll: undefined, // English translation: 'Remove all folders'
+        choose: 'Vybrat složku',
+        chooseUrl: 'Vložit cestu na složku',
+        chooseMultiple: 'Vybrat složky',
+        replaceUrl: 'Nahradit cestou',
+        promptUrl: 'Vložte cestu na složku',
+        chooseDifferent: 'Vyberte jinou složku',
+        addMore: 'Přidat více složek',
+        remove: 'Odstranit složku',
+        removeAll: 'Odstranit všechny složky',
       },
       unknownControl: {
         noControl: "Žádné ovládání pro widget '%{widget}'.",
@@ -261,22 +264,22 @@ const cs: LocalePhrasesRoot = {
       },
       datetime: {
         now: 'Teď',
-        invalidDateTitle: undefined, // English translation: 'Invalid date'
-        invalidDateBody: undefined, // English translation: 'The date you entered is invalid.'
+        invalidDateTitle: 'Neplatné datum',
+        invalidDateBody: 'Datum není validní.',
       },
       list: {
-        add: undefined, // English translation: 'Add %{item}'
-        addType: undefined, // English translation: 'Add %{item}'
-        noValue: undefined, // English translation: 'No value'
+        add: 'Vložit %{item}',
+        addType: 'Vložit %{item}',
+        noValue: 'Žádná hodnota',
       },
       keyvalue: {
-        key: undefined, // English translation: 'Key'
-        value: undefined, // English translation: 'Value'
-        uniqueKeys: undefined, // English translation: '%{keyLabel} must be unique'
+        key: 'Klíč',
+        value: 'Hodnota',
+        uniqueKeys: '%{keyLabel} musí být unikátní',
       },
       code: {
-        language: undefined, // English translation: 'Language'
-        selectLanguage: undefined, // English translation: 'Select language'
+        language: 'Jazyk',
+        selectLanguage: 'Vyberte jazyk',
       },
     },
   },
@@ -290,12 +293,12 @@ const cs: LocalePhrasesRoot = {
       copied: 'Zkopírováno',
     },
     mediaLibrary: {
-      onDeleteTitle: undefined, // English translation: 'Delete selected media?'
+      onDeleteTitle: 'Vymazat',
       onDeleteBody: 'Chcete skutečně vymazat označená média?',
-      fileTooLargeTitle: undefined, // English translation: 'File too large'
+      fileTooLargeTitle: 'Soubor je příliš velký',
       fileTooLargeBody: 'Soubor je příliš velký.\nSoubor musí být menší než %{size} kB.',
-      alreadyExistsTitle: undefined, // English translation: 'File already exists'
-      alreadyExistsBody: undefined, // English translation: '%{filename} already exists. Do you want to replace it?'
+      alreadyExistsTitle: 'Soubor již existuje',
+      alreadyExistsBody: '%{filename} již existuje. Chcete ho nahradit?',
     },
     mediaLibraryModal: {
       noResults: 'Nic nenalezeno.',
@@ -311,31 +314,31 @@ const cs: LocalePhrasesRoot = {
       deleting: 'Vymazávání…',
       deleteSelected: 'Smazat označené',
       chooseSelected: 'Vybrat označené',
-      dropImages: undefined, // English translation: 'Drop images to upload'
-      dropFiles: undefined, // English translation: 'Drop files to upload'
+      dropImages: 'Odebrat obrázky pro nahrání',
+      dropFiles: 'Odebrat soubory pro nahrání',
     },
     folderSupport: {
-      newFolder: undefined, // English translation: 'New folder'
-      createNewFolder: undefined, // English translation: 'Create new folder'
-      enterFolderName: undefined, // English translation: 'Enter folder name...'
-      create: undefined, // English translation: 'Create'
-      home: undefined, // English translation: 'Home'
-      up: undefined, // English translation: 'Up'
-      upToFolder: undefined, // English translation: 'Up to %{folder}'
+      newFolder: 'Nová složka',
+      createNewFolder: 'Vytvořit novou složku',
+      enterFolderName: 'Vložte název nové složky...',
+      create: 'Vytvořit',
+      home: 'Domů',
+      up: 'Nahoru',
+      upToFolder: 'Nahoru na %{folder}',
     },
   },
   ui: {
     common: {
-      yes: undefined, // English translation: 'Yes'
-      no: undefined, // English translation: 'No'
-      okay: undefined, // English translation: 'OK'
-      cancel: undefined, // English translation: 'Cancel'
+      yes: 'Ano',
+      no: 'Ne',
+      okay: 'OK',
+      cancel: 'Zrušit',
     },
     default: {
       goBackToSite: 'Vrátit se na stránku',
     },
     localBackup: {
-      hasLocalBackup: undefined, // English translation: 'Has local backup'
+      hasLocalBackup: 'Záloha obsahuje je lokálně',
     },
     errorBoundary: {
       title: 'Chyba',
@@ -351,26 +354,26 @@ const cs: LocalePhrasesRoot = {
       },
     },
     settingsDropdown: {
-      theme: undefined, // English translation: 'Theme'
+      theme: 'Motiv',
       logOut: 'Odhlásit',
     },
     toast: {
       onFailToLoadEntries: 'Chyba při načítání záznamu: %{details}',
       onFailToLoadDeployPreview: 'Chyba při načítání náhledu: %{details}',
       onFailToPersist: 'Chyba při ukládání záznamu: %{details}',
-      onFailToPersistMedia: undefined, // English translation: 'Failed to persist media: %{details}'
+      onFailToPersistMedia: 'Chyba při ukládání média: %{details}',
       onFailToDelete: 'Chyba při vymazávání záznamu: %{details}',
-      onFailToDeleteMedia: undefined, // English translation: 'Failed to delete media: %{details}'
+      onFailToDeleteMedia: 'Chyba při vymazávání média: %{details}',
       onFailToUpdateStatus: 'Chyba při změně stavu záznamu: %{details}',
       missingRequiredField: 'Vynechali jste povinné pole. Prosím vyplňte ho.',
       entrySaved: 'Záznam uložen',
-      entryDeleted: undefined, // English translation: 'Entry delete'
+      entryDeleted: 'Záznam smazán',
       entryPublished: 'Záznam publikován',
       entryUnpublished: 'Publikování záznamu zrušeno',
       onFailToPublishEntry: 'Chyba při publikování záznamu: %{details}',
       onFailToUnpublishEntry: 'Chyba při rušení publikování záznamu: %{details}',
       entryUpdated: 'Stav záznamu byl změněn',
-      onDeletePublishedEntry: undefined, // English translation: 'Published entry deleted'
+      onDeletePublishedEntry: 'Publikovaný záznam byl smazán',
       onDeleteUnpublishedChanges: 'Nepublikované změny byly smazány',
       onFailToAuth: '%{details}',
       onLoggedOut: 'Byli jste odhlášeni, prosím zálohujte všechna data a znova se přihlašte',
@@ -379,7 +382,7 @@ const cs: LocalePhrasesRoot = {
   },
   workflow: {
     workflow: {
-      dashboard: undefined, // English translation: 'Dashboard'
+      dashboard: 'Nástěnka',
       loading: 'Načítání workflow záznamů',
       workflowHeading: 'Schvalovací Workflow',
       newPost: 'Nový post',
@@ -407,9 +410,10 @@ const cs: LocalePhrasesRoot = {
       currentEntries: '%{smart_count} záznam |||| %{smart_count} záznamů',
     },
     openAuthoring: {
-      forkRequired: undefined, // English translation: 'Open Authoring is enabled. We need to use a fork on your github account. (If a fork already exists, we'll use that.)'
-      forkRepo: undefined, // English translation: 'Fork the repo'
-      markReadyForReview: undefined, // English translation: 'Mark Ready for Review'
+      forkRequired:
+        'Veřejné psaní od jiných uživatelů je povoleno. Potřebujeme zkopírovat váš github účet, pokud kopie ještě nebyla pořízena.',
+      forkRepo: 'Vytvořit kopii repozitáře',
+      markReadyForReview: 'Odeslat záznam k revizi',
     },
   },
 };

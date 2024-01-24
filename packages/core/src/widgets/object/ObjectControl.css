@@ -54,7 +54,7 @@
   }
 
   &.CMS_WidgetObject_open {
-    & .CMS_WidgetObject_expand-icon {
+    & > .CMS_WidgetObject_expand .CMS_WidgetObject_expand-icon {
       @apply rotate-90
         transform;
     }
@@ -65,6 +65,7 @@
   @apply flex
     w-full
     justify-between
+    items-center
     pl-2
     pr-3
     py-2
