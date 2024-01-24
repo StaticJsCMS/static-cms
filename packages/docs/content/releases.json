@@ -1,9 +1,15 @@
 {
   "releases": [
     {
+      "date": "2024-01-24T10:00:00.000Z",
+      "version": "v4.1.0",
+      "type": "minor",
+      "description": "Add logo_link setting"
+    },
+    {
       "date": "2024-01-04T10:00:00.000Z",
       "version": "v4.0.1",
-      "type": "minor"
+      "type": "patch"
     },
     {
       "date": "2024-01-03T11:00:00.000Z",
