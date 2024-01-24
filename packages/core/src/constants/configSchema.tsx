@@ -488,6 +488,7 @@ function getConfigSchema() {
       display_url: { type: 'string', examples: ['https://example.com'] },
       base_url: { type: 'string' },
       logo_url: { type: 'string', examples: ['https://example.com/images/logo.svg'] },
+      logo_link: { type: 'string', examples: ['https://example.com'] },
       media_folder: { type: 'string', examples: ['assets/uploads'] },
       public_folder: { type: 'string', examples: ['/uploads'] },
       media_folder_relative: { type: 'boolean' },

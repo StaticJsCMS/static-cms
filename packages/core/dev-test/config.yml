@@ -1,5 +1,6 @@
 backend:
   name: test-repo
+logo_link: '/#/page/custom-page'
 site_url: 'https://example.com'
 media_folder: /assets/uploads
 media_library:
