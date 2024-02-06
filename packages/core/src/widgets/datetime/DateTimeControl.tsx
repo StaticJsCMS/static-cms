@@ -85,7 +85,7 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
     if (storageFormat) {
       const parsed = parse(valueToParse, storageFormat, new Date());
       // if parsing fails, Invalid Date (NaN) will be returned: fallback to parseISO
-      if (!isNaN(parsed)) {
+      if (!isNaN(parsed.getTime())) {
         return parsed;
       }
     }
