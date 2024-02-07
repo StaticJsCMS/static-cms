@@ -82,7 +82,14 @@ const DateTimeControl: FC<WidgetControlProps<string | Date, DateTimeField>> = ({
       return valueToParse;
     }
 
-    return storageFormat ? parse(valueToParse, storageFormat, new Date()) : parseISO(valueToParse);
+    if (storageFormat) {
+      const parsed = parse(valueToParse, storageFormat, new Date());
+      // if parsing fails, Invalid Date (NaN) will be returned: fallback to parseISO
+      if (!isNaN(parsed.getTime())) {
+        return parsed;
+      }
+    }
+    return parseISO(valueToParse);
   }, [defaultValue, storageFormat, internalValue]);
 
   const handleChange = useCallback(

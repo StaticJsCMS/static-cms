@@ -1,6 +1,11 @@
 {
   "releases": [
     {
+      "date": "2024-02-07T10:00:00.000Z",
+      "version": "v4.1.1",
+      "type": "patch"
+    },
+    {
       "date": "2024-01-24T10:00:00.000Z",
       "version": "v4.1.0",
       "type": "minor",
