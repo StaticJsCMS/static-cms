@@ -157,7 +157,7 @@
     "sanitize-filename": "1.6.3",
     "scheduler": "0.23.0",
     "semaphore": "1.1.0",
-    "slate": "0.94.1",
+    "slate": "0.102.0",
     "slate-history": "0.93.0",
     "slate-hyperscript": "0.77.0",
     "slate-react": "0.98.3",
