@@ -4,7 +4,6 @@ import get from 'lodash/get';
 import { SORT_DIRECTION_NONE } from '@staticcms/core/constants';
 import { filterNullish } from '@staticcms/core/lib/util/null.util';
 
-import type { ViewStyle } from '@staticcms/core/constants/views';
 import type {
   Entries,
   Entry,
@@ -14,6 +13,7 @@ import type {
   SortMap,
   SortObject,
 } from '@staticcms/core';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { RootState } from '@staticcms/core/store';
 
 export const selectEntriesFilters = (entries: RootState) => {

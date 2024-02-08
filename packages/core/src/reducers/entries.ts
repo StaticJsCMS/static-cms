@@ -3,6 +3,7 @@ import sortBy from 'lodash/sortBy';
 
 import {
   CHANGE_VIEW_STYLE,
+  CONFIG_SUCCESS,
   ENTRIES_FAILURE,
   ENTRIES_REQUEST,
   ENTRIES_SUCCESS,
@@ -18,6 +19,7 @@ import {
   GROUP_ENTRIES_REQUEST,
   GROUP_ENTRIES_SUCCESS,
   SEARCH_ENTRIES_SUCCESS,
+  SORT_DIRECTION_ASCENDING,
   SORT_ENTRIES_FAILURE,
   SORT_ENTRIES_REQUEST,
   SORT_ENTRIES_SUCCESS,
@@ -25,6 +27,7 @@ import {
 import { VIEW_STYLES, VIEW_STYLE_TABLE } from '../constants/views';
 import set from '../lib/util/set.util';
 
+import type { ConfigAction } from '../actions/config';
 import type { EntriesAction } from '../actions/entries';
 import type { SearchAction } from '../actions/search';
 import type { ViewStyle } from '../constants/views';
@@ -124,9 +127,70 @@ export type EntriesState = {
 
 function entries(
   state: EntriesState = { entries: {}, pages: {}, sort: loadSort(), viewStyle: loadViewStyle() },
-  action: EntriesAction | SearchAction,
+  action: EntriesAction | SearchAction | ConfigAction,
 ): EntriesState {
   switch (action.type) {
+    case CONFIG_SUCCESS: {
+      const config = action.payload.config;
+
+      const sort: EntriesState['sort'] = {};
+      const group: EntriesState['group'] = {};
+      const filter: EntriesState['filter'] = {};
+
+      for (const collection of config.collections) {
+        if (collection.sortable_fields && collection.sortable_fields.default) {
+          const key = collection.sortable_fields.default.field;
+          sort[collection.name] = {
+            [key]: {
+              key,
+              direction: collection.sortable_fields.default.direction ?? SORT_DIRECTION_ASCENDING,
+            },
+          } as SortMap;
+        }
+
+        if (collection.view_filters && collection.view_filters.default) {
+          const defaultViewFilterName = collection.view_filters.default;
+          const defaultViewFilter = collection.view_filters.filters.find(
+            f => f.name === defaultViewFilterName,
+          );
+
+          const collectionFilters: Record<string, FilterMap> = {};
+          if (defaultViewFilter) {
+            collectionFilters[defaultViewFilter.id] = {
+              ...defaultViewFilter,
+              active: true,
+            };
+          }
+
+          filter[collection.name] = collectionFilters;
+        }
+
+        if (collection.view_groups && collection.view_groups.default) {
+          const defaultViewGroupName = collection.view_groups.default;
+          const defaultViewGroup = collection.view_groups.groups.find(
+            g => g.name === defaultViewGroupName,
+          );
+
+          const collectionGroups: Record<string, GroupMap> = {};
+          if (defaultViewGroup) {
+            collectionGroups[defaultViewGroup.id] = {
+              ...defaultViewGroup,
+              active: true,
+            };
+          }
+
+          group[collection.name] = collectionGroups;
+        }
+      }
+
+      return {
+        ...state,
+        sort,
+        group,
+        filter,
+      };
+    }
+
     case ENTRY_REQUEST: {
       const payload = action.payload;
 
