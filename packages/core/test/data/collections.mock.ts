@@ -46,6 +46,24 @@ export const createMockFolderCollectionWithDefaults = <EF extends BaseField>(
 ): FolderCollectionWithDefaults<EF> => ({
   ...createMockFolderCollection(extra, ...fields),
   i18n: extra.i18n,
+  view_filters: extra.view_filters
+    ? {
+        ...extra.view_filters,
+        filters: extra.view_filters.filters.map(f => ({
+          ...f,
+          id: `${f.field}__${f.pattern}`,
+        })),
+      }
+    : undefined,
+  view_groups: extra.view_groups
+    ? {
+        ...extra.view_groups,
+        groups: extra.view_groups.groups.map(g => ({
+          ...g,
+          id: `${g.field}__${g.pattern}`,
+        })),
+      }
+    : undefined,
 });
 
 export const createMockCollectionFile = <EF extends BaseField>(
@@ -102,4 +120,22 @@ export const createMockFilesCollectionWithDefaults = <EF extends BaseField>(
   ...createMockFilesCollection(extra),
   i18n: extra.i18n,
   files: extra.files,
+  view_filters: extra.view_filters
+    ? {
+        ...extra.view_filters,
+        filters: extra.view_filters.filters.map(f => ({
+          ...f,
+          id: `${f.field}__${f.pattern}`,
+        })),
+      }
+    : undefined,
+  view_groups: extra.view_groups
+    ? {
+        ...extra.view_groups,
+        groups: extra.view_groups.groups.map(g => ({
+          ...g,
+          id: `${g.field}__${g.pattern}`,
+        })),
+      }
+    : undefined,
 });

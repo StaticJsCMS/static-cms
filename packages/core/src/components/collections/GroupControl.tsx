@@ -7,7 +7,7 @@ import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 
-import type { GroupMap, ViewGroup } from '@staticcms/core';
+import type { GroupMap, ViewGroupWithDefaults } from '@staticcms/core';
 import type { FC, MouseEvent } from 'react';
 
 import './GroupControl.css';
@@ -25,9 +25,9 @@ export const classes = generateClassNames('GroupControl', [
 
 export interface GroupControlProps {
   group: Record<string, GroupMap> | undefined;
-  viewGroups: ViewGroup[] | undefined;
+  viewGroups: ViewGroupWithDefaults[] | undefined;
   variant?: 'menu' | 'list';
-  onGroupClick: ((viewGroup: ViewGroup) => void) | undefined;
+  onGroupClick: ((viewGroup: ViewGroupWithDefaults) => void) | undefined;
 }
 
 const GroupControl: FC<GroupControlProps> = ({
@@ -41,7 +41,7 @@ const GroupControl: FC<GroupControlProps> = ({
   const activeGroup = useMemo(() => Object.values(group).find(f => f.active === true), [group]);
 
   const handleGroupClick = useCallback(
-    (viewGroup: ViewGroup) => (event: MouseEvent) => {
+    (viewGroup: ViewGroupWithDefaults) => (event: MouseEvent) => {
       event.stopPropagation();
       event.preventDefault();
       onGroupClick?.(viewGroup);

@@ -7,8 +7,8 @@ import Menu from '../common/menu/Menu';
 import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 
-import type { FilterMap, ViewFilter } from '@staticcms/core';
-import type { MouseEvent, FC } from 'react';
+import type { FilterMap, ViewFilterWithDefaults } from '@staticcms/core';
+import type { FC, MouseEvent } from 'react';
 
 import './FilterControl.css';
 
@@ -24,9 +24,9 @@ export const classes = generateClassNames('FilterControl', [
 
 export interface FilterControlProps {
   filter: Record<string, FilterMap> | undefined;
-  viewFilters: ViewFilter[] | undefined;
+  viewFilters: ViewFilterWithDefaults[] | undefined;
   variant?: 'menu' | 'list';
-  onFilterClick: ((viewFilter: ViewFilter) => void) | undefined;
+  onFilterClick: ((viewFilter: ViewFilterWithDefaults) => void) | undefined;
 }
 
 const FilterControl: FC<FilterControlProps> = ({
@@ -40,7 +40,7 @@ const FilterControl: FC<FilterControlProps> = ({
   const anyActive = useMemo(() => Object.keys(filter).some(key => filter[key]?.active), [filter]);
 
   const handleFilterClick = useCallback(
-    (viewFilter: ViewFilter) => (event: MouseEvent) => {
+    (viewFilter: ViewFilterWithDefaults) => (event: MouseEvent) => {
       event.stopPropagation();
       event.preventDefault();
       onFilterClick?.(viewFilter);

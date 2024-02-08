@@ -44,11 +44,7 @@ import { Cursor } from '../lib/util';
 import { getFields, updateFieldByKey } from '../lib/util/collection.util';
 import { createEmptyDraftData, createEmptyDraftI18nData } from '../lib/util/entry.util';
 import { selectCollectionEntriesCursor } from '../reducers/selectors/cursors';
-import {
-  selectEntriesSelectedSort,
-  selectIsFetching,
-  selectPublishedSlugs,
-} from '../reducers/selectors/entries';
+import { selectIsFetching, selectPublishedSlugs } from '../reducers/selectors/entries';
 import { addSnackbar } from '../store/slices/snackbars';
 import { createAssetProxy } from '../valueObjects/AssetProxy';
 import createEntry from '../valueObjects/createEntry';
@@ -73,7 +69,9 @@ import type {
   SortDirection,
   ValueOrNestedValue,
   ViewFilter,
+  ViewFilterWithDefaults,
   ViewGroup,
+  ViewGroupWithDefaults,
 } from '../interface';
 import type { RootState } from '../store';
 import type AssetProxy from '../valueObjects/AssetProxy';
@@ -122,7 +120,10 @@ export function entriesLoading(collection: CollectionWithDefaults) {
   } as const;
 }
 
-export function filterEntriesRequest(collection: CollectionWithDefaults, filter: ViewFilter) {
+export function filterEntriesRequest(
+  collection: CollectionWithDefaults,
+  filter: ViewFilterWithDefaults,
+) {
   return {
     type: FILTER_ENTRIES_REQUEST,
     payload: {
@@ -162,7 +163,10 @@ export function filterEntriesFailure(
   } as const;
 }
 
-export function groupEntriesRequest(collection: CollectionWithDefaults, group: ViewGroup) {
+export function groupEntriesRequest(
+  collection: CollectionWithDefaults,
+  group: ViewGroupWithDefaults,
+) {
   return {
     type: GROUP_ENTRIES_REQUEST,
     payload: {
@@ -315,7 +319,7 @@ export function sortByField(
   };
 }
 
-export function filterByField(collection: CollectionWithDefaults, filter: ViewFilter) {
+export function filterByField(collection: CollectionWithDefaults, filter: ViewFilterWithDefaults) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     // if we're already fetching we update the filter key, but skip loading entries
@@ -334,17 +338,12 @@ export function filterByField(collection: CollectionWithDefaults, filter: ViewFi
   };
 }
 
-export function groupByField(collection: CollectionWithDefaults, group: ViewGroup) {
+export function groupByField(collection: CollectionWithDefaults, group: ViewGroupWithDefaults) {
   return async (dispatch: ThunkDispatch<RootState, {}, AnyAction>, getState: () => RootState) => {
     const state = getState();
     const isFetching = selectIsFetching(state, collection.name);
-    dispatch({
-      type: GROUP_ENTRIES_REQUEST,
-      payload: {
-        collection: collection.name,
-        group,
-      },
-    });
+    dispatch(groupEntriesRequest(collection, group));
+
     if (isFetching) {
       return;
     }
@@ -699,10 +698,6 @@ export function loadEntries(collection: CollectionWithDefaults, page = 0) {
       return;
     }
     const state = getState();
-    const sortField = selectEntriesSelectedSort(state, collection.name);
-    if (sortField) {
-      return dispatch(sortByField(collection, sortField.key, sortField.direction));
-    }
 
     const configState = state.config;
     if (!configState.config) {
@@ -751,6 +746,7 @@ export function loadEntries(collection: CollectionWithDefaults, page = 0) {
       );
     } catch (error: unknown) {
       console.error(error);
+
       if (error instanceof Error) {
         dispatch(
           addSnackbar({
