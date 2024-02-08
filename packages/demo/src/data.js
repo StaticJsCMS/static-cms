@@ -34,6 +34,10 @@ window.repoFiles = {
       content:
         '---\ntitle: This post should not appear because the extension is different\nimage: /assets/uploads/moby-dick.jpg\ndate: 2015-02-16T00:00:00.000Z\n---\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
     },
+    '2015-02-15-this-is-post-number-2015.md': {
+      content:
+        '+++\ntitle = "This is post #2015"\nimage = "/assets/uploads/moby-dick.jpg"\ndate = "2015-02-15T00:00:00.000Z"\n+++\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n',
+    },
   },
   _faqs: {
     'what-is-static-cms.md': {

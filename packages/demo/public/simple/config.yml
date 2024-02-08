@@ -38,6 +38,7 @@ collections:
         field: title
     create: true
     view_filters:
+      default: posts-with-index
       filters:
         - name: posts-with-index
           label: Posts With Index
@@ -48,6 +49,7 @@ collections:
           field: title
           pattern: front matter post
     view_groups:
+      default: by-year
       groups:
         - name: by-year
           label: Year
