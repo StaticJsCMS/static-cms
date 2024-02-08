@@ -15,8 +15,8 @@ import Button from '../../common/button/Button';
 import Entries from './Entries';
 import entriesClasses from './Entries.classes';
 
-import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { CollectionWithDefaults, Entry, GroupOfEntries } from '@staticcms/core';
+import type { ViewStyle } from '@staticcms/core/constants/views';
 import type { RootState } from '@staticcms/core/store';
 import type { FC } from 'react';
 import type { t } from 'react-polyglot';
@@ -65,13 +65,11 @@ const EntriesCollection: FC<EntriesCollectionProps> = ({
   cursor,
   page,
   entriesLoaded,
-  readyToLoad,
 }) => {
   const t = useTranslate();
 
   const dispatch = useAppDispatch();
 
-  const [prevReadyToLoad, setPrevReadyToLoad] = useState(false);
   const [prevCollection, setPrevCollection] = useState(collection);
 
   const groups = useGroups(collection.name);
@@ -89,26 +87,12 @@ const EntriesCollection: FC<EntriesCollectionProps> = ({
   }, [collection, entries, filterTerm]);
 
   useEffect(() => {
-    if (
-      collection &&
-      !entriesLoaded &&
-      readyToLoad &&
-      (!prevReadyToLoad || prevCollection !== collection)
-    ) {
+    if (collection && !entriesLoaded && prevCollection !== collection) {
       dispatch(loadEntries(collection));
     }
 
-    setPrevReadyToLoad(readyToLoad);
     setPrevCollection(collection);
-  }, [
-    collection,
-    dispatch,
-    entriesLoaded,
-    prevCollection,
-    prevReadyToLoad,
-    readyToLoad,
-    useWorkflow,
-  ]);
+  }, [collection, dispatch, entriesLoaded, prevCollection, useWorkflow]);
 
   const handleCursorActions = useCallback(
     (action: string) => {
@@ -182,7 +166,6 @@ const EntriesCollection: FC<EntriesCollectionProps> = ({
 interface EntriesCollectionOwnProps {
   collection: CollectionWithDefaults;
   viewStyle: ViewStyle;
-  readyToLoad: boolean;
   filterTerm: string;
 }
 

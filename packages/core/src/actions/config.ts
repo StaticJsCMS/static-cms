@@ -145,6 +145,8 @@ function applyFolderCollectionDefaults(
 ): FolderCollectionWithDefaults {
   const collection: FolderCollectionWithDefaults = {
     ...originalCollection,
+    view_filters: undefined,
+    view_groups: undefined,
     i18n: collectionI18n,
   };
 
@@ -228,6 +230,8 @@ function applyFilesCollectionDefaults(
   const collection: FilesCollectionWithDefaults = {
     ...originalCollection,
     i18n: collectionI18n,
+    view_filters: undefined,
+    view_groups: undefined,
     files: originalCollection.files.map(f =>
       applyCollectionFileDefaults(f, originalCollection, collectionI18n, config),
     ),
@@ -271,7 +275,7 @@ function applyCollectionDefaults(
     collection.fields = setI18nDefaultsForFields(collection.fields, Boolean(collectionI18n));
   }
 
-  const { view_filters, view_groups } = collection;
+  const { view_filters, view_groups } = originalCollection;
 
   if (!collection.sortable_fields) {
     collection.sortable_fields = {
@@ -280,7 +284,7 @@ function applyCollectionDefaults(
   }
 
   collection.view_filters = {
-    default: collection.view_filters?.default,
+    default: originalCollection.view_filters?.default,
     filters: (view_filters?.filters ?? []).map(filter => {
       return {
         ...filter,
@@ -290,7 +294,7 @@ function applyCollectionDefaults(
   };
 
   collection.view_groups = {
-    default: collection.view_groups?.default,
+    default: originalCollection.view_groups?.default,
     groups: (view_groups?.groups ?? []).map(group => {
       return {
         ...group,

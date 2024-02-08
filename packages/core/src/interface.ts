@@ -89,9 +89,9 @@ export type SortMap = Record<string, SortObject>;
 
 export type Sort = Record<string, SortMap>;
 
-export type FilterMap = ViewFilter & { active?: boolean };
+export type FilterMap = ViewFilterWithDefaults & { active?: boolean };
 
-export type GroupMap = ViewGroup & { active?: boolean };
+export type GroupMap = ViewGroupWithDefaults & { active?: boolean };
 
 export type Filter = Record<string, Record<string, FilterMap>>; // collection.field.active
 
@@ -305,6 +305,8 @@ export interface BaseCollection {
 
 export interface BaseCollectionWithDefaults extends Omit<BaseCollection, 'i18n'> {
   i18n?: I18nInfo;
+  view_filters?: ViewFiltersWithDefaults;
+  view_groups?: ViewGroupsWithDefaults;
 }
 
 export interface FilesCollection<EF extends BaseField = UnknownField> extends BaseCollection {
@@ -958,9 +960,17 @@ export interface ViewFilter {
   pattern: string | boolean | number;
 }
 
+export interface ViewFilterWithDefaults extends ViewFilter {
+  id: string;
+}
+
 export interface ViewFilters {
   default?: string;
   filters: ViewFilter[];
+}
+
+export interface ViewFiltersWithDefaults extends ViewFilters {
+  filters: ViewFilterWithDefaults[];
 }
 
 export interface ViewGroup {
@@ -971,9 +981,17 @@ export interface ViewGroup {
   pattern?: string;
 }
 
+export interface ViewGroupWithDefaults extends ViewGroup {
+  id: string;
+}
+
 export interface ViewGroups {
   default?: string;
   groups: ViewGroup[];
+}
+
+export interface ViewGroupsWithDefaults extends ViewGroups {
+  groups: ViewGroupWithDefaults[];
 }
 
 export type SortDirection =
