@@ -86,7 +86,7 @@
     "@udecode/plate-cursor": "23.7.4",
     "@udecode/plate-juice": "23.7.4",
     "@udecode/plate-serializer-md": "23.7.4",
-    "@uiw/codemirror-extensions-langs": "4.19.16",
+    "@uiw/codemirror-extensions-langs": "4.21.24",
     "@uiw/react-codemirror": "4.19.16",
     "ajv": "8.12.0",
     "ajv-errors": "3.0.0",
