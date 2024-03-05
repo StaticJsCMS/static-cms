@@ -25,6 +25,7 @@ import API, { API_NAME } from './API';
 import AuthenticationPage from './AuthenticationPage';
 
 import type {
+  AuthScheme,
   BackendClass,
   BackendEntry,
   ConfigWithDefaults,
@@ -75,6 +76,7 @@ export default class GitHub implements BackendClass {
   mediaFolder?: string;
   previewContext: string;
   token: string | null;
+  authScheme: AuthScheme;
   squashMerges: boolean;
   cmsLabelPrefix: string;
   _currentUserPromise?: Promise<GitHubUser>;
@@ -114,6 +116,7 @@ export default class GitHub implements BackendClass {
     this.branch = config.backend.branch?.trim() || 'main';
     this.apiRoot = config.backend.api_root || 'https://api.github.com';
     this.token = '';
+    this.authScheme = config.backend.auth_scheme || 'token';
     this.squashMerges = config.backend.squash_merges || false;
     this.cmsLabelPrefix = config.backend.cms_label_prefix || '';
     this.mediaFolder = config.media_folder;
@@ -171,7 +174,7 @@ export default class GitHub implements BackendClass {
     let repoExists = false;
     while (!repoExists) {
       repoExists = await fetch(`${this.apiRoot}/repos/${repo}`, {
-        headers: { Authorization: `token ${token}` },
+        headers: { Authorization: `${this.authScheme} ${token}` },
       })
         .then(() => true)
         .catch(err => {
@@ -194,7 +197,7 @@ export default class GitHub implements BackendClass {
     if (!this._currentUserPromise) {
       this._currentUserPromise = fetch(`${this.apiRoot}/user`, {
         headers: {
-          Authorization: `token ${token}`,
+          Authorization: `${this.authScheme} ${token}`,
         },
       }).then(res => res.json());
     }
@@ -215,7 +218,7 @@ export default class GitHub implements BackendClass {
         `${this.apiRoot}/repos/${this.originRepo}/collaborators/${username}/permission`,
         {
           headers: {
-            Authorization: `token ${token}`,
+            Authorization: `${this.authScheme} ${token}`,
           },
         },
       )
@@ -232,7 +235,7 @@ export default class GitHub implements BackendClass {
       const repo = await fetch(`${this.apiRoot}/repos/${currentUser.login}/${repoName}`, {
         method: 'GET',
         headers: {
-          Authorization: `token ${token}`,
+          Authorization: `${this.authScheme} ${token}`,
         },
       }).then(res => res.json());
 
@@ -276,7 +279,7 @@ export default class GitHub implements BackendClass {
     const fork = await fetch(`${this.apiRoot}/repos/${this.originRepo}/forks`, {
       method: 'POST',
       headers: {
-        Authorization: `token ${token}`,
+        Authorization: `${this.authScheme} ${token}`,
       },
     }).then(res => res.json());
     this.useOpenAuthoring = true;
@@ -289,6 +292,7 @@ export default class GitHub implements BackendClass {
     const apiCtor = API;
     this.api = new apiCtor({
       token: this.token,
+      authScheme: this.authScheme,
       branch: this.branch,
       repo: this.repo,
       originRepo: this.originRepo,

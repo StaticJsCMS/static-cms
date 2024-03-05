@@ -33,7 +33,7 @@ import {
 } from '@staticcms/core/lib/util/APIUtils';
 import { GitHubCommitStatusState, PullRequestState } from './types';
 
-import type { DataFile, PersistOptions, UnpublishedEntry } from '@staticcms/core';
+import type { AuthScheme, DataFile, PersistOptions, UnpublishedEntry } from '@staticcms/core';
 import type { ApiRequest, FetchError } from '@staticcms/core/lib/util';
 import type AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import type { Semaphore } from 'semaphore';
@@ -75,6 +75,7 @@ export const MOCK_PULL_REQUEST = -1;
 export interface Config {
   apiRoot?: string;
   token?: string;
+  authScheme?: AuthScheme;
   branch?: string;
   useOpenAuthoring?: boolean;
   openAuthoringEnabled?: boolean;
@@ -162,6 +163,7 @@ export type Diff = {
 export default class API {
   apiRoot: string;
   token: string;
+  authScheme: AuthScheme;
   branch: string;
   useOpenAuthoring?: boolean;
   openAuthoringEnabled?: boolean;
@@ -185,6 +187,7 @@ export default class API {
   constructor(config: Config) {
     this.apiRoot = config.apiRoot || 'https://api.github.com';
     this.token = config.token || '';
+    this.authScheme = config.authScheme || 'token';
     this.branch = config.branch || 'main';
     this.useOpenAuthoring = config.useOpenAuthoring;
     this.repo = config.repo || '';
@@ -242,7 +245,7 @@ export default class API {
     };
 
     if (this.token) {
-      baseHeader.Authorization = `token ${this.token}`;
+      baseHeader.Authorization = `${this.authScheme} ${this.token}`;
       return Promise.resolve(baseHeader);
     }
 

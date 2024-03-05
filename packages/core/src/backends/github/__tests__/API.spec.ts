@@ -103,6 +103,35 @@ describe('github API', () => {
       });
     });
 
+    it('should fetch url with authorization header using custom auth scheme', async () => {
+      const api = new API({
+        branch: 'gh-pages',
+        repo: 'my-repo',
+        token: 'token',
+        authScheme: 'Bearer',
+        squashMerges: false,
+        initialWorkflowStatus: WorkflowStatus.DRAFT,
+        cmsLabelPrefix: '',
+      });
+
+      fetch.mockResolvedValue({
+        text: jest.fn().mockResolvedValue('some response'),
+        ok: true,
+        status: 200,
+        headers: { get: () => '' },
+      });
+      const result = await api.request('/some-path');
+      expect(result).toEqual('some response');
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(fetch).toHaveBeenCalledWith('https://api.github.com/some-path', {
+        cache: 'no-cache',
+        headers: {
+          Authorization: 'Bearer token',
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      });
+    });
+
     it('should throw error on not ok response', async () => {
       const api = new API({
         branch: 'gh-pages',
