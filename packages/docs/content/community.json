@@ -16,11 +16,6 @@
       "title": "Support",
       "links": [
         {
-          "title": "Static CMS Discord",
-          "description": "Live community chat for all things Static CMS",
-          "url": "https://discord.gg/ZWJM9pBMjj"
-        },
-        {
           "title": "Static CMS Community",
           "description": "Ask and answer questions on GitHub discussions tab",
           "url": "https://github.com/StaticJsCMS/static-cms/discussions"
