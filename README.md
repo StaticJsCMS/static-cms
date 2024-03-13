@@ -11,7 +11,6 @@
 [Docs](https://staticcms.org/)
 | [Demo](https://demo.staticcms.org/)
 | [Issues](https://github.com/StaticJsCMS/static-cms/issues)
-| [Discord](https://discord.gg/ZWJM9pBMjj)
 
 </div>
 </div>
@@ -113,7 +112,3 @@ Please make sure you understand its [implications and guarantees](https://writin
 # Decap
 
 Static CMS is a fork of [Decap](https://github.com/decaporg/decap-cms) (previously Netlify CMS) focusing on the core product over adding massive, scope expanding, new features.
-
-## Support
-
-For help with integrating Static CMS with your site, check out the community [Discord](https://discord.com/invite/ZWJM9pBMjj).

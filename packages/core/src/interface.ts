@@ -698,6 +698,8 @@ export interface SelectWidgetOptionObject {
 
 export type AuthScope = 'repo' | 'public_repo';
 
+export type AuthScheme = 'token' | 'Bearer';
+
 export type SlugEncoding = 'unicode' | 'ascii';
 
 export type RenderedField<F extends BaseField = UnknownField> = F & {
@@ -1025,6 +1027,7 @@ export interface Backend {
   identity_url?: string;
   gateway_url?: string;
   auth_scope?: AuthScope;
+  auth_scheme?: AuthScheme;
   commit_messages?: {
     create?: string;
     update?: string;
