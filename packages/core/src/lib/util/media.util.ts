@@ -306,6 +306,8 @@ export function selectMediaFilePublicPath<EF extends BaseField>(
 
   if (mediaPath.startsWith(mediaFolder)) {
     return mediaPath.replace(mediaFolder, publicFolder);
+  } else if (mediaPath.startsWith(trim(mediaFolder, '/'))) {
+    return mediaPath.replace(trim(mediaFolder, '/'), publicFolder);
   }
 
   return mediaPath;
