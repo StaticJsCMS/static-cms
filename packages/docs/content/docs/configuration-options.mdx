@@ -68,8 +68,8 @@ Static CMS generates the following commit types:
 
 | Commit type   | When is it triggered?        | Available template tags                                     |
 | ------------- | ---------------------------- | ----------------------------------------------------------- |
-| `create`      | A new entry is created       | `slug`, `path`, `collection`, `author-login`, `author-name` |
-| `update`      | An existing entry is changed | `slug`, `path`, `collection`, `author-login`, `author-name` |
+| `create`      | A new entry is created       | `slug`, `path`, `collection`, `author-login`, `author-name`, `fields` |
+| `update`      | An existing entry is changed | `slug`, `path`, `collection`, `author-login`, `author-name`, `fields` |
 | `delete`      | An existing entry is deleted | `slug`, `path`, `collection`, `author-login`, `author-name` |
 | `uploadMedia` | A media file is uploaded     | `path`, `author-login`, `author-name`                       |
 | `deleteMedia` | A media file is deleted      | `path`, `author-login`, `author-name`                       |
@@ -83,6 +83,7 @@ Template tags produce the following output:
 - `{{path}}`: full path to the changed file
 - `{{author-login}}`: login/username of the author
 - `{{author-name}}`: full name of the author (might be empty based on the user's profile)
+- `{{fields.[FIELD_NAME]}}`: A custom fields value
 
 ## Publish Mode
 
