@@ -9,6 +9,7 @@ import { isEmpty } from './util/string.util';
 import {
   addFileTemplateFields,
   compileStringTemplate,
+  getExplicitFieldReplacement,
   keyToPathArray,
   parseDateFromEntry,
 } from './widgets/stringTemplate';
@@ -41,16 +42,17 @@ type Options<EF extends BaseField> = {
   collection?: CollectionWithDefaults<EF>;
   authorLogin?: string;
   authorName?: string;
+  data?: EntryData;
 };
 
 export function commitMessageFormatter<EF extends BaseField>(
   type: keyof typeof commitMessageTemplates,
   config: ConfigWithDefaults<EF>,
-  { slug, path, collection, authorLogin, authorName }: Options<EF>,
+  { slug, path, collection, authorLogin, authorName, data }: Options<EF>,
   isOpenAuthoring?: boolean,
 ) {
   const templates = { ...commitMessageTemplates, ...(config.backend.commit_messages || {}) };
-
+  let explicitReplacement;
   const commitMessage = templates[type].replace(variableRegex, (_, variable) => {
     switch (variable) {
       case 'slug':
@@ -64,6 +66,10 @@ export function commitMessageFormatter<EF extends BaseField>(
       case 'author-name':
         return authorName || '';
       default:
+        explicitReplacement = getExplicitFieldReplacement(variable, data);
+        if (explicitReplacement) {
+          return explicitReplacement;
+        }
         console.warn(
           `[StaticCMS] Ignoring unknown variable “${variable}” in commit message template.`,
         );
