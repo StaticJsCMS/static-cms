@@ -1118,6 +1118,7 @@ export class Backend<EF extends BaseField = UnknownField, BC extends BackendClas
         path,
         authorLogin: user.login,
         authorName: user.name,
+        data: entryDraft.entry.data,
       },
       user.useOpenAuthoring,
     );
