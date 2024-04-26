@@ -1,4 +1,4 @@
-import addMinutes from 'date-fns/addMinutes';
+import { addMinutes } from 'date-fns/addMinutes';
 
 export function localToUTC(dateTime: Date): Date {
   return addMinutes(dateTime.getTime(), getTimezoneOffset(dateTime));
