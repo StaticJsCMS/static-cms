@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "date": "2024-04-26T10:00:00.000Z",
+      "version": "v4.3.0",
+      "type": "minor",
+      "description": "Add option to make non default locale fields optional"
+    },
+    {
       "date": "2024-04-25T10:00:00.000Z",
       "version": "v4.2.0",
       "type": "minor",

@@ -29,8 +29,8 @@ import MenuGroup from '../common/menu/MenuGroup';
 import MenuItemButton from '../common/menu/MenuItemButton';
 import EditorWorkflowToolbarButtons from './EditorWorkflowToolbarButtons';
 
-import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type { CollectionWithDefaults, EditorPersistOptions } from '@staticcms/core';
+import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type { FC, MouseEventHandler } from 'react';
 
 import './EditorToolbar.css';
@@ -41,6 +41,7 @@ export const classes = generateClassNames('EditorToolbar', [
   'more-menu-button',
   'more-menu-label-icon',
   'preview-toggle',
+  'discard-button',
   'delete-button',
   'publish-button',
   'publish-button-icon',
@@ -419,14 +420,34 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
           disabled={disabled}
         />
       ) : null}
-      {canDelete ? (
+      {hasChanged ? (
+        <IconButton
+          icon={TrashIcon}
+          key="discard-button"
+          title={t('editor.editorToolbar.discardChanges')}
+          color="warning"
+          variant="text"
+          onClick={handleDiscardDraft}
+          rootClassName={classes['discard-button']}
+          aria-label="discard chnages"
+          disabled={disabled}
+        />
+      ) : canDelete &&
+        (!useOpenAuthoring || hasUnpublishedChanges) &&
+        (!useWorkflow || workflowDeleteLabel) ? (
         <IconButton
           icon={TrashIcon}
           key="delete-button"
-          title={t('editor.editorToolbar.deleteEntry')}
+          title={useWorkflow ? t(workflowDeleteLabel!) : t('editor.editorToolbar.deleteEntry')}
           color="error"
           variant="text"
-          onClick={onDelete}
+          onClick={
+            useWorkflow &&
+            workflowDeleteLabel &&
+            workflowDeleteLabel !== 'editor.editorToolbar.deletePublishedEntry'
+              ? onDeleteUnpublishedChanges
+              : onDelete
+          }
           rootClassName={classes['delete-button']}
           aria-label="delete"
           disabled={disabled}

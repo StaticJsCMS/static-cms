@@ -115,6 +115,7 @@ describe('entryDraft', () => {
                 locales: ['en', 'fr', 'es'],
                 defaultLocale: 'en',
                 currentLocale: 'en',
+                enforceRequiredNonDefault: true,
               },
               isMeta: false,
             },
@@ -155,6 +156,7 @@ describe('entryDraft', () => {
             locales: ['en', 'fr', 'es'],
             defaultLocale: 'en',
             currentLocale: 'en',
+            enforceRequiredNonDefault: true,
           };
 
           let state = entryDraftReducer(startState, {

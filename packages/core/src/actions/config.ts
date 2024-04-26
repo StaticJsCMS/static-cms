@@ -92,17 +92,24 @@ function setI18nField<T extends BaseField = UnknownField>(field: T) {
 
 function getI18nDefaults(
   collectionOrFileI18n: boolean | Partial<I18nInfo>,
-  { default_locale, locales = ['en'], structure = I18N_STRUCTURE_SINGLE_FILE }: Partial<I18nInfo>,
+  {
+    default_locale,
+    locales = ['en'],
+    structure = I18N_STRUCTURE_SINGLE_FILE,
+    enforce_required_non_default = true,
+  }: Partial<I18nInfo>,
 ): I18nInfo {
   if (typeof collectionOrFileI18n === 'boolean') {
-    return { default_locale, locales, structure };
+    return { default_locale, locales, structure, enforce_required_non_default };
   } else {
     const mergedI18n: I18nInfo = deepmerge(
-      { default_locale, locales, structure },
+      { default_locale, locales, structure, enforce_required_non_default },
       collectionOrFileI18n,
     );
     mergedI18n.locales = collectionOrFileI18n.locales ?? locales;
     mergedI18n.default_locale = collectionOrFileI18n.default_locale || locales?.[0];
+    mergedI18n.enforce_required_non_default =
+      collectionOrFileI18n.enforce_required_non_default || true;
     throwOnMissingDefaultLocale(mergedI18n);
     return mergedI18n;
   }
@@ -202,6 +209,7 @@ function applyCollectionFileDefaults(
       locales: collectionI18n.locales,
       default_locale: collectionI18n.default_locale,
       structure: collectionI18n.structure,
+      enforce_required_non_default: collectionI18n.enforce_required_non_default,
     });
     file.i18n = fileI18n;
   } else {
@@ -315,6 +323,7 @@ export function applyDefaults<EF extends BaseField = UnknownField>(
 
   if (i18n) {
     i18n.default_locale = i18n.default_locale ?? i18n.locales[0];
+    i18n.enforce_required_non_default = i18n.enforce_required_non_default ?? true;
   }
 
   throwOnMissingDefaultLocale(i18n);

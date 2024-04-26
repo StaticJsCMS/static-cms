@@ -12,6 +12,7 @@ const collectionClasses = generateClassNames('Collection', [
   'header-icon',
   'header-label',
   'new-entry-button',
+  'new-entry-button-text',
 ]);
 
 export default collectionClasses;

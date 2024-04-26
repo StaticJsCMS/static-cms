@@ -40,6 +40,7 @@ const i18n = {
       uniqueItems: true,
     },
     default_locale: localeType,
+    enforce_required_non_default: { type: 'boolean' },
   },
 };
 

@@ -1,6 +1,7 @@
 import attempt from 'lodash/attempt';
 import isError from 'lodash/isError';
 import take from 'lodash/take';
+import trim from 'lodash/trim';
 import unset from 'lodash/unset';
 import { basename, dirname } from 'path';
 import { v4 as uuid } from 'uuid';
@@ -15,7 +16,6 @@ import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
 import AssetProxy from '@staticcms/core/valueObjects/AssetProxy';
 import AuthenticationPage from './AuthenticationPage';
 
-import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 import type {
   BackendClass,
   BackendEntry,
@@ -29,6 +29,7 @@ import type {
   UnpublishedEntry,
   User,
 } from '@staticcms/core';
+import type { WorkflowStatus } from '@staticcms/core/constants/publishModes';
 
 type RepoFile = { path: string; content: string | AssetProxy; isDirectory?: boolean };
 type RepoTree = { [key: string]: RepoFile | RepoTree };
@@ -289,14 +290,14 @@ export default class TestBackend implements BackendClass {
     }
     const files = getFolderFiles(
       window.repoFiles,
-      mediaFolder.split('/')[0],
+      trim(mediaFolder, '/').split('/')[0],
       '',
       100,
       undefined,
       undefined,
       folderSupport,
     ).filter(f => {
-      return dirname(f.path) === mediaFolder;
+      return dirname(f.path) === trim(mediaFolder, '/');
     });
 
     return files.map(f => ({

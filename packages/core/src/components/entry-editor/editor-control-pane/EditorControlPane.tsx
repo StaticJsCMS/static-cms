@@ -88,11 +88,12 @@ const EditorControlPane: FC<EditorControlPaneProps> = ({
 
   const i18n = useMemo(() => {
     if (hasI18n(collection)) {
-      const { locales, default_locale } = getI18nInfo(collection);
+      const { locales, default_locale, enforce_required_non_default } = getI18nInfo(collection);
       return {
         currentLocale: locale ?? locales?.[0],
         locales,
         defaultLocale: default_locale,
+        enforceRequiredNonDefault: enforce_required_non_default,
       } as I18nSettings;
     }
 

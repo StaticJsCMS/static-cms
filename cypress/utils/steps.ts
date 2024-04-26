@@ -1,5 +1,5 @@
 import 'cypress-real-events';
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 
 import { editorStatus, notifications, publishTypes, workflowStatus } from './constants';
 

@@ -1,6 +1,6 @@
 import { Info as InfoIcon } from '@styled-icons/material-outlined/Info';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
+import { format } from 'date-fns/format';
+import { parse } from 'date-fns/parse';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import useTranslate from '@staticcms/core/lib/hooks/useTranslate';
