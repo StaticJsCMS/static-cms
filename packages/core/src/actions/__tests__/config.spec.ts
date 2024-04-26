@@ -697,7 +697,12 @@ describe('config', () => {
               },
             ],
           }).collections[0].i18n,
-        ).toEqual({ structure: 'multiple_folders', locales: ['en', 'de'], default_locale: 'en' });
+        ).toEqual({
+          structure: 'multiple_folders',
+          locales: ['en', 'de'],
+          default_locale: 'en',
+          enforce_required_non_default: true,
+        });
       });
 
       it('should not set root i18n on collection when collection i18n is not set', () => {
@@ -757,7 +762,12 @@ describe('config', () => {
               },
             ],
           }).collections[0].i18n,
-        ).toEqual({ structure: 'multiple_folders', locales: ['en', 'fr'], default_locale: 'fr' });
+        ).toEqual({
+          structure: 'multiple_folders',
+          locales: ['en', 'fr'],
+          default_locale: 'fr',
+          enforce_required_non_default: true,
+        });
       });
 
       it('should throw when i18n structure is not single_file on files collection', () => {

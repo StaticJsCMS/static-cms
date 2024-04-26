@@ -124,7 +124,8 @@ const EditorControl: FC<EditorControlProps> = ({
       (!dirty && !submitted) ||
       disabled ||
       i18nDisabled ||
-      (forList && field.widget === 'object' && field.fields.length === 1)
+      (forList && field.widget === 'object' && field.fields.length === 1) ||
+      (i18n?.enforceRequiredNonDefault === false && i18n?.currentLocale !== i18n?.defaultLocale)
     ) {
       return;
     }
