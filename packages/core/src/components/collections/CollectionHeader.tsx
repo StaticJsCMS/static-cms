@@ -76,9 +76,11 @@ const CollectionHeader: FC<CollectionHeaderProps> = ({ collection }) => {
       </h2>
       {newEntryUrl ? (
         <Button to={newEntryUrl} className={collectionClasses['new-entry-button']}>
-          {t('collection.collectionTop.newButton', {
-            collectionLabel: collectionLabelSingular ?? pluralLabel,
-          })}
+          <div className={collectionClasses['new-entry-button-text']}>
+            {t('collection.collectionTop.newButton', {
+              collectionLabel: collectionLabelSingular ?? pluralLabel,
+            })}
+          </div>
         </Button>
       ) : null}
     </div>
