@@ -22,6 +22,11 @@
     lg:!hidden;
 }
 
+.CMS_EditorToolbar_discard-button {
+  @apply flex
+    lg:!hidden;
+}
+
 .CMS_EditorToolbar_delete-button {
   @apply flex
     lg:!hidden;
