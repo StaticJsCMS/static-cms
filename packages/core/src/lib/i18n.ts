@@ -343,6 +343,7 @@ export async function getI18nEntry<EF extends BaseField>(
     i18nInfo = {
       structure: I18N_STRUCTURE_SINGLE_FILE,
       locales: [],
+      enforce_required_non_default: true,
     };
   }
 

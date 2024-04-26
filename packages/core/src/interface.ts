@@ -267,6 +267,7 @@ export interface I18nSettings {
   currentLocale: string;
   defaultLocale: string;
   locales: string[];
+  enforceRequiredNonDefault?: boolean;
 }
 
 export type Format = keyof typeof formatExtensions;
@@ -1306,6 +1307,7 @@ export interface I18nInfo {
   locales: string[];
   default_locale?: string;
   structure: I18nStructure;
+  enforce_required_non_default?: boolean;
 }
 
 export interface ProcessedCodeLanguage {

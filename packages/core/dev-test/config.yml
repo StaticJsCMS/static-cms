@@ -19,6 +19,10 @@ i18n:
   # Optional, defaults to the first item in locales.
   # The locale to be used for fields validation and as a baseline for the entry.
   default_locale: en
+
+  # Optional, defaults to true.
+  # Enforce required fields in non-default locales
+  enforce_required_non_default: true
 collections:
   - name: posts
     label: Posts
