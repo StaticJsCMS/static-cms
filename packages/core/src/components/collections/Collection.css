@@ -83,5 +83,10 @@
 
 .CMS_Collection_new-entry-button {
   @apply hidden
-    md:flex;
+    md:flex
+    min-w-0;
+}
+
+.CMS_Collection_new-entry-button-text {
+  @apply truncate;
 }

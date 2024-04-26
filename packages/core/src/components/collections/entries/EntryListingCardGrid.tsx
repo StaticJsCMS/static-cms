@@ -3,6 +3,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { VariableSizeGrid as Grid } from 'react-window';
 
 import {
+  COLLECTION_CARD_DATE_HEIGHT,
   COLLECTION_CARD_HEIGHT,
   COLLECTION_CARD_HEIGHT_WITHOUT_IMAGE,
   COLLECTION_CARD_MARGIN,
@@ -64,7 +65,7 @@ const CardWrapper: FC<GridChildComponentProps<CardGridItemData>> = ({
   }
   const data = entryData[index];
   const cardHeight =
-    index < cardHeights.length ? cardHeights[index] + COLLECTION_CARD_MARGIN : style.height;
+    index < cardHeights.length ? cardHeights[index] + COLLECTION_CARD_MARGIN * 2 : style.height;
 
   return (
     <div
@@ -114,9 +115,15 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
   }, []);
 
   const getDefaultHeight = useCallback((data?: CollectionEntryData) => {
-    return isNotNullish(data?.imageFieldName)
+    const base = isNotNullish(data?.imageFieldName)
       ? COLLECTION_CARD_HEIGHT
       : COLLECTION_CARD_HEIGHT_WITHOUT_IMAGE;
+
+    if (isNotNullish(data?.dateFieldName)) {
+      return base + COLLECTION_CARD_DATE_HEIGHT;
+    }
+
+    return base;
   }, []);
 
   const [prevCardHeights, setPrevCardHeight] = useState<number[]>([]);
@@ -185,12 +192,12 @@ const EntryListingCardGrid: FC<EntryListingCardGridProps> = ({
                     }
 
                     if (cardHeights[i] > rowHeight && cardHeights[i]) {
-                      rowHeight = cardHeights[i] + COLLECTION_CARD_MARGIN;
+                      rowHeight = cardHeights[i] + COLLECTION_CARD_MARGIN * 2;
                     }
                   }
 
                   if (rowHeight === 0) {
-                    rowHeight = getDefaultHeight() + COLLECTION_CARD_MARGIN;
+                    rowHeight = getDefaultHeight() + COLLECTION_CARD_MARGIN * 2;
                   }
 
                   return rowHeight;
