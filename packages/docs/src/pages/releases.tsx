@@ -3,8 +3,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import format from 'date-fns/format';
-import parseISO from 'date-fns/parseISO';
+import { format, parseISO } from 'date-fns';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
