@@ -1,3 +1,4 @@
+import * as Locales from 'date-fns/locale';
 import { useMemo } from 'react';
 
 import { isNotEmpty } from '@staticcms/core/lib/util/string.util';
@@ -9,6 +10,7 @@ import {
 } from './constants';
 
 import type { DateTimeField, DateTimeFormats } from '@staticcms/core';
+import type { Locale } from 'date-fns/locale';
 
 function getDisplayFormat(
   dateFormat: string | boolean,
@@ -86,4 +88,8 @@ export function useDatetimeFormats(field: DateTimeField): DateTimeFormats;
 export function useDatetimeFormats(field: DateTimeField | undefined): DateTimeFormats | undefined;
 export function useDatetimeFormats(field: DateTimeField | undefined): DateTimeFormats | undefined {
   return useMemo(() => getDatetimeFormats(field), [field]);
+}
+
+export function getDateFnsLocale(locale: string): Locale {
+  return (Locales as Record<string, Locale>)[locale] ?? Locales.enUS;
 }
