@@ -93,9 +93,12 @@ const Header = ({
   );
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      checkBackendStatus();
-    }, 5 * 60 * 1000);
+    const intervalId = setInterval(
+      () => {
+        checkBackendStatus();
+      },
+      5 * 60 * 1000,
+    );
 
     return () => {
       clearInterval(intervalId);
@@ -156,7 +159,7 @@ const Header = ({
           )}
           {isTestRepo && (
             <Button
-              href="https://staticcms.org/docs/test-backend"
+              href="https://staticjscms.netlify.app/docs/test-backend"
               target="_blank"
               rel="noopener noreferrer"
               sx={{ textTransform: 'none' }}

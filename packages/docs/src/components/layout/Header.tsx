@@ -181,7 +181,7 @@ const Header = ({ mode, docsGroups, searchablePages, toggleColorMode }: HeaderPr
     <StyledHeaderWrapper>
       <StyledNewerDocsWarning>
         This documentation is for Static CMS v1.{' '}
-        <StyledLink href="https://staticcms.org">Go to the latest docs.</StyledLink>
+        <StyledLink href="https://staticjscms.netlify.app">Go to the latest docs.</StyledLink>
       </StyledNewerDocsWarning>
       <StyledAppBar position="fixed">
         <StyledToolbar>
