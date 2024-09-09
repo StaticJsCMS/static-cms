@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> Static CMS has been archived. The project originally started as a way of keeping NetlifyCMS (now [Decap CMS](https://decapcms.org/)) alive, which at the time was abandoned. Since then, Decap CMS has been revitilized. Along with other great alternatives, like [Tina CMS](https://tina.io/), there are better options out there than what StaticCMS provided. Thus the decision was made to cease development.
+> Static CMS has been archived. The project originally started as a way of keeping NetlifyCMS (now [Decap CMS](https://decapcms.org/)) alive, which at the time was abandoned. Since then, Decap CMS has been revitalized. Along with other great alternatives, like [Tina CMS](https://tina.io/), there are better options out there than what StaticCMS provided. Thus the decision was made to cease development.
 
 
 <div align="center">
