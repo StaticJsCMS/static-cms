@@ -8,7 +8,7 @@ Widgets define the data type and interface for entry fields. Static CMS comes wi
 
 Widgets are specified as collection fields in the Static CMS `config` file. Note that [YAML syntax](https://en.wikipedia.org/wiki/YAML#Basic_components) allows lists and objects to be written in block or inline style, and the code samples below include a mix of both.
 
-To see working examples of all of the built-in widgets, try making a 'Kitchen Sink' collection item on the [CMS demo site](https://demo.staticcms.org/). (No login required: click the login button and Static CMS will open.) You can refer to the demo [configuration code](https://github.com/StaticJsCMS/static-cms/blob/main/dev-test/config.yml) to see how each field was configured.
+To see working examples of all of the built-in widgets, try making a 'Kitchen Sink' collection item on the [CMS demo site](https://demo-staticjscms.netlify.app/). (No login required: click the login button and Static CMS will open.) You can refer to the demo [configuration code](https://github.com/StaticJsCMS/static-cms/blob/main/dev-test/config.yml) to see how each field was configured.
 
 ## Available Widgets
 
@@ -37,16 +37,16 @@ To see working examples of all of the built-in widgets, try making a 'Kitchen Si
 
 The following options are available on all fields:
 
-| Name      | Type                                                           | Default    | Description                                                                                                                                                                                                                                                              |
-| --------- | -------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| name      | string                                                         |            | The name of the field                                                                                                                                                                                                                                                    |
-| widget    | string                                                         | `'string'` | _Optional_. The type of widget to render for the field                                                                                                                                                                                                                   |
-| label     | string                                                         | `name`     | _Optional_. The display name of the field                                                                                                                                                                                                                                |
-| required  | boolean                                                        | `true`     | _Optional_. Specify as `false` to make a field optional                                                                                                                                                                                                                  |
-| hint      | string                                                         |            | _Optional_. Adds helper text directly below a widget. Useful for including instructions. Accepts markdown for bold, italic, strikethrough, and links.                                                                                                                    |
-| pattern   | list of strings                                                |            | _Optional_. Adds field validation by specifying a list with a [regex pattern](https://regexr.com/) and an error message; more extensive validation can be achieved with [custom widgets](/docs/custom-widgets/#advanced-field-validation)                                |
+| Name      | Type                                                           | Default    | Description                                                                                                                                                                                                                                                 |
+| --------- | -------------------------------------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name      | string                                                         |            | The name of the field                                                                                                                                                                                                                                       |
+| widget    | string                                                         | `'string'` | _Optional_. The type of widget to render for the field                                                                                                                                                                                                      |
+| label     | string                                                         | `name`     | _Optional_. The display name of the field                                                                                                                                                                                                                   |
+| required  | boolean                                                        | `true`     | _Optional_. Specify as `false` to make a field optional                                                                                                                                                                                                     |
+| hint      | string                                                         |            | _Optional_. Adds helper text directly below a widget. Useful for including instructions. Accepts markdown for bold, italic, strikethrough, and links.                                                                                                       |
+| pattern   | list of strings                                                |            | _Optional_. Adds field validation by specifying a list with a [regex pattern](https://regexr.com/) and an error message; more extensive validation can be achieved with [custom widgets](/docs/custom-widgets/#advanced-field-validation)                   |
 | i18n      | boolean<br />\| 'translate'<br />\| 'duplicate'<br />\| 'none' |            | _Optional_. <ul><li>`translate` - Allows translation of the field</li><li>`duplicate` - Duplicates the value from the default locale</li><li>`true` - Accept parent values as default</li><li>`none` or `false` - Exclude field from translations</li></ul> |
-| condition | FilterRule<br />\| List of FilterRules                         |            | _Optional_. See [Field Conditions](#field-conditions)                                                                                                                                                                                                                    |
+| condition | FilterRule<br />\| List of FilterRules                         |            | _Optional_. See [Field Conditions](#field-conditions)                                                                                                                                                                                                       |
 
 ## Example Widget
 
@@ -280,7 +280,7 @@ collections:
                       - yes
                       - no
 
-```
+````
 
 ```js
 collections: [
@@ -332,6 +332,6 @@ collections: [
     ]
   }
 ],
-```
+````
 
 </CodeTabs>

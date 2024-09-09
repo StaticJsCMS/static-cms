@@ -104,8 +104,8 @@ const StyledDesktopLink = styled(Button)(
   `,
 ) as ExtendButtonBase<ButtonTypeMap<{}, 'a'>>;
 
-const STATIC_CMS_DOMAIN = 'staticcms.org';
-const DEFAULT_DEMO_SITE = 'demo.staticcms.org';
+const STATIC_CMS_DOMAIN = 'staticjscms.netlify.app';
+const DEFAULT_DEMO_SITE = 'demo-staticjscms.netlify.app';
 const STATIC_CMS_DOMAIN_REGEX = /staticcms\.org$/g;
 
 function createDemoUrl(subdomain?: string): string {

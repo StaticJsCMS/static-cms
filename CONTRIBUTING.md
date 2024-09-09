@@ -99,9 +99,8 @@ In order to debug a specific issue follow the next steps:
 1. Replace `dev-test/config.yml` with the relevant `config.yml`. If you want to test the backend, make sure that the `backend` property of the config indicates which backend you use (Github, Gitlab, Bitbucket etc) and path to the repo.
 
 ```js
-backend:
-  name: github
-  repo: owner-name/repo-name
+backend: name: github;
+repo: owner - name / repo - name;
 ```
 
 2. Run `yarn dev`
@@ -111,14 +110,14 @@ backend:
 
 When debugging the CMS with Git Gateway you must:
 
-1. Have a Netlify site with [Git Gateway](https://docs.netlify.com/visitor-access/git-gateway/) and [Netlify Identity](https://docs.netlify.com/visitor-access/identity/) enabled. An easy way to create such a site is to use a [template](https://staticcms.org/docs/start-with-a-template/), for example the [Gatsby template](https://app.netlify.com/start/deploy?repository=https://github.com/AustinGreen/gatsby-starter-netlify-cms&stack=cms)
+1. Have a Netlify site with [Git Gateway](https://docs.netlify.com/visitor-access/git-gateway/) and [Netlify Identity](https://docs.netlify.com/visitor-access/identity/) enabled. An easy way to create such a site is to use a [template](https://staticjscms.netlify.app/docs/start-with-a-template/), for example the [Gatsby template](https://app.netlify.com/start/deploy?repository=https://github.com/AustinGreen/gatsby-starter-netlify-cms&stack=cms)
 2. Tell the CMS the URL of your Netlify site using a local storage item. To do so:
 
-    1. Open `http://localhost:8080/` in the browser
-    2. Open the Developer Console. Write the below command and press enter: `localStorage.setItem('netlifySiteURL', 'https://yourwebsiteurl.netlify.app/')`
-    3. To be sure, you can run this command as well: `localStorage.getItem('netlifySiteURL')`
-    4. Refresh the page
-    5. You should be able to log in via your Netlify Identity email/password
+   1. Open `http://localhost:8080/` in the browser
+   2. Open the Developer Console. Write the below command and press enter: `localStorage.setItem('netlifySiteURL', 'https://yourwebsiteurl.netlify.app/')`
+   3. To be sure, you can run this command as well: `localStorage.getItem('netlifySiteURL')`
+   4. Refresh the page
+   5. You should be able to log in via your Netlify Identity email/password
 
 ## License
 

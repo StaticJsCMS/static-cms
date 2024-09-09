@@ -15,7 +15,7 @@ describe('Markdown widget link', () => {
 
   describe('link', () => {
     it('can add a new valid link', () => {
-      const link = 'https://www.staticcms.org/';
+      const link = 'https://staticjscms.netlify.app/';
       cy.window().then(win => {
         cy.stub(win, 'prompt').returns(link);
       });
@@ -30,7 +30,7 @@ describe('Markdown widget link', () => {
     });
 
     it('can add a new invalid link', () => {
-      const link = 'www.staticcms.org';
+      const link = 'staticjscms.netlify.app';
       cy.window().then(win => {
         cy.stub(win, 'prompt').returns(link);
       });
@@ -45,7 +45,7 @@ describe('Markdown widget link', () => {
     });
 
     it('can select existing text as link', () => {
-      const link = 'https://www.staticcms.org';
+      const link = 'https://staticjscms.netlify.app';
       cy.window().then(win => {
         cy.stub(win, 'prompt').returns(link);
       });
