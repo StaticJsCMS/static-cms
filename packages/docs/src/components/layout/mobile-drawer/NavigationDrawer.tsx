@@ -5,7 +5,6 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { useMemo } from 'react';
 
 import Logo from '../Logo';
-import SponsorButton from '../SponsorButton';
 import MobileNavItem from './MobileNavItem';
 
 import type { MenuItem } from '../../../interface';
@@ -50,7 +49,6 @@ const NavigationDrawer = ({ items, mobileOpen, onMobileOpenToggle }: NavigationD
         <StyledLogoWrapper key="drawer-nav-logo-wrapper">
           <Logo key="drawer-nav-logo" inMenu />
         </StyledLogoWrapper>
-        <SponsorButton sx={{ margin: '16px', marginTop: 0 }} />
         <Divider key="drawer-nav-divider" sx={{ borderColor: 'rgba(255, 255, 255, 0.8)' }} />
         <List key="drawer-nav-list" sx={{ flexGrow: 1 }}>
           {items.map(item => (
