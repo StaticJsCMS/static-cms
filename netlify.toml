@@ -3,10 +3,10 @@
 
 [[redirects]]
   from = "https://staticjscms.netlify.app/*"
-  to = "https://www.staticcms.org/:splat"
+  to = "https://staticjscms.netlify.app/:splat"
   status = 301
 
 [[redirects]]
   from = "https://staticjscms.netlify.app/"
-  to = "https://www.staticcms.org/"
+  to = "https://staticjscms.netlify.app/"
   status = 301
